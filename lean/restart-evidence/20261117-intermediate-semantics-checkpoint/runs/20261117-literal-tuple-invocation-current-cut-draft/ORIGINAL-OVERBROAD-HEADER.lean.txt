@@ -1,0 +1,47 @@
+/- OPEN owner-local producer. No declaration or proof is installed. -/
+private theorem actual_completed_eager_tuple_current_at_invocation
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (resourceDepthIH : RealEagerEmittedCompleteAtDepth (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth)
+    (selectionMembers : ∀ entry rows depth free,
+      ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free,
+      (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (root : IdentityActualSourceRoot bits)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (inputs : List (Node × List Suspended))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv
+      point.frame scopeOriginal scopeBefore allInputs)
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.tuple point inputs))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.tuple point inputs))
+    (done : List Fragment → Caller (bits + 2) → Queries → Cached → Fold)
+    (stopped : List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold)
+    (index : Nat) (output : Output (bits + 2) Typing)
+    (fragments : List Fragment) (reached : Caller (bits + 2))
+    (saved : Queries) (after : Cached) (localIndex : Nat)
+    (invoked : SourcePruningEnumerationSharedInvocationTrace.ChildrenInvocationAt
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager
+      done stopped inputs point.caller point.before point.queries index output
+      (.done fragments reached saved after) localIndex) :
+    ∃ returned : IdentityActualSourcePoint bits,
+      returned.frame = point.frame ∧
+      returned.completed = point.completed ++ fragments ∧
+      returned.caller = reached ∧ returned.queries = saved ∧ returned.before = after ∧
+      ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+        (.tuple returned []) ∧
+      ∃ returnedAncestors : ActualFrameLedger formulas solver root metadata uv
+          returned.frame scopeOriginal scopeBefore allInputs,
+        ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+          allInputs recursiveDepth (.tuple returned [])

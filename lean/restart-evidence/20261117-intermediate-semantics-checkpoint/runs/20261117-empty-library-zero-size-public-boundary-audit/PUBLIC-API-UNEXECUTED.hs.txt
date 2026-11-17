@@ -1,0 +1,16 @@
+{-# LANGUAGE OverloadedStrings #-}
+-- UNEXECUTED: exact public API expressions and expected observations only.
+-- Do not treat these comments as runtime verification.
+import qualified Data.CFTA.Gen.Synthesis as S
+import qualified Data.CFTA.Enumeration as E
+
+emptyLibrary = S.library [] [] []
+emptyQuery = S.Query [] (S.TVar "a")
+originalRoot = S.rawSearchSpace emptyLibrary emptyQuery 0
+
+-- Expected: []
+rawRuns = E.runsInterned "Mu" originalRoot
+-- Expected: []
+publicPrograms = S.programsIn (S.reduceWithOrder originalRoot)
+-- Expected: []
+publicSolutions = S.solutionsOfSize emptyLibrary emptyQuery 0

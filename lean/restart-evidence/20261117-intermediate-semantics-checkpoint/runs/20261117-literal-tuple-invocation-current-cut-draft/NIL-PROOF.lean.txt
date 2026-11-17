@@ -1,0 +1,8 @@
+ := by
+  dsimp only [ActualInvocationCurrentAt, ActualTupleInvocationCurrentAt]
+  intro scopeOriginal scopeBefore allInputs ancestors origin current
+    index output fragments reached saved after localIndex invoked
+  cases invoked with
+  | nil _ =>
+    refine ⟨point, rfl, ?_, rfl, rfl, rfl, origin, ancestors, current, Nat.le_refl _⟩
+    exact (List.append_nil point.completed).symm

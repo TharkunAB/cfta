@@ -1,0 +1,25 @@
+ := by
+  dsimp only [ActualInvocationCurrentAt, ActualChildInvocationCurrentAt]
+  intro scopeOriginal scopeBefore allInputs ancestors origin current
+    index output fragment reached saved after localIndex invoked
+  obtain ⟨rowsOrigin, rowsCurrent, decrease⟩ :=
+    actual_source_ordinary_current holeKey fits admits graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore allInputs
+      point height incoming bucket rest origin ordinary current
+  have rowsCut := taskIH (.rows height {point with height := height + 1} incoming bucket rest) decrease
+  dsimp only [ActualInvocationCurrentAt, ActualRowsInvocationCurrentAt] at rowsCut
+  cases invoked with
+  | eager_fallback unsupported _ =>
+    rw [ordinary] at unsupported
+    cases unsupported
+  | eager_ordinary _ sourceRows past _ row _ _ =>
+    have completed := rowsCut scopeOriginal scopeBefore allInputs ancestors rowsOrigin rowsCurrent
+      _ _ _ _ _ _ _ sourceRows
+      (by simpa only [actual_source_row_prefix_run_with_narrow, actual_source_guarded_child,
+        SourcePruningEnumerationSharedInvocationTrace.runPolicy] using past)
+      _ output fragment reached saved after localIndex row
+    obtain ⟨returned, frameSame, completedSame, callerSame, queriesSame, cacheSame,
+      returnedOrigin, returnedAncestors, returnedCurrent, remainingWork⟩ := completed
+    exact ⟨returned, frameSame, completedSame, callerSame, queriesSame, cacheSame,
+      returnedOrigin, returnedAncestors, returnedCurrent,
+      Nat.le_trans remainingWork (Nat.le_of_lt decrease)⟩

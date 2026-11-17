@@ -1,0 +1,96 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies EnumerationReferences
+open InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+open SourcePruningEnumerationSharedSelectedContinuations
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+set_option maxHeartbeats 200000
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan
+  identity_actual_frame_plan identity_actual_frame_reserved
+  IdentityActualSourceRoot.limit IdentityActualSourceRoot.own
+  SourceCurrentConstrainedCapTargetForecast.scalar
+
+/- Note [Literal invocation completion cuts]
+The source task invariant describes the actual frame callbacks.
+Earlier sibling callbacks can change native callers and queries.
+The completion predicate therefore retains these literal callbacks.
+The three phases follow the existing task constructors and work measure.
+They add no runtime code or numeric forecast.
+Returned current data names one actual cache and endpoint jointly.
+The task induction must derive each smaller completion result.
+The completed-current proof covers the actual tuple, child and row phases.
+The whole outer held-history target remains open.
+-/
+
+/- Owner-local target. Its callbacks are the literal task callbacks. -/
+private theorem actual_completed_eager_tuple_current_at_original_budget
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (selectionMembers : ∀ entry rows depth free,
+      ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free,
+      (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (root : IdentityActualSourceRoot bits)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (inputs : List (Node × List Suspended))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv
+      point.frame scopeOriginal scopeBefore allInputs)
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.tuple point inputs))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.tuple point inputs))
+    (index : Nat) (output : Output (bits + 2) Typing)
+    (fragments : List Fragment) (reached : Caller (bits + 2))
+    (saved : Queries) (after : Cached) (localIndex : Nat)
+    (invoked :
+      let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point.frame
+      SourcePruningEnumerationSharedInvocationTrace.ChildrenInvocationAt
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager
+        (fun produced => callbacks.1 (point.completed ++ produced))
+        (fun completed => callbacks.2 (point.completed ++ completed))
+        inputs point.caller point.before point.queries index output
+        (.done fragments reached saved after) localIndex) :
+    ∃ returned : IdentityActualSourcePoint bits,
+      returned.frame = point.frame ∧
+      returned.completed = point.completed ++ fragments ∧
+      returned.caller = reached ∧ returned.queries = saved ∧ returned.before = after ∧
+      ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+        (.tuple returned []) ∧
+      ActualFrameLedger formulas solver root metadata uv
+        returned.frame scopeOriginal scopeBefore allInputs ∧
+      ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+        allInputs recursiveDepth (.tuple returned []) := by
+  have resourceDepthIH := real_eager_emitted_complete_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+  exact actual_completed_eager_tuple_current_at_invocation
+    holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+    formulas solver resourceDepthIH selectionMembers selectionLength root scopeOriginal scopeBefore allInputs
+    point inputs ancestors origin current index output fragments reached saved after localIndex invoked
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

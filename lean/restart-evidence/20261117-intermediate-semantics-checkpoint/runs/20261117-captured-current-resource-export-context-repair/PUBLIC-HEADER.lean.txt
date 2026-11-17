@@ -1,0 +1,43 @@
+/-- Derive all three concrete packets before the actual recursive callback resumes. -/
+set_option maxHeartbeats 200000 in
+ theorem captured_tuple_callback_packets_at_original_budget
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (capturedCaller : Caller (bits + 2)) (memos : Memos)
+    (metadata updated : Metadata Typing) (graph : Graph Symbol Constraint)
+    (templates : List (Template.Pattern Symbol))
+    (capturedBefore : Cached) (uv handle : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (ownCache : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (packet : Packet formulas solver inventory capturedCaller memos metadata capturedBefore)
+    (ready : EnumerationDriver.Ready uv capturedBefore.core)
+    (stored : capturedBefore.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv capturedBefore.core)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare capturedCaller.checked.native.machine.heap
+      scs edge capturedBefore = some [((edge.entry.key.symbol, staged, residual), ownCache)])
+    (fragments : List Fragment) (caller : Caller (bits + 2)) (queries : Queries) (current : Cached)
+    (history : CapturedTupleInputs formulas solver capturedCaller metadata ownCache
+      (staged.map (fun input => (input.1, input.2.1))) fragments caller queries current)
+    (currentSeed : Seed) (currentFits : Fits currentSeed.2 caller.checked)
+    (currentKnown : Heap (fun guard => guard ∈ currentSeed.1) caller.checked.native.machine.heap)
+    (workFuel : Nat) (finished : Cached) (callbackCore : Core)
+    (finalized : SourcePruningEnumerationFinalize.run caller.checked.native.machine.heap workFuel uv
+      (.node edge.entry.key.symbol fragments)
+      (SelectedEdge.finish residual (.node edge.entry.key.symbol fragments) current) = some finished)
+    (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+      (.inl (.node edge.entry.key.symbol fragments)) finished.core) =
+        [.ok ((false, updated), callbackCore)]) :
+    ∃ (next : Inventory) (final : Memos),
+      Post formulas solver next capturedCaller caller final ∧ final.query = queries ∧
+      Packet formulas solver next caller final metadata
+        (SelectedEdge.finish residual (.node edge.entry.key.symbol fragments) current) ∧
+      Packet formulas solver next caller final metadata finished ∧
+      Packet formulas solver next caller final updated (EnumerationExpandableIndex.frame callbackCore finished) ∧
+      FragmentBound finished.core.counter (.node edge.entry.key.symbol fragments) ∧
+      RenderStable finished.core callbackCore ∧ Frame finished.core callbackCore ∧
+      Fits currentSeed.2 caller.checked ∧
+      Heap (fun guard => guard ∈ currentSeed.1) caller.checked.native.machine.heap ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound finished.core ≤
+        SourcePruningEnumerationPrefixAdmission.suspendedBound current.core ∧
+      finished.core.values[uv]? = some (.enumerated (.node edge.entry.key.symbol fragments)) ∧
+      IsRoot finished.core.representatives uv

@@ -1,0 +1,13 @@
+theorem top_arrow_preparation_first
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (scs : List Suspended) (edge : Edge) (marker argument result : Node)
+    (before middle : Cached) (symbol : Symbol) (staged : List Input)
+    (residual : Option Constraint)
+    (top : edge.entry.key.constraint = SourceSynthesisGeneralizeSyntax.top)
+    (children : edge.children = [marker, argument, result])
+    (actual : SourcePruningEnumerationCachedOwn.prepare heap scs edge before =
+      some [((symbol, staged, residual), middle)]) :
+    middle = before ∧ symbol = edge.entry.key.symbol ∧ residual = none ∧
+      staged[0]? = some (marker, descendScs 0 scs,
+        SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+          (descendScs 0 scs) marker)

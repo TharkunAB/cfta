@@ -1,0 +1,21 @@
+ := by
+  have projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint =
+      some ([], none) := by
+    rw [top]
+    rfl
+  have observed := actual
+  unfold SourcePruningEnumerationCachedOwn.prepare at observed
+  split at observed
+  next admitted =>
+    rw [projected] at observed
+    dsimp only [SourcePruningEnumerationCachedOwn.suspendMany, Option.map] at observed
+    have rowSame := (List.cons.inj (Option.some.inj observed)).1
+    have cacheSame := congrArg (fun row : (Symbol × List Input × Option Constraint) × Cached => row.2) rowSame
+    have symbolSame := congrArg (fun row : (Symbol × List Input × Option Constraint) × Cached => row.1.1) rowSame
+    have stagedSame := congrArg (fun row : (Symbol × List Input × Option Constraint) × Cached => row.1.2.1) rowSame
+    have residualSame := congrArg (fun row : (Symbol × List Input × Option Constraint) × Cached => row.1.2.2) rowSame
+    dsimp only at cacheSame symbolSame stagedSame residualSame
+    refine ⟨cacheSame.symm, symbolSame.symm, residualSame.symm, ?_⟩
+    rw [← stagedSame, children]
+    rfl
+  next rejected => cases observed

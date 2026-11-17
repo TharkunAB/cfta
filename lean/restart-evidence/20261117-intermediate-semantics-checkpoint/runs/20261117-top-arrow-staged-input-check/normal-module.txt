@@ -1,0 +1,130 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-top-arrow-staged-input-check/source/MicroCFTA/SourcePruningEnumerationTopArrowInput.lean:52:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((symbol, staged, residual), middle).fst.snd.fst
+in the target expression
+  staged[0]? =
+    some (marker, descendScs 0 scs, SourcePruningEnumerationShallowChild.prepareChild (descendScs 0 scs) marker)
+
+heap : InternedConstructorTemplates.State Symbol Constraint
+scs : List Suspended
+edge : Edge
+marker argument result : Node
+before middle : Cached
+symbol : Symbol
+staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))
+residual : Option Constraint
+top : edge.entry.key.constraint = SourceSynthesisGeneralizeSyntax.top
+children : edge.children = [marker, argument, result]
+actual : SourcePruningEnumerationCachedOwn.prepare heap scs edge before = some [((symbol, staged, residual), middle)]
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some ([], none)
+admitted : arityAllows edge.children.length scs = true
+observed :
+  some
+      [((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd [],
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd []) indexed.fst))
+              edge.children.zipIdx,
+            none),
+          before)] =
+    some [((symbol, staged, residual), middle)]
+rowSame :
+  ((edge.entry.key.symbol,
+        List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd [],
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd []) indexed.fst))
+          edge.children.zipIdx,
+        none),
+      before) =
+    ((symbol, staged, residual), middle)
+cacheSame :
+  ((edge.entry.key.symbol,
+          List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd [],
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd []) indexed.fst))
+            edge.children.zipIdx,
+          none),
+        before).snd =
+    ((symbol, staged, residual), middle).snd
+symbolSame :
+  ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd [],
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd []) indexed.fst))
+              edge.children.zipIdx,
+            none),
+          before).fst.fst =
+    ((symbol, staged, residual), middle).fst.fst
+stagedSame :
+  ((edge.entry.key.symbol,
+              List.map
+                (fun indexed =>
+                  (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd [],
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd []) indexed.fst))
+                edge.children.zipIdx,
+              none),
+            before).fst.snd.fst =
+    ((symbol, staged, residual), middle).fst.snd.fst
+residualSame :
+  ((edge.entry.key.symbol,
+              List.map
+                (fun indexed =>
+                  (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd [],
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd []) indexed.fst))
+                edge.children.zipIdx,
+              none),
+            before).fst.snd.snd =
+    ((symbol, staged, residual), middle).fst.snd.snd
+⊢ staged[0]? =
+    some (marker, descendScs 0 scs, SourcePruningEnumerationShallowChild.prepareChild (descendScs 0 scs) marker)
+MicroCFTA.SourcePruningEnumerationTopArrowInput.top_arrow_preparation_first
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (marker argument result :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before middle :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (staged :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended ×
+          Option
+            (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (top : edge.entry.key.constraint = MicroCFTA.SourceSynthesisGeneralizeSyntax.top)
+  (children : edge.children = [marker, argument, result])
+  (actual :
+    MicroCFTA.SourcePruningEnumerationCachedOwn.prepare heap scs edge before =
+      some [((symbol, staged, residual), middle)]) :
+  middle = before ∧
+    symbol = edge.entry.key.symbol ∧
+      residual = none ∧
+        staged[0]? =
+          some
+            (marker, MicroCFTA.EnumerationState.descendScs 0 scs,
+              MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild (MicroCFTA.EnumerationState.descendScs 0 scs)
+                marker)
+'MicroCFTA.SourcePruningEnumerationTopArrowInput.top_arrow_preparation_first' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

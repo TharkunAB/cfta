@@ -1,0 +1,135 @@
+private def ActualInvocationReturnedCurrent
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits)
+    (source : IdentityActualSourceTask bits) (point : IdentityActualSourcePoint bits)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (rest : List (Node × List Suspended)) (produced : List Fragment)
+    (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) : Prop :=
+  ∃ returned : IdentityActualSourcePoint bits,
+    returned.frame = point.frame ∧ returned.completed = point.completed ++ produced ∧
+    returned.caller = reached ∧ returned.queries = saved ∧ returned.before = after ∧
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root (.tuple returned rest) ∧
+    ActualFrameLedger formulas solver root metadata uv returned.frame scopeOriginal scopeBefore allInputs ∧
+    ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+        allInputs recursiveDepth (.tuple returned rest) ∧
+    IdentityActualSourceTask.work root.limit (.tuple returned rest) ≤ source.work root.limit
+
+
+private def ActualTupleInvocationCurrentAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits)
+    (point : IdentityActualSourcePoint bits) (inputs : List (Node × List Suspended)) : Prop :=
+  ∀ (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached) (allInputs : List (Node × List Suspended)),
+    ActualFrameLedger formulas solver root metadata uv point.frame scopeOriginal scopeBefore allInputs →
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root (.tuple point inputs) →
+    ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+        allInputs recursiveDepth (.tuple point inputs) →
+    ∀ (index : Nat) (output : Output (bits + 2) Typing) (fragments : List Fragment)
+      (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) (localIndex : Nat),
+    let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point.frame
+    SourcePruningEnumerationSharedInvocationTrace.ChildrenInvocationAt
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager
+      (fun produced => callbacks.1 (point.completed ++ produced))
+      (fun completed => callbacks.2 (point.completed ++ completed))
+      inputs point.caller point.before point.queries index output
+      (.done fragments reached saved after) localIndex →
+    ActualInvocationReturnedCurrent holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root
+      (.tuple point inputs) point scopeOriginal scopeBefore allInputs [] fragments reached saved after
+
+
+private def ActualChildInvocationCurrentAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits)
+    (point : IdentityActualSourcePoint bits) (incoming : Node) (bucket : List Suspended)
+    (rest : List (Node × List Suspended)) : Prop :=
+  ∀ (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached) (allInputs : List (Node × List Suspended)),
+    ActualFrameLedger formulas solver root metadata uv point.frame scopeOriginal scopeBefore allInputs →
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root (.child point incoming bucket rest) →
+    ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+        allInputs recursiveDepth (.child point incoming bucket rest) →
+    ∀ (index : Nat) (output : Output (bits + 2) Typing) (fragment : Fragment)
+      (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) (localIndex : Nat),
+    let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point.frame
+    SourcePruningEnumerationSharedInvocationTrace.ChildInvocationAt
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager bucket incoming
+      point.caller point.before point.queries
+      (actual_source_parent_tail checkEmpty edgesOf workFuel callbacks point.completed rest)
+      (callbacks.2 point.completed) index output (.done fragment reached saved after) localIndex →
+    ActualInvocationReturnedCurrent holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root
+      (.child point incoming bucket rest) point scopeOriginal scopeBefore allInputs rest [fragment] reached saved after
+
+
+private def ActualRowsInvocationCurrentAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits)
+    (height : Nat) (point : IdentityActualSourcePoint bits) (incoming : Node)
+    (bucket : List Suspended) (rest : List (Node × List Suspended)) : Prop :=
+  ∀ (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached) (allInputs : List (Node × List Suspended)),
+    ActualFrameLedger formulas solver root metadata uv point.frame scopeOriginal scopeBefore allInputs →
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root (.rows height point incoming bucket rest) →
+    ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+        allInputs recursiveDepth (.rows height point incoming bucket rest) →
+    ∀ (attempted remaining : List (EdgeValue Symbol Constraint)) (edge : EdgeValue Symbol Constraint)
+      (processed : List (SelectedEdge.Result (bits + 2))) (earlier : List (Output (bits + 2) Typing))
+      (rowCaller : Caller (bits + 2)) (rowQueries : Queries),
+    edgesOf incoming = attempted ++ edge :: remaining →
+    actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      point incoming bucket rest attempted = .complete processed earlier rowCaller rowQueries →
+    ∀ (index : Nat) (output : Output (bits + 2) Typing) (fragment : Fragment)
+      (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) (localIndex : Nat),
+    let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point.frame
+    SourcePruningEnumerationSharedInvocationTrace.SelectedInvocationAt
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf (.guarded incoming)
+      (SourcePruningEnumerationSharedEagerChildren.consumeSelected
+        (actual_source_parent_tail checkEmpty edgesOf workFuel callbacks point.completed rest) rowCaller rowQueries)
+      bucket edge rowCaller point.before rowQueries index output (.complete fragment reached saved after) localIndex →
+    ActualInvocationReturnedCurrent holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root
+      (.rows height point incoming bucket rest) point scopeOriginal scopeBefore allInputs rest [fragment] reached saved after
+
+
+private def ActualInvocationCurrentAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits)
+    (task : IdentityActualSourceTask bits) : Prop :=
+  match task with
+  | .tuple point inputs => ActualTupleInvocationCurrentAt holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root point inputs
+  | .child point incoming bucket rest => ActualChildInvocationCurrentAt holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root point incoming bucket rest
+  | .rows height point incoming bucket rest => ActualRowsInvocationCurrentAt holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root height point incoming bucket rest

@@ -1,0 +1,41 @@
+theorem original_universe_unfolded_row_preparation
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (nativeBefore nativeAfter : InternedConstructorTemplates.State Symbol Constraint)
+    (facts : Facts nativeBefore) (sourceGrowth : Grows sourceHeap nativeBefore)
+    (fuel : Nat) (prepared : Node)
+    (actual : SourcePruningEnumerationSelectedValue.run fuel
+      (.mu entry body depth ordinary) nativeBefore = .done prepared nativeAfter)
+    (row : Edge) (present : row ∈ InternedEdgeResidency.nodeEdges prepared)
+    (scs : List Suspended) (before middle : Cached) (symbol : Symbol)
+    (staged : List Input) (residual : Option Constraint)
+    (own : SourcePruningEnumerationCachedOwn.prepare nativeAfter scs row before =
+      some [((symbol, staged, residual), middle)]) :
+    ∃ sourceRow : Edge,
+      sourceRow ∈ InternedEdgeResidency.nodeEdges body ∧
+      row.entry.key.symbol = sourceRow.entry.key.symbol ∧
+      row.entry.key.constraint = sourceRow.entry.key.constraint ∧
+      row.children = sourceRow.children.map
+        (InternedStoredSubstitution.input
+          (InternedStoredSubstitutionRebind.replacement (.interned entry.identity)
+            (.mu entry body depth ordinary))) ∧
+      ((∃ (name : String) (arity : Nat),
+          (name, arity) ∈ SourceSynthesisUniverseBody.descriptors
+            (SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+          row.entry.key.symbol = literal name ∧
+          row.children = List.replicate arity (.mu entry body depth ordinary)) ∨
+        ∃ (marker : Node) (markerEntry : Interned NodeKey) (markerRow : Edge),
+          marker = .node markerEntry [markerRow] 0 [] ∧
+          markerRow.children = [] ∧
+          markerRow.entry.key = ⟨literal "(->)", [], SourceSynthesisGeneralizeSyntax.top⟩ ∧
+          row.entry.key.symbol = literal "->" ∧
+          row.children = [marker, .mu entry body depth ordinary, .mu entry body depth ordinary] ∧
+          middle = before ∧ symbol = row.entry.key.symbol ∧ residual = none ∧
+          staged[0]? = some (marker, descendScs 0 scs,
+            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+              (descendScs 0 scs) marker))

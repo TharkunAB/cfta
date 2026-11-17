@@ -1,0 +1,21 @@
+ := by
+  dsimp only [ActualInvocationCurrentAt, ActualChildInvocationCurrentAt]
+  intro scopeOriginal scopeBefore allInputs ancestors origin current
+    index output fragment reached saved after localIndex invoked
+  cases invoked with
+  | eager_fallback _ shallow =>
+    cases shallow with
+    | shallow_done actual _ =>
+      obtain ⟨_head, _returnedSame, returnedOrigin, returnedAncestors, returnedCurrent,
+          _runtime, decrease, _forecast, _growth, _positions⟩ :=
+        actual_source_fallback_child_current holeKey fits admits graph templates checkEmpty edgesOf
+          stop order recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore
+          allInputs point incoming bucket rest origin ancestors current fallback fragment _ _ reached
+          saved after _ actual
+      refine ⟨{point with completed := point.completed ++ [fragment], caller := reached,
+        before := after, queries := saved, mass := point.mass + point.bound,
+        seed := advance point.seed (point.bound + 1)}, rfl, rfl, rfl, rfl, rfl,
+        returnedOrigin, returnedAncestors, returnedCurrent, Nat.le_of_lt decrease⟩
+  | eager_ordinary ordinary _ _ _ _ _ _ =>
+    rw [fallback] at ordinary
+    cases ordinary

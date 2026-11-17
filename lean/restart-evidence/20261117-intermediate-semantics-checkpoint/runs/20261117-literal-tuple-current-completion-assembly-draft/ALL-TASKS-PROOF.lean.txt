@@ -1,0 +1,96 @@
+ := by
+  have allTasks : ∀ (amount : Nat) (candidate : IdentityActualSourceTask bits),
+      candidate.work root.limit = amount →
+      ActualInvocationCurrentAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv formulas solver root candidate := by
+    intro amount
+    induction amount using Nat.strongRecOn with
+    | ind amount smallerIH =>
+      intro candidate measured
+      have taskIH : ∀ smaller : IdentityActualSourceTask bits,
+          smaller.work root.limit < candidate.work root.limit →
+          ActualInvocationCurrentAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+            recursiveDepth workFuel metadata uv formulas solver root smaller := by
+        intro smaller decrease
+        exact smallerIH (smaller.work root.limit) (by omega) smaller rfl
+      cases candidate with
+      | tuple point remaining =>
+        cases remaining with
+        | nil =>
+          exact actual_tuple_nil_invocation_current holeKey fits admits graph templates checkEmpty edgesOf
+            stop order recursiveDepth workFuel metadata uv formulas solver root point
+        | cons head rest =>
+          obtain ⟨incoming, bucket⟩ := head
+          cases point with
+          | mk frame completed caller before queries height count bound mass seed =>
+            cases count with
+            | zero =>
+              dsimp only [ActualInvocationCurrentAt, ActualTupleInvocationCurrentAt]
+              intro scopeOriginal scopeBefore allInputs ancestors origin current
+              obtain ⟨inputs, _fits, _known, _reserved⟩ := current
+              obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, _previous,
+                _mass, capacity, _included, _genuine⟩ := inputs
+              change ((incoming, bucket) :: rest).length ≤ 0 at capacity
+              simp only [List.length_cons] at capacity
+              omega
+            | succ count =>
+              let prior : IdentityActualSourcePoint bits := {
+                frame := frame, completed := completed, caller := caller, before := before,
+                queries := queries, height := height, count := count, bound := bound,
+                mass := mass, seed := seed }
+              exact actual_tuple_cons_invocation_current holeKey fits admits graph templates checkEmpty edgesOf
+                stop order recursiveDepth workFuel metadata uv formulas solver root prior count
+                incoming bucket rest taskIH
+      | child point incoming bucket rest =>
+        by_cases ordinary : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = true
+        · cases point with
+          | mk frame completed caller before queries height count bound mass seed =>
+            cases height with
+            | zero =>
+              dsimp only [ActualInvocationCurrentAt, ActualChildInvocationCurrentAt]
+              intro scopeOriginal scopeBefore allInputs ancestors origin current
+              obtain ⟨inputs, _fits, _known, _reserved⟩ := current
+              obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, _previous,
+                _mass, _capacity, _included, genuine⟩ := inputs
+              have ranked := (genuine incoming bucket List.mem_cons_self).2.2.1
+              change MergedOrdinaryHeight.height incoming ≤ 0 at ranked
+              cases incoming with
+              | empty => cases ordinary
+              | reference name => cases ordinary
+              | node entry rows depth free =>
+                simp only [MergedOrdinaryHeight.height] at ranked
+                omega
+              | union entry members depth free => cases ordinary
+              | mu entry body depth payload => cases ordinary
+            | succ height =>
+              let prior : IdentityActualSourcePoint bits := {
+                frame := frame, completed := completed, caller := caller, before := before,
+                queries := queries, height := height, count := count, bound := bound,
+                mass := mass, seed := seed }
+              exact actual_ordinary_invocation_current holeKey fits admits graph templates checkEmpty edgesOf
+                stop order recursiveDepth workFuel metadata uv formulas solver root prior height
+                incoming bucket rest ordinary taskIH
+        · have fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false := by
+            cases classified : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming with
+            | false => rfl
+            | true => exact (ordinary classified).elim
+          exact actual_fallback_invocation_current holeKey fits admits graph templates checkEmpty edgesOf
+            stop order recursiveDepth workFuel metadata uv formulas solver root point incoming bucket rest fallback
+      | rows height point incoming bucket rest =>
+        dsimp only [ActualInvocationCurrentAt, ActualRowsInvocationCurrentAt]
+        intro scopeOriginal scopeBefore allInputs ancestors origin current
+        cases origin with
+        | ordinaryRows prior parentHeight value retained tail previous ordinary =>
+          cases value with
+          | node entry rows depth free =>
+            have phase := actual_rows_invocation_current holeKey fits admits graph templates checkEmpty edgesOf
+              stop order recursiveDepth workFuel metadata uv formulas solver root resourceDepthIH
+              selectionMembers selectionLength prior parentHeight entry rows depth free retained tail taskIH
+            dsimp only [ActualInvocationCurrentAt, ActualRowsInvocationCurrentAt] at phase
+            exact phase scopeOriginal scopeBefore allInputs ancestors
+              (.ordinaryRows prior parentHeight (.node entry rows depth free) retained tail previous ordinary) current
+          | empty => cases ordinary
+          | reference name => cases ordinary
+          | union entry members depth free => cases ordinary
+          | mu entry body depth payload => cases ordinary
+  exact allTasks (task.work root.limit) task rfl

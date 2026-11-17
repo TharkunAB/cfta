@@ -1,0 +1,49 @@
+theorem original_universe_terminal_marker_demand
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary)) :
+    ∃ (bodyEntry : Interned NodeKey) (marker : Node) (markerEntry : Interned NodeKey)
+        (markerRow arrow : Edge) (rows : List Edge),
+      body = .node bodyEntry (canonicalEdges (arrow :: rows)) 0 [.interned entry.identity] ∧
+      marker = .node markerEntry [markerRow] 0 [] ∧ markerRow.children = [] ∧
+      markerRow.entry.key = ⟨literal "(->)", [], SourceSynthesisGeneralizeSyntax.top⟩ ∧
+      arrow.children = [marker, .reference (.interned entry.identity), .reference (.interned entry.identity)] ∧
+      arrow ∈ canonicalEdges (arrow :: rows) ∧
+      ∀ (seed : Seed) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+        (solver : SourceGuards.Entailment FullSyntax.Formula)
+        (inventory : Inventory) (caller : Caller (bits + 2)) (before : Cached)
+        (checkEmpty : Bool) (bucket : List Suspended) (roots : Nat → Nat) (memos : Memos),
+        Grows sourceHeap caller.checked.native.machine.heap →
+        Context formulas solver inventory caller memos →
+        Safe before.core → Roots before.core.representatives roots →
+        EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+        (∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+          ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) →
+        PendingRealized caller.checked.native.machine.heap before.core →
+        (∀ sc ∈ bucket, sc.var < before.core.counter) → InputsPending before.core bucket →
+        Fits seed.2 caller.checked → Reserved bits seed (bucket.length + 1) →
+        SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap →
+        ∀ (held : Nat), held < before.core.counter → Avoids before.core.representatives held bucket →
+        ∀ (r n p h k : Nat) (fragment : Fragment) (reached : Caller (bits + 2))
+          (saved : Queries) (read returned : Core) (waiting : EnumerationWaitingIndex.Waiting) (after : Cached),
+          bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true →
+          ChildDispatch.run checkEmpty r n p h k bucket marker caller before memos.query =
+            ((.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting), some after) →
+          ∃ (winner owner size handle : Nat) (storedBucket : List Suspended) (replacement : Node),
+            after.core = returned ∧ fragment = .hole winner ∧
+            UnionFind.Reaches returned.representatives winner owner size ∧
+            returned.values[owner]? = some (.unenumerated (some handle) storedBucket) ∧
+            SourcePruningEnumerationNodes.lookupNode reached.checked.native.machine.heap handle = some replacement ∧
+            Available reached.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
+            (∀ sc ∈ bucket, [] ∈ EqualityTrie.fromPathTrie sc.trie →
+              UnionFind.SameClass returned.representatives winner sc.var) ∧
+            ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+              (residualMeaning : Constraint → Term Symbol → Prop) (assignment : Nat → Term Symbol),
+              Satisfies
+                (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                  ambient reached.checked.native.machine.heap) residualMeaning assignment returned →
+                assignment winner = .node (literal "(->)") []

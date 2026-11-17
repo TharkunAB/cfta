@@ -1,0 +1,133 @@
+
+section CapturedCurrentResourceExports
+set_option autoImplicit false
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies EnumerationCompressionFrame
+open InternedConstructorTemplates
+open EnumerationDriver (RenderStable)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationRecursive (Packet)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/- Note [Resources at the actual captured callback cut]
+The exported alias names the existing tuple receipt. It adds no new invariant.
+The producer reuses the existing selected residual and finalizer proofs.
+It compares the same successful finalizer at a common proof bound.
+The runtime call keeps its original supplied workFuel.
+The actual false recordTypes receipt yields the callback packet directly.
+No recursive callback outcome or future resource law is assumed.
+
+All cache, caller, query and fragment cuts are explicit data arguments.
+The tuple receipt still needs the genuine source-task producer upstream.
+This local law does not derive that receipt from arbitrary output membership.
+It does not replace an eager selected call with a shallow selected-edge run.
+-/
+
+/-- Name the existing source tuple receipt for ordinary importing consumers. -/
+abbrev CapturedTupleInputs
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing) (before : Cached)
+    (inputs : List (Node × List Suspended)) (fragments : List Fragment)
+    (reached : Caller (bits + 2)) (queries : Queries) (after : Cached) : Prop :=
+  TupleInputs formulas solver original metadata before inputs fragments reached queries after
+
+set_option maxHeartbeats 200000 in
+/-- Derive all three concrete packets before the actual recursive callback resumes. -/
+ theorem captured_tuple_callback_packets_at_original_budget
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (capturedCaller : Caller (bits + 2)) (memos : Memos)
+    (metadata updated : Metadata Typing) (graph : Graph Symbol Constraint)
+    (templates : List (Template.Pattern Symbol))
+    (capturedBefore : Cached) (uv handle : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (ownCache : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (packet : Packet formulas solver inventory capturedCaller memos metadata capturedBefore)
+    (ready : EnumerationDriver.Ready uv capturedBefore.core)
+    (stored : capturedBefore.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv capturedBefore.core)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare capturedCaller.checked.native.machine.heap
+      scs edge capturedBefore = some [((edge.entry.key.symbol, staged, residual), ownCache)])
+    (fragments : List Fragment) (caller : Caller (bits + 2)) (queries : Queries) (current : Cached)
+    (history : CapturedTupleInputs formulas solver capturedCaller metadata ownCache
+      (staged.map (fun input => (input.1, input.2.1))) fragments caller queries current)
+    (currentSeed : Seed) (currentFits : Fits currentSeed.2 caller.checked)
+    (currentKnown : Heap (fun guard => guard ∈ currentSeed.1) caller.checked.native.machine.heap)
+    (workFuel : Nat) (finished : Cached) (callbackCore : Core)
+    (finalized : SourcePruningEnumerationFinalize.run caller.checked.native.machine.heap workFuel uv
+      (.node edge.entry.key.symbol fragments)
+      (SelectedEdge.finish residual (.node edge.entry.key.symbol fragments) current) = some finished)
+    (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+      (.inl (.node edge.entry.key.symbol fragments)) finished.core) =
+        [.ok ((false, updated), callbackCore)]) :
+    ∃ (next : Inventory) (final : Memos),
+      Post formulas solver next capturedCaller caller final ∧ final.query = queries ∧
+      Packet formulas solver next caller final metadata
+        (SelectedEdge.finish residual (.node edge.entry.key.symbol fragments) current) ∧
+      Packet formulas solver next caller final metadata finished ∧
+      Packet formulas solver next caller final updated (EnumerationExpandableIndex.frame callbackCore finished) ∧
+      FragmentBound finished.core.counter (.node edge.entry.key.symbol fragments) ∧
+      RenderStable finished.core callbackCore ∧ Frame finished.core callbackCore ∧
+      Fits currentSeed.2 caller.checked ∧
+      Heap (fun guard => guard ∈ currentSeed.1) caller.checked.native.machine.heap ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound finished.core ≤
+        SourcePruningEnumerationPrefixAdmission.suspendedBound current.core ∧
+      finished.core.values[uv]? = some (.enumerated (.node edge.entry.key.symbol fragments)) ∧
+      IsRoot finished.core.representatives uv
+ := by
+  let fragment : Fragment := .node edge.entry.key.symbol fragments
+  let selected := SelectedEdge.finish residual fragment current
+  have tuple : TupleInputs formulas solver capturedCaller metadata ownCache
+      (staged.map (fun input => (input.1, input.2.1))) fragments caller queries current := history
+  have data := actual_observed_own_tuple_child_inputs formulas solver inventory capturedCaller memos metadata
+    capturedBefore scs edge residual ownCache staged packet prepared fragments caller queries current tuple
+  obtain ⟨next, final, finalFuel, canonicalAfter, post, querySame, finalAt,
+      finishedPacket, finalBound, _core, finalMass, finalStored, finalRoot⟩ :=
+    finalize_child_inputs_packet formulas solver capturedCaller caller metadata capturedBefore selected uv handle scs
+      fragment queries ready stored incoming data
+  have observedLater := SourcePruningEnumerationFinalize.run_some_moreFuel
+    caller.checked.native.machine.heap workFuel finalFuel uv fragment selected finished finalized
+  have canonicalLater := finalAt workFuel
+  rw [Nat.add_comm workFuel finalFuel] at observedLater
+  have sameCache : canonicalAfter = finished := Option.some.inj (canonicalLater.symm.trans observedLater)
+  subst canonicalAfter
+  obtain ⟨_selectedInventory, _selectedMemos, _selectedPost, _selectedQuery, selectedPacket, _selectedHistory⟩ := data
+  have selectedCurrent : Packet formulas solver next caller final metadata selected :=
+    ⟨post.context, selectedPacket.safe, selectedPacket.pending, selectedPacket.valid,
+      selectedPacket.ordered, selectedPacket.bounded⟩
+  have actualCallback : EnumerationCorrectness.Success
+      (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (.inl fragment))
+      finished.core (false, updated) callbackCore := by
+    change Except.ok ((false, updated), callbackCore) ∈
+      ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+        (.inl fragment) finished.core)
+    rw [recorded]
+    exact List.mem_singleton_self _
+  obtain ⟨callbackPacket, stable, frame, _types, _holes, _typing, fitted, known⟩ :=
+    SourcePruningEnumerationRealWorkerCallbackResources.recorded_callback_current_at_original_budget
+      formulas solver next graph templates metadata uv fragment caller final finished currentSeed
+      finishedPacket finalBound currentFits currentKnown workFuel (false, updated) callbackCore actualCallback
+  have mass : SourcePruningEnumerationPrefixAdmission.suspendedBound finished.core ≤
+      SourcePruningEnumerationPrefixAdmission.suspendedBound current.core := finalMass
+  exact ⟨next, final, post, querySame, selectedCurrent, finishedPacket, callbackPacket,
+    finalBound, stable, frame, fitted, known, mass, finalStored, finalRoot⟩
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+end CapturedCurrentResourceExports

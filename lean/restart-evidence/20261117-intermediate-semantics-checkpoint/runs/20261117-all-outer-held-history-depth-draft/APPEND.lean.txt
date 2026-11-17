@@ -1,0 +1,80 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationSharedPreparedRecursive (Output)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+set_option maxHeartbeats 200000
+
+/- Note [Past admission for all outer entries]
+The depth predicate retains the original resource and selector inputs.
+Its history argument is an actual indexed operational derivation.
+It also retains a past held receipt from one fixed anchor to the entry.
+The successor proof must derive the next Packet and plan at the actual cut.
+It must not infer those data backwards from an emitted endpoint.
+The public worker must produce the operational history internally.
+This definition is an induction target, not a caller correctness oracle.
+Consumers must eliminate one resulting held derivation for all event fields.
+-/
+
+private def RealOuterHeldEntriesAtDepth
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (depth : Nat) : Prop :=
+  ∀ (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (metadata : Metadata Typing) (seed : Seed) (ceiling : Nat),
+    Packet formulas solver inventory caller memos metadata before →
+    Fits seed.2 caller.checked →
+    Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap →
+    (∀ entry rows level free, ∀ edge ∈ edgesOf (.node entry rows level free), edge ∈ rows) →
+    (∀ entry rows level free, (edgesOf (.node entry rows level free)).length ≤ rows.length) →
+    SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling →
+    eagerReserved bits depth seed ceiling →
+    ∀ (workFuel held heldHandle : Nat) (value : Node) (anchor : Core),
+      EnumerationDischargeHistory.HeldFragmentHistory held heldHandle anchor before.core →
+      SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap heldHandle = some value →
+      MergedOrdinaryHeight.recursiveBoundary value = true →
+      ∀ (decision : Option Next) (index : Nat) (output : Output (bits + 2) Typing),
+        SourcePruningEnumerationRestart.decision stop order metadata before = decision →
+        ∀ history : SourcePruningEnumerationRealEagerCausalOutputHistory.OutputHistoryAt
+          holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel depth
+          metadata caller memos.query before decision index output,
+          SourcePruningEnumerationParkedOuterHeldHistory.HeldOutputHistoryAt
+            holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel held heldHandle anchor history
+
+private theorem real_outer_held_entries_zero
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    RealOuterHeldEntriesAtDepth holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver 0 := by
+  unfold RealOuterHeldEntriesAtDepth
+  intro inventory caller memos before metadata seed ceiling
+    _packet _bounded _known _selectionMembers _selectionLength _mass _reserved
+    workFuel held heldHandle value anchor past _decoded _boundary decision index output _truthful history
+  cases history with
+  | stopped _ _ _ _ _ =>
+    exact .stopped _ _ _ _ _ past
+  | done _ _ _ _ _ =>
+    exact .done _ _ _ _ _ past
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

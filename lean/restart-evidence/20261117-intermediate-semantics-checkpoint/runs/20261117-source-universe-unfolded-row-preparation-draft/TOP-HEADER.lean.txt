@@ -1,0 +1,15 @@
+theorem original_universe_unfolded_row_top
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (nativeBefore nativeAfter : InternedConstructorTemplates.State Symbol Constraint)
+    (facts : Facts nativeBefore) (sourceGrowth : Grows sourceHeap nativeBefore)
+    (fuel : Nat) (prepared : Node)
+    (actual : SourcePruningEnumerationSelectedValue.run fuel
+      (.mu entry body depth ordinary) nativeBefore = .done prepared nativeAfter)
+    (row : Edge) (present : row ∈ InternedEdgeResidency.nodeEdges prepared) :
+    row.entry.key.constraint = SourceSynthesisGeneralizeSyntax.top
