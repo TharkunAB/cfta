@@ -1,0 +1,45 @@
+--- actual-trace
+
++++ required-trace
+
+@@ -1,11 +1,11 @@
+
+   @SourcePruningEnumerationSharedInvocationTrace.ChildrenInvocationAt (bits + 2) (Output (bits + 2) Typing)
+     (Failure (bits + 2) Typing) inst✝² inst✝¹ inst✝ checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+     SourcePruningEnumerationSharedInvocationTrace.Policy.eager
+-    (fun produced current capturedQueries captured =>
++    (fun produced reached saved after =>
+       match
+-        SourcePruningEnumerationFinalize.run current.checked.native.machine.heap workFuel uv
++        SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv
+           (Fragments.Fragment.node edge.entry.key.symbol produced)
+-          (SelectedEdge.finish residual (Fragments.Fragment.node edge.entry.key.symbol produced) captured) with
++          (SelectedEdge.finish residual (Fragments.Fragment.node edge.entry.key.symbol produced) after) with
+       | some finished =>
+         SourcePruningEnumerationSharedReceiptContinuation.run
+           (continueWith
+@@ -17,8 +17,8 @@
+
+             graph templates stop order workFuel metadata uv)
+           rowCaller rowQueries
+           (some
+-            (SelectedEdge.Result.complete (Fragments.Fragment.node edge.entry.key.symbol produced) current
+-              capturedQueries finished))
++            (SelectedEdge.Result.complete (Fragments.Fragment.node edge.entry.key.symbol produced) reached saved
++              finished))
+       | none =>
+         SourcePruningEnumerationSharedReceiptContinuation.run
+           (continueWith
+@@ -30,9 +30,8 @@
+
+             graph templates stop order workFuel metadata uv)
+           rowCaller rowQueries
+           (some
+-            (SelectedEdge.Result.finalizeStopped (Fragments.Fragment.node edge.entry.key.symbol produced) current
+-              capturedQueries
+-              (SelectedEdge.finish residual (Fragments.Fragment.node edge.entry.key.symbol produced) captured))))
++            (SelectedEdge.Result.finalizeStopped (Fragments.Fragment.node edge.entry.key.symbol produced) reached saved
++              (SelectedEdge.finish residual (Fragments.Fragment.node edge.entry.key.symbol produced) after))))
+     (fun completed observation candidate =>
+       SourcePruningEnumerationSharedReceiptContinuation.run
+         (continueWith

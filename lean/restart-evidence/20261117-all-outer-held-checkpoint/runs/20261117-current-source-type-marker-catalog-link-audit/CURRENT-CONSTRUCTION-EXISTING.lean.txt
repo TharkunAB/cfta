@@ -1,0 +1,9 @@
+/-- Construct the current root with canonical query bindings and repaired types. -/
+def firstOrderRaw (lib : Library) (query : Query) (signed : Int) :
+    Except MissingKey Expression :=
+  let ctx := SourceSynthesisCurrentContext.context lib query
+  if signed < 0 then .error (.relevant true signed (ctx.argumentEdges.map Prod.fst))
+  else do
+    let chunks ← (permutations ctx.argumentEdges).mapM fun selected =>
+      relevantRows ctx true signed.toNat (selected.map Prod.fst)
+    pure (ofType (.union chunks.flatten) (SourceSynthesisCurrentContext.typeNode query.queryGoal))

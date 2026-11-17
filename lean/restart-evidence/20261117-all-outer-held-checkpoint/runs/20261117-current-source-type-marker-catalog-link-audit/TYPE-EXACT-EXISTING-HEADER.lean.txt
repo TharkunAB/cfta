@@ -1,0 +1,5 @@
+theorem allTypes_member_iff_TypeIn (holds : Guard → Term Symbol → Bool)
+    (topHeld : ∀ term, holds top term = true)
+    (catalog : List (String × Nat)) (term : Term Symbol) :
+    evaluate holds [] (mapSyntax literal (allTypes top catalog)) term ↔
+      TypeIn catalog term := by

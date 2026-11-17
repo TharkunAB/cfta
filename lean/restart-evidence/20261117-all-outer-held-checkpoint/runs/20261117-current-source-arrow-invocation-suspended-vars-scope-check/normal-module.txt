@@ -1,0 +1,151 @@
+MicroCFTA.SourceSynthesisCurrentUniverseArrowInvocationProvenance.original_universe_arrow_selected_provenance.{u, v}
+  {width : Nat} {Output : Type u} {Reason : Type v} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (stored :
+    sourceHeap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+  (nativeBefore nativeAfter :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts nativeBefore)
+  (sourceGrowth : MicroCFTA.InternedConstructorTemplates.Grows sourceHeap nativeBefore) (unfoldFuel : Nat)
+  (prepared :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (unfolded :
+    MicroCFTA.SourcePruningEnumerationSelectedValue.run unfoldFuel
+        (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) nativeBefore =
+      MicroCFTA.MergedSourceComparison.Result.done prepared nativeAfter)
+  (row :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (present : row ∈ MicroCFTA.InternedEdgeResidency.nodeEdges prepared)
+  (arrowSymbol : row.entry.key.symbol = MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "->")
+  (checkEmpty : Bool) (r n p h k : Nat)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (policy : MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.Policy)
+  (consume :
+    MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result width →
+      MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result Output Reason width)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (caller reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before beforeFinalize :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries saved : MicroCFTA.SourceEndpointMemo.Memos) (index : Nat) (output : Output)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) (consumerIndex : Nat)
+  (total : MicroCFTA.UnionFind.Total before.core.representatives)
+  (trace :
+    MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.SelectedInvocationAt checkEmpty r n p h k edgesOf policy
+      consume scs row caller before queries index output
+      (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved
+        beforeFinalize)
+      consumerIndex) :
+  have fullUniverse := MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary;
+  ∃ marker markerEntry markerRow staged fragments afterChildren,
+    marker = MicroCFTA.InternedConstructorTemplates.Value.node markerEntry [markerRow] 0 [] ∧
+      markerRow.children = [] ∧
+        markerRow.entry.key =
+            { symbol := MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "(->)", children := [],
+              constraint := MicroCFTA.SourceSynthesisGeneralizeSyntax.top } ∧
+          row.children = [marker, fullUniverse, fullUniverse] ∧
+            row.entry.key.constraint = MicroCFTA.SourceSynthesisGeneralizeSyntax.top ∧
+              MicroCFTA.SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs row before =
+                  some [((MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "->", staged, none), before)] ∧
+                staged =
+                    [(marker, MicroCFTA.EnumerationState.descendScs 0 scs,
+                        MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild
+                          (MicroCFTA.EnumerationState.descendScs 0 scs) marker),
+                      (fullUniverse, MicroCFTA.EnumerationState.descendScs 1 scs,
+                        MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild
+                          (MicroCFTA.EnumerationState.descendScs 1 scs) fullUniverse),
+                      (fullUniverse, MicroCFTA.EnumerationState.descendScs 2 scs,
+                        MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild
+                          (MicroCFTA.EnumerationState.descendScs 2 scs) fullUniverse)] ∧
+                  fragment =
+                      MicroCFTA.Fragments.Fragment.node (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "->")
+                        fragments ∧
+                    beforeFinalize =
+                        MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.finish none fragment
+                          afterChildren ∧
+                      have done := fun produced current capturedQueries captured =>
+                        consume
+                          (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete
+                            (MicroCFTA.Fragments.Fragment.node
+                              (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "->") produced)
+                            current capturedQueries
+                            (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.finish none
+                              (MicroCFTA.Fragments.Fragment.node
+                                (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "->") produced)
+                              captured));
+                      have stopped := fun completed observation candidate =>
+                        consume
+                          (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped
+                            completed observation candidate);
+                      have rest :=
+                        [(fullUniverse, MicroCFTA.EnumerationState.descendScs 1 scs),
+                          (fullUniverse, MicroCFTA.EnumerationState.descendScs 2 scs)];
+                      ∃ markerFragment markerCaller markerQueries markerAfter markerConsumerIndex remainingFragments,
+                        fragments = markerFragment :: remainingFragments ∧
+                          MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.ChildInvocationAt checkEmpty r n p h k
+                              edgesOf policy (MicroCFTA.EnumerationState.descendScs 0 scs) marker caller before queries
+                              (fun produced current capturedQueries captured =>
+                                MicroCFTA.SourcePruningEnumerationSharedChildVisitors.visitChildren
+                                  (MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.runPolicy checkEmpty r n p h
+                                    k edgesOf policy)
+                                  (fun remaining => done (produced :: remaining))
+                                  (fun completed => stopped (produced :: completed)) rest current captured
+                                  capturedQueries)
+                              (fun observation candidate => stopped [] observation candidate) index output
+                              (MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.ChildExit.done markerFragment
+                                markerCaller markerQueries markerAfter)
+                              markerConsumerIndex ∧
+                            MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.ChildrenInvocationAt checkEmpty r n
+                                p h k edgesOf policy (fun remaining => done (markerFragment :: remaining))
+                                (fun completed => stopped (markerFragment :: completed)) rest markerCaller markerAfter
+                                markerQueries markerConsumerIndex output
+                                (MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.TupleExit.done
+                                  remainingFragments reached saved afterChildren)
+                                consumerIndex ∧
+                              (((MicroCFTA.EnumerationState.descendScs 0 scs).any fun sc =>
+                                    MicroCFTA.EqualityTrie.isTerminal sc.trie) =
+                                  true →
+                                ∃ returned read waiting winner,
+                                  ⋯ = ⋯ ∧
+                                    index = markerConsumerIndex ∧
+                                      markerFragment = MicroCFTA.Fragments.Fragment.hole winner ∧
+                                        ∀ (sc : MicroCFTA.EqualityTrie.Suspended Nat),
+                                          sc ∈ MicroCFTA.EnumerationState.descendScs 0 scs →
+                                            [] ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie →
+                                              MicroCFTA.UnionFind.SameClass returned.representatives winner sc.var)
+'MicroCFTA.SourceSynthesisCurrentUniverseArrowInvocationProvenance.original_universe_arrow_selected_provenance' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

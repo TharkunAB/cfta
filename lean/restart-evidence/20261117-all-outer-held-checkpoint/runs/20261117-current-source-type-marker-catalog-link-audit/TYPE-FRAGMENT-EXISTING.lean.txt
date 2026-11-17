@@ -1,0 +1,13 @@
+/-- A finite Type fragment has marked holes and the original Type constructor layouts. -/
+inductive TypeFragment (catalog : List (String × Nat)) (marked : Nat → Prop) : Fragment Symbol → Prop where
+  | hole (uv : Nat) (known : marked uv) : TypeFragment catalog marked (.hole uv)
+  | leaf (name : String) (present : name ∈ ["var1", "var2", "var3", "var4"]) :
+      TypeFragment catalog marked (.node (literal name) [])
+  | node (name : String) (children : List (Fragment Symbol))
+      (present : (name, children.length) ∈ catalog)
+      (checked : ∀ child ∈ children, TypeFragment catalog marked child) :
+      TypeFragment catalog marked (.node (literal name) children)
+  | arrow (argument result : Fragment Symbol)
+      (first : TypeFragment catalog marked argument) (second : TypeFragment catalog marked result) :
+      TypeFragment catalog marked
+        (.node (literal "->") [.node (literal "(->)") [], argument, result])

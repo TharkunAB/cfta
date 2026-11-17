@@ -1,0 +1,59 @@
+private theorem real_outer_held_prepared_opaque
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth workFuel : Nat)
+    (outerIH : RealOuterHeldEntriesAtDepth (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before : Cached) (seed : Seed) (ceiling uv handle : Nat)
+    (scs : List Suspended)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (bounded : Fits (SourcePruningEnumerationSharedRecursiveReservation.narrowSeed seed).2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (bucketBound : scs.length ≤ ceiling)
+    (selectionMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : eagerReserved bits (recursiveDepth + 1) seed ceiling)
+    (held heldHandle : Nat) (heldValue : Node) (anchor : Core) (different : uv ≠ held)
+    (past : EnumerationDischargeHistory.HeldFragmentHistory held heldHandle anchor before.core)
+    (decodedHeld : SourcePruningEnumerationNodes.lookupNode
+      caller.checked.native.machine.heap heldHandle = some heldValue)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary heldValue = true)
+    (index : Nat) (output : Output (bits + 2) Typing)
+    (target preparedHandle : Nat) (preparedScs : List Suspended) (decoded value : Node)
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (entered callbackCore : Core)
+    (callbackMetadata : Metadata Typing) (fragment : Fragment)
+    (completedCaller : Caller (bits + 2)) (saved : Queries) (finished : Cached)
+    (preparation : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv caller before =
+      ([.ok ((target, preparedHandle, preparedScs, decoded), entered)], some (.done value heap)))
+    (mode : preparedScs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true ∨
+      (match value with | .node .. => False | _ => True))
+    (completed : SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty
+      workFuel workFuel workFuel workFuel workFuel target preparedScs value
+      (SourcePruningEnumerationSelectedValueCaller.advance caller heap)
+      (EnumerationExpandableIndex.frame entered before) memos.query =
+      some (.complete fragment completedCaller saved finished))
+    (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+      (.inl fragment) finished.core) = [.ok ((false, callbackMetadata), callbackCore)])
+    (tail : SourcePruningEnumerationRealEagerCausalOutputHistory.OutputHistoryAt
+      holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+      callbackMetadata completedCaller saved (EnumerationExpandableIndex.frame callbackCore finished)
+      (SourcePruningEnumerationRestart.decision stop order callbackMetadata
+        (EnumerationExpandableIndex.frame callbackCore finished)) index output) :
+    SourcePruningEnumerationParkedOuterHeldHistory.HeldPreparedHistoryAt
+      holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel held heldHandle anchor
+      (SourcePruningEnumerationRealEagerCausalOutputHistory.PreparedHistoryAt.opaque
+        (bits := bits) (depth := recursiveDepth) (uv := uv) (target := target)
+        (handle := preparedHandle) (index := index) (metadata := metadata)
+        (callbackMetadata := callbackMetadata) (caller := caller) (completedCaller := completedCaller)
+        (queries := memos.query) (saved := saved) (before := before) (finished := finished)
+        (scs := preparedScs) (decoded := decoded) (value := value) (heap := heap)
+        (entered := entered) (callbackCore := callbackCore) (fragment := fragment) (output := output)
+        preparation (by cases value <;> exact mode) completed recorded tail)
