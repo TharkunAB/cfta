@@ -1,0 +1,19 @@
+# Source-derived third-query node seed
+
+Status: FROZEN COMPLETE UNCOMPILED CANDIDATE. No theorem credit is claimed.
+
+The public theorem is NativeAllocation.original_universe_two_prefix_node_seed_for_third_actual_history in normal module SourceSynthesisCurrentUniverseThirdQueryNodeSeed. Its complete source/root/configuration/fuel/plans/controls prefix is byte-identical to b4b2af07 except the theorem name. It projects only the C/M node seed. The target keeps nextRoot, the exact middleSnapshot start and the full nextCount H3. It supplies no future Profile, Gamma, source role, target inventory, body law or model.
+
+Both private headers and the public FIRST were frozen before proof writing. authentic_key_and_parent_apart eliminates ONE genuine AuthenticEntryAt. Its actual entry prefix derives Physical at that entry. The checked ordered-entry receipt supplies its literal full U and full ordinary pattern at the SAME state. The helper derives the original singleton key and source parent-pair separation there. No source pattern is required at an earlier writer, and no availability is transported backward.
+
+The second helper applies that fact to one actual producer auxiliary key and one actual future original entry. The four original auxiliary key shapes retain the old parent plus e or d. The old source receipt proves those pairs distinct. The future authentic entry has a singleton base. The new pure key-separation law rejects their equality. No full-pattern comparison or payload assumption is used in this exclusion.
+
+The public proof derives current physical and source inventory facts at the first snapshot from the original bounded cold prefix. It derives both actual producer Gamma laws from the existing source theorems: cold Gamma for query1 and first-warm Gamma for query2. These are proof-local derived facts, not public semantic inputs. The closed request clause follows directly from the actual middle Gamma because ClosedQualified does not depend on H3.
+
+For the mixed clause, the proof eliminates the middle trace's returned-node origin once. Inherited cells retain the SAME oldSnapshot handle, captured request and value. The original cold returned-node full-admission producer then yields the true cold source admission for that same cell. Newly produced cells retain the SAME actual finish and owner; the checked warm query-dispatch origin and full warm call-admission export supply their literal middle-query admission. No independent origin or query witness is selected from value membership.
+
+A Qualified producing admission activates that producer's already-derived Gamma. The resulting Profile is independent of H3. An auxiliary producing admission is excluded by the actual future mixed qualifier's original singleton domain, using the source key helper above. Every auxiliary key alternative is covered. The original full source pattern and source body identity remain in the receipts. The proof does not shorten H3 or compare unrelated histories at equal Prop indices.
+
+All third-query physical/root/resource fields are retained from b4b2af07. Some are stronger than this node-only proof needs; the proof explicitly retains them. The four auxiliary initial fields, the initial edge law and the overall inventory/six-seed conjunction remain separate obligations. This candidate does not prove query3 execution preservation, arbitrary serial warm closure, native inhabitance, guard truth or one finite accepted completion under one assignment.
+
+Compile the frozen source key owner candidate first, then this normal-import module. DEPENDENCIES.json pins that selection. PROBES.lean.txt has one public report. INTERNAL-PROBES.lean.txt is a separate optional same-file fixture with two private reports. Neither imports its own module. Default proof limits and autoImplicit false remain. No Source, Work, compiler, Git, board, temporary file or earlier packet was changed.

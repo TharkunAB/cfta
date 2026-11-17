@@ -1,0 +1,152 @@
+ := by
+  have _retainedThirdAdmissions := And.intro nextRootDomain
+    (And.intro nextRootAvailable (And.intro nextRootClosed
+      (And.intro nextBound (And.intro nextInputs (And.intro nextFields nextActual)))))
+  let coldInitial : Checked width := ⟨initial width machine, operations⟩
+  have coldPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  have oldCurrent : Inputs (.code (.node oldRoot .pure)) coldInitial := by
+    cases oldFuel with
+    | zero => exact oldInputs
+    | succ remaining => exact oldInputs.1
+  have oldLeftAvailable : Available machine.heap oldRoot.left := oldCurrent.1.2.1
+  have oldRightAvailable : Available machine.heap oldRoot.right := oldCurrent.1.2.2
+  have oldOperations := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+    oldFuel oldCount (.code (.node oldRoot .pure)) oldControl .pure coldInitial oldSnapshot sourceHeap
+    coldPhysical oldInputs oldFields operationsValid sourceGrowth
+    (by simpa only [Control.bind_pure] using oldActual.steps) oldBound
+  have middlePhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension middleActual oldOperations.2.1).1
+  have leftProfile : Profile entry.identity oldRoot.left :=
+    ⟨oldRootClosed.1,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        machine.heap machineValid.1.coherent pastInventory oldRoot.left oldLeftAvailable oldRootClosed.1⟩
+  have rightProfile : Profile entry.identity oldRoot.right :=
+    ⟨oldRootClosed.2,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        machine.heap machineValid.1.coherent pastInventory oldRoot.right oldRightAvailable oldRootClosed.2⟩
+  have coldInventory := original_universe_cold_query_no_new_mu
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    oldRoot machine machineValid sourceGrowth oldRootDomain leftProfile rightProfile
+    operations operationsValid oldFuel oldInputs oldFields
+  have inventoryAtOld : InternedShallowHeap.NoNewMu sourceHeap oldSnapshot.native.machine.heap :=
+    InternedShallowHeap.noNewMu_trans pastInventory
+      (coldInventory.2 oldCount oldControl oldSnapshot oldBound oldActual)
+  have oldGamma :=
+    SourceCurrentAllocatedNativeGeneralCMHistory.current_stored_universe_general_cm_returned_at_every_actual_prefix
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      oldRoot machine machineValid sourceGrowth operations operationsValid oldFuel oldCount oldControl oldSnapshot
+      oldBound oldInputs oldFields oldActual
+  have middleGamma :=
+    SourceCurrentNativeWarmCMHistory.current_stored_universe_warm_cm_returned_at_every_actual_prefix
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      oldRoot machine oldRootDomain oldRootClosed machineValid sourceGrowth pastInventory
+      operations operationsValid oldFuel oldCount oldControl oldSnapshot oldBound oldInputs oldFields oldActual
+      middleRoot middleFuel middleCount middleControl middleSnapshot middleBound middleInputs middleFields middleActual
+  obtain ⟨bodyEntry, _marker, _arrow, _sourceRows, bodyShape, _bodyAvailable, _markerShape,
+      _arrowChildren, _arrowKey, _catalog, _markerClosed, _markerAvailable, _markerAtoms,
+      _rowKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      machine.heap machineValid.1 sourceGrowth
+  let bodyRows := canonicalEdges (_arrow :: _sourceRows)
+  have bodyRead : body = .node bodyEntry bodyRows 0 [.interned entry.identity] := bodyShape
+  have bodyIdentity : identity body = some bodyEntry.identity := by
+    rw [bodyRead]
+    rfl
+  intro handle request value currentCell
+  constructor
+  · intro closed
+    exact (middleGamma.1.1 handle request value currentCell).1 closed
+  · intro mixed
+    obtain ⟨targetPattern, targetPatternId, _targetAlias, _targetOperand, targetAuthentic,
+      _targetAliasKind, _targetProfile, _targetHeight, _targetStrict, _targetOrder⟩ := mixed
+    have excluded
+        (producerRoot : NodeRequest Symbol Guard) (producerStart : Checked width)
+        (producerPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid producerStart.native)
+        (producerCount : Nat) (pattern : Node) (patternId : Nat)
+        (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+        (authentic : AuthenticEntryAt (width := width) producerRoot producerStart producerCount
+          entry body depth ordinary pattern patternId domain)
+        (keys :
+        request.domain.key = extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity) ∨
+        request.domain.key = extend (extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity))
+          [entry.identity] (pair entry.identity entry.identity) ∨
+        request.domain.key = extend domain.key [entry.identity] (pair entry.identity entry.identity) ∨
+        request.domain.key = extend (extend domain.key [entry.identity] (pair entry.identity entry.identity))
+          [entry.identity] (pair bodyEntry.identity entry.identity)) : False := by
+      exact auxiliary_domain_cannot_be_authentic_base (width := width)
+        producerRoot producerStart producerPhysical producerCount entry body depth ordinary
+        bodyEntry bodyRows bodyRead pattern patternId domain authentic request.domain keys
+        nextRoot middleSnapshot middlePhysical nextCount targetPattern targetPatternId targetAuthentic
+    rcases SourceCurrentAllocatedNativeNodeReturnOrigin.returned_node_cell_or_finish_prefix
+        middleActual handle request value currentCell with inherited | produced
+    · obtain ⟨_finishUsed, _suffixCount, _beforeFinish, _continuation, _queryUsed, _bodyCount,
+        _queryBefore, _beforeBody, _queryNext, _finishTotal, _finishSmall, _finishFuel,
+        _finishActual, _owner, _finishEvent, _finished, _suffix, _queryTotal, _querySmall,
+        _queryFuel, _queryActual, _dispatch, _isolated, _physical, _ready, _safe,
+        _bodyOwner, _bodyActual, _nextSame, bodyId, bodyIdRead, admitted⟩ :=
+      original_universe_returned_node_full_admission (width := width)
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        oldRoot machine machineValid sourceGrowth pastInventory oldRootDomain oldLeftAvailable oldRightAvailable
+        oldRootClosed.1 oldRootClosed.2 operations oldFuel oldCount oldControl oldSnapshot oldBound oldActual
+        handle request value inherited
+      rcases admitted with qualified | auxiliary
+      · rcases qualified with closed | oldMixed
+        · exact (oldGamma.1.1 handle request value inherited).1 closed
+        · exact (oldGamma.1.1 handle request value inherited).2 oldMixed
+      · have bodyIdSame : bodyId = bodyEntry.identity := Option.some.inj (bodyIdRead.symm.trans bodyIdentity)
+        subst bodyId
+        obtain ⟨pattern, patternId, domain, authentic, alternatives⟩ := auxiliary
+        dsimp only at alternatives
+        have keys :
+          request.domain.key = extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity) ∨
+          request.domain.key = extend (extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity))
+            [entry.identity] (pair entry.identity entry.identity) ∨
+          request.domain.key = extend domain.key [entry.identity] (pair entry.identity entry.identity) ∨
+          request.domain.key = extend (extend domain.key [entry.identity] (pair entry.identity entry.identity))
+            [entry.identity] (pair bodyEntry.identity entry.identity) := by
+          rcases alternatives with ⟨same, _⟩ | ⟨same, _, _⟩ | ⟨same, _⟩ | ⟨same, _⟩
+          · exact Or.inl same
+          · exact Or.inr (Or.inl same)
+          · exact Or.inr (Or.inr (Or.inl same))
+          · exact Or.inr (Or.inr (Or.inr same))
+        exact (excluded oldRoot coldInitial coldPhysical oldCount pattern patternId domain authentic keys).elim
+    · obtain ⟨finishUsed, _suffixCount, beforeFinish, continuation, total,
+        finishActual, owner, _finishEvent, _finished, _suffix⟩ := produced
+      obtain ⟨queryUsed, _bodyCount, queryBefore, _beforeBody, queryNext, queryTotal,
+          _querySmall, _queryFuel, queryActual, _dispatch, _isolated, _queryPhysical,
+          _ready, _safe, _bodyOwner, _bodyActual, _nextSame⟩ :=
+        SourceCurrentAllocatedNativeNodeQueryDispatchOrigin.actual_node_query_dispatch_from_warm_query_finish
+          middleRoot oldSnapshot oldOperations.2.1 middleFuel finishUsed handle request value continuation
+          beforeFinish (by omega) finishActual owner
+      obtain ⟨bodyId, bodyIdRead, admitted⟩ := original_universe_warm_node_query_prefix_full_admission
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        middleRoot oldSnapshot oldOperations.2.1 oldOperations.2.2.2.1 inventoryAtOld
+        middleRootDomain middleLeftAvailable middleRightAvailable middleLeftClosed middleRightClosed
+        middleFuel middleCount queryUsed middleBound middleInputs middleFields
+        request queryNext queryBefore (by omega) queryActual
+      rcases admitted with qualified | auxiliary
+      · rcases qualified with closed | oldMixed
+        · exact (middleGamma.1.1 handle request value currentCell).1 closed
+        · exact (middleGamma.1.1 handle request value currentCell).2 oldMixed
+      · have bodyIdSame : bodyId = bodyEntry.identity := Option.some.inj (bodyIdRead.symm.trans bodyIdentity)
+        subst bodyId
+        obtain ⟨pattern, patternId, domain, authentic, alternatives⟩ := auxiliary
+        dsimp only at alternatives
+        have keys :
+          request.domain.key = extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity) ∨
+          request.domain.key = extend (extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity))
+            [entry.identity] (pair entry.identity entry.identity) ∨
+          request.domain.key = extend domain.key [entry.identity] (pair entry.identity entry.identity) ∨
+          request.domain.key = extend (extend domain.key [entry.identity] (pair entry.identity entry.identity))
+            [entry.identity] (pair bodyEntry.identity entry.identity) := by
+          rcases alternatives with ⟨same, _⟩ | ⟨same, _, _⟩ | ⟨same, _⟩ | ⟨same, _⟩
+          · exact Or.inl same
+          · exact Or.inr (Or.inl same)
+          · exact Or.inr (Or.inr (Or.inl same))
+          · exact Or.inr (Or.inr (Or.inr same))
+        exact (excluded middleRoot oldSnapshot oldOperations.2.1 middleCount
+          pattern patternId domain authentic keys).elim

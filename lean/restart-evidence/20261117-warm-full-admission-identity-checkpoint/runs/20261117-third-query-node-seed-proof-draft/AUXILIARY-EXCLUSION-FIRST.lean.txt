@@ -1,0 +1,23 @@
+private theorem auxiliary_domain_cannot_be_authentic_base
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+    (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+    (wholeCount : Nat) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+    (pattern : Node) (patternId : Nat) (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (authentic : AuthenticEntryAt (width := width) rootRequest start wholeCount
+      entry body depth ordinary pattern patternId domain)
+    (requestDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (auxiliary :
+      requestDomain.key = extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity) ∨
+      requestDomain.key = extend (extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity))
+        [entry.identity] (pair entry.identity entry.identity) ∨
+      requestDomain.key = extend domain.key [entry.identity] (pair entry.identity entry.identity) ∨
+      requestDomain.key = extend (extend domain.key [entry.identity] (pair entry.identity entry.identity))
+        [entry.identity] (pair bodyEntry.identity entry.identity))
+    (targetRoot : NodeRequest Symbol Guard) (targetStart : Checked width)
+    (targetPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid targetStart.native)
+    (targetCount : Nat) (targetPattern : Node) (targetPatternId : Nat)
+    (targetAuthentic : AuthenticEntryAt (width := width) targetRoot targetStart targetCount
+      entry body depth ordinary targetPattern targetPatternId requestDomain) : False
