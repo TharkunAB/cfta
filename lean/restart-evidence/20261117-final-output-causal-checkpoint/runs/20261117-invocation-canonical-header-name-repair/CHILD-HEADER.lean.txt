@@ -1,0 +1,11 @@
+theorem child_done_canonical
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (scs : List Suspended) (incoming : Node) (caller reached : Caller width)
+    (before after : Cached) (queries saved : Queries) (done : Done) (stopped : Stopped)
+    (index : Nat) (output : Output) (fragment : Fragment) (localIndex : Nat)
+    (canonical : Canonical before.core)
+    (valid : ValidSuspended scs)
+    (trace : ChildInvocationAt checkEmpty r n p h k edgesOf policy
+      scs incoming caller before queries done stopped index output
+        (.done fragment reached saved after) localIndex) :
+    Canonical after.core

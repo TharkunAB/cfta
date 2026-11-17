@@ -1,0 +1,11 @@
+theorem children_done_canonical
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (done : TupleDone) (stopped : TupleStopped) (inputs : List (Node × List Suspended))
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (index : Nat) (output : Output) (fragments : List Fragment) (localIndex : Nat)
+    (canonical : Canonical before.core)
+    (valid : ∀ input ∈ inputs, ValidSuspended input.2)
+    (trace : ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+      done stopped inputs caller before queries index output
+        (.done fragments reached saved after) localIndex) :
+    Canonical after.core

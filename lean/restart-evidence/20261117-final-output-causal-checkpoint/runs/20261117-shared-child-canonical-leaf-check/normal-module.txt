@@ -1,0 +1,32 @@
+MicroCFTA.SourcePruningEnumerationSharedChildCanonical.successful_canonical {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries saved : MicroCFTA.SourceEndpointMemo.Memos)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (returned read :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (canonical : MicroCFTA.EnumerationValidity.Canonical before.core)
+  (inputs : MicroCFTA.EnumerationSemantics.ValidSuspended scs)
+  (actual :
+    MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty r n p h k scs incoming
+        caller before queries =
+      ((Except.ok (some [Except.ok (fragment, returned)]), reached, saved, read, waiting), some after)) :
+  MicroCFTA.EnumerationValidity.Canonical after.core
+'MicroCFTA.SourcePruningEnumerationSharedChildCanonical.successful_canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,6 @@
+theorem enter_sameClass_forward
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel uv : Nat)
+    (before after : Core) (result : Nat × Nat × List Suspended × Node)
+    (actual : Success (SourcePruningEnumerationEntry.enter heap fuel uv) before result after) :
+    ∀ left right, UnionFind.SameClass before.representatives left right →
+      UnionFind.SameClass after.representatives left right

@@ -1,0 +1,32 @@
+theorem nonterminal_success_footprint
+    (checkEmpty : Bool) (r n p h k : Nat)
+    (scs : List Suspended) (incoming : Node) (caller reached : Caller width)
+    (before after : Cached) (queries saved : Queries) (fragment : Fragment)
+    (returned read : Core) (waiting : EnumerationWaitingIndex.Waiting)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (actual : ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries =
+      ((.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting), some after)) :
+    let storedBucket : List Suspended := match incoming with | .node _ _ _ _ => scs | _ => []
+    ∃ (handle : Nat) (decoded : Node) (flag : Bool)
+        (action : EnumerateM Symbol Constraint Fragment),
+      incoming ≠ .empty ∧
+      SourcePruningEnumerationNodes.encodeNode incoming = some handle ∧
+      SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some decoded ∧
+      SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (.unenumerated (some handle) []) = some flag ∧
+      SourcePruningEnumerationShallowChild.prepareChild scs incoming = some action ∧
+      ExceptT.run (action before.core) = [.ok (fragment, returned)] ∧
+      SourcePruningEnumerationCachedPrepare.prepareChild caller.checked.native.machine.heap
+        k scs incoming before = some [(fragment, after)] ∧
+      fragment = .hole before.core.counter ∧ reached = caller ∧ saved = queries ∧
+      read = before.core ∧ waiting = before.waiting ∧ after.core = returned ∧
+      returned = (match incoming with
+        | .node _ _ _ _ =>
+            {EnumerationState.allocated (some handle) before.core with
+              values := (EnumerationState.allocated (some handle) before.core).values.set
+                before.core.counter (.unenumerated (some handle) scs)}
+        | _ => EnumerationState.allocated (some handle) before.core) ∧
+      after.core.counter = before.core.counter + 1 ∧
+      (before.core.counter = before.core.values.length →
+        after.core.values[before.core.counter]? = some (.unenumerated (some handle) storedBucket) ∧
+          after.core.counter = after.core.values.length)

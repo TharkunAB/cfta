@@ -1,0 +1,17 @@
+theorem enter_sameClass_forward
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel uv : Nat)
+    (before after : Core) (result : Nat × Nat × List Suspended × Node)
+    (actual : Success (SourcePruningEnumerationEntry.enter heap fuel uv) before result after) :
+    ∀ left right, UnionFind.SameClass before.representatives left right →
+      UnionFind.SameClass after.representatives left right
+
+theorem successful_preparation_entry_invariants
+    (entryFuel nativeFuel uv target handle : Nat) (bucket : List Suspended)
+    (caller : Caller width) (before : Cached) (entered : Core) (decoded result : Node)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (canonical : Canonical before.core) (total : UnionFind.Total before.core.representatives)
+    (observed : SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv caller before =
+      ([.ok ((target, handle, bucket, decoded), entered)], some (.done result heap))) :
+    UnionFind.Total entered.representatives ∧ Canonical entered ∧ ValidSuspended bucket ∧
+      ∀ left right, UnionFind.SameClass before.core.representatives left right →
+        UnionFind.SameClass entered.representatives left right

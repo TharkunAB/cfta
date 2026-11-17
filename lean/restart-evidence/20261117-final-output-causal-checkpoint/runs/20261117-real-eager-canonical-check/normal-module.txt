@@ -1,0 +1,115 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-real-eager-canonical-check/source/MicroCFTA/SourcePruningEnumerationRealEagerCanonical.lean:93:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  after.values
+in the target expression
+  value ∈ (EnumerationExpandableIndex.frame after before).core.values
+
+Typing : Type
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+fuel uv : Nat
+metadata updated : Metadata Typing
+fragment : Fragment
+before : Cached
+after : Core
+canonical : Canonical before.core
+recorded :
+  (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv (Sum.inl fragment) before.core).run =
+    [Except.ok ((false, updated), after)]
+successful :
+  Success (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before.core
+    (false, updated) after
+values : after.values = before.core.values
+value : UVarValue Symbol
+member : value ∈ (EnumerationExpandableIndex.frame after before).core.values
+⊢ value ∈ before.core.values
+MicroCFTA.SourcePruningEnumerationRealEagerCanonical.resumeWithNarrow_real_canonical_at_any_budget {Typing Key : Type}
+  {bits : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel recursiveDepth : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (decision : Option MicroCFTA.EnumerationState.Next) :
+  MicroCFTA.EnumerationValidity.Canonical before.core →
+    ∀ (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing),
+      output ∈
+          MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.emitted
+            (MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+              (MicroCFTA.SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                workFuel workFuel edgesOf)
+              (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop
+              order workFuel recursiveDepth metadata caller queries before decision) →
+        MicroCFTA.EnumerationValidity.Canonical output.cache.core
+'MicroCFTA.SourcePruningEnumerationRealEagerCanonical.resumeWithNarrow_real_canonical_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationRealEagerCanonical.runEager_real_canonical_at_any_budget {Typing Key : Type}
+  {bits : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel recursiveDepth : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (canonical : MicroCFTA.EnumerationValidity.Canonical before.core) :
+  have outcome :=
+    MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+      workFuel recursiveDepth metadata caller queries before;
+  ∀ (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing),
+    output ∈ MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.emitted outcome →
+      MicroCFTA.EnumerationValidity.Canonical output.cache.core
+'MicroCFTA.SourcePruningEnumerationRealEagerCanonical.runEager_real_canonical_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

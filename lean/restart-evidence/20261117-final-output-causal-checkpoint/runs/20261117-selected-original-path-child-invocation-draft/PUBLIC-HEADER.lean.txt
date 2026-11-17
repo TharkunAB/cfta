@@ -1,0 +1,50 @@
+theorem selected_original_path_child_invocation
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width)
+    (parentBucket : List Suspended) (edge : Edge) (caller finalCaller : Caller width)
+    (before middle finished : Cached) (queries finalQueries : Queries)
+    (index : Nat) (output : Output) (fragment : Fragment) (consumerIndex : Nat)
+    (symbol : Symbol) (staged : List Input) (residual : Option Constraint)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap parentBucket edge before =
+      some [((symbol, staged, residual), middle)])
+    (occurrence : Nat) (obligation : Suspended)
+    (original : parentBucket[occurrence]? = some obligation)
+    (valid : EqualityTrie.Valid obligation.trie) (position : Nat) (suffix : List Nat)
+    (path : position :: suffix ∈ EqualityTrie.fromPathTrie obligation.trie)
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy consume parentBucket edge caller before queries
+      index output (.complete fragment finalCaller finalQueries finished) consumerIndex) :
+    let tupleDone : TupleDone := fun produced current capturedQueries captured =>
+      consume (.complete (.node symbol produced) current capturedQueries
+        (SelectedEdge.finish residual (.node symbol produced) captured))
+    let tupleStopped : TupleStopped := fun completed observation candidate =>
+      consume (.stopped completed observation candidate)
+    let descendant : Suspended := ⟨EqualityTrie.pathTrieDescend obligation.trie position, obligation.var⟩
+    ∃ (incoming : Node) (childBucket : List Suspended)
+        (action : Option (EnumerateM Symbol Constraint Fragment))
+        (priorStaged laterStaged : List Input) (priorFragments : List Fragment)
+        (childCaller : Caller width) (childBefore : Cached) (childQueries : Queries)
+        (childRootIndex : Nat) (childFragment : Fragment) (reached : Caller width)
+        (saved : Queries) (after : Cached) (childCallbackIndex : Nat)
+        (remainingFragments : List Fragment) (afterChildren : Cached),
+      staged[position]? = some (incoming, childBucket, action) ∧
+      staged = priorStaged ++ (incoming, childBucket, action) :: laterStaged ∧
+      priorStaged.length = position ∧ priorFragments.length = position ∧
+      childBucket[(descendScs position (parentBucket.take occurrence)).length]? = some descendant ∧
+      EqualityTrie.Valid descendant.trie ∧ suffix ∈ EqualityTrie.fromPathTrie descendant.trie ∧
+      fragment = .node symbol (priorFragments ++ childFragment :: remainingFragments) ∧
+      finished = SelectedEdge.finish residual fragment afterChildren ∧
+      ChildInvocationAt checkEmpty r n p h k edgesOf policy childBucket incoming childCaller childBefore childQueries
+        (fun produced current capturedQueries captured =>
+          visitChildren (runPolicy checkEmpty r n p h k edgesOf policy)
+            (fun remaining => tupleDone (priorFragments ++ produced :: remaining))
+            (fun completed => tupleStopped (priorFragments ++ produced :: completed))
+            (laterStaged.map (fun input => (input.1, input.2.1))) current captured capturedQueries)
+        (fun observation candidate => tupleStopped priorFragments observation candidate)
+        childRootIndex output (.done childFragment reached saved after) childCallbackIndex ∧
+      ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+        (fun remaining => tupleDone (priorFragments ++ childFragment :: remaining))
+        (fun completed => tupleStopped (priorFragments ++ childFragment :: completed))
+        (laterStaged.map (fun input => (input.1, input.2.1))) reached after saved
+        childCallbackIndex output (.done remainingFragments finalCaller finalQueries afterChildren) consumerIndex ∧
+      ∀ left right, UnionFind.SameClass after.core.representatives left right →
+        UnionFind.SameClass finished.core.representatives left right

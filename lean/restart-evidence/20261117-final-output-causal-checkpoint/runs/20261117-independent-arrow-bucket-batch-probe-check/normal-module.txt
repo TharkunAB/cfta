@@ -1,0 +1,121 @@
+@MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion.recomplete_independent_arrow_buckets_at_snapshot : ∀
+  {Guard : Type} (catalog : List (String × Nat))
+  (state : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  MicroCFTA.EnumerationSchedule.Safe state →
+    ∀ (roots : Nat → Nat),
+      MicroCFTA.EnumerationSchedule.Roots state.representatives roots →
+        ∀ (level : Nat → Nat) (frontier : Nat),
+          MicroCFTA.EnumerationOrder.Stratified state level frontier →
+            ∀ (current : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+              MicroCFTA.UnionFind.Satisfies state.representatives current →
+                (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+                    state.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                      MicroCFTA.Fragments.fill current fragment = current slot) →
+                  ∀ (events : List (Nat × List MicroCFTA.EnumerationState.Suspended)),
+                    (∀ (event : Nat × List MicroCFTA.EnumerationState.Suspended),
+                        event ∈ events →
+                          ∃ node bucket,
+                            state.values[event.fst]? =
+                              some (MicroCFTA.EnumerationState.UVarValue.unenumerated node bucket)) →
+                      List.Pairwise
+                          (fun first second =>
+                            ¬MicroCFTA.UnionFind.SameClass state.representatives first.fst second.fst)
+                          events →
+                        (∀ (event : Nat × List MicroCFTA.EnumerationState.Suspended),
+                            event ∈ events →
+                              ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                                sc ∈ event.snd →
+                                  ∀ (path : MicroCFTA.EqualityTrie.Path),
+                                    path ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie → path = [1] ∨ path = [2]) →
+                          (∀ (event : Nat × List MicroCFTA.EnumerationState.Suspended),
+                              event ∈ events →
+                                ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                                  sc ∈ event.snd →
+                                    ∀ (position : Nat),
+                                      [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie →
+                                        MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog (current sc.var)) →
+                            (∀ (event : Nat × List MicroCFTA.EnumerationState.Suspended),
+                                event ∈ events →
+                                  ∀ (firstIndex secondIndex : Nat) (first second : MicroCFTA.EnumerationState.Suspended)
+                                    (position : Nat),
+                                    event.snd[firstIndex]? = some first →
+                                      event.snd[secondIndex]? = some second →
+                                        [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie first.trie →
+                                          [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie second.trie →
+                                            current first.var = current second.var) →
+                              ∀ (kept : Nat → Prop),
+                                (∀ (uv : Nat),
+                                    kept uv →
+                                      ∀
+                                        (fragment :
+                                          MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+                                        state.values[roots uv]? =
+                                            some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                          ∀ (hole : Nat),
+                                            MicroCFTA.EnumerationDependencies.HasHole fragment hole → kept hole) →
+                                  (∀ (event : Nat × List MicroCFTA.EnumerationState.Suspended),
+                                      event ∈ events →
+                                        ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ event.snd → kept sc.var) →
+                                    (∀ (event : Nat × List MicroCFTA.EnumerationState.Suspended),
+                                        event ∈ events →
+                                          ∀ (slot : Nat),
+                                            kept slot →
+                                              ¬MicroCFTA.UnionFind.SameClass state.representatives event.fst slot) →
+                                      ∃ assignment,
+                                        MicroCFTA.UnionFind.Satisfies state.representatives assignment ∧
+                                          (∀ (slot : Nat)
+                                              (fragment :
+                                                MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+                                              state.values[slot]? =
+                                                  some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                                assignment slot = MicroCFTA.Fragments.fill assignment fragment) ∧
+                                            (∀ (slot : Nat), kept slot → assignment slot = current slot) ∧
+                                              (∀ (event : Nat × List MicroCFTA.EnumerationState.Suspended),
+                                                  event ∈ events →
+                                                    ∃ argument result,
+                                                      MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog
+                                                          argument ∧
+                                                        MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog
+                                                            result ∧
+                                                          assignment event.fst =
+                                                              MicroCFTA.Language.Term.node
+                                                                (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal
+                                                                  "->")
+                                                                [MicroCFTA.Language.Term.node
+                                                                    (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal
+                                                                      "(->)")
+                                                                    [],
+                                                                  argument, result] ∧
+                                                            MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog
+                                                                (assignment event.fst) ∧
+                                                              ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                                                                sc ∈ event.snd →
+                                                                  MicroCFTA.EnumerationState.Suspended.Holds assignment
+                                                                    (assignment event.fst) sc) ∧
+                                                ∀ (slot : Nat) (node : Option Nat)
+                                                  (bucket : List MicroCFTA.EnumerationState.Suspended),
+                                                  state.values[slot]? =
+                                                      some
+                                                        (MicroCFTA.EnumerationState.UVarValue.unenumerated node
+                                                          bucket) →
+                                                    (∀ (event : Nat × List MicroCFTA.EnumerationState.Suspended),
+                                                        event ∈ events →
+                                                          ¬MicroCFTA.UnionFind.SameClass state.representatives event.fst
+                                                              slot) →
+                                                      assignment slot = current slot
+'MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion.recomplete_independent_arrow_buckets_at_snapshot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion.two_owner_proper_arrow_cycle_impossible : ∀
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol) (first second : Nat),
+  (assignment first).atPath [1] = some (assignment second) →
+    (assignment second).atPath [1] = some (assignment first) → False
+'MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion.two_owner_proper_arrow_cycle_impossible' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion.raw_dag_same_position_cycle_impossible : ∀
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol) (first second third : Nat),
+  (assignment first).atPath [1] = some (assignment second) →
+    (assignment first).atPath [1] = some (assignment third) →
+      (assignment second).atPath [1] = some (assignment third) → False
+'MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion.raw_dag_same_position_cycle_impossible' depends on axioms: [propext,
+ Quot.sound]

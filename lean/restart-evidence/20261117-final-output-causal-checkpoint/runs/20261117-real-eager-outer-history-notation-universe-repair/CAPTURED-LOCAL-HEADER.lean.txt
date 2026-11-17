@@ -1,0 +1,42 @@
+private theorem captured_preparation_history_of_depth_induction
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel depth : Nat)
+    (smallerDepth : ∀ (nextMetadata : Metadata Typing) (nextCaller : Caller (bits + 2))
+      (nextQueries : Queries) (nextBefore : Cached) (nextDecision : Option Next)
+      (nextIndex : Nat) (nextOutput : Output (bits + 2) Typing),
+      (emitted (resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel depth
+        nextMetadata nextCaller nextQueries nextBefore nextDecision))[nextIndex]? = some nextOutput →
+      OutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+        depth nextMetadata nextCaller nextQueries nextBefore nextDecision nextIndex nextOutput)
+    (uv target handle : Nat) (metadata : Metadata Typing)
+    (caller : Caller (bits + 2)) (before : Cached) (queries : Queries)
+    (scs : List Suspended) (decoded : Node)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List Edge)
+    (ordinaryDepth : Nat) (free : List InternedBinderProtocol.Reference)
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (entered : Core)
+    (preparation : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv caller before =
+      ([.ok ((target, handle, scs, decoded), entered)],
+        some (.done (.node entry rows ordinaryDepth free) heap)))
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (index : Nat) (output : Output (bits + 2) Typing) :
+    let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+      (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+    let recur := resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel depth
+    let hook := continueWith recur graph templates stop order workFuel metadata uv
+    let rootBefore := EnumerationExpandableIndex.frame entered before
+    let rootCaller := SourcePruningEnumerationSelectedValueCaller.advance caller heap
+    let visit := fun edge reached saved captured =>
+      visitCapturedWith child hook workFuel target scs edge reached saved captured
+    (outputs (scan visit rootBefore (edgesOf (.node entry rows ordinaryDepth free)) rootCaller queries))[index]? =
+      some output →
+    PreparedHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+      depth metadata uv caller queries before index output

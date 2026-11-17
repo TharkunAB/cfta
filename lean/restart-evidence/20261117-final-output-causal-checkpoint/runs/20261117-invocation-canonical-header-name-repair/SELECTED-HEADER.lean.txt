@@ -1,0 +1,12 @@
+theorem selected_complete_canonical
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller reached : Caller width)
+    (before after : Cached) (queries saved : Queries) (index : Nat) (output : Output)
+    (fragment : Fragment) (consumerIndex : Nat)
+    (canonical : Canonical before.core)
+    (valid : ValidSuspended scs)
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy
+      consume scs edge caller before queries index output
+        (.complete fragment reached saved after) consumerIndex) :
+    Canonical after.core

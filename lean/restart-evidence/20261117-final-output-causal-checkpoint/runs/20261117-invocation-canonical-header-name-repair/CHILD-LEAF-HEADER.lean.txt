@@ -1,0 +1,8 @@
+theorem successful_canonical
+    (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended) (incoming : Node)
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (fragment : Fragment) (returned read : Core) (waiting : EnumerationWaitingIndex.Waiting)
+    (canonical : Canonical before.core) (inputs : ValidSuspended scs)
+    (actual : ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries =
+      ((.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting), some after)) :
+    Canonical after.core

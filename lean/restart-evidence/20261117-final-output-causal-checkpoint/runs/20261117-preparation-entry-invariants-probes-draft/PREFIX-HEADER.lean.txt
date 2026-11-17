@@ -1,0 +1,21 @@
+theorem runPrefix_entry_invariants
+    {Typing Key : Type}
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+    (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+    (caller : Caller width) (before : Cached) (queries : SourceEndpointMemo.Memos)
+    (canonical : Canonical before.core) (total : UnionFind.Total before.core.representatives) :
+    match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries with
+    | .stopped _ _ => True
+    | .parked checked candidate _ =>
+        UnionFind.Total checked.representatives ∧ Canonical checked ∧
+          ∀ after, candidate = some after →
+            UnionFind.Total after.core.representatives ∧ Canonical after.core
+    | .narrowed checked _ _ _ _ candidate _ _ =>
+        UnionFind.Total checked.representatives ∧ Canonical checked ∧
+          ∀ after, candidate = some after →
+            UnionFind.Total after.core.representatives ∧ Canonical after.core

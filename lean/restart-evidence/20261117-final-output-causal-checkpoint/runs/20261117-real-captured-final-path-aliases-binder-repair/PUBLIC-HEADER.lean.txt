@@ -1,0 +1,46 @@
+theorem real_eager_captured_output_final_path_alias_origin
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveDepth uv target : Nat) (metadata : Metadata Typing)
+    (scs : List Suspended) (edge : Edge) (caller : Caller (bits + 2))
+    (queries : Queries) (before : Cached) (index : Nat) (output : Output (bits + 2) Typing) :
+    let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+      (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+    let recur := resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+    let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+      graph templates stop order workFuel metadata uv
+    let actual := SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook
+      workFuel target scs edge caller queries before
+    (outputs actual)[index]? = some output →
+    ∃ (fragment : Fragments.Fragment Symbol) (reached : Caller (bits + 2)) (saved : Queries)
+        (beforeFinalize finished : Cached) (updated : Metadata Typing) (callbackCore : Core)
+        (earlier later : List (Output (bits + 2) Typing)) (localIndex : Nat),
+      SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+        workFuel target fragment beforeFinalize = some finished ∧
+      ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+        (.inl fragment) finished.core) = [.ok ((false, updated), callbackCore)] ∧
+      let resumed := recur updated reached saved (EnumerationExpandableIndex.frame callbackCore finished)
+        (SourcePruningEnumerationRestart.decision stop order updated
+          (EnumerationExpandableIndex.frame callbackCore finished))
+      outputs actual = earlier ++ emitted resumed ++ later ∧
+      (emitted resumed)[localIndex]? = some output ∧ index = earlier.length + localIndex ∧
+      CapturedCallbackInvocationAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        workFuel recursiveDepth uv target metadata scs edge caller queries before index output
+        fragment reached saved beforeFinalize finished updated callbackCore earlier later localIndex ∧
+      ∀ (_total : UnionFind.Total before.core.representatives)
+        (_valid : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie)
+        (middle : Cached) (staged : List Input) (residual : Option Constraint),
+        SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+          some [((edge.entry.key.symbol, staged, residual), middle)] →
+        ∀ (position : Nat) (incoming : Node) (childBucket : List Suspended)
+          (action : Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))),
+          staged[position]? = some (incoming, childBucket, action) →
+          ∀ (firstIndex secondIndex : Nat) (first second : Suspended),
+            scs[firstIndex]? = some first → scs[secondIndex]? = some second →
+            [position] ∈ EqualityTrie.fromPathTrie first.trie →
+            [position] ∈ EqualityTrie.fromPathTrie second.trie →
+            UnionFind.SameClass output.cache.core.representatives first.var second.var

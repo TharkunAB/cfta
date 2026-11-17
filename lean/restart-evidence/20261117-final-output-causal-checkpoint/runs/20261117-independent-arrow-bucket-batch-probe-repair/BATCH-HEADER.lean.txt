@@ -1,0 +1,53 @@
+import MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion
+
+namespace MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open SourceSynthesisFiniteTypeWitnesses (TypeIn)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "literal" => SourceSynthesisLabelProgramBuildRoles.literal
+variable {Guard : Type}
+set_option autoImplicit false
+
+/-- Recomplete an independent finite batch using one fixed dependency-closed kept set. -/
+theorem recomplete_independent_arrow_buckets_at_snapshot
+    (catalog : List (String × Nat)) (state : EnumerationState.State Symbol Guard) (safe : Safe state)
+    (roots : Nat → Nat) (paths : Roots state.representatives roots)
+    (level : Nat → Nat) (frontier : Nat) (stratified : EnumerationOrder.Stratified state level frontier)
+    (current : Nat → Term Symbol)
+    (currentAliases : UnionFind.Satisfies state.representatives current)
+    (currentEquations : ∀ slot fragment, state.values[slot]? = some (.enumerated fragment) →
+      fill current fragment = current slot)
+    (events : List (Nat × List Suspended))
+    (pendingOwners : ∀ event ∈ events, ∃ (node : Option Nat) (bucket : List Suspended),
+      state.values[event.1]? = some (.unenumerated node bucket))
+    (distinctOwners : events.Pairwise (fun first second =>
+      ¬UnionFind.SameClass state.representatives first.1 second.1))
+    (arrowPaths : ∀ event ∈ events, ∀ sc ∈ event.2,
+      ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, path = [1] ∨ path = [2])
+    (targetTypes : ∀ event ∈ events, ∀ sc ∈ event.2, ∀ (position : Nat),
+      [position] ∈ EqualityTrie.fromPathTrie sc.trie → TypeIn catalog (current sc.var))
+    (compatible : ∀ event ∈ events,
+      ∀ (firstIndex secondIndex : Nat) (first second : Suspended) (position : Nat),
+      event.2[firstIndex]? = some first → event.2[secondIndex]? = some second →
+      [position] ∈ EqualityTrie.fromPathTrie first.trie →
+      [position] ∈ EqualityTrie.fromPathTrie second.trie → current first.var = current second.var)
+    (kept : Nat → Prop)
+    (dependencies : ∀ uv, kept uv → ∀ fragment,
+      state.values[roots uv]? = some (.enumerated fragment) →
+      ∀ hole, EnumerationDependencies.HasHole fragment hole → kept hole)
+    (targetsKept : ∀ event ∈ events, ∀ sc ∈ event.2, kept sc.var)
+    (keptSeparate : ∀ event ∈ events, ∀ slot, kept slot →
+      ¬UnionFind.SameClass state.representatives event.1 slot) :
+    ∃ assignment : Nat → Term Symbol,
+      UnionFind.Satisfies state.representatives assignment ∧
+      (∀ slot fragment, state.values[slot]? = some (.enumerated fragment) →
+        assignment slot = fill assignment fragment) ∧
+      (∀ slot, kept slot → assignment slot = current slot) ∧
+      (∀ event ∈ events, ∃ (argument result : Term Symbol),
+        TypeIn catalog argument ∧ TypeIn catalog result ∧
+        assignment event.1 = .node (literal "->") [.node (literal "(->)") [], argument, result] ∧
+        TypeIn catalog (assignment event.1) ∧
+        ∀ sc ∈ event.2, Suspended.Holds assignment (assignment event.1) sc) ∧
+      ∀ slot node bucket, state.values[slot]? = some (.unenumerated node bucket) →
+        (∀ event ∈ events, ¬UnionFind.SameClass state.representatives event.1 slot) →
+        assignment slot = current slot

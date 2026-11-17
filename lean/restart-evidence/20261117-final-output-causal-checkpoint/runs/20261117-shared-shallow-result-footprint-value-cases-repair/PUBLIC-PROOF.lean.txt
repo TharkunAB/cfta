@@ -1,0 +1,84 @@
+ := by
+  dsimp only
+  have nonempty : incoming ≠ .empty := by
+    intro empty
+    simp only [ChildDispatch.run, empty, ↓reduceIte, Prod.mk.injEq,
+      Except.ok.injEq, Option.some.injEq, reduceCtorEq, false_and] at actual
+  have noHere : (scs.partition (fun sc => EqualityTrie.isTerminal sc.trie)).1 = [] := by
+    simp only [List.partition_eq_filter_filter]
+    exact List.filter_eq_nil_iff.mpr (fun sc member => List.any_eq_false.mp nonterminal sc member)
+  have coreSame := ChildDispatch.singleton_core checkEmpty r n p h k scs incoming caller reached
+    before after queries saved fragment returned read waiting actual
+  cases partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+  | mk here descendants =>
+      have hereSame : here = [] := by simpa only [partitioned] using noHere
+      subst here
+      have observed : ChildDispatch.observe checkEmpty r n p h scs incoming caller before.core
+          before.waiting queries = (.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting) :=
+        (ChildDispatch.erase checkEmpty r n p h k scs incoming caller before queries).symm.trans
+          (congrArg Prod.fst actual)
+      cases prepared : SourcePruningEnumerationShallowChild.prepareChild
+          (EnumGuard := Constraint) scs incoming with
+      | none =>
+          simp only [ChildDispatch.observe, ite_eq_right nonempty, partitioned, prepared,
+            Prod.mk.injEq, Except.ok.injEq, reduceCtorEq, false_and] at observed
+      | some action =>
+          have endpoints : ExceptT.run (action before.core) = [.ok (fragment, returned)] ∧
+              caller = reached ∧ queries = saved ∧ before.core = read ∧ before.waiting = waiting := by
+            simpa only [ChildDispatch.observe, ite_eq_right nonempty, partitioned, prepared,
+              Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] using observed
+          obtain ⟨raw, callerSame, queriesSame, readSame, waitingSame⟩ := endpoints
+          have cachedSingleton : SourcePruningEnumerationCachedPrepare.prepareChild
+              caller.checked.native.machine.heap k scs incoming before = some [(fragment, after)] := by
+            cases cached : SourcePruningEnumerationCachedPrepare.prepareChild
+                caller.checked.native.machine.heap k scs incoming before with
+            | none =>
+                have cacheReturned := congrArg Prod.snd actual
+                simp only [ChildDispatch.run, ite_eq_right nonempty, partitioned, cached, reduceCtorEq] at cacheReturned
+            | some rows =>
+                have erasure := SourcePruningEnumerationCachedPrepare.erase_some
+                  caller.checked.native.machine.heap k scs incoming before rows cached
+                rw [prepared, Option.map_some, raw] at erasure
+                have rowsMapped : rows.map (fun row => Except.ok (row.1, row.2.core)) =
+                    [.ok (fragment, returned)] := (Option.some.inj erasure).symm
+                obtain ⟨row, _singleton, mapped⟩ := List.map_eq_singleton_iff.mp rowsMapped
+                rcases row with ⟨childFragment, childCache⟩
+                subst rows
+                have cacheSame : childCache = after := by
+                  simpa only [ChildDispatch.run, ite_eq_right nonempty, partitioned, cached,
+                    Option.some.injEq] using congrArg Prod.snd actual
+                have fragmentSame : childFragment = fragment := (Prod.mk.inj (Except.ok.inj mapped)).1
+                rw [← cacheSame, ← fragmentSame]
+          have success : Success action before.core fragment returned := by
+            simp only [Success, raw, List.mem_singleton]
+          obtain ⟨handle, encoded, fragmentSame, returnedShape⟩ :=
+            prepared_success_shape scs incoming before.core returned action fragment nonterminal prepared success
+          obtain ⟨observedHandle, decoded, flag, observedEncoded, nativeRead, classified⟩ :=
+            cached_success_readback caller.checked.native.machine.heap k scs incoming before after fragment
+              nonterminal cachedSingleton
+          have handleSame : observedHandle = handle := Option.some.inj (observedEncoded.symm.trans encoded)
+          subst observedHandle
+          have scalars : after.core.counter = before.core.counter + 1 ∧
+              (before.core.counter = before.core.values.length →
+                after.core.values[before.core.counter]? = some (.unenumerated (some handle)
+                  (match incoming with | .node _ _ _ _ => scs | _ => [])) ∧
+                  after.core.counter = after.core.values.length) := by
+            cases incoming with
+            | node entry edges depth free =>
+                rw [coreSame, returnedShape]
+                refine ⟨rfl, ?_⟩
+                intro aligned
+                have inside : before.core.counter < (allocated (some handle) before.core).values.length := by
+                  simp only [allocated, List.length_append, List.length_singleton, ← aligned]
+                  exact Nat.lt_succ_self _
+                exact ⟨List.getElem?_set_self inside, by
+                  simpa only [List.length_set] using allocated_supply (some handle) before.core aligned⟩
+            | empty | reference _ | union _ _ _ _ | mu _ _ _ _ =>
+                rw [coreSame, returnedShape]
+                exact ⟨rfl, fun aligned =>
+                  ⟨allocated_slot (some handle) before.core aligned,
+                    allocated_supply (some handle) before.core aligned⟩⟩
+          cases incoming <;>
+            exact ⟨handle, decoded, flag, action, nonempty, encoded, nativeRead, classified,
+              rfl, raw, cachedSingleton, fragmentSame, callerSame.symm, queriesSame.symm,
+              readSame.symm, waitingSame.symm, coreSame, returnedShape, scalars.1, scalars.2⟩

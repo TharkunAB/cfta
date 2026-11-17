@@ -1,0 +1,54 @@
+theorem output_history_input_invariants
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel depth : Nat) (metadata : Metadata Typing) (caller : Caller (bits + 2))
+    (queries : Queries) (before : Cached) (decision : Option Next)
+    (index : Nat) (output : Output (bits + 2) Typing)
+    (history : OutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+      depth metadata caller queries before decision index output)
+    (canonical : Canonical before.core) (total : UnionFind.Total before.core.representatives) :
+    QualifiedOutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel history
+ := by
+  exact (history_input_invariants holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel).1
+    depth metadata caller queries before decision index output history ⟨canonical, total⟩
+
+theorem prepared_history_input_invariants
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel depth : Nat) (metadata : Metadata Typing) (uv : Nat) (caller : Caller (bits + 2))
+    (queries : Queries) (before : Cached) (index : Nat) (output : Output (bits + 2) Typing)
+    (history : PreparedHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+      depth metadata uv caller queries before index output)
+    (canonical : Canonical before.core) (total : UnionFind.Total before.core.representatives) :
+    QualifiedPreparedHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel history
+ := by
+  exact (history_input_invariants holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel).2
+    depth metadata uv caller queries before index output history ⟨canonical, total⟩
+
+theorem resumeWithNarrow_real_eager_qualified_output_history
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveDepth : Nat) (metadata : Metadata Typing)
+    (caller : Caller (bits + 2)) (queries : Queries) (before : Cached) (decision : Option Next)
+    (index : Nat) (output : Output (bits + 2) Typing)
+    (canonical : Canonical before.core) (total : UnionFind.Total before.core.representatives)
+    (observed : (emitted (resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+      metadata caller queries before decision))[index]? = some output) :
+    ∃ history : OutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+        recursiveDepth metadata caller queries before decision index output,
+      QualifiedOutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel history
+ := by
+  have history := resumeWithNarrow_real_eager_indexed_output_history holeKey fits admits graph templates
+    checkEmpty edgesOf stop order workFuel recursiveDepth metadata caller queries before decision index output observed
+  exact ⟨history, output_history_input_invariants holeKey fits admits graph templates checkEmpty edgesOf stop order
+    workFuel recursiveDepth metadata caller queries before decision index output history canonical total⟩

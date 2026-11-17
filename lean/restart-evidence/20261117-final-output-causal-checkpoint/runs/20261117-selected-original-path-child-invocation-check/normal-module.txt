@@ -1,0 +1,145 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-selected-original-path-child-invocation-check/source/MicroCFTA/SourcePruningEnumerationSelectedPathDescent.lean:75:102: error: Application type mismatch: The argument
+  retained
+has type
+  (!decide (EqualityTrie.isEmpty (EqualityTrie.pathTrieDescend obligation.trie position) = true)) = true
+but is expected to have type
+  (!EqualityTrie.isEmpty
+        { trie := EqualityTrie.pathTrieDescend obligation.trie position, var := obligation.var }.trie) =
+    true
+in the application
+  filter_map_indexed (fun sc => { trie := EqualityTrie.pathTrieDescend sc.trie position, var := sc.var })
+    (fun sc => !EqualityTrie.isEmpty sc.trie) parentBucket occurrence obligation original retained
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-selected-original-path-child-invocation-check/source/MicroCFTA/SourcePruningEnumerationSelectedPathDescent.lean:118:89: error: unsolved goals
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentBucket : List Suspended
+edge : Edge
+before middle : Cached
+symbol : Symbol
+staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment))
+residual : Option Constraint
+occurrence : Nat
+obligation : Suspended
+original : parentBucket[occurrence]? = some obligation
+valid : EqualityTrie.Valid obligation.trie
+position : Nat
+suffix : List Nat
+path : position :: suffix ∈ EqualityTrie.fromPathTrie obligation.trie
+descendantFound :
+  (descendScs position parentBucket)[(descendScs position (List.take occurrence parentBucket)).length]? =
+    some { trie := EqualityTrie.pathTrieDescend obligation.trie position, var := obligation.var }
+inside : (descendScs position (List.take occurrence parentBucket)).length < (descendScs position parentBucket).length
+allowed : arityAllows edge.children.length parentBucket = true
+childBound : position < edge.children.length
+tries : List EqualityTrie.Trie
+kept : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, kept)
+own : List Suspended
+ownAfter : Cached
+allocated : SourcePruningEnumerationCachedOwn.suspendMany heap tries before = some (own, ownAfter)
+prepared :
+  Option.map
+      (fun result =>
+        [((edge.entry.key.symbol,
+              List.map
+                (fun indexed =>
+                  (indexed.fst, descendScs indexed.snd parentBucket ++ descendScs indexed.snd result.fst,
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd parentBucket ++ descendScs indexed.snd result.fst) indexed.fst))
+                edge.children.zipIdx,
+              kept),
+            result.snd)])
+      (some (own, ownAfter)) =
+    some [((symbol, staged, residual), middle)]
+rowSame :
+  ((edge.entry.key.symbol,
+        List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd parentBucket ++ descendScs indexed.snd (own, ownAfter).fst,
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd parentBucket ++ descendScs indexed.snd (own, ownAfter).fst) indexed.fst))
+          edge.children.zipIdx,
+        kept),
+      (own, ownAfter).snd) =
+    ((symbol, staged, residual), middle)
+stagedSame :
+  List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd parentBucket ++ descendScs indexed.snd own,
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd parentBucket ++ descendScs indexed.snd own) indexed.fst))
+      edge.children.zipIdx =
+    staged
+incoming : Node
+childStored : edge.children[position]? = some incoming
+⊢ some (incoming, 0 + position) = some (incoming, position)
+@MicroCFTA.SourcePruningEnumerationSelectedPathDescent.selected_original_path_child_invocation : ∀ {width : Nat}
+  {Output : Type u_1} {Reason : Type u_2} [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (policy : MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.Policy)
+  (consume :
+    MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result width →
+      MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result Output Reason width)
+  (parentBucket : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller finalCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before middle finished :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries finalQueries : MicroCFTA.SourceEndpointMemo.Memos) (index : Nat) (output : Output)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) (consumerIndex : Nat)
+  (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (staged :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended ×
+          Option
+            (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap parentBucket edge before =
+      some [((symbol, staged, residual), middle)] →
+    ∀ (occurrence : Nat) (obligation : MicroCFTA.EnumerationState.Suspended),
+      parentBucket[occurrence]? = some obligation →
+        MicroCFTA.EqualityTrie.Valid obligation.trie →
+          ∀ (position : Nat) (suffix : List Nat),
+            position :: suffix ∈ MicroCFTA.EqualityTrie.fromPathTrie obligation.trie →
+              MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.SelectedInvocationAt checkEmpty r n p h k edgesOf
+                  policy consume parentBucket edge caller before queries index output
+                  (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment
+                    finalCaller finalQueries finished)
+                  consumerIndex →
+                have tupleDone := fun produced current capturedQueries captured =>
+                  consume
+                    (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete
+                      (MicroCFTA.Fragments.Fragment.node symbol produced) current capturedQueries
+                      (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.finish residual
+                        (MicroCFTA.Fragments.Fragment.node symbol produced) captured));
+                have tupleStopped := fun completed observation candidate =>
+                  consume
+                    (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped completed
+                      observation candidate);
+                have descendant :=
+                  { trie := MicroCFTA.EqualityTrie.pathTrieDescend obligation.trie position, var := obligation.var };
+                ∃ incoming childBucket action priorStaged laterStaged priorFragments childCaller childBefore, ⋯
+'MicroCFTA.SourcePruningEnumerationSelectedPathDescent.selected_original_path_child_invocation' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

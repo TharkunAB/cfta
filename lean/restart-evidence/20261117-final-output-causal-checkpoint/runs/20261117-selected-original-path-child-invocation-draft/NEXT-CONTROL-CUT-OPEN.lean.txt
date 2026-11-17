@@ -1,0 +1,37 @@
+-- OPEN structural target. This file is not an accepted declaration or an import.
+-- Use the same normal invocation context and local aliases as the candidate module.
+theorem child_done_dispatch_or_selected
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (scs : List Suspended) (incoming : Node) (caller reached : Caller width)
+    (before after : Cached) (queries saved : Queries)
+    (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (stopped : Observation width → Option Cached → Result Output Reason width)
+    (index : Nat) (output : Output) (fragment : Fragment) (localIndex : Nat)
+    (trace : ChildInvocationAt checkEmpty r n p h k edgesOf policy scs incoming caller before queries
+      done stopped index output (.done fragment reached saved after) localIndex) :
+    (∃ (returned read : EnumerationState.State Symbol Constraint)
+        (waiting : EnumerationWaitingIndex.Waiting),
+      ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries =
+        ((.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting), some after) ∧
+      index = localIndex) ∨
+    ∃ (attempted remaining : List Edge) (edge : Edge) (rowCaller : Caller width) (rowQueries : Queries)
+        (processed : List (Receipt width)) (earlier : List Output)
+        (rowResult : Result Output Reason width) (rowIndex : Nat),
+      SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal scs incoming = true ∧
+      edgesOf incoming = attempted ++ edge :: remaining ∧
+      SourcePruningEnumerationSharedBranching.scan
+        (fun selected current capturedQueries captured =>
+          SourcePruningEnumerationSharedChildVisitors.visitSelected
+            (runPolicy checkEmpty r n p h k edgesOf (.guarded incoming))
+            (SourcePruningEnumerationSharedEagerChildren.consumeSelected done current capturedQueries)
+            scs selected current captured capturedQueries)
+        before attempted caller queries = .complete processed earlier rowCaller rowQueries ∧
+      SourcePruningEnumerationSharedChildVisitors.visitSelected
+        (runPolicy checkEmpty r n p h k edgesOf (.guarded incoming))
+        (SourcePruningEnumerationSharedEagerChildren.consumeSelected done rowCaller rowQueries)
+        scs edge rowCaller before rowQueries = rowResult ∧
+      SelectedInvocationAt checkEmpty r n p h k edgesOf (.guarded incoming)
+        (SourcePruningEnumerationSharedEagerChildren.consumeSelected done rowCaller rowQueries)
+        scs edge rowCaller before rowQueries rowIndex output
+        (.complete fragment reached saved after) localIndex ∧
+      index = earlier.length + rowIndex

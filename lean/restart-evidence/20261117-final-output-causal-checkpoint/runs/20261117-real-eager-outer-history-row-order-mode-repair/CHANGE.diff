@@ -1,0 +1,29 @@
+--- frozen10bc54d5
++++ row-order-mode-repair
+@@ -275,7 +275,7 @@
+   let visit := fun edge reached saved captured =>
+     visitCapturedWith child hook workFuel target scs edge reached saved captured
+   obtain ⟨attempted, edge, remaining, rowCaller, rowQueries, processed, earlier, rowResult,
+-      rowIndex, later, order, prefixObserved, rowCall, rowHit, offset, whole⟩ :=
++      rowIndex, later, rowOrder, prefixObserved, rowCall, rowHit, offset, whole⟩ :=
+     SourcePruningEnumerationSharedScanOutputOrigins.scan_output_block_origin
+       visit rootBefore (edgesOf (.node entry rows ordinaryDepth free)) rootCaller queries index output observed
+   have visitorHit : (outputs (visitCapturedWith child hook workFuel target scs
+@@ -303,7 +303,7 @@
+     (callbackCore := callbackCore) (callbackEarlier := callbackEarlier) (callbackLater := callbackLater)
+     (tailIndex := tailIndex) ?_ tailHistory
+   dsimp only
+-  refine ⟨preparation, nonterminal, order, prefixObserved, rowCall, ?_, offset, whole, invoked, ?_, callbackOffset⟩
++  refine ⟨preparation, nonterminal, rowOrder, prefixObserved, rowCall, ?_, offset, whole, invoked, ?_, callbackOffset⟩
+   · rw [← rowCall]
+     exact visitorHit
+   · rw [← rowCall]
+@@ -408,7 +408,7 @@
+             recur graph templates stop order workFuel metadata callbackMetadata uv fragment
+             completedCaller saved finished callbackCore recorded
+           rw [callbackEquation] at observed
+-          exact PreparedHistoryAt.opaque preparation mode receiptRun recorded
++          exact PreparedHistoryAt.opaque preparation (by cases value <;> exact mode) receiptRun recorded
+             (smallerDepth callbackMetadata completedCaller saved
+               (EnumerationExpandableIndex.frame callbackCore finished)
+               (SourcePruningEnumerationRestart.decision stop order callbackMetadata

@@ -1,0 +1,110 @@
+MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.real_eager_captured_output_final_path_alias_origin
+  {Typing Key : Type} {bits : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (workFuel recursiveDepth uv target : Nat) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (index : Nat) (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing) :
+  have child :=
+    MicroCFTA.SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+      workFuel edgesOf;
+  have recur :=
+    MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow child
+      (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+      workFuel recursiveDepth;
+  have hook :=
+    MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph templates stop order workFuel
+      metadata uv;
+  have actual :=
+    MicroCFTA.SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel target scs edge caller
+      queries before;
+  (MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs actual)[index]? = some output →
+    ∃ fragment reached saved beforeFinalize finished updated callbackCore earlier later localIndex,
+      MicroCFTA.SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel target fragment
+            beforeFinalize =
+          some finished ∧
+        (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (Sum.inl fragment)
+                finished.core).run =
+            [Except.ok ((false, updated), callbackCore)] ∧
+          have resumed :=
+            recur updated reached saved (MicroCFTA.EnumerationExpandableIndex.frame callbackCore finished)
+              (MicroCFTA.SourcePruningEnumerationRestart.decision stop order updated
+                (MicroCFTA.EnumerationExpandableIndex.frame callbackCore finished));
+          MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs actual =
+              earlier ++ MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.emitted resumed ++ later ∧
+            (MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.emitted resumed)[localIndex]? = some output ∧
+              index = earlier.length + localIndex ∧
+                MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.CapturedCallbackInvocationAt
+                    holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveDepth uv target
+                    metadata scs edge caller queries before index output fragment reached saved beforeFinalize finished
+                    updated callbackCore earlier later localIndex ∧
+                  (MicroCFTA.UnionFind.Total before.core.representatives →
+                    (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → MicroCFTA.EqualityTrie.Valid sc.trie) →
+                      ∀
+                        (middle :
+                          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                        (staged :
+                          List
+                            (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+                              List MicroCFTA.EnumerationState.Suspended ×
+                                Option
+                                  (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+                        (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                        MicroCFTA.SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge
+                              before =
+                            some [((edge.entry.key.symbol, staged, residual), middle)] →
+                          ∀ (position : Nat)
+                            (incoming :
+                              MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                            (childBucket : List MicroCFTA.EnumerationState.Suspended)
+                            (action :
+                              Option
+                                (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                  (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))),
+                            staged[position]? = some (incoming, childBucket, action) →
+                              ∀ (firstIndex secondIndex : Nat) (first second : MicroCFTA.EnumerationState.Suspended),
+                                scs[firstIndex]? = some first →
+                                  scs[secondIndex]? = some second →
+                                    [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie first.trie →
+                                      [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie second.trie →
+                                        MicroCFTA.UnionFind.SameClass output.cache.core.representatives first.var
+                                          second.var)
+'MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.real_eager_captured_output_final_path_alias_origin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

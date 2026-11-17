@@ -1,0 +1,77 @@
+@MicroCFTA.SourcePruningEnumerationSharedShallowFootprint.nonterminal_success_footprint : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries saved : MicroCFTA.SourceEndpointMemo.Memos)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (returned read :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+  (scs.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) = false →
+    ∀
+      (actual :
+        MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty r n p h k scs
+            incoming caller before queries =
+          ((Except.ok (some [Except.ok (fragment, returned)]), reached, saved, read, waiting), some after)),
+      have storedBucket :=
+        match incoming, actual with
+        | MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free, actual => scs
+        | x, actual => [];
+      ∃ handle decoded flag action,
+        incoming ≠ MicroCFTA.InternedConstructorTemplates.Value.empty ∧
+          MicroCFTA.SourcePruningEnumerationNodes.encodeNode incoming = some handle ∧
+            MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle =
+                some decoded ∧
+              MicroCFTA.SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+                    (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) []) =
+                  some flag ∧
+                MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs incoming = some action ∧
+                  (action before.core).run = [Except.ok (fragment, returned)] ∧
+                    MicroCFTA.SourcePruningEnumerationCachedPrepare.prepareChild caller.checked.native.machine.heap k
+                          scs incoming before =
+                        some [(fragment, after)] ∧
+                      fragment = MicroCFTA.Fragments.Fragment.hole before.core.counter ∧
+                        reached = caller ∧
+                          saved = queries ∧
+                            read = before.core ∧
+                              waiting = before.waiting ∧
+                                after.core = returned ∧
+                                  (returned =
+                                      match incoming, actual with
+                                      | MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free,
+                                        actual =>
+                                        have __src := MicroCFTA.EnumerationState.allocated (some handle) before.core;
+                                        { counter := __src.counter, representatives := __src.representatives,
+                                          values :=
+                                            (MicroCFTA.EnumerationState.allocated (some handle) before.core).values.set
+                                              before.core.counter
+                                              (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs),
+                                          obligations := __src.obligations,
+                                          recursionAncestry := __src.recursionAncestry,
+                                          expansionAncestry := __src.expansionAncestry }
+                                      | x, actual => MicroCFTA.EnumerationState.allocated (some handle) before.core) ∧
+                                    after.core.counter = before.core.counter + 1 ∧
+                                      (before.core.counter = before.core.values.length →
+                                        after.core.values[before.core.counter]? =
+                                            some
+                                              (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle)
+                                                storedBucket) ∧
+                                          after.core.counter = after.core.values.length)
+'MicroCFTA.SourcePruningEnumerationSharedShallowFootprint.nonterminal_success_footprint' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,31 @@
+private theorem prepared_output_history_of_depth_induction
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel depth : Nat)
+    (smallerDepth : ∀ (nextMetadata : Metadata Typing) (nextCaller : Caller (bits + 2))
+      (nextQueries : Queries) (nextBefore : Cached) (nextDecision : Option Next)
+      (nextIndex : Nat) (nextOutput : Output (bits + 2) Typing),
+      (emitted (resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel depth
+        nextMetadata nextCaller nextQueries nextBefore nextDecision))[nextIndex]? = some nextOutput →
+      OutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+        depth nextMetadata nextCaller nextQueries nextBefore nextDecision nextIndex nextOutput)
+    (metadata : Metadata Typing) (uv : Nat)
+    (caller : Caller (bits + 2)) (queries : Queries) (before : Cached) :
+    let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+      (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+    let recur := resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel depth
+    let hook := continueWith recur graph templates stop order workFuel metadata uv
+    let actual := SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook
+      checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before queries
+    ∀ folded, actual.2 = some folded → ∀ (index : Nat) (output : Output (bits + 2) Typing),
+      (outputs folded)[index]? = some output →
+      PreparedHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+        depth metadata uv caller queries before index output

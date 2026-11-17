@@ -1,0 +1,105 @@
+MicroCFTA.SourcePruningEnumerationPreparationEntryInvariants.enter_sameClass_forward
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fuel uv : Nat)
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (result :
+    Nat ×
+      Nat ×
+        List MicroCFTA.EnumerationState.Suspended ×
+          MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (actual :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationEntry.enter heap fuel uv) before result
+      after)
+  (left right : Nat) :
+  MicroCFTA.UnionFind.SameClass before.representatives left right →
+    MicroCFTA.UnionFind.SameClass after.representatives left right
+'MicroCFTA.SourcePruningEnumerationPreparationEntryInvariants.enter_sameClass_forward' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparationEntryInvariants.successful_preparation_entry_invariants {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (entryFuel nativeFuel uv target handle : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (entered :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (decoded result :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (canonical : MicroCFTA.EnumerationValidity.Canonical before.core)
+  (total : MicroCFTA.UnionFind.Total before.core.representatives)
+  (observed :
+    MicroCFTA.SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv caller before =
+      ([Except.ok ((target, handle, bucket, decoded), entered)],
+        some (MicroCFTA.MergedSourceComparison.Result.done result heap))) :
+  MicroCFTA.UnionFind.Total entered.representatives ∧
+    MicroCFTA.EnumerationValidity.Canonical entered ∧
+      MicroCFTA.EnumerationSemantics.ValidSuspended bucket ∧
+        ∀ (left right : Nat),
+          MicroCFTA.UnionFind.SameClass before.core.representatives left right →
+            MicroCFTA.UnionFind.SameClass entered.representatives left right
+'MicroCFTA.SourcePruningEnumerationPreparationEntryInvariants.successful_preparation_entry_invariants' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparationEntryInvariants.runPrefix_entry_invariants {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Typing Key : Type} (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos) (canonical : MicroCFTA.EnumerationValidity.Canonical before.core)
+  (total : MicroCFTA.UnionFind.Total before.core.representatives) :
+  match
+    MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+      readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries with
+  | MicroCFTA.SourcePruningEnumerationSelectedStep.Result.stopped read checked => True
+  | MicroCFTA.SourcePruningEnumerationSelectedStep.Result.parked checked candidate raw =>
+    MicroCFTA.UnionFind.Total checked.representatives ∧
+      MicroCFTA.EnumerationValidity.Canonical checked ∧
+        ∀
+          (after :
+            MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          candidate = some after →
+            MicroCFTA.UnionFind.Total after.core.representatives ∧ MicroCFTA.EnumerationValidity.Canonical after.core
+  |
+  MicroCFTA.SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared caller queries action candidate right
+      ordinary =>
+    MicroCFTA.UnionFind.Total checked.representatives ∧
+      MicroCFTA.EnumerationValidity.Canonical checked ∧
+        ∀
+          (after :
+            MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          candidate = some after →
+            MicroCFTA.UnionFind.Total after.core.representatives ∧ MicroCFTA.EnumerationValidity.Canonical after.core
+'MicroCFTA.SourcePruningEnumerationPreparationEntryInvariants.runPrefix_entry_invariants' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

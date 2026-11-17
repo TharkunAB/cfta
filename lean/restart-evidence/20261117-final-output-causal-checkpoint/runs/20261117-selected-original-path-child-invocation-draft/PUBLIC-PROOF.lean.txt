@@ -1,0 +1,37 @@
+ := by
+  dsimp only
+  obtain ⟨incoming, childBucket, action, indexed, descendantFound⟩ :=
+    prepared_path_child caller.checked.native.machine.heap parentBucket edge before middle symbol staged residual
+      prepared occurrence obligation original valid position suffix path
+  have joined := selected_staged_child_invocation checkEmpty r n p h k edgesOf policy consume
+    parentBucket edge caller before queries index output fragment finalCaller finalQueries finished consumerIndex
+    symbol staged residual middle prepared position incoming childBucket action indexed trace
+  dsimp only at joined
+  obtain ⟨priorStaged, laterStaged, priorFragments, childCaller, childBefore, childQueries,
+    childRootIndex, childFragment, reached, saved, after, childCallbackIndex, remainingFragments,
+    afterChildren, split, priorLength, completedLength, assembled, finishedEq, child, tail⟩ := joined
+  let tupleDone : TupleDone := fun produced current capturedQueries captured =>
+    consume (.complete (.node symbol produced) current capturedQueries
+      (SelectedEdge.finish residual (.node symbol produced) captured))
+  let tupleStopped : TupleStopped := fun completed observation candidate =>
+    consume (.stopped completed observation candidate)
+  have tailAliases := SourcePruningEnumerationInvocationRawAliasGrowth.children_done_sameClass_forward
+    (checkEmpty := checkEmpty) (r := r) (n := n) (p := p) (h := h) (k := k) (edgesOf := edgesOf) (policy := policy)
+    (done := fun remaining => tupleDone (priorFragments ++ childFragment :: remaining))
+    (stopped := fun completed => tupleStopped (priorFragments ++ childFragment :: completed))
+    (inputs := laterStaged.map (fun input => (input.1, input.2.1)))
+    (caller := reached) (reached := finalCaller) (before := after) (after := afterChildren)
+    (queries := saved) (saved := finalQueries) (index := childCallbackIndex) (output := output)
+    (fragments := remainingFragments) (localIndex := consumerIndex) (trace := tail)
+  have finalForest : finished.core.representatives = afterChildren.core.representatives := by
+    rw [finishedEq]
+    exact SourcePruningEnumerationOwnAliasForest.finish_forest residual fragment afterChildren
+  refine ⟨incoming, childBucket, action, priorStaged, laterStaged, priorFragments,
+    childCaller, childBefore, childQueries, childRootIndex, childFragment, reached, saved,
+    after, childCallbackIndex, remainingFragments, afterChildren, indexed, split, priorLength,
+    completedLength, descendantFound, EqualityTrie.descend_valid obligation.trie valid position,
+    (EqualityTrie.descend_exact obligation.trie valid position suffix).mpr path,
+    assembled, finishedEq, child, tail, ?_⟩
+  intro left right same
+  rw [finalForest]
+  exact tailAliases left right same

@@ -1,0 +1,10 @@
+theorem two_owner_proper_arrow_cycle_impossible
+    (assignment : Nat → Term Symbol) (first second : Nat)
+    (forward : (assignment first).atPath [1] = some (assignment second))
+    (backward : (assignment second).atPath [1] = some (assignment first)) : False
+
+theorem raw_dag_same_position_cycle_impossible
+    (assignment : Nat → Term Symbol) (first second third : Nat)
+    (firstTarget : (assignment first).atPath [1] = some (assignment second))
+    (secondTarget : (assignment first).atPath [1] = some (assignment third))
+    (nestedTarget : (assignment second).atPath [1] = some (assignment third)) : False

@@ -1,0 +1,10 @@
+ := by
+  have reading := congrArg Prod.fst observed
+  change ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
+    entryFuel uv before.core) = [.ok ((target, handle, bucket, decoded), entered)] at reading
+  have successful : Success (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
+      entryFuel uv) before.core (target, handle, bucket, decoded) entered := by
+    rw [Success, reading]
+    exact List.mem_singleton_self _
+  exact SourcePruningEnumerationEntry.enter_canonical caller.checked.native.machine.heap
+    entryFuel uv before.core entered target handle bucket decoded canonical successful
