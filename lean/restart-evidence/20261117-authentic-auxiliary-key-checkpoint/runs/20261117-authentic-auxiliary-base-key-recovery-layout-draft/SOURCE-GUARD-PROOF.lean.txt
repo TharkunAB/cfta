@@ -1,0 +1,38 @@
+  have bodyAvailable : Available heap
+      (.node bodyEntry bodyRows 0 [.interned universeEntry.identity]) :=
+    universeAvailable.children _ (by simp [children])
+  have patternRead := SourcePreparedSharedRows.read_identity heap facts pattern patternAvailable
+    patternId (ordinary_reference pattern patternId patternIdentity patternKind)
+  have bodyRead := SourcePreparedSharedRows.read_identity heap facts
+    (.node bodyEntry bodyRows 0 [.interned universeEntry.identity]) bodyAvailable bodyEntry.identity rfl
+  have universeRead := SourcePreparedSharedRows.read_identity heap facts
+    (.mu universeEntry (.node bodyEntry bodyRows 0 [.interned universeEntry.identity]) depth ordinary)
+    universeAvailable universeEntry.identity rfl
+  have apartBody : patternId ≠ bodyEntry.identity := by
+    intro same
+    have patternAtBody : SourcePreparedSharedRows.read heap bodyEntry.identity = some pattern := by
+      simpa only [same] using patternRead
+    have valueSame : pattern = .node bodyEntry bodyRows 0 [.interned universeEntry.identity] :=
+      Option.some.inj (patternAtBody.symm.trans bodyRead)
+    have impossible : ([.interned universeEntry.identity] : List Reference) = [] := by
+      simpa only [Value.free] using (congrArg Value.free valueSame).symm.trans patternClosed
+    cases impossible
+  have apartUniverse : patternId ≠ universeEntry.identity := by
+    intro same
+    have patternAtUniverse : SourcePreparedSharedRows.read heap universeEntry.identity = some pattern := by
+      simpa only [same] using patternRead
+    have valueSame : pattern =
+        .mu universeEntry (.node bodyEntry bodyRows 0 [.interned universeEntry.identity]) depth ordinary :=
+      Option.some.inj (patternAtUniverse.symm.trans universeRead)
+    have sameKind := patternKind
+    rw [valueSame] at sameKind
+    simpa [tag] using sameKind
+  constructor
+  · intro same
+    have symmetric : pair bodyEntry.identity universeEntry.identity =
+        pair universeEntry.identity bodyEntry.identity := by
+      simp only [pair, Nat.min_comm, Nat.max_comm]
+    exact apartBody (pair_fixed_owner_injective universeEntry.identity patternId bodyEntry.identity
+      (same.trans symmetric))
+  · intro same
+    exact apartUniverse (pair_fixed_owner_injective universeEntry.identity patternId universeEntry.identity same)

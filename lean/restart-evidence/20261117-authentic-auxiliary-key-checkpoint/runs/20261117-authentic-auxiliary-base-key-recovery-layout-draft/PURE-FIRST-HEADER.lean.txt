@@ -1,0 +1,18 @@
+theorem auxiliary_key_eq_recovers_singleton_base
+    (owner : Nat) (oldParent newParent extra diagonal : Nat × Nat)
+    (oldKey newKey : IntersectionFlatMemoKeyDomain.DomainKey)
+    (oldApartExtra : oldParent ≠ extra) (oldApartDiagonal : oldParent ≠ diagonal)
+    (oldShape :
+      (oldKey = extend (extend IntersectionEmptyDomain.emptyKey [owner] oldParent) [owner] extra ∨
+      oldKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [owner] oldParent) [owner] extra) [owner] diagonal ∨
+      oldKey = extend (extend IntersectionEmptyDomain.emptyKey [owner] oldParent) [owner] diagonal ∨
+      oldKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [owner] oldParent) [owner] diagonal) [owner] extra))
+    (newShape :
+      (newKey = extend (extend IntersectionEmptyDomain.emptyKey [owner] newParent) [owner] extra ∨
+      newKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [owner] newParent) [owner] extra) [owner] diagonal ∨
+      newKey = extend (extend IntersectionEmptyDomain.emptyKey [owner] newParent) [owner] diagonal ∨
+      newKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [owner] newParent) [owner] diagonal) [owner] extra))
+    (same : oldKey = newKey) :
+    oldParent = newParent ∧
+      extend IntersectionEmptyDomain.emptyKey [owner] oldParent =
+        extend IntersectionEmptyDomain.emptyKey [owner] newParent

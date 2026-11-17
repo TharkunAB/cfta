@@ -1,0 +1,17 @@
+  have oldMember : oldParent ∈ oldKey.seen := by
+    rcases oldShape with rfl | rfl | rfl | rfl
+    all_goals simp [extend_seen, IntersectionEmptyDomain.emptyKey]
+  have newMember : oldParent ∈ newKey.seen := by
+    simpa only [same] using oldMember
+  have parentSame : oldParent = newParent := by
+    rcases newShape with rfl | rfl | rfl | rfl
+    · simpa only [extend_seen, IntersectionEmptyDomain.emptyKey, List.not_mem_nil,
+        or_false, oldApartExtra, false_or] using newMember
+    · simpa only [extend_seen, IntersectionEmptyDomain.emptyKey, List.not_mem_nil,
+        or_false, oldApartExtra, oldApartDiagonal, false_or] using newMember
+    · simpa only [extend_seen, IntersectionEmptyDomain.emptyKey, List.not_mem_nil,
+        or_false, oldApartDiagonal, false_or] using newMember
+    · simpa only [extend_seen, IntersectionEmptyDomain.emptyKey, List.not_mem_nil,
+        or_false, oldApartExtra, oldApartDiagonal, false_or] using newMember
+  exact ⟨parentSame, congrArg (fun parent =>
+    extend IntersectionEmptyDomain.emptyKey [owner] parent) parentSame⟩

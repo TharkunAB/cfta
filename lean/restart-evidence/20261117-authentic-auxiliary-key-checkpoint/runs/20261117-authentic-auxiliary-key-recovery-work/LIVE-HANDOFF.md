@@ -1,0 +1,13 @@
+Checked 2026-11-17T16:49:13.413384+01:00. Goal ACTIVE.
+
+Source 1486005366064378867bc4dbc3a11867f113b2b7 is committed. The tracked working tree is clean. All five publication gates passed in actual terminal session 7078: 679/3/274/679/679 reports. All 6,282 pins match. Audit checked 99,781 declarations. Three public laws and two private helpers are five declarations and three fresh explicit reports. Fresh three plus inherited 470 gives 473 combined. All 264 resource-owner reports remain inherited.
+
+The new source key-recovery module is exact repair ee0c04dc, with all three selected full headers preserved. First check63069 failed only unnecessarySimpa; repaired37074 passed with all 6,275 pins verified. Source6252, imports5252, Audit679, independent274. All 6,250 old non-Audit Source files remain exact. Old Audit424863B is retained atoffset61 afteroneimport.
+
+Root checkpoint-note.md is ready. Canonical board post1492/request4ab29cf0-6869-444f-96c6-6933d4341f63 is independently verified and saved. Await final frozen checkpoint controls from canonical_bucket_semantics for archive20261117-authentic-auxiliary-key-checkpoint. Review the complete controls and manifest, then prepare/assemble/finalize/verify/commit. Push only origin/formalize without force; save independent remote/current-tree receipt afterward. This Source commit is not yet pushed.
+
+The actual_edge_footprint task is preparing a separate inherited B/P hit candidate. Its full70-line hit header and66-line arbitrary-child target are frozen. The arbitrary evaluated-child target stays OPEN. Do not add this unfinished candidate to archive roots until its own manifest freezes. It has zero theorem credit in this batch. New source key helper is not needed for the direct singleton-base hit case.
+
+All compilers are terminal. Three owned object directories were removed:427104B thisbatch, known cumulative6403240613B. At16:48 /tmp had4525580743 readable regular-file bytes; unknown entries remain untouched. Upstreammain e538 was refreshed at16:34 and is already integrated. Prior Source0f56/checkpoint4b28 is pushed and independently verified. The prior immutable archive is unchanged.
+
+Global warm NoNewMu, every warm input qualification, inherited semantic history, one joint finite accepted completion, Type/Marker compatibility, native inhabitance, guard truth and compiled Haskell correspondence remain open. No Haskell source changed or new reachable defect was established. Preserve the full target and all previous failures, repairs, counterexamples and open drafts. Usage80%; pause and notify Matti if it exceeds80%.

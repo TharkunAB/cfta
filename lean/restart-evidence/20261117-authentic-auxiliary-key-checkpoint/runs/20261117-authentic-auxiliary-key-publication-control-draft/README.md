@@ -1,0 +1,19 @@
+# Authentic auxiliary-key publication controller
+
+Status: FROZEN CANDIDATE / NOT EXECUTED. Root must review this controller, then copy it to Work47 as `prepare-publication.py`. Its path guard prevents use from this packet. No controller, compiler, Git command, board action, cleanup, active Work mutation, or normal Source write was run during preparation.
+
+This controller adapts the verified Work46 five-gate publication controls. It retains the serial driver, 8 GiB memory cap, zero swap, one Lean thread, warning errors, and pin verification before and after each gate. It adds no proof limit. The gates are public build, strict new component and prior bindings, independent imports, Audit build, and Audit strict.
+
+The new module is the exact checked 12,329-byte repair `ee0c04dc54667b6b55698e3774e1955c61cd5660f79b6f1a2d37adb06b17eff9`. The controller binds actual successful check37074 and its terminal receipt, selected input hash, original three headers, normal checked source, and log. The first failed proof check63069 and precompiler review/staging failures remain preserved in Work and their original packets. The first proof failure was an unnecessary simp argument. No blanket first-pass claim is made.
+
+Audit has one new 61-byte ordinary import, then all old 424,863 bytes with 676 reports, then three new public probe pairs. The old Audit bytes start at offset61. They are not an exact prefix. Root generated the public `#check`/`#print axioms` pairs in Work. The selected private packet still has only its original `#print axioms` lines. Neither packet was edited. All 6,250 old non-Audit Source files remain byte-exact.
+
+Only the three public theorems receive explicit fresh strict probes. Two private helper declarations are checked transitively in the same module. They do not add two extra explicit reports. Counts are five new theorem declarations, three fresh public reports, zero fresh private reports, 470 inherited reports, and 473 combined reports. All 264 resource-owner reports are inherited. There is no owner preflight, old report replacement, or axiom-string replay.
+
+The expected final inventory is 6,252 Source files, 5,252 Audit imports, 679 Audit reports, and 274 independent reports. Audit has 673 standard and six axiom-free reports. Independent checks have 271 standard and three axiom-free reports. The new strict gate has three standard reports. Independent probes prepend the same new ordinary import and retain all previous imports and public probes.
+
+The strict binding checks the prior archive manifest committed at `4b28f2f1e19751f4c6116fe0cc04a2fce70d6e74`, runs its historical verifier, compares its archived prior publication report and pins, and verifies the old proof inputs and toolchain. Only Audit uses its Work `Audit-BEFORE.lean.txt` snapshot. Every other prior Source file remains current and exact. The unchanged resource owner remains bound to its previous hash.
+
+The proved component recovers the original singleton base key from four authentic auxiliary key shapes. At one coherent heap, source-shaped Mu/open-body records and a closed ordinary old pattern rule out parent-pair collisions with the auxiliary pairs. The full-pattern law then uses actual availability, closedness, identities, and equal keys. It does not cancel arbitrary domain extensions. These are explicit source-qualified mathematical premises. The theorem does not derive them for every warm worker call.
+
+General warm NoNewMu, qualification of all warm calls, inherited-cell semantic chronology, native inhabitance, Type/Marker compatibility, one finite accepted-root completion, and compiled Haskell correspondence remain open. Earlier cold source admission and whole-worker resource/role results remain inherited. Haskell, runtime fuels, old proofs, and proof limits are unchanged.

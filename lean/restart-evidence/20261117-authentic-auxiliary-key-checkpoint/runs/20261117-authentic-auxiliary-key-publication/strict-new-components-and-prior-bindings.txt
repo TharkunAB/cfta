@@ -1,0 +1,208 @@
+{"archived_inputs_verified": 394, "payload_files_verified": 411, "total_files": 412, "total_bytes": 6011629, "manifest_sha256": "30d54512940c5a9adc322f6c97d5e100b8be85556e1e41654546ffd09303eb97", "source_tree_sha256": "e3e0ead2da7f14bc05e750a6b73e0d311ee59254a5e2b8ef3446531b909af426"}
+{"inherited_component_reports_verified": 470, "fresh_public_reports_expected": 3, "new_private_helper_declarations": 2, "new_private_explicit_reports": 0, "fresh_owner_preflight_reports": 0, "unchanged_owner_reports_inherited": 264, "old_sources_and_toolchain_byte_exact": true}
+MicroCFTA.SourceCurrentNativeAuxiliaryBaseKeyRecovery.auxiliary_key_eq_recovers_singleton_base : ∀ (owner : Nat)
+  (oldParent newParent extra diagonal : Nat × Nat) (oldKey newKey : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+  oldParent ≠ extra →
+    oldParent ≠ diagonal →
+      oldKey =
+            MicroCFTA.SourceRecursiveIntersectionDomain.extend
+              (MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [owner]
+                oldParent)
+              [owner] extra ∨
+          oldKey =
+              MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                  (MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [owner]
+                    oldParent)
+                  [owner] extra)
+                [owner] diagonal ∨
+            oldKey =
+                MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                  (MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [owner]
+                    oldParent)
+                  [owner] diagonal ∨
+              oldKey =
+                MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                  (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                    (MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey
+                      [owner] oldParent)
+                    [owner] diagonal)
+                  [owner] extra →
+        newKey =
+              MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                (MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [owner]
+                  newParent)
+                [owner] extra ∨
+            newKey =
+                MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                  (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                    (MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey
+                      [owner] newParent)
+                    [owner] extra)
+                  [owner] diagonal ∨
+              newKey =
+                  MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                    (MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey
+                      [owner] newParent)
+                    [owner] diagonal ∨
+                newKey =
+                  MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                    (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                      (MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey
+                        [owner] newParent)
+                      [owner] diagonal)
+                    [owner] extra →
+          oldKey = newKey →
+            oldParent = newParent ∧
+              MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [owner]
+                  oldParent =
+                MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [owner]
+                  newParent
+'MicroCFTA.SourceCurrentNativeAuxiliaryBaseKeyRecovery.auxiliary_key_eq_recovers_singleton_base' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentNativeAuxiliaryBaseKeyRecovery.source_parent_pair_avoids_auxiliary : ∀ {Symbol Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts heap →
+    ∀ (universeEntry bodyEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (bodyRows : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      MicroCFTA.InternedProbeProvenance.Available heap
+          (MicroCFTA.InternedConstructorTemplates.Value.mu universeEntry
+            (MicroCFTA.InternedConstructorTemplates.Value.node bodyEntry bodyRows 0
+              [MicroCFTA.InternedBinderProtocol.Reference.interned universeEntry.identity])
+            depth ordinary) →
+        ∀ (pattern : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (patternId : Nat),
+          MicroCFTA.InternedProbeProvenance.Available heap pattern →
+            pattern.free = [] →
+              MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId →
+                MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+                    MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 3 →
+                  MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity patternId ≠
+                      MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity universeEntry.identity ∧
+                    MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity patternId ≠
+                      MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity universeEntry.identity
+'MicroCFTA.SourceCurrentNativeAuxiliaryBaseKeyRecovery.source_parent_pair_avoids_auxiliary' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceCurrentNativeAuxiliaryBaseKeyRecovery.source_auxiliary_key_eq_recovers_full_pattern : ∀
+  {Symbol Guard : Type} (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts heap →
+    ∀ (universeEntry bodyEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (bodyRows : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      MicroCFTA.InternedProbeProvenance.Available heap
+          (MicroCFTA.InternedConstructorTemplates.Value.mu universeEntry
+            (MicroCFTA.InternedConstructorTemplates.Value.node bodyEntry bodyRows 0
+              [MicroCFTA.InternedBinderProtocol.Reference.interned universeEntry.identity])
+            depth ordinary) →
+        ∀ (oldPattern newPattern : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (oldPatternId newPatternId : Nat),
+          MicroCFTA.InternedProbeProvenance.Available heap oldPattern →
+            MicroCFTA.InternedProbeProvenance.Available heap newPattern →
+              oldPattern.free = [] →
+                newPattern.free = [] →
+                  MicroCFTA.SourceRecursiveIntersectionControl.identity oldPattern = some oldPatternId →
+                    MicroCFTA.SourceRecursiveIntersectionControl.identity newPattern = some newPatternId →
+                      MicroCFTA.SourceRecursiveIntersectionControl.tag oldPattern = 1 ∨
+                          MicroCFTA.SourceRecursiveIntersectionControl.tag oldPattern = 3 →
+                        ∀ (oldKey newKey : MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+                          oldKey =
+                                MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                  (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                    MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                    (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                      oldPatternId))
+                                  [universeEntry.identity]
+                                  (MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity
+                                    universeEntry.identity) ∨
+                              oldKey =
+                                  MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                    (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                      (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                        MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                        (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                          oldPatternId))
+                                      [universeEntry.identity]
+                                      (MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity
+                                        universeEntry.identity))
+                                    [universeEntry.identity]
+                                    (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                      universeEntry.identity) ∨
+                                oldKey =
+                                    MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                      (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                        MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                        (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                          oldPatternId))
+                                      [universeEntry.identity]
+                                      (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                        universeEntry.identity) ∨
+                                  oldKey =
+                                    MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                      (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                        (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                          MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                          (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                            oldPatternId))
+                                        [universeEntry.identity]
+                                        (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                          universeEntry.identity))
+                                      [universeEntry.identity]
+                                      (MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity
+                                        universeEntry.identity) →
+                            newKey =
+                                  MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                    (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                      MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                      (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                        newPatternId))
+                                    [universeEntry.identity]
+                                    (MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity
+                                      universeEntry.identity) ∨
+                                newKey =
+                                    MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                      (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                        (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                          MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                          (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                            newPatternId))
+                                        [universeEntry.identity]
+                                        (MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity
+                                          universeEntry.identity))
+                                      [universeEntry.identity]
+                                      (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                        universeEntry.identity) ∨
+                                  newKey =
+                                      MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                        (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                          MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                          (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                            newPatternId))
+                                        [universeEntry.identity]
+                                        (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                          universeEntry.identity) ∨
+                                    newKey =
+                                      MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                        (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                          (MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                            MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                            (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                              newPatternId))
+                                          [universeEntry.identity]
+                                          (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                            universeEntry.identity))
+                                        [universeEntry.identity]
+                                        (MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity
+                                          universeEntry.identity) →
+                              oldKey = newKey →
+                                oldPatternId = newPatternId ∧
+                                  oldPattern = newPattern ∧
+                                    MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                        MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                        (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                          oldPatternId) =
+                                      MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                        MicroCFTA.IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+                                        (MicroCFTA.SourceRecursiveIntersectionControl.pair universeEntry.identity
+                                          newPatternId)
+'MicroCFTA.SourceCurrentNativeAuxiliaryBaseKeyRecovery.source_auxiliary_key_eq_recovers_full_pattern' depends on axioms: [propext,
+ Quot.sound]

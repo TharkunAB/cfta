@@ -1,0 +1,15 @@
+  obtain ⟨apartExtra, apartDiagonal⟩ := source_parent_pair_avoids_auxiliary
+    heap facts universeEntry bodyEntry bodyRows depth ordinary universeAvailable
+    oldPattern oldPatternId oldAvailable oldClosed oldIdentity oldKind
+  obtain ⟨parentSame, baseSame⟩ := auxiliary_key_eq_recovers_singleton_base
+    universeEntry.identity (pair universeEntry.identity oldPatternId)
+    (pair universeEntry.identity newPatternId) (pair bodyEntry.identity universeEntry.identity)
+    (pair universeEntry.identity universeEntry.identity) oldKey newKey apartExtra apartDiagonal
+    oldShape newShape same
+  have identitySame : oldPatternId = newPatternId :=
+    pair_fixed_owner_injective universeEntry.identity oldPatternId newPatternId parentSame
+  have valueSame : oldPattern = newPattern :=
+    SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective heap facts
+      oldPattern newPattern oldAvailable newAvailable oldClosed newClosed oldPatternId oldIdentity
+      (by simpa only [identitySame] using newIdentity)
+  exact ⟨identitySame, valueSame, baseSame⟩
