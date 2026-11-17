@@ -1,0 +1,61 @@
+  obtain ⟨handle, bucket, readAfter, value, root, size, resolved,
+    reading, originalStored, path, readFrame, decoded, boundary, checking, resolution, resolvedFrame,
+    seen, resolvedStored, written, shape, parkedCore, adapted, restarted,
+    updatedEq, coreEq, nextEq, notStuck, aliases, restart⟩ :=
+    SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.parked_singleton_removed_bucket_receipt
+      holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel depth uv
+      metadata updated caller queries before parked checked core next ready.safe.1.total actual
+  obtain ⟨_rootSize, rootPath⟩ := ready.root
+  have rootSame : root = uv := (UnionFind.reaches_unique path rootPath).1
+  subst root
+  have frames := readFrame.trans resolvedFrame
+  have pendingBefore := pending_inputs before.core pending uv (some handle) bucket originalStored
+  have originalAvoid := ready.avoids handle bucket originalStored
+  have clearOrigin := EnumerationDependencies.setValue_origin
+    uv (.unenumerated (some handle) []) resolved checked
+    (by intro produced impossible; cases impossible) written
+  have originalExpanded : EnumeratedOrigin before.core checked := by
+    intro slot fragment stored
+    have previous := clearOrigin slot fragment stored
+    simpa only [frames.values] using previous
+  have classes : ∀ left right, UnionFind.SameClass checked.representatives left right ↔
+      UnionFind.SameClass before.core.representatives left right := by
+    intro left right
+    rw [shape]
+    change UnionFind.SameClass resolved.representatives left right ↔ _
+    simp only [UnionFind.SameClass, frames.reaches]
+  have pendingChecked : InputsPending checked bucket := by
+    intro old oldFragment stored sc member related
+    exact pendingBefore old oldFragment (originalExpanded old oldFragment stored)
+      sc member ((classes old sc.var).mp related)
+  have avoidChecked : Avoids checked.representatives uv bucket := by
+    intro sc member related
+    exact originalAvoid sc member ((classes uv sc.var).mp related)
+  have pendingParked : InputsPending parked.core bucket := by
+    rw [parkedCore]
+    exact pendingChecked
+  have avoidParked : Avoids parked.core.representatives uv bucket := by
+    rw [parkedCore]
+    exact avoidChecked
+  have readSuccess : Success (getValue workFuel uv) before.core
+      (.unenumerated (some handle) bucket) readAfter := by
+    rw [Success, reading]
+    exact List.mem_singleton_self _
+  have checkSuccess : Success (SourcePruningEnumerationRecursion.checkRepeated
+      caller.checked.native.machine.heap workFuel uv handle bucket) readAfter true checked := by
+    rw [Success, checking]
+    exact List.mem_singleton_self _
+  have readReady := (EnumerationDriver.getValue_ready workFuel uv before.core readAfter
+    (.unenumerated (some handle) bucket) ready readSuccess).1
+  have readIncoming := EnumerationPendingReplacement.frame_incoming uv before.core readAfter readFrame incoming
+  have checkedIsolated := EnumerationDischargeHistory.checkRepeated_created_isolated
+    caller.checked.native.machine.heap workFuel uv handle bucket readAfter checked
+    readReady readIncoming checkSuccess
+  have isolated : EnumerationDischargeHistory.IsolatedPending uv handle parked.core := by
+    rw [parkedCore]
+    exact checkedIsolated
+  exact ⟨handle, bucket, readAfter, value, size, resolved,
+    reading, originalStored, pendingParked, avoidParked, isolated,
+    path, readFrame, decoded, boundary, checking, resolution, resolvedFrame,
+    seen, resolvedStored, written, shape, parkedCore, adapted, restarted,
+    updatedEq, coreEq, nextEq, notStuck, aliases, restart⟩

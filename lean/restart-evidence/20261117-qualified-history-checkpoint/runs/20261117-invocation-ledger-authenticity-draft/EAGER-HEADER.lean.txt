@@ -1,0 +1,18 @@
+theorem eager_selected_output_authentic_event_ledger
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output)
+    (observed : (outputs (SourcePruningEnumerationSharedChildVisitors.visitSelected
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty r n p h k edgesOf)
+      consume scs edge caller before queries))[index]? = some output) :
+    ∃ (receipt : Receipt width) (consumerIndex : Nat) (events : List (Event width)),
+      SelectedLedgerAt checkEmpty r n p h k edgesOf .eager consume scs edge caller before queries
+        index output receipt consumerIndex [] events ∧
+      (∀ event ∈ events, AuthenticEvent event) ∧
+      ∃ (earlier later : List Output),
+        outputs (SourcePruningEnumerationSharedChildVisitors.visitSelected
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty r n p h k edgesOf)
+          consume scs edge caller before queries) = earlier ++ outputs (consume receipt) ++ later ∧
+        (outputs (consume receipt))[consumerIndex]? = some output ∧
+        index = earlier.length + consumerIndex

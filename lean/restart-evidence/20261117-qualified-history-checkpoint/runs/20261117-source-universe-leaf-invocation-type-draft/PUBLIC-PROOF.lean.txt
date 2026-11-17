@@ -1,0 +1,28 @@
+ := by
+  have fragmentShape := selected_leaf_fragment checkEmpty r n p h k edgesOf policy consume
+    parentBucket edge caller reached before finished queries saved index output fragment consumerIndex leaf trace
+  have typed : TypeIn (SourceSynthesisCurrentContext.constructorCatalog lib query)
+      (.node edge.entry.key.symbol []) := by
+    obtain ⟨bodyEntry, marker, arrow, rows, bodyEq, _markerRead, arrowChildren, _arrowKey,
+        aligned, _markerClosed, _markerAvailable, _kinds, _arrowRetained⟩ :=
+      SourceSynthesisCurrentUniverseOwnership.current_stored_universe_rows
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    have retained : edge ∈ canonicalEdges (arrow :: rows) := by
+      simpa only [bodyEq, InternedEdgeResidency.nodeEdges] using present
+    have original := (List.mem_filter.mp (canonicalEdges_member _ edge retained)).1
+    rcases List.mem_cons.mp original with same | later
+    · subst edge
+      rw [leaf] at arrowChildren
+      cases arrowChildren
+    · obtain ⟨descriptor, described, related⟩ := output_origin aligned edge later
+      have zero : descriptor.2 = 0 := by
+        have lengths := congrArg List.length related.1
+        simpa only [leaf, List.length_nil, List.length_replicate] using lengths.symm
+      have symbolSame : edge.entry.key.symbol = literal descriptor.1 :=
+        congrArg EdgeKey.symbol related.2
+      rw [symbolSame]
+      exact descriptor_leaf_type (SourceSynthesisCurrentContext.constructorCatalog lib query) descriptor described zero
+  refine ⟨fragmentShape, ?_⟩
+  intro assignment
+  rw [fragmentShape]
+  simpa only [fill, List.map_nil] using typed

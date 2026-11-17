@@ -1,0 +1,23 @@
+theorem invocation_ledger_events_authentic
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) :
+    (∀ (policy : Policy) (scs : List Suspended) (incoming : Node) (caller : Caller width)
+      (before : Cached) (queries : Queries) (done : Done) (stopped : Stopped)
+      (index : Nat) (output : Output) (exit : ChildExit width) (localIndex : Nat)
+      (path : List Nat) (events : List (Event width)),
+      ChildLedgerAt checkEmpty r n p h k edgesOf policy scs incoming caller before queries
+        done stopped index output exit localIndex path events →
+      ∀ event ∈ events, AuthenticEvent event) ∧
+    (∀ (policy : Policy) (done : TupleDone) (stopped : TupleStopped) (inputs : List (Node × List Suspended))
+      (caller : Caller width) (before : Cached) (queries : Queries)
+      (index : Nat) (output : Output) (exit : TupleExit width) (localIndex : Nat)
+      (path : List Nat) (position : Nat) (events : List (Event width)),
+      ChildrenLedgerAt checkEmpty r n p h k edgesOf policy done stopped inputs caller before queries
+        index output exit localIndex path position events →
+      ∀ event ∈ events, AuthenticEvent event) ∧
+    (∀ (policy : Policy) (consume : Receipt width → Result Output Reason width)
+      (scs : List Suspended) (edge : Edge) (caller : Caller width) (before : Cached) (queries : Queries)
+      (index : Nat) (output : Output) (receipt : Receipt width) (consumerIndex : Nat)
+      (path : List Nat) (events : List (Event width)),
+      SelectedLedgerAt checkEmpty r n p h k edgesOf policy consume scs edge caller before queries
+        index output receipt consumerIndex path events →
+      ∀ event ∈ events, AuthenticEvent event)

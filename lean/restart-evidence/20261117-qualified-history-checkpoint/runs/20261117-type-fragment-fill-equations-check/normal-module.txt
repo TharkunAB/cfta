@@ -1,0 +1,26 @@
+MicroCFTA.SourceSynthesisTypeFragmentAssignment.TypeFragment : List (String × Nat) →
+  (Nat → Prop) → MicroCFTA.Fragments.Fragment (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) → Prop
+MicroCFTA.SourceSynthesisTypeFragmentAssignment.TypeFragment.fill_type : ∀ (catalog : List (String × Nat))
+  (marked : Nat → Prop)
+  (assignment : Nat → MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (fragment : MicroCFTA.Fragments.Fragment (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceSynthesisTypeFragmentAssignment.TypeFragment catalog marked fragment →
+    (∀ (uv : Nat), marked uv → MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog (assignment uv)) →
+      MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog (MicroCFTA.Fragments.fill assignment fragment)
+'MicroCFTA.SourceSynthesisTypeFragmentAssignment.TypeFragment.fill_type' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceSynthesisTypeFragmentAssignment.evaluateSlotsWith_type : ∀ (catalog : List (String × Nat))
+  (values :
+    List (MicroCFTA.EnumerationState.UVarValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)))
+  (roots : Nat → Nat) (marked : Nat → Prop)
+  (base : Nat → MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+  (∀ (uv : Nat), marked uv → MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog (base uv)) →
+    (∀ (uv : Nat),
+        marked uv →
+          ∀ (fragment : MicroCFTA.Fragments.Fragment (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+            values[roots uv]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+              MicroCFTA.SourceSynthesisTypeFragmentAssignment.TypeFragment catalog marked fragment) →
+      ∀ (fuel uv : Nat),
+        marked uv →
+          MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog
+            (MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith values roots base fuel uv)
+'MicroCFTA.SourceSynthesisTypeFragmentAssignment.evaluateSlotsWith_type' depends on axioms: [propext, Quot.sound]

@@ -1,0 +1,10 @@
+theorem selected_ledger_first_preparation
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (policy : Policy) (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller : Caller width) (before : Cached) (queries : Queries)
+    (index consumerIndex : Nat) (output : Output) (receipt : Receipt width)
+    (path : List Nat) (events : List (Event width))
+    (ledger : SelectedLedgerAt checkEmpty r n p h k edgesOf policy consume scs edge caller before queries
+      index output receipt consumerIndex path events) :
+    ∃ rows, events.head? = some (.prepare path scs edge caller before queries rows) ∧
+      SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before = rows

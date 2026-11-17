@@ -1,0 +1,24 @@
+ := by
+  dsimp only
+  let base : Nat → Term Symbol := fun _ => .node (literal "var1") []
+  let current := EnumerationPendingAssignment.evaluateSlotsWith state.values roots base (frontier + 1)
+  have baseAliases : UnionFind.Satisfies state.representatives base := by
+    intro _left _right _same
+    rfl
+  have baseTyped : ∀ uv, marked uv → TypeIn catalog (base uv) := by
+    intro _uv _marked
+    exact TypeIn.leaf "var1" (by simp)
+  obtain ⟨currentAliases, currentEquations, _currentPending⟩ :=
+    EnumerationPendingAssignment.evaluateSlotsWith_witness
+      state safe roots paths level frontier stratified base baseAliases
+  have targetTypes : ∀ event ∈ events, ∀ sc ∈ event.2, kept sc.var →
+      TypeIn catalog (current sc.var) := by
+    intro event member sc listed supported
+    exact SourceSynthesisTypeFragmentAssignment.evaluateSlotsWith_type
+      catalog state.values roots marked base baseTyped expanded
+      (frontier + 1) sc.var (targetsMarked event member sc listed supported)
+  exact recomplete_ordered_arrow_buckets_at_snapshot
+    catalog state safe roots paths level frontier stratified current currentAliases
+    (fun slot fragment stored => (currentEquations slot fragment stored).symm)
+    events pendingOwners distinctOwners arrowPaths compatibleClasses kept dependencies
+    targetTypes targetOrder keptSeparate

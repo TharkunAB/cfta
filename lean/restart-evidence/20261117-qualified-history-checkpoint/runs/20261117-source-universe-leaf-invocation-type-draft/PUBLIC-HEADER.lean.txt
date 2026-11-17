@@ -1,0 +1,19 @@
+theorem original_universe_leaf_selected_type
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (edge : Edge) (present : edge ∈ InternedEdgeResidency.nodeEdges body) (leaf : edge.children = [])
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width)
+    (parentBucket : List Suspended) (caller reached : Caller width) (before finished : Cached)
+    (queries saved : Queries) (index : Nat) (output : Output)
+    (fragment : Fragment) (consumerIndex : Nat)
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy consume parentBucket edge
+      caller before queries index output (.complete fragment reached saved finished) consumerIndex) :
+    fragment = .node edge.entry.key.symbol [] ∧
+      ∀ assignment : Nat → Term Symbol,
+        TypeIn (SourceSynthesisCurrentContext.constructorCatalog lib query) (fill assignment fragment)

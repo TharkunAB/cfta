@@ -1,0 +1,8 @@
+theorem evaluateSlotsWith_type
+    (catalog : List (String × Nat)) (values : List (UVarValue Symbol))
+    (roots : Nat → Nat) (marked : Nat → Prop) (base : Nat → Term Symbol)
+    (baseTyped : ∀ uv, marked uv → TypeIn catalog (base uv))
+    (expanded : ∀ uv, marked uv → ∀ fragment,
+      values[roots uv]? = some (.enumerated fragment) → TypeFragment catalog marked fragment) :
+    ∀ fuel uv, marked uv →
+      TypeIn catalog (EnumerationPendingAssignment.evaluateSlotsWith values roots base fuel uv)

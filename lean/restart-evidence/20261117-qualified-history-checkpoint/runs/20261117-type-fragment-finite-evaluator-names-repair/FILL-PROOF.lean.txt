@@ -1,0 +1,16 @@
+ := by
+  induction wellFormed with
+  | hole uv known =>
+      exact holes uv known
+  | leaf name present =>
+      exact TypeIn.leaf name present
+  | node name children present _checked ih =>
+      change TypeIn catalog (.node (literal name) (children.map (fill assignment)))
+      apply TypeIn.node name (children.map (fill assignment))
+      · simpa only [List.length_map] using present
+      · intro term member
+        obtain ⟨child, listed, rfl⟩ := List.mem_map.mp member
+        exact ih child listed
+  | arrow argument result _first _second left right =>
+      simpa only [fill, List.map_cons, List.map_nil] using
+        TypeIn.arrow (fill assignment argument) (fill assignment result) left right

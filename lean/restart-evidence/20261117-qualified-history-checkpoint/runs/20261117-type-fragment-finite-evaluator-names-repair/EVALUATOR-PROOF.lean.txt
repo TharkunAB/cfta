@@ -1,0 +1,20 @@
+ := by
+  intro fuel
+  induction fuel with
+  | zero =>
+      intro uv known
+      exact baseTyped uv known
+  | succ fuel ih =>
+      intro uv known
+      cases stored : values[roots uv]? with
+      | none =>
+          simpa only [EnumerationPendingAssignment.evaluateSlotsWith, stored] using baseTyped uv known
+      | some value =>
+          cases value with
+          | unenumerated node bucket | eliminated =>
+              simpa only [EnumerationPendingAssignment.evaluateSlotsWith, stored] using baseTyped uv known
+          | enumerated fragment =>
+              simp only [EnumerationPendingAssignment.evaluateSlotsWith, stored]
+              exact TypeFragment.fill_type catalog marked
+                (EnumerationPendingAssignment.evaluateSlotsWith values roots base fuel) fragment
+                (expanded uv known fragment stored) ih
