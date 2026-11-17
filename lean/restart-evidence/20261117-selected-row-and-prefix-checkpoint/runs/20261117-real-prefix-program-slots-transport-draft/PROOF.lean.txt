@@ -1,0 +1,147 @@
+ := by
+  classical
+  obtain ⟨ready, _incoming, _selectedPayload⟩ := SourcePruningEnumerationRestart.selected
+    stop order metadata caller before uv packet.valid packet.safe chosen
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  by_cases readable : ∃ (oldHandle : Nat) (scs : List Suspended) (readAfter : Core),
+      ExceptT.run (getValue readFuel uv before.core) =
+        [.ok (.unenumerated (some oldHandle) scs, readAfter)]
+  · obtain ⟨oldHandle, scs, readAfter, reading⟩ := readable
+    have readSuccess : Success (getValue readFuel uv) before.core
+        (.unenumerated (some oldHandle) scs) readAfter := by
+      rw [Success, reading]
+      exact List.mem_singleton_self _
+    by_cases checkedResult : ∃ (repeated : Bool) (checked : Core),
+        ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+          caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter) = [.ok (repeated, checked)]
+    · obtain ⟨repeated, checked, checking⟩ := checkedResult
+      have checkSuccess : Success (SourcePruningEnumerationRecursion.checkRepeated
+          caller.checked.native.machine.heap checkFuel uv oldHandle scs) readAfter repeated checked := by
+        rw [Success, checking]
+        exact List.mem_singleton_self _
+      cases repeated with
+      | true =>
+          have checkedSlots := observed_repeated_slots caller.checked.native.machine.heap
+            readFuel checkFuel uv oldHandle scs before.core readAfter checked packet.safe
+            valid marked slots readSuccess checkSuccess
+          unfold SourcePruningEnumerationSelectedStep.runPrefix
+            SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+          simp only [reading, checking]
+          cases adapted : SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap
+              indexFuel uv oldHandle scs before checked with
+          | none => trivial
+          | some attached =>
+              change ProgramSlots valid literal caller.checked.native.machine.heap attached.core marked
+              rw [SourcePruningEnumerationParkedRestart.adapt_core caller.checked.native.machine.heap
+                indexFuel uv oldHandle scs before attached checked adapted]
+              exact checkedSlots
+      | false =>
+          cases oldDecoded : lookupNode caller.checked.native.machine.heap oldHandle with
+          | none =>
+              simp only [SourcePruningEnumerationSelectedStep.runPrefix,
+                SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, reading, checking, oldDecoded]
+          | some oldValue =>
+              have readStored := (EnumerationDriver.getValue_root readFuel uv before.core readAfter
+                (.unenumerated (some oldHandle) scs) packet.safe ready.inside ready.root readSuccess).2.2.2
+              have readFrame := (getValue_frame readFuel uv before.core readAfter
+                (.unenumerated (some oldHandle) scs) packet.safe.1.total readSuccess).1
+              have originalStored : before.core.values[uv]? = some (.unenumerated (some oldHandle) scs) := by
+                simpa only [readFrame.values] using readStored
+              obtain ⟨original, originalDecoded, oldAvailable, oldClosed⟩ :=
+                realized uv oldHandle scs originalStored
+              have originalSame : original = oldValue := Option.some.inj (originalDecoded.symm.trans oldDecoded)
+              subst original
+              unfold SourcePruningEnumerationSelectedStep.runPrefix
+                SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+              simp only [reading, checking, oldDecoded,
+                ← SourcePruningEnumerationAction.prepare_configured_eq]
+              cases preparedEq : SourcePruningEnumerationAction.prepare (EnumGuard := Constraint)
+                  holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue
+                  caller.checked.native.machine.heap with
+              | failed fault heap => trivial
+              | done pair heap =>
+                  obtain ⟨value, possibleAction⟩ := pair
+                  cases possibleAction with
+                  | none => trivial
+                  | some action =>
+                      dsimp only
+                      by_cases ran : ∃ observed : Core,
+                          ExceptT.run (action checked) = [.ok ((), observed)]
+                      · obtain ⟨observed, raw⟩ := ran
+                        have actionSuccess : Success action checked () observed := by
+                          rw [Success, raw]
+                          exact List.mem_singleton_self _
+                        simp only [raw]
+                        cases encoded : encodeNode value with
+                        | none => trivial
+                        | some newHandle =>
+                            dsimp only
+                            cases adapted : SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel
+                                uv oldHandle newHandle scs before observed with
+                            | none => trivial
+                            | some attached =>
+                                dsimp only
+                                have narrowed := SourcePruningEnumerationSharedRecursive.prepared_done_narrowed
+                                  holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs
+                                  oldValue value caller.checked.native.machine.heap heap action preparedEq
+                                have nonempty := SourcePruningEnumerationSharedRecursive.prepared_success_nonempty
+                                  holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs
+                                  oldValue value caller.checked.native.machine.heap heap action checked observed
+                                  preparedEq raw
+                                obtain ⟨final, post, _unfolding, _querySame⟩ := SourcePruningNativeContext.outer_post
+                                  formulas solver inventory caller memos holeKey fits admits metadata nativeFuel uv
+                                  oldValue value heap packet.context oldAvailable narrowed
+                                have kept : SourceEqualityRequiredCache.Keeps
+                                    caller.checked.native.machine.heap heap := post.effects.keeps
+                                have observedSlots := observed_prepared_slots holeKey fits admits metadata
+                                  readFuel checkFuel nativeFuel representativeFuel uv oldHandle newHandle scs oldValue value
+                                  caller.checked.native.machine.heap heap action before.core readAfter checked observed
+                                  valid marked slots ready packet.context.ready.semantic.ready realized kept oldDecoded
+                                  readSuccess checkSuccess narrowed nonempty encoded preparedEq actionSuccess
+                                have attachedCore := SourcePruningEnumerationNarrowAdapter.adapt_core heap indexFuel
+                                  uv oldHandle newHandle scs before attached observed adapted
+                                have attachedSlots : ProgramSlots valid literal heap attached.core marked := by
+                                  rw [attachedCore]
+                                  exact observedSlots
+                                have recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes
+                                    graph templates callbackFuel metadata uv (.inr newHandle) attached.core) =
+                                    [.ok ((false, metadata), attached.core)] := by
+                                  rw [SourcePruningRecordTypes.recordTypes_inr]
+                                  rfl
+                                simp only [recorded]
+                                exact attachedSlots
+                      · generalize rawEq : ExceptT.run (action checked) = rawAction
+                        cases rawAction with
+                        | nil => trivial
+                        | cons first rest =>
+                            cases first with
+                            | error fault => trivial
+                            | ok pair =>
+                                obtain ⟨token, observed⟩ := pair
+                                cases token
+                                cases rest with
+                                | nil => exact (ran ⟨observed, rawEq⟩).elim
+                                | cons another remaining => trivial
+    · have stopped : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+          readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before memos.query =
+          .stopped (ExceptT.run (getValue readFuel uv before.core))
+            (some (ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+              caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter))) := by
+        unfold SourcePruningEnumerationSelectedStep.runPrefix
+          SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+        simp only [reading]
+        split
+        · exact (checkedResult ⟨true, _, by assumption⟩).elim
+        · exact (checkedResult ⟨false, _, by assumption⟩).elim
+        · rfl
+      simp only [stopped]
+  · have stopped : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before memos.query =
+        .stopped (ExceptT.run (getValue readFuel uv before.core)) none := by
+      unfold SourcePruningEnumerationSelectedStep.runPrefix
+        SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+      dsimp only
+      split
+      · exact (readable ⟨_, _, _, by assumption⟩).elim
+      · rfl
+    simp only [stopped]
