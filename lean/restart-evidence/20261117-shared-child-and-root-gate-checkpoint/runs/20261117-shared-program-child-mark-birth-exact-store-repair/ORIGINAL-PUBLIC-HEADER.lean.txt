@@ -1,0 +1,31 @@
+/-- One literal shared Program-child success marks its exact fresh root with the full bucket. -/
+theorem successful_program_child_mark_birth
+    (valid : Constraint → Prop) (literal : String → Symbol)
+    (checkEmpty : Bool) (r n p h k : Nat)
+    (scs : List Suspended) (incoming : Node) (caller reached : Caller width)
+    (before after : Cached) (queries saved : Queries) (fragment : Fragment)
+    (returned read : Core) (waiting : EnumerationWaitingIndex.Waiting)
+    (coherent : InternedRecordCoherence.Coherent caller.checked.native.machine.heap)
+    (available : Available caller.checked.native.machine.heap incoming)
+    (closed : incoming.free = []) (fields : ValueFields valid literal incoming)
+    (pathScope : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie ∧
+      ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, ∃ tail, path = 0 :: tail)
+    (marked : Nat → Prop) (safe : Safe before.core)
+    (slots : ProgramSlots valid literal caller.checked.native.machine.heap before.core marked)
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter)
+    (avoids : ∀ uv, marked uv → Avoids before.core.representatives uv scs)
+    (actual : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+      checkEmpty r n p h k scs incoming caller before queries =
+        ((.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting), some after)) :
+    ∃ handle,
+      SourcePruningEnumerationNodes.encodeNode incoming = some handle ∧
+      SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some incoming ∧
+      fragment = .hole before.core.counter ∧ reached = caller ∧ saved = queries ∧
+      read = before.core ∧ waiting = before.waiting ∧ after.core = returned ∧
+      after.core = {allocated (some handle) before.core with values :=
+        (allocated (some handle) before.core).values.set before.core.counter
+          (.unenumerated (some handle) scs)} ∧
+      after.core.values[before.core.counter]? = some (.unenumerated (some handle) scs) ∧
+      after.core.counter = before.core.counter + 1 ∧ Safe after.core ∧
+      ProgramSlots valid literal reached.checked.native.machine.heap after.core
+        (fun uv => marked uv ∨ uv = before.core.counter)

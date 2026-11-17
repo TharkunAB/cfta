@@ -1,0 +1,26 @@
+--- original/SourceSynthesisSharedProgramChildMarkBirth.lean
++++ repair/SourceSynthesisSharedProgramChildMarkBirth.lean
+@@ -53,9 +53,8 @@
+       SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some incoming ∧
+       fragment = .hole before.core.counter ∧ reached = caller ∧ saved = queries ∧
+       read = before.core ∧ waiting = before.waiting ∧ after.core = returned ∧
+-      after.core = {allocated (some handle) before.core with values :=
+-        (allocated (some handle) before.core).values.set before.core.counter
+-          (.unenumerated (some handle) scs)} ∧
++      after.core = {allocated (some handle) before.core with
++        values := (allocated (some handle) before.core).values.set before.core.counter (.unenumerated (some handle) scs)} ∧
+       after.core.values[before.core.counter]? = some (.unenumerated (some handle) scs) ∧
+       after.core.counter = before.core.counter + 1 ∧ Safe after.core ∧
+       ProgramSlots valid literal reached.checked.native.machine.heap after.core
+@@ -98,9 +97,8 @@
+   have freshStored : after.core.values[before.core.counter]? =
+       some (.unenumerated (some handle) scs) := by
+     simpa only [storedBucket] using (fresh safe.1.aligned).1
+-  have afterShape : after.core = {allocated (some handle) before.core with values :=
+-      (allocated (some handle) before.core).values.set before.core.counter
+-        (.unenumerated (some handle) scs)} := coreSame.trans returnedShape
++  have afterShape : after.core = {allocated (some handle) before.core with
++      values := (allocated (some handle) before.core).values.set before.core.counter (.unenumerated (some handle) scs)} := coreSame.trans returnedShape
+   have afterSafe : Safe after.core := by
+     rw [coreSame]
+     exact returnedSafe

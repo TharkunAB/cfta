@@ -1,0 +1,27 @@
+ := by
+  have impossible : ∀ value, SourceEndpointReachability.Witness SourceMemoGate.unconstrained value →
+      Available sourceHeap value → False := by
+    intro value witness
+    induction witness with
+    | @binder entry body depth ordinary constrained =>
+        intro available
+        have plain := original_stored_mu_unconstrained lib query signed whole accepted
+          rootValue sourceHeap built entry.key entry body depth ordinary
+          (available.resident entry rfl)
+        rw [plain] at constrained
+        cases constrained
+    | union _nested member _next ih =>
+        intro available
+        exact ih (available.children _ member)
+    | node _nested rowMember childMember _next ih =>
+        intro available
+        exact ih (available.children _ (List.mem_flatMap.mpr ⟨_, rowMember, childMember⟩))
+  have available : Available sourceHeap rootValue :=
+    (InternedFreshOrdinaryFacts.closed_verified (ordinarySymbols whole)).result
+      rootValue sourceHeap built
+  cases answer : SourceEndpointReachability.reaches SourceMemoGate.unconstrained rootValue with
+  | false => rfl
+  | true =>
+      exact False.elim (impossible rootValue
+        ((SourceEndpointReachability.reaches_iff SourceMemoGate.unconstrained rootValue).mp answer)
+        available)

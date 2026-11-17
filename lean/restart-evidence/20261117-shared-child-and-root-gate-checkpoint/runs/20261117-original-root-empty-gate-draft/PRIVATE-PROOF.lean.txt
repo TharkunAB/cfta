@@ -1,0 +1,37 @@
+ := by
+  obtain ⟨bodyEntry, marker, arrow, rows, bodyEq, markerShape, _arrowChildren,
+      _arrowKey, _catalog, _markerClosed, _markerAvailable, kinds, _retained⟩ :=
+    SourceSynthesisCurrentUniverseOwnership.current_stored_universe_rows
+      lib query signed whole accepted rootValue sourceHeap built
+      key entry body depth ordinary stored
+  obtain ⟨markerEntry, markerRow, markerEq, markerLeaf, markerKey⟩ := markerShape
+  have topPlain : SourceMemoGate.plain SourceSynthesisGeneralizeSyntax.top = true := rfl
+  have markerPlain : Annotated (fun guard => SourceMemoGate.plain guard = true) marker := by
+    rw [markerEq]
+    refine .node markerEntry [markerRow] 0 [] ?_ ?_
+    · intro edge member
+      have same := List.mem_singleton.mp member
+      cases same
+      rw [markerKey]
+      exact topPlain
+    · intro child member
+      obtain ⟨row, rowMember, childMember⟩ := List.mem_flatMap.mp member
+      have same := List.mem_singleton.mp rowMember
+      cases same
+      rw [markerLeaf] at childMember
+      cases childMember
+  have bodyPlain : Annotated (fun guard => SourceMemoGate.plain guard = true) body := by
+    rw [bodyEq]
+    refine .node bodyEntry (canonicalEdges (arrow :: rows)) 0 [.interned entry.identity] ?_ ?_
+    · intro row member
+      rw [(kinds row member).1]
+      exact topPlain
+    · intro child member
+      obtain ⟨row, selected, included⟩ := List.mem_flatMap.mp member
+      rcases (kinds row selected).2 child included with same | same
+      · rw [same]
+        exact markerPlain
+      · rw [same]
+        exact .reference _
+  exact SourceCurrentHereditaryUnconstrained.unconstrained
+    (.mu entry body depth ordinary) (.mu entry body depth ordinary bodyPlain)

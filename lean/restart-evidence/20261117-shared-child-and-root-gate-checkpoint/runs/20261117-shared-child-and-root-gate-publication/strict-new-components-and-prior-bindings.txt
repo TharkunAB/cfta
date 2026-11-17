@@ -1,0 +1,140 @@
+{"archived_inputs_verified": 124, "payload_files_verified": 141, "total_files": 142, "total_bytes": 3031746, "manifest_sha256": "f9242bbea6b9ddf7fee611bd6adfc1d3ecae00de2320eaf0074aeb98fdd09206", "source_tree_sha256": "4561b791254ae2443b9fac842b4ce888acbc0c363ca79550e9d04ef0307505dc"}
+{"inherited_component_reports_verified": 374, "fresh_component_reports_expected": 3, "old_sources_and_toolchain_byte_exact": true}
+@MicroCFTA.SourceSynthesisSharedProgramChildMarkBirth.successful_program_child_mark_birth : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (literal : String → MicroCFTA.SourcePruningTemplates.Symbol) (checkEmpty : Bool) (r n p h k : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries saved : MicroCFTA.SourceEndpointMemo.Memos)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (returned read :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+  MicroCFTA.InternedRecordCoherence.Coherent caller.checked.native.machine.heap →
+    MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap incoming →
+      incoming.free = [] →
+        MicroCFTA.SourceSynthesisHereditaryProgramFields.ValueFields valid literal incoming →
+          (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+              sc ∈ scs →
+                MicroCFTA.EqualityTrie.Valid sc.trie ∧
+                  ∀ (path : MicroCFTA.EqualityTrie.Path),
+                    path ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie → ∃ tail, path = 0 :: tail) →
+            ∀ (marked : Nat → Prop),
+              MicroCFTA.EnumerationSchedule.Safe before.core →
+                MicroCFTA.SourceSynthesisProgramEnumerationRoles.ProgramSlots valid literal
+                    caller.checked.native.machine.heap before.core marked →
+                  (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → sc.var < before.core.counter) →
+                    (∀ (uv : Nat),
+                        marked uv → MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives uv scs) →
+                      MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty r n p h
+                            k scs incoming caller before queries =
+                          ((Except.ok (some [Except.ok (fragment, returned)]), reached, saved, read, waiting),
+                            some after) →
+                        ∃ handle,
+                          MicroCFTA.SourcePruningEnumerationNodes.encodeNode incoming = some handle ∧
+                            MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap
+                                  handle =
+                                some incoming ∧
+                              fragment = MicroCFTA.Fragments.Fragment.hole before.core.counter ∧
+                                reached = caller ∧
+                                  saved = queries ∧
+                                    read = before.core ∧
+                                      waiting = before.waiting ∧
+                                        after.core = returned ∧
+                                          (after.core =
+                                              have __src :=
+                                                MicroCFTA.EnumerationState.allocated (some handle) before.core;
+                                              { counter := __src.counter, representatives := __src.representatives,
+                                                values :=
+                                                  (MicroCFTA.EnumerationState.allocated (some handle)
+                                                          before.core).values.set
+                                                    before.core.counter
+                                                    (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle)
+                                                      scs),
+                                                obligations := __src.obligations,
+                                                recursionAncestry := __src.recursionAncestry,
+                                                expansionAncestry := __src.expansionAncestry }) ∧
+                                            after.core.values[before.core.counter]? =
+                                                some
+                                                  (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle)
+                                                    scs) ∧
+                                              after.core.counter = before.core.counter + 1 ∧
+                                                MicroCFTA.EnumerationSchedule.Safe after.core ∧
+                                                  MicroCFTA.SourceSynthesisProgramEnumerationRoles.ProgramSlots valid
+                                                    literal reached.checked.native.machine.heap after.core fun uv =>
+                                                    marked uv ∨ uv = before.core.counter
+'MicroCFTA.SourceSynthesisSharedProgramChildMarkBirth.successful_program_child_mark_birth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisCurrentRootEmptyCheckGate.original_stored_mu_unconstrained : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (sourceHeap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          sourceHeap.nodeRecords key =
+              some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+            MicroCFTA.SourceMemoGate.unconstrained
+                (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) =
+              true
+'_private.MicroCFTA.SourceSynthesisCurrentRootEmptyCheckGate.0.MicroCFTA.SourceSynthesisCurrentRootEmptyCheckGate.original_stored_mu_unconstrained' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisCurrentRootEmptyCheckGate.original_root_reaches_constrained_mu_false : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (sourceHeap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap →
+        MicroCFTA.SourceEndpointReachability.reaches MicroCFTA.SourceMemoGate.unconstrained rootValue = false
+'MicroCFTA.SourceSynthesisCurrentRootEmptyCheckGate.original_root_reaches_constrained_mu_false' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

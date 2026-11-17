@@ -1,0 +1,37 @@
+--- layout/SourceSynthesisSharedProgramChildMarkBirth.lean
++++ store/SourceSynthesisSharedProgramChildMarkBirth.lean
+@@ -77,9 +77,9 @@
+     checkEmpty r n p h k scs incoming caller reached before after queries saved fragment
+     returned read waiting nonterminal actual
+   dsimp only at receipt
+-  obtain ⟨handle, _decoded, _flag, action, nonempty, encoded, _readback, _classified,
++  obtain ⟨handle, _decoded, _flag, action, _nonempty, encoded, _readback, _classified,
+       prepared, raw, _cached, fragmentSame, callerSame, querySame, readSame, waitingSame,
+-      coreSame, _footprintShape, counterSame, fresh⟩ := receipt
++      coreSame, _footprintShape, counterSame, _fresh⟩ := receipt
+   have success : Success action before.core fragment returned := by
+     rw [Success, raw]
+     exact List.mem_singleton_self _
+@@ -90,15 +90,15 @@
+       safe slots bounded avoids action fragment prepared success
+   have handleSame : actualHandle = handle := Option.some.inj (actualEncoded.symm.trans encoded)
+   subst actualHandle
+-  have storedBucket : (match incoming with | .node _ _ _ _ => scs | _ => []) = scs := by
+-    cases fields with
+-    | empty => exact (nonempty rfl).elim
+-    | node => rfl
++  have afterShape : after.core = {allocated (some handle) before.core with
++      values := (allocated (some handle) before.core).values.set before.core.counter (.unenumerated (some handle) scs)} := coreSame.trans returnedShape
++  have allocatedStored := EnumerationState.allocated_slot (some handle) before.core safe.1.aligned
++  have freshInside : before.core.counter < (allocated (some handle) before.core).values.length :=
++    (List.getElem?_eq_some_iff.mp allocatedStored).1
+   have freshStored : after.core.values[before.core.counter]? =
+       some (.unenumerated (some handle) scs) := by
+-    simpa only [storedBucket] using (fresh safe.1.aligned).1
+-  have afterShape : after.core = {allocated (some handle) before.core with
+-      values := (allocated (some handle) before.core).values.set before.core.counter (.unenumerated (some handle) scs)} := coreSame.trans returnedShape
++    rw [afterShape]
++    exact List.getElem?_set_self freshInside
+   have afterSafe : Safe after.core := by
+     rw [coreSame]
+     exact returnedSafe

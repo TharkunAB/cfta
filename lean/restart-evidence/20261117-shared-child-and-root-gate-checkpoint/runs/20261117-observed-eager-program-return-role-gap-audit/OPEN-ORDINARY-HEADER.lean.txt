@@ -1,0 +1,32 @@
+/-- OPEN: source roles at the same actual ordinary eager child return. -/
+theorem observed_eager_ordinary_program_return_roles
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (selectionMembers : ∀ entry rows depth free, ∀ row ∈ edgesOf (.node entry rows depth free), row ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller reached : Caller width) (before after : Cached) (memos : Memos) (saved : Queries)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List Edge) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (scs : List Suspended)
+    (available : InternedProbeProvenance.Available caller.checked.native.machine.heap (.node entry rows depth free))
+    (closed : (.node entry rows depth free : Node).free = [])
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (slots : ProgramSlots valid literal caller.checked.native.machine.heap before.core marked)
+    (fields : ValueFields valid literal (.node entry rows depth free))
+    (pathScope : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie ∧
+      ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, ∃ tail, path = 0 :: tail)
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter)
+    (pending : InputsPending before.core scs)
+    (avoids : ∀ uv, marked uv → Avoids before.core.representatives uv scs)
+    (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (stopped : ChildDispatch.Observation width → Option Cached → Result Output Reason width)
+    (index consumerIndex : Nat) (output : Output) (fragment : Fragment)
+    (actual : ChildInvocationAt checkEmpty r n p h k edgesOf .eager scs (.node entry rows depth free)
+      caller before memos.query done stopped index output (.done fragment reached saved after) consumerIndex) :
+    ∃ extended : Nat → Prop,
+      (∀ uv, marked uv → extended uv) ∧
+      ProgramSlots valid literal reached.checked.native.machine.heap after.core extended ∧
+      FragmentRoles literal extended fragment
