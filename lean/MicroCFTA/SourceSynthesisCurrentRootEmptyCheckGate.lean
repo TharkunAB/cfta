@@ -108,3 +108,58 @@ theorem original_root_reaches_constrained_mu_false
         available)
 
 end MicroCFTA.SourceSynthesisCurrentRootEmptyCheckGate
+
+namespace MicroCFTA.SourceSynthesisCurrentRootEmptyCheckGate
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+set_option autoImplicit false
+
+/- Note [The descendant gate after a source query]
+Every retained Mu has the same complete record as an original source Mu.
+The original source Mu body is plain. The descendant gate stops at that Mu.
+Thus an available retained value cannot reach a constrained Mu.
+The gate result says nothing about finite inhabitance.
+-/
+
+theorem source_retained_available_reaches_constrained_mu_false
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (currentHeap : State Symbol Guard)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap currentHeap)
+    (value : Value Symbol Guard) (available : Available currentHeap value) :
+    SourceEndpointReachability.reaches SourceMemoGate.unconstrained value = false := by
+  have impossible : ∀ nested,
+      SourceEndpointReachability.Witness SourceMemoGate.unconstrained nested →
+      Available currentHeap nested → False := by
+    intro nested witness
+    induction witness with
+    | @binder entry body depth ordinary constrained =>
+        intro available
+        have original : sourceHeap.nodeRecords entry.key = some (.mu entry body depth ordinary) :=
+          pastInventory entry.key entry body depth ordinary (available.resident entry rfl)
+        have plain := original_stored_mu_unconstrained lib query signed whole accepted
+          rootValue sourceHeap built entry.key entry body depth ordinary original
+        rw [plain] at constrained
+        cases constrained
+    | union _nested member _next ih =>
+        intro available
+        exact ih (available.children _ member)
+    | node _nested rowMember childMember _next ih =>
+        intro available
+        exact ih (available.children _ (List.mem_flatMap.mpr ⟨_, rowMember, childMember⟩))
+  cases answer : SourceEndpointReachability.reaches SourceMemoGate.unconstrained value with
+  | false => rfl
+  | true =>
+      exact False.elim (impossible value
+        ((SourceEndpointReachability.reaches_iff SourceMemoGate.unconstrained value).mp answer)
+        available)
+
+end MicroCFTA.SourceSynthesisCurrentRootEmptyCheckGate
