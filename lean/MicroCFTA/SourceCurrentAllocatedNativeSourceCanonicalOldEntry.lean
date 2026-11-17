@@ -164,3 +164,162 @@ theorem stored_dispatch_canonical_old_entry
     heapSame, cacheSame, operationsSame, universeBefore, patternBefore, startedDomain, reachedDomain, exactKey⟩
 
 end MicroCFTA.SourceCurrentAllocatedNativeSourceCanonicalOldEntry
+
+namespace MicroCFTA.SourceCurrentAllocatedNativeSourceCanonicalOldEntry
+open Cache InternedConstructorTemplates InternedBinderProtocol IntersectionFlatMemoKeyDomain
+open InternedProbeProvenance SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionControl SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+variable {width : Nat}
+set_option autoImplicit false
+
+/- Note [Closed-root warm entry]
+The actual staged incoming operand need not have a pending-slot lookup.
+Its actual source receipt supplies closed root operands. Reuse the original
+entry proof at the same Checked start. Keep all counts, controls, domains,
+continuations, and readers. This is physical provenance for an authentic entry.
+It does not classify an inherited payload or prove a semantic result law.
+-/
+
+theorem closed_root_canonical_old_entry
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (rootRequest : NodeRequest Symbol Guard)
+    (rootEmpty : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (oldUsed : Nat) (beforeOld : Checked width) (parent : Interned DomainKey)
+    (oldLeft oldRight : Value Symbol Guard) (oldFirst oldSecond : Nat)
+    (oldNext : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (oldPrefix : Trace oldUsed (.code (.node rootRequest .pure)) before
+      (.code (.enter parent oldLeft oldRight oldFirst oldSecond oldNext)) beforeOld)
+    (oldTail : Nat) (oldControl : Control (Value Symbol Guard)) (oldSnapshot : Checked width)
+    (oldSpan : Trace (oldTail + 1)
+      (.code (.enter parent oldLeft oldRight oldFirst oldSecond oldNext)) beforeOld oldControl oldSnapshot)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (universeClosed : (Value.mu entry body depth ordinary).free = [])
+    (pattern : Value Symbol Guard) (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : SourceRecursiveIntersectionControl.identity pattern = some patternId)
+    (patternKind : SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag pattern = 3)
+    (universeFirst : Bool) (newRoot : NodeRequest Symbol Guard) (newUsed : Nat)
+    (beforeNew reader : Checked width)
+    (newNext : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (newControl : Control (Value Symbol Guard)) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let newLeft := if universeFirst then universeValue else pattern
+    let newRight := if universeFirst then pattern else universeValue
+    let newFirst := if universeFirst then entry.identity else patternId
+    let newSecond := if universeFirst then patternId else entry.identity
+    let newEntered := SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    Trace newUsed (.code (.node newRoot .pure)) oldSnapshot
+      (.code (.enter IntersectionEmptyDomain.emptyDomain newLeft newRight newFirst newSecond newNext)) beforeNew →
+    Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain newLeft newRight newFirst newSecond newNext))
+      beforeNew newControl reader →
+    (SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+      parent.key oldLeft oldRight oldFirst oldSecond).1.key = newEntered.1.key →
+    ∃ oldUniverseFirst : Bool,
+      let oldCanonicalLeft := if oldUniverseFirst then universeValue else pattern
+      let oldCanonicalRight := if oldUniverseFirst then pattern else universeValue
+      let oldCanonicalFirst := if oldUniverseFirst then entry.identity else patternId
+      let oldCanonicalSecond := if oldUniverseFirst then patternId else entry.identity
+      let oldEntered := SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+        IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+      let oldStarted : Checked width :=
+        {beforeOld with native := advance beforeOld.native {beforeOld.native.machine with domains := oldEntered.2}}
+      parent = IntersectionEmptyDomain.emptyDomain ∧
+      Trace oldUsed (.code (.node rootRequest .pure)) before
+        (.code (.enter IntersectionEmptyDomain.emptyDomain oldCanonicalLeft oldCanonicalRight
+          oldCanonicalFirst oldCanonicalSecond oldNext)) beforeOld ∧
+      SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+        IntersectionEmptyDomain.emptyKey oldCanonicalLeft oldCanonicalRight oldCanonicalFirst oldCanonicalSecond = oldEntered ∧
+      SourceEqualityNativeDemand.step
+        (.code (.enter IntersectionEmptyDomain.emptyDomain oldCanonicalLeft oldCanonicalRight
+          oldCanonicalFirst oldCanonicalSecond oldNext)) beforeOld =
+        .yielded (.code (oldNext oldEntered.1)) oldStarted ∧
+      Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain oldCanonicalLeft oldCanonicalRight
+        oldCanonicalFirst oldCanonicalSecond oldNext)) beforeOld (.code (oldNext oldEntered.1)) oldStarted ∧
+      Trace oldTail (.code (oldNext oldEntered.1)) oldStarted oldControl oldSnapshot ∧
+      oldStarted.native.machine.heap = beforeOld.native.machine.heap ∧
+      oldStarted.native.machine.domains = oldEntered.2 ∧ oldStarted.operations = beforeOld.operations ∧
+      Available beforeOld.native.machine.heap universeValue ∧ Available beforeOld.native.machine.heap pattern ∧
+      Domain oldStarted.native.machine oldEntered.1 ∧ Domain oldSnapshot.native.machine oldEntered.1 ∧
+      oldEntered.1.key = SourceRecursiveIntersectionDomain.extend IntersectionEmptyDomain.emptyKey
+        [entry.identity] (SourceRecursiveIntersectionControl.pair entry.identity patternId) := by
+  dsimp only
+  intro newPrefix newEntry sameKey
+  let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+  obtain ⟨parentKey, fullOrder, _leftAtReader, _rightAtReader, _universeAtReader, _patternAtReader⟩ :=
+    SourceCurrentAllocatedNativeSourceEnterFullOperands.closed_root_old_new_full_operands
+      before rootRequest rootEmpty rootClosed physical oldUsed beforeOld parent oldLeft oldRight
+      oldFirst oldSecond oldNext oldPrefix oldTail oldControl oldSnapshot oldSpan entry body depth ordinary
+      universeClosed pattern patternClosed patternId patternIdentity patternKind universeFirst newRoot newUsed
+      beforeNew reader newNext newControl newPrefix newEntry sameKey
+  have capturedIds := SourceCurrentAllocatedNativeSourceEmptyEnterOperands.closed_root_enter_identities
+    before rootRequest rootClosed physical oldUsed beforeOld parent oldLeft oldRight oldFirst oldSecond
+    oldNext oldPrefix
+  have beforeOldPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension oldPrefix physical).1
+  have rawReceipt := SourceCurrentNativeEnterCommonOperand.enter_prefix_common_operands
+    parent oldLeft oldRight oldFirst oldSecond oldNext oldTail beforeOld oldSnapshot oldControl
+    beforeOldPhysical oldSpan
+  obtain ⟨_rawStep, _rawSuffix, _rawHeap, _rawCache, _rawOperations, oldDomain,
+      _rawLeftBefore, _rawRightBefore, _rawLeftAfter, _rawRightAfter,
+      _rawStartedDomain, _rawReachedDomain, _rawKey, _rawExtension, _rawClassify⟩ := rawReceipt
+  have parentIdentity : parent.identity = 0 := by
+    simpa only [parentKey, ite_true] using oldDomain.represented.2
+  have parentEmpty : parent = IntersectionEmptyDomain.emptyDomain := by
+    have same : parent = Interned.mk 0 parent.key :=
+      congrArg (fun identifier => Interned.mk identifier parent.key) parentIdentity
+    rw [parentKey] at same
+    exact same
+  have oldOrder : ∃ oldUniverseFirst : Bool,
+      oldLeft = (if oldUniverseFirst then universeValue else pattern) ∧
+      oldRight = (if oldUniverseFirst then pattern else universeValue) ∧
+      oldFirst = (if oldUniverseFirst then entry.identity else patternId) ∧
+      oldSecond = (if oldUniverseFirst then patternId else entry.identity) := by
+    rcases fullOrder with ⟨leftSame, rightSame⟩ | ⟨leftSame, rightSame⟩
+    · have leftIdentity : some entry.identity = some oldFirst := by
+        simpa only [leftSame, identity] using capturedIds.1
+      have rightIdentity : identity pattern = some oldSecond := by
+        simpa only [rightSame] using capturedIds.2
+      have firstSame : oldFirst = entry.identity := (Option.some.inj leftIdentity).symm
+      have secondSame : oldSecond = patternId := Option.some.inj (rightIdentity.symm.trans patternIdentity)
+      exact ⟨true, leftSame, rightSame, firstSame, secondSame⟩
+    · have leftIdentity : identity pattern = some oldFirst := by
+        simpa only [leftSame] using capturedIds.1
+      have rightIdentity : some entry.identity = some oldSecond := by
+        simpa only [rightSame, identity] using capturedIds.2
+      have firstSame : oldFirst = patternId := Option.some.inj (leftIdentity.symm.trans patternIdentity)
+      have secondSame : oldSecond = entry.identity := (Option.some.inj rightIdentity).symm
+      exact ⟨false, leftSame, rightSame, firstSame, secondSame⟩
+  obtain ⟨oldUniverseFirst, leftSame, rightSame, firstSame, secondSame⟩ := oldOrder
+  have canonicalPrefix : Trace oldUsed (.code (.node rootRequest .pure)) before
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if oldUniverseFirst then universeValue else pattern)
+        (if oldUniverseFirst then pattern else universeValue)
+        (if oldUniverseFirst then entry.identity else patternId)
+        (if oldUniverseFirst then patternId else entry.identity) oldNext)) beforeOld := by
+    simpa only [parentEmpty, leftSame, rightSame, firstSame, secondSame] using oldPrefix
+  have canonicalSpan : Trace (oldTail + 1)
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if oldUniverseFirst then universeValue else pattern)
+        (if oldUniverseFirst then pattern else universeValue)
+        (if oldUniverseFirst then entry.identity else patternId)
+        (if oldUniverseFirst then patternId else entry.identity) oldNext)) beforeOld oldControl oldSnapshot := by
+    simpa only [parentEmpty, leftSame, rightSame, firstSame, secondSame] using oldSpan
+  have oldReceipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+    entry body depth ordinary pattern patternClosed patternId patternIdentity patternKind oldUniverseFirst
+    oldNext oldTail beforeOld oldSnapshot oldControl beforeOldPhysical canonicalSpan
+  obtain ⟨canonicalAllocation, actualStep, actualEntry, actualSuffix, heapSame, cacheSame, operationsSame,
+      universeBefore, patternBefore, _universeAfter, _patternAfter, startedDomain,
+      reachedDomain, exactKey, _nonempty, _snapshotPhysical, _extension, _classify⟩ := oldReceipt
+  refine ⟨oldUniverseFirst, ?_⟩
+  exact ⟨parentEmpty, canonicalPrefix, canonicalAllocation, actualStep, actualEntry, actualSuffix,
+    heapSame, cacheSame, operationsSame, universeBefore, patternBefore, startedDomain, reachedDomain, exactKey⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeSourceCanonicalOldEntry

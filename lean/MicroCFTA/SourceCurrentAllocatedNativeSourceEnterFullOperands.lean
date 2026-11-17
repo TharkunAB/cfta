@@ -126,3 +126,123 @@ theorem stored_dispatch_old_new_full_operands
   exact ⟨parentEmpty, fullOperands, oldLeftAtReader, oldRightAtReader, universeAvailable, patternAvailable⟩
 
 end MicroCFTA.SourceCurrentAllocatedNativeSourceEnterFullOperands
+
+namespace MicroCFTA.SourceCurrentAllocatedNativeSourceEnterFullOperands
+open Cache InternedConstructorTemplates InternedBinderProtocol IntersectionFlatMemoKeyDomain
+open InternedProbeProvenance SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionControl SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+variable {width : Nat}
+set_option autoImplicit false
+
+/- Note [Closed-root warm entry]
+The actual staged incoming operand need not have a pending-slot lookup.
+Its actual source receipt supplies closed root operands. Reuse the original
+entry proof at the same Checked start. Keep all counts, controls, domains,
+continuations, and readers. This is physical provenance for an authentic entry.
+It does not classify an inherited payload or prove a semantic result law.
+-/
+
+theorem closed_root_old_new_full_operands
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (rootRequest : NodeRequest Symbol Guard)
+    (rootEmpty : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (oldUsed : Nat) (beforeOld : Checked width) (parent : Interned DomainKey)
+    (oldLeft oldRight : Value Symbol Guard) (oldFirst oldSecond : Nat)
+    (oldNext : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (oldPrefix : Trace oldUsed (.code (.node rootRequest .pure)) before
+      (.code (.enter parent oldLeft oldRight oldFirst oldSecond oldNext)) beforeOld)
+    (oldTail : Nat) (oldControl : Control (Value Symbol Guard)) (oldSnapshot : Checked width)
+    (oldSpan : Trace (oldTail + 1)
+      (.code (.enter parent oldLeft oldRight oldFirst oldSecond oldNext)) beforeOld oldControl oldSnapshot)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (universeClosed : (Value.mu entry body depth ordinary).free = [])
+    (pattern : Value Symbol Guard) (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : SourceRecursiveIntersectionControl.identity pattern = some patternId)
+    (patternKind : SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag pattern = 3)
+    (universeFirst : Bool) (newRoot : NodeRequest Symbol Guard) (newUsed : Nat)
+    (beforeNew reader : Checked width)
+    (newNext : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (newControl : Control (Value Symbol Guard)) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let newLeft := if universeFirst then universeValue else pattern
+    let newRight := if universeFirst then pattern else universeValue
+    let newFirst := if universeFirst then entry.identity else patternId
+    let newSecond := if universeFirst then patternId else entry.identity
+    let newEntered := SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    Trace newUsed (.code (.node newRoot .pure)) oldSnapshot
+      (.code (.enter IntersectionEmptyDomain.emptyDomain newLeft newRight newFirst newSecond newNext)) beforeNew →
+    Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain newLeft newRight newFirst newSecond newNext))
+      beforeNew newControl reader →
+    (SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+      parent.key oldLeft oldRight oldFirst oldSecond).1.key = newEntered.1.key →
+    parent.key = IntersectionEmptyDomain.emptyKey ∧
+      ((oldLeft = universeValue ∧ oldRight = pattern) ∨
+       (oldLeft = pattern ∧ oldRight = universeValue)) ∧
+      Available reader.native.machine.heap oldLeft ∧ Available reader.native.machine.heap oldRight ∧
+      Available reader.native.machine.heap universeValue ∧ Available reader.native.machine.heap pattern := by
+  dsimp only
+  intro newPrefix newEntry sameKey
+  let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+  have beforeOldPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension oldPrefix physical).1
+  have oldReceipt := SourceCurrentNativeEnterCommonOperand.enter_prefix_common_operands
+    parent oldLeft oldRight oldFirst oldSecond oldNext oldTail beforeOld oldSnapshot oldControl
+    beforeOldPhysical oldSpan
+  obtain ⟨_oldStep, _oldSuffix, _oldHeap, _oldCache, _oldOperations, _oldDomain,
+      _oldLeftBefore, _oldRightBefore, oldLeftAvailable, oldRightAvailable,
+      _oldStartedDomain, _oldReachedDomain, _oldKey, _oldExtension, _oldClassify⟩ := oldReceipt
+  have oldSnapshotPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension oldSpan beforeOldPhysical).1
+  have beforeNewPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension newPrefix oldSnapshotPhysical).1
+  have newReceipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+    entry body depth ordinary pattern patternClosed patternId patternIdentity patternKind universeFirst
+    newNext 0 beforeNew reader newControl beforeNewPhysical newEntry
+  obtain ⟨_newCanonical, _newStep, _newChecked, _newSuffix, _newHeap, _newCache, _newOperations,
+      _newUBefore, _newPBefore, universeAvailable, patternAvailable, _newStartedDomain,
+      _newReachedDomain, newKey, _newNonempty, readerPhysical, _newExtension, _newClassify⟩ := newReceipt
+  have oldKey :
+      (SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+        parent.key oldLeft oldRight oldFirst oldSecond).1.key =
+      SourceRecursiveIntersectionDomain.extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId) := sameKey.trans newKey
+  obtain ⟨parentEmpty, oldLeftClosed, oldRightClosed, orderedIds⟩ :=
+    SourceCurrentAllocatedNativeSourceEmptyEnterOperands.query_enter_closed_operands_of_closed_root
+      before rootRequest rootEmpty rootClosed physical oldUsed beforeOld parent oldLeft oldRight
+      oldFirst oldSecond entry.identity patternId oldNext oldPrefix oldKey
+  have warmSpan : Trace (newUsed + 1) (.code (.node newRoot .pure)) oldSnapshot newControl reader :=
+    newPrefix.trans newEntry
+  have reached := SourceCurrentNativeEnterCommonOperand.checked_trace_extension warmSpan oldSnapshotPhysical
+  have oldLeftAtReader : Available reader.native.machine.heap oldLeft :=
+    reached.2.available oldLeft oldLeftAvailable
+  have oldRightAtReader : Available reader.native.machine.heap oldRight :=
+    reached.2.available oldRight oldRightAvailable
+  have fullOperands : (oldLeft = universeValue ∧ oldRight = pattern) ∨
+      (oldLeft = pattern ∧ oldRight = universeValue) := by
+    rcases orderedIds with ⟨leftId, rightId⟩ | ⟨leftId, rightId⟩
+    · exact Or.inl ⟨
+        SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective reader.native.machine.heap
+          readerPhysical.machine.1 oldLeft universeValue oldLeftAtReader universeAvailable
+          oldLeftClosed universeClosed entry.identity leftId rfl,
+        SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective reader.native.machine.heap
+          readerPhysical.machine.1 oldRight pattern oldRightAtReader patternAvailable
+          oldRightClosed patternClosed patternId rightId patternIdentity⟩
+    · exact Or.inr ⟨
+        SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective reader.native.machine.heap
+          readerPhysical.machine.1 oldLeft pattern oldLeftAtReader patternAvailable
+          oldLeftClosed patternClosed patternId leftId patternIdentity,
+        SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective reader.native.machine.heap
+          readerPhysical.machine.1 oldRight universeValue oldRightAtReader universeAvailable
+          oldRightClosed universeClosed entry.identity rightId rfl⟩
+  exact ⟨parentEmpty, fullOperands, oldLeftAtReader, oldRightAtReader, universeAvailable, patternAvailable⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeSourceEnterFullOperands

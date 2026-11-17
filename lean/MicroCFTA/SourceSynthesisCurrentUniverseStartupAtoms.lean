@@ -191,3 +191,57 @@ theorem current_stored_universe_boundary_atoms_closed_after_growth
       simp only [same, universeClosed, List.not_mem_nil] at free
 
 end MicroCFTA.SourceSynthesisCurrentUniverseStartupAtoms
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseStartupAtoms
+open Cache InternedConstructorTemplates InternedNestedFacts InternedProbeProvenance
+open InternedBoundaryAtoms InternedBoundaryProvenance
+open InternedBinderProtocol (NodeKey NodeRef)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisGeneralizeSyntax (Guard)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+set_option autoImplicit false
+
+/- Note [Original Mu inventory after execution]
+NoNewMu sends every later complete Mu record back to the actual source heap.
+The accepted source build has one full universe owner. Closed resident values
+have no literal free reference boundary. Thus every boundary atom names that
+same original owner. No future boundary or language law is an input.
+-/
+
+/-- Actual absence of new Mu records transports the original closed boundary atoms. -/
+theorem current_stored_universe_closed_atoms_after_no_new_mu
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (coherent : InternedRecordCoherence.Coherent heap)
+    (unchanged : InternedShallowHeap.NoNewMu sourceHeap heap)
+    (value : Value Symbol Guard) (available : Available heap value)
+    (closed : value.free = []) :
+    ∀ atom ∈ atoms value, atom = .mu entry.identity := by
+  rcases SourceSynthesisCurrentUniverseOwnership.current_build_single_universe
+      lib query signed whole accepted rootValue sourceHeap built with noMu | someMu
+  · exact False.elim (noMu key entry body depth ordinary stored)
+  · obtain ⟨owner, ownerBody, ownerDepth, ownerOrdinary, _ownerStored, _ownerAvailable,
+        _ownerClosed, _ownerReplay, unique⟩ := someMu
+    have selected := unique key entry body depth ordinary stored
+    intro atom member
+    rcases atom_shape value atom member with ⟨name, same⟩ | ⟨identity, same⟩
+    · rw [same] at member
+      have free := ref_free name value heap coherent available member
+      simp only [closed, List.not_mem_nil] at free
+    · rw [same] at member
+      obtain ⟨other, otherBody, otherDepth, otherOrdinary, identitySame, present⟩ :=
+        mu_stored value heap available identity member
+      have old := unchanged other.key other otherBody otherDepth otherOrdinary present
+      have equal := (unique other.key other otherBody otherDepth otherOrdinary old).trans selected.symm
+      have entries : other = entry := (Value.mu.inj equal).1
+      rw [same, ← identitySame, entries]
+
+end MicroCFTA.SourceSynthesisCurrentUniverseStartupAtoms
