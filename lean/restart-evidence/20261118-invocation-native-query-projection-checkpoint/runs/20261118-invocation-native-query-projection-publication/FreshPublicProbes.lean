@@ -1,0 +1,3 @@
+import MicroCFTA.SourcePruningEnumerationInvocationNativeQueryProjection
+#check MicroCFTA.SourcePruningEnumerationInvocationNativeQueryProjection.nativeQueries
+#print axioms MicroCFTA.SourcePruningEnumerationInvocationNativeQueryProjection.native_query_origin

@@ -1,0 +1,50 @@
+ := by
+  let piece : Operation width → List (QueryEvent width) := fun operation =>
+    match operation with
+    | .prepare _ _ _ _ _ _ _ => []
+    | .residual _ _ _ _ _ _ _ => []
+    | .dispatch _ checkEmpty r n p h k scs incoming caller before queries _ _ =>
+        (SourcePruningEnumerationSharedChildDispatchQueryEvents.observe
+          checkEmpty r n p h k scs incoming caller before queries).2
+  have indexed : ∀ (values : List (Operation width)) (index : Nat),
+      (values.flatMap piece)[index]? = some queryEvent →
+      ∃ outer selected inner,
+        values[outer]? = some selected ∧ (piece selected)[inner]? = some queryEvent ∧
+        index = ((values.take outer).flatMap piece).length + inner := by
+    intro values index observed
+    induction values generalizing index with
+    | nil =>
+        simp only [List.flatMap_nil, List.getElem?_nil] at observed
+        cases observed
+    | cons first rest ih =>
+        simp only [List.flatMap_cons] at observed
+        by_cases short : index < (piece first).length
+        · rw [List.getElem?_append_left short] at observed
+          exact ⟨0, first, index, rfl, observed, by
+            simp only [List.take_zero, List.flatMap_nil, List.length_nil, Nat.zero_add]⟩
+        · have long : (piece first).length ≤ index := by omega
+          rw [List.getElem?_append_right long] at observed
+          obtain ⟨outer, selected, inner, atOuter, atInner, offset⟩ :=
+            ih (index - (piece first).length) observed
+          refine ⟨outer + 1, selected, inner, atOuter, atInner, ?_⟩
+          simp only [List.take_succ_cons, List.flatMap_cons, List.length_append]
+          omega
+  change (operations.flatMap piece)[nativeIndex]? = some queryEvent at found
+  obtain ⟨operationIndex, operation, localIndex, atOperation, atQuery, offset⟩ :=
+    indexed operations nativeIndex found
+  have authenticSelected := authentic operation (List.mem_of_getElem? atOperation)
+  cases operation with
+  | prepare path scs edge caller before queries rows =>
+      simp only [piece, List.getElem?_nil] at atQuery
+      cases atQuery
+  | residual path guard fragment caller queries before after =>
+      simp only [piece, List.getElem?_nil] at atQuery
+      cases atQuery
+  | dispatch path checkEmpty r n p h k scs incoming caller before queries recorded candidate =>
+      have ran : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+          checkEmpty r n p h k scs incoming caller before queries = (recorded, candidate) :=
+        authenticSelected
+      refine ⟨operationIndex, path, checkEmpty, r, n, p, h, k, scs, incoming, caller,
+        before, queries, recorded, candidate, localIndex, atOperation, ran, ?_, atQuery, offset⟩
+      exact (SourcePruningEnumerationSharedChildDispatchQueryEvents.observe_exact
+        checkEmpty r n p h k scs incoming caller before queries).trans ran
