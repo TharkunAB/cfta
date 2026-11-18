@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedIncomingQuerySeeds
 import MicroCFTA.SourcePruningEnumerationSharedTerminalAdmission
 import MicroCFTA.SourcePruningEnumerationSharedTerminalScalarBounds
 import MicroCFTA.SourcePruningEnumerationSharedIncomingQueryEventResources
@@ -538,5 +539,252 @@ theorem run_observe_query_resources
                                                 | some rows =>
                                                     simp only [runObserved, ite_eq_right empty, prefixEq, scan, mergedEq] at member
                                                     exact allEvents start saved left right actual member
+
+end MicroCFTA.SourcePruningEnumerationSharedTerminalQueryEvents
+
+namespace MicroCFTA.SourcePruningEnumerationSharedTerminalQueryEvents
+open EnumerationState EnumerationCorrectness EnumerationCompleteness
+open EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationObservation (PendingRealized)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance Reserved)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+open SourceCurrentNativeNumericalSeedInvariant (Seeds)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceEqualityNativeDemand (Control)
+open SourceRecursiveIntersectionControl (identity)
+open SourceRecursiveIntersectionCode (requestNode)
+open InternedBinderProtocol (NodeKey)
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+set_option autoImplicit false
+
+open Cache (Interned)
+
+/- Note [Source Seeds through the actual terminal fold and incoming merge]
+The terminal prefix changes no native caller state.
+The cached-fold law supplies Seeds at its literal returned caller.
+The singleton fold observation supplies the same Post and current resources.
+The incoming law uses that Post and the same fold result.
+The cache adapter changes no native caller field or query-event position.
+Each event retains its original execute fuel and every bounded Trace prefix.
+-/
+
+theorem run_original_source_observe_preserves_seeds
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
+    (checkEmpty : Bool) (first : Suspended) (rest : List Suspended)
+    (incoming : Node) (incomingScs : List Suspended) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter)
+    (pending : InputsPending before.core (first :: rest))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (available : Available beforeCaller.checked.native.machine.heap incoming)
+    (closed : incoming.free = [])
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed ((first :: rest).length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (sourceGrowth : Grows sourceHeap beforeCaller.checked.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId beforeCaller.checked)
+    (representativeFuel nativeFuel p h indexFuel : Nat) :
+    let observed := runObserved checkEmpty representativeFuel nativeFuel p h indexFuel
+      first rest beforeCaller before incoming incomingScs memos.query
+    observed.1 = SourcePruningEnumerationSharedCachedTerminal.run
+      checkEmpty representativeFuel nativeFuel p h indexFuel
+      first rest beforeCaller before incoming incomingScs memos.query ∧
+    observed.1.1 = SourcePruningEnumerationSharedCachedTerminal.raw
+      checkEmpty representativeFuel nativeFuel p h first rest before.waiting
+      beforeCaller before.core incoming incomingScs memos.query ∧
+    (Seeds sourceHeap entry body depth ordinary bodyId observed.1.1.2.1.checked ∧
+      Grows sourceHeap observed.1.1.2.1.checked.native.machine.heap) ∧
+    ∀ start saved left right actual, (start, saved, left, right, actual) ∈ observed.2 →
+      actual = SourceEqualityNativeDemand.execute nativeFuel
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked ∧
+      (Seeds sourceHeap entry body depth ordinary bodyId actual.state ∧
+        Grows sourceHeap actual.state.native.machine.heap) ∧
+      ∀ (count : Nat) (resume : Control Node) (after : SourceEqualityNativeDemand.State (bits + 2)),
+        count ≤ nativeFuel → Trace count
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked resume after →
+        Seeds sourceHeap entry body depth ordinary bodyId after ∧
+          Grows sourceHeap after.native.machine.heap
+ := by
+  dsimp only
+  have literal := run_observe_exact checkEmpty representativeFuel nativeFuel p h indexFuel
+    first rest beforeCaller before incoming incomingScs memos.query
+  refine ⟨literal.1, literal.2.1, ?_⟩
+  by_cases empty : incoming = .empty
+  · simp only [runObserved, ite_eq_left empty]
+    refine ⟨⟨pastSeeds, sourceGrowth⟩, ?_⟩
+    intro start saved left right actual member
+    simp only [List.not_mem_nil] at member
+  · cases prefixEq : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+        representativeFuel first rest before.waiting before.core) with
+    | nil =>
+        simp only [runObserved, ite_eq_right empty, prefixEq]
+        refine ⟨⟨pastSeeds, sourceGrowth⟩, ?_⟩
+        intro start saved left right actual member
+        simp only [List.not_mem_nil] at member
+    | cons firstRow prefixTail =>
+        cases firstRow with
+        | error fault =>
+            simp only [runObserved, ite_eq_right empty, prefixEq]
+            refine ⟨⟨pastSeeds, sourceGrowth⟩, ?_⟩
+            intro start saved left right actual member
+            simp only [List.not_mem_nil] at member
+        | ok value =>
+            rcases value with ⟨⟨recorded, winner, moved⟩, joined⟩
+            cases prefixTail with
+            | cons next remaining =>
+                simp only [runObserved, ite_eq_right empty, prefixEq]
+                refine ⟨⟨pastSeeds, sourceGrowth⟩, ?_⟩
+                intro start saved left right actual member
+                simp only [List.not_mem_nil] at member
+            | nil =>
+                obtain ⟨recordedSame, joinedRealized, winnerPending, recordedPending⟩ :=
+                  SourcePruningEnumerationSharedCachedTerminal.terminal_observed_prefix
+                    beforeCaller.checked.native.machine.heap before.core first rest before.waiting
+                    roots paths counts safe bounded pending realized prefixEq
+                have lengthSame : recorded.length = (first :: rest).length := by
+                  simp only [recordedSame, List.length_map]
+                have reservation : Reserved bits seed (recorded.length + 1) := by
+                  simpa only [lengthSame] using reserved
+                have foldReservation : Reserved bits seed recorded.length :=
+                  reservation.prefix (by omega)
+                have selected : ∀ source ∈ recorded, PendingOrEliminated joined source :=
+                  fun source sourceMember => .inl (recordedPending source sourceMember)
+                cases scan : SourcePruningEnumerationSharedTerminalFoldQueryEvents.foldObserved
+                    checkEmpty nativeFuel p h recorded beforeCaller
+                    ⟨joined, before.expandable, moved⟩ winner memos.query with
+                | mk observation events =>
+                    rcases observation with ⟨⟨outcome, reached, queries, outer⟩, cache⟩
+                    have foldSeeds :=
+                      SourcePruningEnumerationSharedTerminalFoldQueryEvents.fold_original_source_observe_preserves_seeds
+                        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+                        stored bodyId bodyIdentity seed formulas solver inventory beforeCaller
+                        ⟨joined, before.expandable, moved⟩ recorded checkEmpty nativeFuel p h winner memos
+                        initial joinedRealized winnerPending selected fits foldReservation known sourceGrowth pastSeeds
+                    simp only [scan] at foldSeeds
+                    cases outcome with
+                    | error fault =>
+                        simpa only [runObserved, ite_eq_right empty, prefixEq, scan] using foldSeeds.2
+                    | ok returned =>
+                        cases returned with
+                        | none =>
+                            simpa only [runObserved, ite_eq_right empty, prefixEq, scan] using foldSeeds.2
+                        | some raw =>
+                            cases raw with
+                            | nil =>
+                                simpa only [runObserved, ite_eq_right empty, prefixEq, scan] using foldSeeds.2
+                            | cons firstRaw rawTail =>
+                                cases firstRaw with
+                                | error fault =>
+                                    simpa only [runObserved, ite_eq_right empty, prefixEq, scan] using foldSeeds.2
+                                | ok result =>
+                                    rcases result with ⟨resultUnit, folded⟩
+                                    cases resultUnit
+                                    cases rawTail with
+                                    | cons next remaining =>
+                                        simpa only [runObserved, ite_eq_right empty, prefixEq, scan] using foldSeeds.2
+                                    | nil =>
+                                        have rawObserved :
+                                            SourcePruningEnumerationSharedCachedTerminal.rawFold
+                                              checkEmpty nativeFuel p h recorded beforeCaller joined winner memos.query =
+                                                (.ok (some [.ok ((), folded)]), reached, queries, outer) := by
+                                          have erased := congrArg (fun observed => observed.1) foldSeeds.1
+                                          exact (erased.trans
+                                            (SourcePruningEnumerationSharedCachedTerminal.fold_erase
+                                              checkEmpty nativeFuel p h recorded beforeCaller
+                                              ⟨joined, before.expandable, moved⟩ winner memos.query)).symm
+                                        obtain ⟨nextInventory, final, post, querySame, finalRealized,
+                                          finalFits, _finalKnown⟩ :=
+                                          actual_singleton_fold_inputs seed formulas solver inventory beforeCaller
+                                            joined recorded checkEmpty nativeFuel p h winner memos initial
+                                            joinedRealized winnerPending selected fits foldReservation known
+                                            reached queries folded outer rawObserved
+                                        have remainingReservation :
+                                            Reserved bits (advance seed recorded.length) 1 := reservation.after_prefix
+                                        have incomingSeeds :=
+                                          SourcePruningEnumerationSharedIncomingQueryEvents.original_source_observe_preserves_seeds
+                                            lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+                                            stored bodyId bodyIdentity (advance seed recorded.length) formulas solver
+                                            nextInventory reached folded final post.context finalRealized finalFits
+                                            remainingReservation foldSeeds.2.1.2 foldSeeds.2.1.1
+                                            checkEmpty representativeFuel nativeFuel p h winner incoming incomingScs
+                                            (post.effects.keeps.available incoming available) closed
+                                        rw [querySame] at incomingSeeds
+                                        cases mergedEq : incomingObserved
+                                            checkEmpty representativeFuel nativeFuel p h indexFuel cache reached
+                                            folded winner incoming incomingScs queries with
+                                        | mk observation tailEvents =>
+                                            rcases observation with ⟨⟨lastOutcome, last, finalQueries, read⟩, finalCache⟩
+                                            have tailSame : tailEvents =
+                                                (SourcePruningEnumerationSharedIncomingQueryEvents.observe
+                                                  checkEmpty representativeFuel nativeFuel p h reached folded
+                                                  winner incoming incomingScs queries).2 := by
+                                              have projected := congrArg (fun observed => observed.2) mergedEq
+                                              exact projected.symm
+                                            have callerSame :
+                                                (SourcePruningEnumerationSharedIncomingQueryEvents.observe
+                                                  checkEmpty representativeFuel nativeFuel p h reached folded
+                                                  winner incoming incomingScs queries).1.2.1 = last := by
+                                              exact congrArg (fun observed => observed.1.1.2.1) mergedEq
+                                            have lastSeeds := incomingSeeds.2.1
+                                            rw [callerSame] at lastSeeds
+                                            have allEvents : ∀ eventCaller eventQueries lhs rhs result,
+                                                (eventCaller, eventQueries, lhs, rhs, result) ∈ events ++ tailEvents →
+                                                result = SourceEqualityNativeDemand.execute nativeFuel
+                                                  (.code (requestNode IntersectionEmptyDomain.emptyDomain lhs rhs)) eventCaller.checked ∧
+                                                (Seeds sourceHeap entry body depth ordinary bodyId result.state ∧
+                                                  Grows sourceHeap result.state.native.machine.heap) ∧
+                                                ∀ (count : Nat) (resume : Control Node)
+                                                  (after : SourceEqualityNativeDemand.State (bits + 2)),
+                                                  count ≤ nativeFuel → Trace count
+                                                    (.code (requestNode IntersectionEmptyDomain.emptyDomain lhs rhs))
+                                                    eventCaller.checked resume after →
+                                                  Seeds sourceHeap entry body depth ordinary bodyId after ∧
+                                                    Grows sourceHeap after.native.machine.heap := by
+                                              intro eventCaller eventQueries lhs rhs result eventMember
+                                              rcases List.mem_append.mp eventMember with fromFold | fromIncoming
+                                              · exact foldSeeds.2.2 eventCaller eventQueries lhs rhs result fromFold
+                                              · rw [tailSame] at fromIncoming
+                                                exact (incomingSeeds.2.2
+                                                  eventCaller eventQueries lhs rhs result fromIncoming).2.2.2
+                                            cases lastOutcome with
+                                            | error fault =>
+                                                simpa only [runObserved, ite_eq_right empty, prefixEq, scan, mergedEq]
+                                                  using And.intro lastSeeds allEvents
+                                            | ok returned =>
+                                                cases returned with
+                                                | none =>
+                                                    simpa only [runObserved, ite_eq_right empty, prefixEq, scan, mergedEq]
+                                                      using And.intro lastSeeds allEvents
+                                                | some rows =>
+                                                    simpa only [runObserved, ite_eq_right empty, prefixEq, scan, mergedEq]
+                                                      using And.intro lastSeeds allEvents
 
 end MicroCFTA.SourcePruningEnumerationSharedTerminalQueryEvents
