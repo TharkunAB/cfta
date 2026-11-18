@@ -1,0 +1,155 @@
+ := by
+  dsimp only
+  have literal := run_observe_exact checkEmpty representativeFuel nativeFuel p h indexFuel
+    first rest beforeCaller before incoming incomingScs memos.query
+  refine ⟨literal.1, literal.2.1, ?_⟩
+  intro start saved left right actual member
+  by_cases empty : incoming = .empty
+  · simp only [runObserved, ite_eq_left empty, List.not_mem_nil] at member
+  · cases prefixEq : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+        representativeFuel first rest before.waiting before.core) with
+    | nil =>
+        simp only [runObserved, ite_eq_right empty, prefixEq, List.not_mem_nil] at member
+    | cons firstRow prefixTail =>
+        cases firstRow with
+        | error fault =>
+            simp only [runObserved, ite_eq_right empty, prefixEq, List.not_mem_nil] at member
+        | ok value =>
+            rcases value with ⟨⟨recorded, winner, moved⟩, joined⟩
+            cases prefixTail with
+            | cons next remaining =>
+                simp only [runObserved, ite_eq_right empty, prefixEq, List.not_mem_nil] at member
+            | nil =>
+                obtain ⟨recordedSame, joinedRealized, winnerPending, recordedPending⟩ :=
+                  SourcePruningEnumerationSharedCachedTerminal.terminal_observed_prefix
+                    beforeCaller.checked.native.machine.heap before.core first rest before.waiting
+                    roots paths counts safe bounded pending realized prefixEq
+                have lengthSame : recorded.length = (first :: rest).length := by
+                  simp only [recordedSame, List.length_map]
+                have reservation : Reserved bits seed (recorded.length + 1) := by
+                  simpa only [lengthSame] using reserved
+                have foldReservation : Reserved bits seed recorded.length :=
+                  reservation.prefix (by omega)
+                have selected : ∀ source ∈ recorded, PendingOrEliminated joined source :=
+                  fun source sourceMember => .inl (recordedPending source sourceMember)
+                cases scan : SourcePruningEnumerationSharedTerminalFoldQueryEvents.foldObserved
+                    checkEmpty nativeFuel p h recorded beforeCaller
+                    ⟨joined, before.expandable, moved⟩ winner memos.query with
+                | mk observation events =>
+                    rcases observation with ⟨⟨outcome, reached, queries, outer⟩, cache⟩
+                    have foldFacts :=
+                      SourcePruningEnumerationSharedTerminalFoldQueryEvents.fold_observe_query_resources
+                        seed formulas solver inventory beforeCaller ⟨joined, before.expandable, moved⟩
+                        recorded checkEmpty nativeFuel p h winner memos initial joinedRealized
+                        winnerPending selected fits foldReservation known
+                    rw [scan] at foldFacts
+                    have foldEvents : ∀ eventCaller eventQueries lhs rhs result,
+                        (eventCaller, eventQueries, lhs, rhs, result) ∈ events →
+                        ∃ consumed : Nat, consumed < (first :: rest).length + 1 ∧
+                          SourceCurrentConjunctionClassScan.Ready eventCaller.checked ∧
+                          Fits (advance seed consumed).2 eventCaller.checked ∧
+                          SourceCurrentAllocatedNativeCreditProfile.Admits bits (advance seed consumed).2 ∧
+                          Available eventCaller.checked.native.machine.heap lhs ∧
+                          Available eventCaller.checked.native.machine.heap rhs ∧
+                          lhs.free = [] ∧ rhs.free = [] ∧
+                          result = SourceEqualityNativeDemand.execute nativeFuel
+                            (.code (SourceRecursiveIntersectionCode.requestNode
+                              IntersectionEmptyDomain.emptyDomain lhs rhs)) eventCaller.checked := by
+                      intro eventCaller eventQueries lhs rhs result eventMember
+                      obtain ⟨consumed, less, resources⟩ :=
+                        foldFacts.2 eventCaller eventQueries lhs rhs result eventMember
+                      exact ⟨consumed, by omega, resources⟩
+                    cases outcome with
+                    | error fault =>
+                        simp only [runObserved, ite_eq_right empty, prefixEq, scan] at member
+                        exact foldEvents start saved left right actual member
+                    | ok returned =>
+                        cases returned with
+                        | none =>
+                            simp only [runObserved, ite_eq_right empty, prefixEq, scan] at member
+                            exact foldEvents start saved left right actual member
+                        | some raw =>
+                            cases raw with
+                            | nil =>
+                                simp only [runObserved, ite_eq_right empty, prefixEq, scan] at member
+                                exact foldEvents start saved left right actual member
+                            | cons firstRaw rawTail =>
+                                cases firstRaw with
+                                | error fault =>
+                                    simp only [runObserved, ite_eq_right empty, prefixEq, scan] at member
+                                    exact foldEvents start saved left right actual member
+                                | ok result =>
+                                    rcases result with ⟨resultUnit, folded⟩
+                                    cases resultUnit
+                                    cases rawTail with
+                                    | cons next remaining =>
+                                        simp only [runObserved, ite_eq_right empty, prefixEq, scan] at member
+                                        exact foldEvents start saved left right actual member
+                                    | nil =>
+                                        have rawObserved :
+                                            SourcePruningEnumerationSharedCachedTerminal.rawFold
+                                              checkEmpty nativeFuel p h recorded beforeCaller joined winner memos.query =
+                                                (.ok (some [.ok ((), folded)]), reached, queries, outer) := by
+                                          have erased := congrArg (fun observed => observed.1) foldFacts.1
+                                          exact (erased.trans
+                                            (SourcePruningEnumerationSharedCachedTerminal.fold_erase
+                                              checkEmpty nativeFuel p h recorded beforeCaller
+                                              ⟨joined, before.expandable, moved⟩ winner memos.query)).symm
+                                        obtain ⟨nextInventory, final, post, querySame, finalRealized,
+                                          finalFits, _finalKnown⟩ :=
+                                          actual_singleton_fold_inputs seed formulas solver inventory beforeCaller
+                                            joined recorded checkEmpty nativeFuel p h winner memos initial
+                                            joinedRealized winnerPending selected fits foldReservation known
+                                            reached queries folded outer rawObserved
+                                        have remainingReservation :
+                                            Reserved bits (advance seed recorded.length) 1 := reservation.after_prefix
+                                        have incomingFacts :=
+                                          SourcePruningEnumerationSharedIncomingQueryEvents.observe_query_resources
+                                            (advance seed recorded.length) formulas solver nextInventory reached
+                                            folded final post.context finalRealized finalFits remainingReservation
+                                            checkEmpty representativeFuel nativeFuel p h winner incoming incomingScs
+                                            (post.effects.keeps.available incoming available) closed
+                                        rw [querySame] at incomingFacts
+                                        cases mergedEq : incomingObserved
+                                            checkEmpty representativeFuel nativeFuel p h indexFuel cache reached
+                                            folded winner incoming incomingScs queries with
+                                        | mk observation tailEvents =>
+                                            rcases observation with ⟨⟨lastOutcome, last, finalQueries, read⟩, finalCache⟩
+                                            have tailSame : tailEvents =
+                                                (SourcePruningEnumerationSharedIncomingQueryEvents.observe
+                                                  checkEmpty representativeFuel nativeFuel p h reached folded
+                                                  winner incoming incomingScs queries).2 := by
+                                              have projected := congrArg (fun observed => observed.2) mergedEq
+                                              exact projected.symm
+                                            have allEvents : ∀ eventCaller eventQueries lhs rhs result,
+                                                (eventCaller, eventQueries, lhs, rhs, result) ∈ events ++ tailEvents →
+                                                ∃ consumed : Nat, consumed < (first :: rest).length + 1 ∧
+                                                  SourceCurrentConjunctionClassScan.Ready eventCaller.checked ∧
+                                                  Fits (advance seed consumed).2 eventCaller.checked ∧
+                                                  SourceCurrentAllocatedNativeCreditProfile.Admits bits (advance seed consumed).2 ∧
+                                                  Available eventCaller.checked.native.machine.heap lhs ∧
+                                                  Available eventCaller.checked.native.machine.heap rhs ∧
+                                                  lhs.free = [] ∧ rhs.free = [] ∧
+                                                  result = SourceEqualityNativeDemand.execute nativeFuel
+                                                    (.code (SourceRecursiveIntersectionCode.requestNode
+                                                      IntersectionEmptyDomain.emptyDomain lhs rhs)) eventCaller.checked := by
+                                              intro eventCaller eventQueries lhs rhs result eventMember
+                                              rcases List.mem_append.mp eventMember with headMember | tailMember
+                                              · exact foldEvents eventCaller eventQueries lhs rhs result headMember
+                                              · rw [tailSame] at tailMember
+                                                have resources := incomingFacts.2
+                                                  eventCaller eventQueries lhs rhs result tailMember
+                                                refine ⟨recorded.length, by omega, ?_⟩
+                                                exact resources.2.2.2
+                                            cases lastOutcome with
+                                            | error fault =>
+                                                simp only [runObserved, ite_eq_right empty, prefixEq, scan, mergedEq] at member
+                                                exact allEvents start saved left right actual member
+                                            | ok returned =>
+                                                cases returned with
+                                                | none =>
+                                                    simp only [runObserved, ite_eq_right empty, prefixEq, scan, mergedEq] at member
+                                                    exact allEvents start saved left right actual member
+                                                | some rows =>
+                                                    simp only [runObserved, ite_eq_right empty, prefixEq, scan, mergedEq] at member
+                                                    exact allEvents start saved left right actual member

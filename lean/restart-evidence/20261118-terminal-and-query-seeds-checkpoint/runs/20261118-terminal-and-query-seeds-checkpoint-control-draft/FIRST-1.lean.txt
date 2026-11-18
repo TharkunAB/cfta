@@ -1,0 +1,38 @@
+theorem run_observe_query_resources
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
+    (checkEmpty : Bool) (first : Suspended) (rest : List Suspended)
+    (incoming : Node) (incomingScs : List Suspended) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter)
+    (pending : InputsPending before.core (first :: rest))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (available : Available beforeCaller.checked.native.machine.heap incoming)
+    (closed : incoming.free = [])
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed ((first :: rest).length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (representativeFuel nativeFuel p h indexFuel : Nat) :
+    let observed := runObserved checkEmpty representativeFuel nativeFuel p h indexFuel
+      first rest beforeCaller before incoming incomingScs memos.query
+    observed.1 = SourcePruningEnumerationSharedCachedTerminal.run
+      checkEmpty representativeFuel nativeFuel p h indexFuel
+      first rest beforeCaller before incoming incomingScs memos.query ∧
+    observed.1.1 = SourcePruningEnumerationSharedCachedTerminal.raw
+      checkEmpty representativeFuel nativeFuel p h first rest before.waiting
+      beforeCaller before.core incoming incomingScs memos.query ∧
+    ∀ start saved left right actual, (start, saved, left, right, actual) ∈ observed.2 →
+      ∃ consumed : Nat, consumed < (first :: rest).length + 1 ∧
+        SourceCurrentConjunctionClassScan.Ready start.checked ∧
+        Fits (advance seed consumed).2 start.checked ∧
+        SourceCurrentAllocatedNativeCreditProfile.Admits bits (advance seed consumed).2 ∧
+        Available start.checked.native.machine.heap left ∧
+        Available start.checked.native.machine.heap right ∧
+        left.free = [] ∧ right.free = [] ∧
+        actual = SourceEqualityNativeDemand.execute nativeFuel
+          (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+          start.checked

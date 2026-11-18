@@ -1,0 +1,25 @@
+ := by
+  have ranges := SourcePruningEnumerationSharedCachedTerminal.initial_ranges
+    seed formulas solver inventory beforeCaller before sources checkEmpty target memos
+    initial realized targetPending selected fits reserved known
+  obtain ⟨fuel, lowP, lowH, raw, actualCaller, actualCore, actualQueries, final, next,
+    stable, post, querySame, finalRealized, _shape, _completed, _eliminated, _length,
+    _forest, _counter, _obligations, _expansion, _ancestry, _rejection⟩ :=
+    SourcePruningEnumerationSharedCachedTerminal.rawFold_complete
+      formulas solver inventory beforeCaller before sources checkEmpty target memos
+      initial realized targetPending (fun source member => Or.symm (selected source member)) ranges
+  have adequate := stable 0 lowP lowH (Nat.le_refl _) (Nat.le_refl _)
+  simp only [Nat.add_zero] at adequate
+  have resources := SourcePruningEnumerationSharedCachedTerminal.rawFold_observed_resources
+    seed formulas solver inventory beforeCaller before sources checkEmpty nativeFuel p h
+    target memos initial realized targetPending selected fits reserved known observed
+  have coreSame := SourcePruningEnumerationSharedCachedTerminal.rawFold_singleton_core
+    checkEmpty nativeFuel p h sources beforeCaller before target memos.query
+    folded reached saved outer observed
+  subst outer
+  obtain ⟨_rawSame, callerSame, queriesSame, afterSame⟩ :=
+    SourcePruningEnumerationSharedCachedTerminal.rawFold_ok_unique checkEmpty adequate observed
+  subst actualCaller
+  subst actualCore
+  exact ⟨next, final, post, querySame.trans queriesSame, finalRealized,
+    resources.1, resources.2⟩

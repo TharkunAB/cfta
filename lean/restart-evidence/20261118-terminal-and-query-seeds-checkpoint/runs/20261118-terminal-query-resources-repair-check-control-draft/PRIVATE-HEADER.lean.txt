@@ -1,0 +1,23 @@
+private theorem actual_singleton_fold_inputs
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : Core) (sources : List Nat)
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (targetPending : PendingAt before target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before source)
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed sources.length)
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (reached : Caller (bits + 2)) (saved : Queries) (folded outer : Core)
+    (observed : SourcePruningEnumerationSharedCachedTerminal.rawFold
+      checkEmpty nativeFuel p h sources beforeCaller before target memos.query =
+        (.ok (some [.ok ((), folded)]), reached, saved, outer)) :
+    ∃ next final, Post formulas solver next beforeCaller reached final ∧ final.query = saved ∧
+      PendingRealized reached.checked.native.machine.heap folded ∧
+      Fits (advance seed sources.length).2 reached.checked ∧
+      Heap (fun guard => guard ∈ (advance seed sources.length).1)
+        reached.checked.native.machine.heap

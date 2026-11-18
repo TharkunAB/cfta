@@ -1,0 +1,30 @@
+private theorem actual_query_source_seeds
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (before : Checked (bits + 2)) (profile : Profile)
+    (ready : SourceCurrentConjunctionClassScan.Ready before)
+    (fits : Fits profile before)
+    (admitted : SourceCurrentAllocatedNativeCreditProfile.Admits bits profile)
+    (sourceGrowth : Grows sourceHeap before.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId before)
+    (left right : Node)
+    (leftAvailable : Available before.native.machine.heap left)
+    (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = []) (fuel : Nat) :
+    (Seeds sourceHeap entry body depth ordinary bodyId
+        (SourceEqualityNativeDemand.execute fuel
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state ∧
+      Grows sourceHeap (SourceEqualityNativeDemand.execute fuel
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state.native.machine.heap) ∧
+    ∀ (count : Nat) (rest : Control Node) (after : Checked (bits + 2)),
+      count ≤ fuel → Trace count
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before rest after →
+      Seeds sourceHeap entry body depth ordinary bodyId after ∧
+        Grows sourceHeap after.native.machine.heap

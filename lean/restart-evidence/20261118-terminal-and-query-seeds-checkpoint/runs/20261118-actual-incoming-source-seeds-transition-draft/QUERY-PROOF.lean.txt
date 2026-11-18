@@ -1,0 +1,20 @@
+ := by
+  let request : NodeRequest Symbol Constraint :=
+    ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+  have seeds := SourceCurrentNativeNumericalSeedInvariant.original_universe_resource_admitted_request_seeds
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    bodyId bodyIdentity request before sourceGrowth pastSeeds rfl
+    ⟨leftAvailable, rightAvailable⟩ ⟨leftClosed, rightClosed⟩ profile ready fits admitted fuel
+  have plans := SourcePruningEnumerationNativeRequestFields.admitted_request_plans
+    profile before ready fits admitted left right leftAvailable rightAvailable leftClosed rightClosed fuel
+  have physical := SourceCurrentAllocatedNativePhysicalExecution.execute_invariants
+    fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before
+    ready.good.native ready.good.heap plans.1
+  have endpointSeeds : Seeds sourceHeap entry body depth ordinary bodyId
+      (SourceEqualityNativeDemand.execute fuel
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state := by
+    exact seeds.1
+  refine ⟨⟨endpointSeeds, grows_trans sourceGrowth physical.2.1.heap⟩, ?_⟩
+  intro count rest after bounded actual
+  exact ⟨seeds.2 count rest after bounded actual,
+    actual_trace_source_growth sourceHeap _ _ before after count actual ready.good.native sourceGrowth⟩

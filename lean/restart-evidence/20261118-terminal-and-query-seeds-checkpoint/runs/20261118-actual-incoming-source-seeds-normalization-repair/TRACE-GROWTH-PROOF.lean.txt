@@ -1,0 +1,16 @@
+ := by
+  induction trace with
+  | refl =>
+      intro _valid growth
+      exact growth
+  | cons start before next middle final after count inputs actual rest ih =>
+      intro valid growth
+      have oneValid := SourceCurrentAllocatedNativePhysicalExecution.step_valid
+        start before valid inputs
+      have oneExtension := SourceCurrentAllocatedNativePhysicalExecution.step_extension
+        start before valid.machine inputs
+      have middleValid : SourceCurrentAllocatedNativePhysicalCache.Valid middle.native := by
+        simpa only [actual, SourceEqualityNativeDemand.Outcome.state] using oneValid
+      have middleExtension : Extension before.native.machine middle.native.machine := by
+        simpa only [actual, SourceEqualityNativeDemand.Outcome.state] using oneExtension
+      exact ih middleValid (grows_trans growth middleExtension.heap)

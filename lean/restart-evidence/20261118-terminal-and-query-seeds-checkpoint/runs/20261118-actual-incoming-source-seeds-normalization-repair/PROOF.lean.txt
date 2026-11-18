@@ -1,0 +1,104 @@
+ := by
+  dsimp only
+  have literal := observe_exact checkEmpty representativeFuel nativeFuel p h
+    beforeCaller before uv incoming incomingScs memos.query
+  have eventResources := observe_query_resources seed formulas solver inventory beforeCaller before memos
+    initial realized fits reserved checkEmpty representativeFuel nativeFuel p h uv incoming incomingScs
+    available closed
+  refine ⟨literal.1, ?_, ?_⟩
+  · cases rootRead : UnionFind.findRoot representativeFuel before.representatives uv with
+    | none =>
+        simp only [observe, rootRead]
+        exact ⟨pastSeeds, sourceGrowth⟩
+    | some found =>
+        cases slotRead : before.values[found.representative]? with
+        | none =>
+            simp only [observe, rootRead, slotRead]
+            exact ⟨pastSeeds, sourceGrowth⟩
+        | some value =>
+            cases value with
+            | eliminated =>
+                simp only [observe, rootRead, slotRead]
+                exact ⟨pastSeeds, sourceGrowth⟩
+            | enumerated fragment =>
+                simp only [observe, rootRead, slotRead]
+                exact ⟨pastSeeds, sourceGrowth⟩
+            | unenumerated oldNode oldScs =>
+                cases oldNode with
+                | none =>
+                    cases encoded : encodeNode incoming <;>
+                      simp only [observe, rootRead, slotRead, encoded] <;>
+                      exact ⟨pastSeeds, sourceGrowth⟩
+                | some oldHandle =>
+                    cases oldRead : lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+                    | none =>
+                        simp only [observe, rootRead, slotRead, oldRead]
+                        exact ⟨pastSeeds, sourceGrowth⟩
+                    | some old =>
+                        obtain ⟨value, decoded, resident, oldClosed⟩ :=
+                          realized found.representative oldHandle oldScs slotRead
+                        have valueSame : value = old := Option.some.inj (decoded.symm.trans oldRead)
+                        subst value
+                        have native := actual_query_source_seeds
+                          lib query signed whole accepted rootValue sourceHeap built
+                          key entry body depth ordinary stored bodyId bodyIdentity beforeCaller.checked
+                          seed.2 initial.ready fits reserved.head sourceGrowth pastSeeds incoming old
+                          available resident closed oldClosed nativeFuel
+                        cases nativeRead : SourceEqualityNativeDemand.execute nativeFuel
+                            (.code (requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+                            beforeCaller.checked with
+                        | done value queried =>
+                            have nativeFacts : Seeds sourceHeap entry body depth ordinary bodyId queried ∧
+                                Grows sourceHeap queried.native.machine.heap := by
+                              simpa only [nativeRead, SourceEqualityNativeDemand.Outcome.state] using native.1
+                            obtain ⟨_next, _source, _roots, receipt, _post, _bounded, _mass⟩ :=
+                              SourceCurrentAllocatedTargetQuery.raw_done_caller_admitted_resources
+                                seed.2 nativeFuel formulas solver inventory beforeCaller queried incoming old value
+                                memos initial fits reserved.head available resident closed oldClosed nativeRead
+                            have skip :=
+                              SourceSynthesisCurrentRootEmptyCheckGate.source_retained_available_shared_empty_check_skipped
+                                lib query signed whole accepted rootValue sourceHeap built queried
+                                receipt.ready.good.native.machine.1.coherent nativeFacts.1.1 value
+                                receipt.available memos.query receipt.globals.query beforeCaller.fourth p h
+                            cases checkEmpty with
+                            | false =>
+                                cases encoded : encodeNode value <;>
+                                  simpa only [observe, rootRead, slotRead, oldRead, nativeRead,
+                                    Bool.false_eq_true, ↓reduceIte,
+                                    SourcePruningEnumerationSharedEnabledEmpty.Outcome.completed,
+                                    SourcePruningEnumerationSharedEnabledEmpty.Outcome.state,
+                                    SourceCurrentAllocatedPartialState.advance, encoded] using nativeFacts
+                            | true =>
+                                cases encoded : encodeNode value <;>
+                                  simpa only [observe, rootRead, slotRead, oldRead, nativeRead, Bool.false_eq_true, ↓reduceIte,
+                                    skip.2.1, SourcePruningEnumerationSharedEnabledEmpty.Outcome.completed,
+                                    SourcePruningEnumerationSharedEnabledEmpty.Outcome.state,
+                                    SourceCurrentAllocatedPartialState.advance, encoded] using nativeFacts
+                        | yielded next queried =>
+                            simpa only [observe, rootRead, slotRead, oldRead, nativeRead,
+                              SourceEqualityNativeDemand.Outcome.state,
+                              SourceCurrentAllocatedPartialState.advance] using native.1
+                        | failed failure queried =>
+                            simpa only [observe, rootRead, slotRead, oldRead, nativeRead,
+                              SourceEqualityNativeDemand.Outcome.state,
+                              SourceCurrentAllocatedPartialState.advance] using native.1
+                        | constraintError message queried =>
+                            simpa only [observe, rootRead, slotRead, oldRead, nativeRead,
+                              SourceEqualityNativeDemand.Outcome.state,
+                              SourceCurrentAllocatedPartialState.advance] using native.1
+                        | blocked reason next queried =>
+                            simpa only [observe, rootRead, slotRead, oldRead, nativeRead,
+                              SourceEqualityNativeDemand.Outcome.state,
+                              SourceCurrentAllocatedPartialState.advance] using native.1
+  · intro start saved left right actual member
+    obtain ⟨startSame, savedSame, leftSame, _ready, _fitted, _admitted,
+        leftAvailable, rightAvailable, leftClosed, rightClosed, actualSame⟩ :=
+      eventResources.2 start saved left right actual member
+    subst start
+    have native := actual_query_source_seeds
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      bodyId bodyIdentity beforeCaller.checked seed.2 initial.ready fits reserved.head sourceGrowth
+      pastSeeds left right leftAvailable rightAvailable leftClosed rightClosed nativeFuel
+    refine ⟨rfl, savedSame, leftSame, actualSame, ?_, native.2⟩
+    rw [actualSame]
+    exact native.1

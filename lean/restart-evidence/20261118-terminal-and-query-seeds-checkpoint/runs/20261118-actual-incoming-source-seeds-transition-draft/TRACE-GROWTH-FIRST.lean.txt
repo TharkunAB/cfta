@@ -1,0 +1,6 @@
+private theorem actual_trace_source_growth
+    (sourceHeap : State Symbol Constraint)
+    (control rest : Control Node) (before after : Checked (bits + 2)) (count : Nat)
+    (trace : Trace count control before rest after) :
+    SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+      Grows sourceHeap before.native.machine.heap → Grows sourceHeap after.native.machine.heap
