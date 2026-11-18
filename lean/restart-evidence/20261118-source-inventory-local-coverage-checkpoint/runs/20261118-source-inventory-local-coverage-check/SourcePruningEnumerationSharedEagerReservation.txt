@@ -1,0 +1,142 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-source-inventory-local-coverage-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:40489:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (edge.entry.key.symbol, staged, residual).snd.fst
+in the target expression
+  List.map (fun input => (input.fst, input.snd.fst)) staged = inputs
+
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+rootValue : Node
+sourceHeap : InternedConstructorTemplates.State Symbol Constraint
+key : InternedBinderProtocol.NodeKey
+universeEntry : Cache.Interned InternedBinderProtocol.NodeKey
+universeBody universeDepth universeOrdinary : Node
+bodyId : Nat
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+recursiveDepth workFuel : Nat
+metadata : Metadata Typing
+uv : Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (alternatives : List (EdgeValue Symbol Constraint))
+    (level : Nat) (names : List InternedBinderProtocol.Reference) (selected : EdgeValue Symbol Constraint),
+    selected ∈ edgesOf (Value.node entry alternatives level names) → selected ∈ alternatives
+root : IdentityActualSourceRoot bits
+point : IdentityActualSourcePoint bits
+height : Nat
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+rows : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+bucket : List Suspended
+rest : List (Node × List Suspended)
+scopeOriginal : Caller (bits + 2)
+scopeBefore : Cached
+allInputs : List (Node × List Suspended)
+attempted remaining : List (EdgeValue Symbol Constraint)
+edge : EdgeValue Symbol Constraint
+residual : Option Constraint
+rowOwn : Cached
+staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment))
+processed : List (SelectedEdge.Result (bits + 2))
+earlier : List (Output (bits + 2) Typing)
+reached : Caller (bits + 2)
+saved : Queries
+sourceRows : edgesOf (Value.node parentEntry rows depth free) = attempted ++ edge :: remaining
+prepared :
+  SourcePruningEnumerationCachedOwn.prepare reached.checked.native.machine.heap bucket edge point.before =
+    some [((edge.entry.key.symbol, staged, residual), rowOwn)]
+x✝¹⁰ : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+x✝⁹ :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue sourceHeap
+x✝⁸ : sourceHeap.nodeRecords key = some (Value.mu universeEntry universeBody universeDepth universeOrdinary)
+x✝⁷ : SourceRecursiveIntersectionControl.identity universeBody = some bodyId
+x✝⁶ :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (alternatives : List (EdgeValue Symbol Constraint))
+    (level : Nat) (names : List InternedBinderProtocol.Reference),
+    (edgesOf (Value.node entry alternatives level names)).length ≤ alternatives.length
+x✝⁵ : ActualFrameLedger formulas solver root metadata uv point.frame scopeOriginal scopeBefore allInputs
+x✝⁴ :
+  ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+    recursiveDepth workFuel metadata uv root
+    (IdentityActualSourceTask.rows height
+      { frame := point.frame, completed := point.completed, caller := point.caller, before := point.before,
+        queries := point.queries, height := height + 1, count := point.count, bound := point.bound, mass := point.mass,
+        seed := point.seed }
+      (Value.node parentEntry rows depth free) bucket rest)
+x✝³ :
+  ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore allInputs recursiveDepth
+    (IdentityActualSourceTask.rows height
+      { frame := point.frame, completed := point.completed, caller := point.caller, before := point.before,
+        queries := point.queries, height := height + 1, count := point.count, bound := point.bound, mass := point.mass,
+        seed := point.seed }
+      (Value.node parentEntry rows depth free) bucket rest)
+x✝² : Grows sourceHeap point.caller.checked.native.machine.heap
+x✝¹ :
+  SourceCurrentNativeNumericalSeedInvariant.Seeds sourceHeap universeEntry universeBody universeDepth universeOrdinary
+    bodyId point.caller.checked
+x✝ :
+  actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates
+      checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      { frame := point.frame, completed := point.completed, caller := point.caller, before := point.before,
+        queries := point.queries, height := height + 1, count := point.count, bound := point.bound, mass := point.mass,
+        seed := point.seed }
+      (Value.node parentEntry rows depth free) bucket rest attempted =
+    NativeContinuations.Result.complete processed earlier reached saved
+selected : edge ∈ rows
+allowed : arityAllows edge.children.length bucket = true
+tries : List EqualityTrie.Trie
+projectedResidual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, projectedResidual)
+inputShape :
+  (edge.entry.key.symbol, staged, residual) =
+    (edge.entry.key.symbol,
+      List.map
+        (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+        (SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries),
+      projectedResidual)
+stagedSame :
+  (edge.entry.key.symbol, staged, residual).snd.fst =
+    (edge.entry.key.symbol,
+          List.map
+            (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+            (SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries),
+          projectedResidual).snd.fst
+inputs : List (Node × List Suspended) :=
+  SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries
+⊢ List.map (fun input => (input.fst, input.snd.fst)) staged = inputs
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-source-inventory-local-coverage-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:40554:9: error(lean.unknownIdentifier): Unknown identifier `SourcePruningEnumerationInvocationNativeQueryProjection.nativeQueries`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-source-inventory-local-coverage-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:40560:10: error(lean.unknownIdentifier): Unknown identifier `Available`
+
+Note: It is not possible to treat `Available` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-source-inventory-local-coverage-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:40561:10: error(lean.unknownIdentifier): Unknown identifier `Available`
+
+Note: It is not possible to treat `Available` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-source-inventory-local-coverage-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:40592:15: error(lean.unknownIdentifier): Unknown identifier `SourcePruningEnumerationInvocationNativeQueryProjection.nativeQueries`
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_source_prepared_row_children_strict_lower_at_original_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-source-inventory-local-coverage-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:40606:14: error(lean.unknownIdentifier): Unknown constant `actual_source_fallback_terminal_full_query_coverage_at_original_budget`
+Traceback (most recent call last):
+  File "/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-source-inventory-local-coverage-check/shadow-compile.py", line 18, in <module>
+    subprocess.run([
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['lean', '-j1', '-DwarningAsError=true', '-R', '/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-source-inventory-local-coverage-check/source', '-o', '/tmp/mcfta-source-inventory-local-coverage-6qwp6rrz/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.olean', '/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-source-inventory-local-coverage-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean']' returned non-zero exit status 1.

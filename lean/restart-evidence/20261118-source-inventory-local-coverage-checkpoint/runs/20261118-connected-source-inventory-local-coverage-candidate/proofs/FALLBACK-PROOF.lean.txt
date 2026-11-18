@@ -1,0 +1,22 @@
+  dsimp only
+  have native := actual_source_child_query_resources_and_seeds
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+    universeStored bodyId bodyIdentity formulas solver root point scopeOriginal metadata scopeBefore
+    allInputs recursiveDepth incoming bucket rest current sourceGrowth pastSeeds checkEmpty
+    workFuel workFuel workFuel workFuel workFuel
+  have returned := native.2.1
+  rw [native.1, actualChild] at returned
+  refine ⟨ActualFullTaskQueryCoverageAt.fallback_stopped fallback actualChild terminal,
+    ?_, returned, ?_⟩
+  · intro operation member
+    obtain rfl := List.mem_singleton.mp member
+    exact actualChild
+  · intro nativeIndex start saved left right actual found
+    simp only [SourcePruningEnumerationInvocationNativeQueryProjection.nativeQueries,
+      List.flatMap_cons, List.flatMap_nil, List.append_nil] at found
+    obtain ⟨consumed, _consumedBound, ready, bounded, admitted, leftAvailable, rightAvailable,
+        leftClosed, rightClosed, executed, afterSeeds, prefixSeeds⟩ :=
+      native.2.2 start saved left right actual (List.mem_of_getElem? found)
+    exact ⟨(SourcePruningEnumerationSharedIncomingReservation.advance point.seed consumed).2,
+      ready, bounded, admitted, leftAvailable, rightAvailable, leftClosed, rightClosed,
+      executed, afterSeeds, prefixSeeds⟩

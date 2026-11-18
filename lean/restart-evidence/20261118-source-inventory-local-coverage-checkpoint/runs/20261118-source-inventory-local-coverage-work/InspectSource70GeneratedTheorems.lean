@@ -1,0 +1,27 @@
+import Lean
+import MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+import MicroCFTA.SourceSynthesisCurrentDoneOutputAssignmentInventory
+
+open Lean Elab Command
+
+run_cmd do
+  let env ← getEnv
+  let prefixes := [
+    "MicroCFTA.SourceCurrentClosedRecursiveBoundaryMuOrigin.",
+    "MicroCFTA.SourceSynthesisCurrentDoneAssignment.actual_done_output_assignment_of_original_source_inventory",
+    "MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_source_prepared_row_children_strict_lower_at_original_budget",
+    "MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_source_fallback_terminal_full_query_coverage_at_original_budget"]
+  let mut count : Nat := 0
+  for (name, info) in env.constants.toList do
+    if info.isTheorem && name.toString.startsWith
+        "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation." then
+      logInfo m!"SHARED_THEOREM {name}"
+    let newModule := name.toString.startsWith
+      "_private.MicroCFTA.SourceCurrentClosedRecursiveBoundaryMuOrigin." ||
+      name.toString.startsWith
+        "_private.MicroCFTA.SourceSynthesisCurrentDoneOutputAssignmentInventory."
+    if info.isTheorem && (newModule ||
+        prefixes.any ((privateToUserName name).toString.startsWith ·)) then
+      logInfo m!"SOURCE70_THEOREM {name}"
+      count := count + 1
+  logInfo m!"SOURCE70_THEOREM_COUNT {count}"

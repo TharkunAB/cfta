@@ -1,0 +1,248 @@
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualFullQueryCoverageProducerLeaves
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+/- Note [Retain the audited worker interface]
+The direct height proof uses selection and the same singleton preparation.
+The fixed header retains the original worker admissions for the row induction.
+Anonymous proof terms reference those admissions before the context is cleared.
+They add no semantic conclusion.
+-/
+
+private theorem actual_source_prepared_row_children_strict_lower_at_original_budget
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (key : InternedBinderProtocol.NodeKey)
+    (universeEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (universeBody universeDepth universeOrdinary : Node)
+    (stored : sourceHeap.nodeRecords key =
+      some (.mu universeEntry universeBody universeDepth universeOrdinary))
+    (bodyId : Nat)
+    (bodyIdentity : SourceRecursiveIntersectionControl.identity universeBody = some bodyId)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (selectionMembers : ∀ entry alternatives level names,
+      ∀ selected ∈ edgesOf (.node entry alternatives level names), selected ∈ alternatives)
+    (selectionLength : ∀ entry alternatives level names,
+      (edgesOf (.node entry alternatives level names)).length ≤ alternatives.length)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+    (height : Nat) (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv point.frame
+      scopeOriginal scopeBefore allInputs)
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.rows height {point with height := height + 1}
+        (.node parentEntry rows depth free) bucket rest))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.rows height {point with height := height + 1}
+        (.node parentEntry rows depth free) bucket rest))
+    (sourceGrowth : InternedConstructorTemplates.Grows sourceHeap
+      point.caller.checked.native.machine.heap)
+    (pastSeeds : SourceCurrentNativeNumericalSeedInvariant.Seeds
+      sourceHeap universeEntry universeBody universeDepth universeOrdinary bodyId
+      point.caller.checked)
+    (attempted remaining : List (EdgeValue Symbol Constraint))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (rowOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (processed : List (SelectedEdge.Result (bits + 2)))
+    (earlier : List (Output (bits + 2) Typing))
+    (reached : Caller (bits + 2)) (saved : Queries)
+    (sourceRows : edgesOf (.node parentEntry rows depth free) = attempted ++ edge :: remaining)
+    (past : actual_source_row_prefix_run_with_narrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      {point with height := height + 1} (.node parentEntry rows depth free) bucket rest
+      attempted = .complete processed earlier reached saved)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare reached.checked.native.machine.heap
+      bucket edge point.before =
+        some [((edge.entry.key.symbol, staged, residual), rowOwn)]) :
+    ∀ child childBucket,
+      (child, childBucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      MergedOrdinaryHeight.height child <
+        MergedOrdinaryHeight.height (.node parentEntry rows depth free) := by
+  have _ := accepted
+  have _ := built
+  have _ := stored
+  have _ := bodyIdentity
+  have _ := selectionLength
+  have _ := ancestors
+  have _ := origin
+  have _ := current
+  have _ := sourceGrowth
+  have _ := pastSeeds
+  have _ := past
+  clear accepted built stored bodyIdentity selectionLength ancestors origin current
+    sourceGrowth pastSeeds past
+  have selected : edge ∈ rows := by
+    apply selectionMembers parentEntry rows depth free edge
+    rw [sourceRows]
+    exact List.mem_append_right attempted List.mem_cons_self
+  cases allowed : arityAllows edge.children.length bucket with
+  | false =>
+    simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, Bool.false_eq_true,
+      ↓reduceIte] at prepared
+    cases prepared
+  | true =>
+    cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none =>
+      simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte, projected]
+        at prepared
+      cases prepared
+    | some projection =>
+      obtain ⟨tries, projectedResidual⟩ := projection
+      have inputShape := SourcePruningEnumerationCachedOwn.prepare_inputs
+        reached.checked.native.machine.heap bucket edge point.before rowOwn tries
+        projectedResidual (edge.entry.key.symbol, staged, residual) projected prepared
+      have stagedSame := congrArg (fun result => result.2.1) inputShape
+      let inputs := SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries
+      have readback : staged.map (fun input => (input.1, input.2.1)) = inputs := by
+        rw [stagedSame]
+        simp only [List.map_map]
+        exact List.map_id _
+      have nodes : inputs.map Prod.fst = edge.children := by
+        simp only [inputs, SourcePruningEnumerationEdgeInputs.children, List.map_map]
+        change edge.children.zipIdx.map Prod.fst = edge.children
+        exact List.zipIdx_map_fst 0 edge.children
+      intro child childBucket member
+      have childMember : child ∈ inputs.map Prod.fst :=
+        List.mem_map.mpr ⟨(child, childBucket), readback ▸ member, rfl⟩
+      rw [nodes] at childMember
+      exact MergedOrdinaryHeight.child_lt parentEntry rows depth free edge selected child childMember
+
+private theorem actual_source_fallback_terminal_full_query_coverage_at_original_budget
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (key : InternedBinderProtocol.NodeKey)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (universeStored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.child point incoming bucket rest))
+    (sourceGrowth : InternedConstructorTemplates.Grows sourceHeap
+      point.caller.checked.native.machine.heap)
+    (pastSeeds : SourceCurrentNativeNumericalSeedInvariant.Seeds
+      sourceHeap entry body depth ordinary bodyId point.caller.checked)
+    (path : List Nat) (parents : List (List Nat))
+    (fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false)
+    (observation : ChildDispatch.Observation (bits + 2)) (candidate : Option Cached)
+    (actualChild : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+      bucket incoming point.caller point.before point.queries = (observation, candidate))
+    (terminal : SourcePruningEnumerationSharedInvocationTrace.ShallowStopped observation candidate) :
+    let operations : List (SourcePruningEnumerationInvocationEventLedger.Event (bits + 2)) :=
+      [.dispatch (path ++ [point.completed.length]) checkEmpty workFuel workFuel workFuel workFuel
+        workFuel bucket incoming point.caller point.before point.queries observation candidate]
+    ActualFullTaskQueryCoverageAt (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+      metadata uv root (path :: parents) (.child point incoming bucket rest)
+      (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+        (.child point incoming bucket rest)) operations ∧
+    (∀ operation ∈ operations,
+      SourcePruningEnumerationInvocationEventLedger.AuthenticEvent operation) ∧
+    (SourceCurrentNativeNumericalSeedInvariant.Seeds
+        sourceHeap entry body depth ordinary bodyId observation.2.1.checked ∧
+      InternedConstructorTemplates.Grows sourceHeap
+        observation.2.1.checked.native.machine.heap) ∧
+    ∀ (nativeIndex : Nat) (start : Caller (bits + 2)) (saved : Queries)
+          (left right : Node) (actual : SourceEqualityNativeDemand.Outcome (bits + 2) Node),
+        (SourcePruningEnumerationInvocationNativeQueryProjection.nativeQueries operations)[nativeIndex]? =
+          some (start, saved, left, right, actual) →
+        ∃ profile : SourceCurrentAllocatedNativeResourceForecast.Profile,
+          SourceCurrentConjunctionClassScan.Ready start.checked ∧
+          SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile start.checked ∧
+          SourceCurrentAllocatedNativeCreditProfile.Admits bits profile ∧
+          Available start.checked.native.machine.heap left ∧
+          Available start.checked.native.machine.heap right ∧
+          left.free = [] ∧ right.free = [] ∧
+          actual = SourceEqualityNativeDemand.execute workFuel
+            (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+            start.checked ∧
+          (SourceCurrentNativeNumericalSeedInvariant.Seeds
+              sourceHeap entry body depth ordinary bodyId actual.state ∧
+            InternedConstructorTemplates.Grows sourceHeap actual.state.native.machine.heap) ∧
+          ∀ (count : Nat) (resume : SourceEqualityNativeDemand.Control Node)
+              (after : SourceEqualityNativeDemand.State (bits + 2)),
+            count ≤ workFuel →
+            SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace count
+              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+              start.checked resume after →
+            SourceCurrentNativeNumericalSeedInvariant.Seeds
+              sourceHeap entry body depth ordinary bodyId after ∧
+              InternedConstructorTemplates.Grows sourceHeap after.native.machine.heap := by
+  dsimp only
+  have native := actual_source_child_query_resources_and_seeds
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+    universeStored bodyId bodyIdentity formulas solver root point scopeOriginal metadata scopeBefore
+    allInputs recursiveDepth incoming bucket rest current sourceGrowth pastSeeds checkEmpty
+    workFuel workFuel workFuel workFuel workFuel
+  have returned := native.2.1
+  rw [native.1, actualChild] at returned
+  refine ⟨ActualFullTaskQueryCoverageAt.fallback_stopped fallback actualChild terminal,
+    ?_, returned, ?_⟩
+  · intro operation member
+    obtain rfl := List.mem_singleton.mp member
+    exact actualChild
+  · intro nativeIndex start saved left right actual found
+    simp only [SourcePruningEnumerationInvocationNativeQueryProjection.nativeQueries,
+      List.flatMap_cons, List.flatMap_nil, List.append_nil] at found
+    obtain ⟨consumed, _consumedBound, ready, bounded, admitted, leftAvailable, rightAvailable,
+        leftClosed, rightClosed, executed, afterSeeds, prefixSeeds⟩ :=
+      native.2.2 start saved left right actual (List.mem_of_getElem? found)
+    exact ⟨(SourcePruningEnumerationSharedIncomingReservation.advance point.seed consumed).2,
+      ready, bounded, admitted, leftAvailable, rightAvailable, leftClosed, rightClosed,
+      executed, afterSeeds, prefixSeeds⟩
+
+end ActualFullQueryCoverageProducerLeaves
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

@@ -1,0 +1,43 @@
+  have normal := packet.context.ready.semantic.ready.semantic.1.normal
+  rcases SourceSynthesisCurrentUniverseOwnership.current_build_single_universe
+      lib query signed whole accepted rootValue sourceHeap built with noMu | someMu
+  · obtain ⟨level, frontier, ordered⟩ := packet.ordered
+    apply EnumerationPendingAssignment.stratified_pending_assignment output.cache.core packet.safe
+      level frontier ordered (.node (literal "var1") [])
+      (handles (SourceEqualityPCSGuard.holds formulas solver) ambient
+        output.caller.checked.native.machine.heap)
+    intro slot node scs atSlot
+    cases node with
+    | none =>
+        refine ⟨noneBuckets slot scs atSlot, ?_⟩
+        intro handle impossible
+        cases impossible
+    | some handle =>
+        obtain ⟨value, _decoded, available, closed, boundary, _emptyBucket⟩ :=
+          SourcePruningEnumerationRestart.done_pending_boundary
+            order metadata output.caller output.cache packet.valid done slot handle scs atSlot
+        obtain ⟨key, entry, body, depth, ordinary, stored⟩ :=
+          SourceCurrentClosedRecursiveBoundaryMuOrigin.closed_recursive_boundary_has_source_mu
+            sourceHeap output.caller.checked.native.machine.heap normal irreducible
+            sourceInventory value available closed boundary
+        exact False.elim (noMu key entry body depth ordinary stored)
+  · obtain ⟨entry, body, depth, ordinary, stored, _available, _closed, _replay, _unique⟩ := someMu
+    have onlyU : ∀ (slot handle : Nat) (scs : List EnumerationState.Suspended),
+        output.cache.core.values[slot]? = some (.unenumerated (some handle) scs) →
+        ∀ value, lookupNode output.caller.checked.native.machine.heap handle = some value →
+        ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity := by
+      intro slot handle scs atSlot value decoded
+      obtain ⟨actualValue, actualRead, available, closed, _boundary, _emptyBucket⟩ :=
+        SourcePruningEnumerationRestart.done_pending_boundary
+          order metadata output.caller output.cache packet.valid done slot handle scs atSlot
+      have same : actualValue = value := Option.some.inj (actualRead.symm.trans decoded)
+      subst actualValue
+      exact SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built
+        (muKey depth ordinary) entry body depth ordinary stored
+        output.caller.checked.native.machine.heap normal.facts.coherent sourceInventory value available closed
+    exact done_current_assignment formulas solver ambient
+      lib query signed whole accepted rootValue sourceHeap built
+      (muKey depth ordinary) entry body depth ordinary stored
+      order metadata inventory output.caller memos output.cache packet done irreducible sourceGrowth
+      onlyU noneBuckets

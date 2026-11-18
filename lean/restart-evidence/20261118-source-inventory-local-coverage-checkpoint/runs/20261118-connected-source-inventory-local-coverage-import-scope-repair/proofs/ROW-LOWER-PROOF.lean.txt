@@ -1,0 +1,53 @@
+  have _ := accepted
+  have _ := built
+  have _ := stored
+  have _ := bodyIdentity
+  have _ := selectionLength
+  have _ := ancestors
+  have _ := origin
+  have _ := current
+  have _ := sourceGrowth
+  have _ := pastSeeds
+  have _ := past
+  clear accepted built stored bodyIdentity selectionLength ancestors origin current
+    sourceGrowth pastSeeds past
+  have selected : edge ∈ rows := by
+    apply selectionMembers parentEntry rows depth free edge
+    rw [sourceRows]
+    exact List.mem_append_right attempted List.mem_cons_self
+  cases allowed : arityAllows edge.children.length bucket with
+  | false =>
+    simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, Bool.false_eq_true,
+      ↓reduceIte] at prepared
+    cases prepared
+  | true =>
+    cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none =>
+      simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte, projected]
+        at prepared
+      cases prepared
+    | some projection =>
+      obtain ⟨tries, projectedResidual⟩ := projection
+      have inputShape := SourcePruningEnumerationCachedOwn.prepare_inputs
+        reached.checked.native.machine.heap bucket edge point.before rowOwn tries
+        projectedResidual (edge.entry.key.symbol, staged, residual) projected prepared
+      have stagedSame : staged =
+          (SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries).map
+            (fun input => (input.1, input.2,
+              SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+                input.2 input.1)) :=
+        congrArg (fun result => result.2.1) inputShape
+      let inputs := SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries
+      have readback : staged.map (fun input => (input.1, input.2.1)) = inputs := by
+        rw [stagedSame]
+        simp only [List.map_map]
+        exact List.map_id _
+      have nodes : inputs.map Prod.fst = edge.children := by
+        simp only [inputs, SourcePruningEnumerationEdgeInputs.children, List.map_map]
+        change edge.children.zipIdx.map Prod.fst = edge.children
+        exact List.zipIdx_map_fst 0 edge.children
+      intro child childBucket member
+      have childMember : child ∈ inputs.map Prod.fst :=
+        List.mem_map.mpr ⟨(child, childBucket), readback ▸ member, rfl⟩
+      rw [nodes] at childMember
+      exact MergedOrdinaryHeight.child_lt parentEntry rows depth free edge selected child childMember

@@ -1,0 +1,76 @@
+private theorem actual_source_fallback_terminal_full_query_coverage_at_original_budget
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (key : InternedBinderProtocol.NodeKey)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (universeStored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.child point incoming bucket rest))
+    (sourceGrowth : InternedConstructorTemplates.Grows sourceHeap
+      point.caller.checked.native.machine.heap)
+    (pastSeeds : SourceCurrentNativeNumericalSeedInvariant.Seeds
+      sourceHeap entry body depth ordinary bodyId point.caller.checked)
+    (path : List Nat) (parents : List (List Nat))
+    (fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false)
+    (observation : ChildDispatch.Observation (bits + 2)) (candidate : Option Cached)
+    (actualChild : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+      bucket incoming point.caller point.before point.queries = (observation, candidate))
+    (terminal : SourcePruningEnumerationSharedInvocationTrace.ShallowStopped observation candidate) :
+    let operations : List (SourcePruningEnumerationInvocationEventLedger.Event (bits + 2)) :=
+      [.dispatch (path ++ [point.completed.length]) checkEmpty workFuel workFuel workFuel workFuel
+        workFuel bucket incoming point.caller point.before point.queries observation candidate]
+    ActualFullTaskQueryCoverageAt (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+      metadata uv root (path :: parents) (.child point incoming bucket rest)
+      (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+        (.child point incoming bucket rest)) operations ∧
+    (∀ operation ∈ operations,
+      SourcePruningEnumerationInvocationEventLedger.AuthenticEvent operation) ∧
+    (SourceCurrentNativeNumericalSeedInvariant.Seeds
+        sourceHeap entry body depth ordinary bodyId observation.2.1.checked ∧
+      InternedConstructorTemplates.Grows sourceHeap
+        observation.2.1.checked.native.machine.heap) ∧
+    ∀ (nativeIndex : Nat) (start : Caller (bits + 2)) (saved : Queries)
+          (left right : Node) (actual : SourceEqualityNativeDemand.Outcome (bits + 2) Node),
+        (SourcePruningEnumerationInvocationNativeQueryProjection.nativeQueries operations)[nativeIndex]? =
+          some (start, saved, left, right, actual) →
+        ∃ profile : SourceCurrentAllocatedNativeResourceForecast.Profile,
+          SourceCurrentConjunctionClassScan.Ready start.checked ∧
+          SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile start.checked ∧
+          SourceCurrentAllocatedNativeCreditProfile.Admits bits profile ∧
+          Available start.checked.native.machine.heap left ∧
+          Available start.checked.native.machine.heap right ∧
+          left.free = [] ∧ right.free = [] ∧
+          actual = SourceEqualityNativeDemand.execute workFuel
+            (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+            start.checked ∧
+          (SourceCurrentNativeNumericalSeedInvariant.Seeds
+              sourceHeap entry body depth ordinary bodyId actual.state ∧
+            InternedConstructorTemplates.Grows sourceHeap actual.state.native.machine.heap) ∧
+          ∀ (count : Nat) (resume : SourceEqualityNativeDemand.Control Node)
+              (after : SourceEqualityNativeDemand.State (bits + 2)),
+            count ≤ workFuel →
+            SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace count
+              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+              start.checked resume after →
+            SourceCurrentNativeNumericalSeedInvariant.Seeds
+              sourceHeap entry body depth ordinary bodyId after ∧
+              InternedConstructorTemplates.Grows sourceHeap after.native.machine.heap

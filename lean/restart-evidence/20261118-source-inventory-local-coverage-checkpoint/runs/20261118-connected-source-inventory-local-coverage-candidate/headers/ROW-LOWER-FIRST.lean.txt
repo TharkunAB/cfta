@@ -1,0 +1,69 @@
+private theorem actual_source_prepared_row_children_strict_lower_at_original_budget
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (key : InternedBinderProtocol.NodeKey)
+    (universeEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (universeBody universeDepth universeOrdinary : Node)
+    (stored : sourceHeap.nodeRecords key =
+      some (.mu universeEntry universeBody universeDepth universeOrdinary))
+    (bodyId : Nat)
+    (bodyIdentity : SourceRecursiveIntersectionControl.identity universeBody = some bodyId)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (selectionMembers : ∀ entry alternatives level names,
+      ∀ selected ∈ edgesOf (.node entry alternatives level names), selected ∈ alternatives)
+    (selectionLength : ∀ entry alternatives level names,
+      (edgesOf (.node entry alternatives level names)).length ≤ alternatives.length)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+    (height : Nat) (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv point.frame
+      scopeOriginal scopeBefore allInputs)
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.rows height {point with height := height + 1}
+        (.node parentEntry rows depth free) bucket rest))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.rows height {point with height := height + 1}
+        (.node parentEntry rows depth free) bucket rest))
+    (sourceGrowth : InternedConstructorTemplates.Grows sourceHeap
+      point.caller.checked.native.machine.heap)
+    (pastSeeds : SourceCurrentNativeNumericalSeedInvariant.Seeds
+      sourceHeap universeEntry universeBody universeDepth universeOrdinary bodyId
+      point.caller.checked)
+    (attempted remaining : List (EdgeValue Symbol Constraint))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (rowOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (processed : List (SelectedEdge.Result (bits + 2)))
+    (earlier : List (Output (bits + 2) Typing))
+    (reached : Caller (bits + 2)) (saved : Queries)
+    (sourceRows : edgesOf (.node parentEntry rows depth free) = attempted ++ edge :: remaining)
+    (past : actual_source_row_prefix_run_with_narrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      {point with height := height + 1} (.node parentEntry rows depth free) bucket rest
+      attempted = .complete processed earlier reached saved)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare reached.checked.native.machine.heap
+      bucket edge point.before =
+        some [((edge.entry.key.symbol, staged, residual), rowOwn)]) :
+    ∀ child childBucket,
+      (child, childBucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      MergedOrdinaryHeight.height child <
+        MergedOrdinaryHeight.height (.node parentEntry rows depth free)
