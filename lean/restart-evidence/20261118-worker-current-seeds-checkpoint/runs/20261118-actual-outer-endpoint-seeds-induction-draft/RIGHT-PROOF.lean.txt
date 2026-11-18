@@ -1,0 +1,54 @@
+
+ := by
+  have prefixEndpoint := actual_selected_prefix_endpoint_seeds_and_growth
+    lib query signed whole accepted rootValue sourceHeap built entry body depth ordinary bodyId
+    holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before
+    packet sourceGrowth pastSeeds workFuel workFuel workFuel workFuel workFuel workFuel uv
+  rw [actual] at prefixEndpoint
+  dsimp only at prefixEndpoint
+  have current := SourcePruningEnumerationSharedRecursive.prefix_real_continuing_current_at_original_budget
+    holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before packet
+    seed.2 (fun guard => guard ∈ seed.1) bounded known workFuel uv chosen
+  rw [actual] at current
+  have currentFull : SourcePruningEnumerationSharedRecursive.CurrentPrefixResources stop order metadata
+      formulas solver inventory uv caller before memos seed.2 (fun guard => guard ∈ seed.1)
+      (.narrowed checked prepared reached saved action (some after)
+        (some [.ok ((false, updated), callbackCore)]) none) := by
+    cases action with
+    | none => exact current
+    | some rows => cases rows <;> exact current
+  have current := currentFull
+  obtain ⟨_ordinary, _queries, value, heap, selectedAction, final, preparedSame, _reached,
+    _post, querySame, shape⟩ := current.1
+  rcases shape with ⟨_empty, _action, impossible, _right⟩ |
+    ⟨newHandle, scs, cached, _nonempty, _encoded, actionSame, cacheSame, rightSame,
+      ready, stored, _waiting, afterPacket⟩
+  · cases impossible
+  · have cachedSame := Option.some.inj cacheSame
+    subst cached
+    have rightFields : updated = metadata ∧ callbackCore = after.core := by
+      simpa only [Option.some.injEq, List.cons.injEq, Except.ok.injEq, Prod.mk.injEq,
+        and_true, true_and] using rightSame
+    rw [rightFields.1]
+    have admission := SourcePruningEnumerationSharedRecursive.prefix_real_phase_admission_at_original_budget
+      holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before packet
+      workFuel uv ceiling chosen initialMass
+    rw [actual, preparedSame, actionSame] at admission
+    dsimp only at admission
+    obtain ⟨oldHandle, observedHandle, originalScs, _originalStored, observedStored, _oldLength, bound⟩ :=
+      admission.2.2.2
+    have scsSame : originalScs = scs := by
+      have same := Option.some.inj (observedStored.symm.trans stored)
+      cases same
+      rfl
+    have bucketBound : scs.length ≤ ceiling := by
+      rw [← scsSame]
+      exact bound
+    have inherited := real_actual_prepared_endpoint_seeds_of_outer_induction
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+      universeStored bodyId bodyIdentity holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver recursiveDepth workFuel outerIH inventory reached final metadata after seed ceiling
+      uv newHandle scs afterPacket ready stored admission.1 current.2.1 current.2.2
+      admission.2.2.1 bucketBound selectionMembers selectionLength reserved prefixEndpoint.2 prefixEndpoint.1
+    rw [querySame] at inherited
+    exact inherited

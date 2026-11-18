@@ -1,0 +1,35 @@
+ := by
+  induction recursiveDepth with
+  | zero =>
+      exact real_eager_endpoint_seeds_zero (bits := bits) sourceHeap entry body depth ordinary bodyId
+        holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+  | succ recursiveDepth outerIH =>
+      unfold RealEagerEndpointSeedsAtDepth
+      intro inventory caller memos before metadata seed ceiling packet bounded known
+        selectionMembers selectionLength initialMass reserved sourceGrowth pastSeeds workFuel decision chosen
+      cases decision with
+      | none =>
+          refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+          intro output member
+          have same := List.mem_singleton.mp member
+          subst output
+          exact ⟨pastSeeds, sourceGrowth⟩
+      | some next =>
+          cases next with
+          | done =>
+              refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+              intro output member
+              have same := List.mem_singleton.mp member
+              subst output
+              exact ⟨pastSeeds, sourceGrowth⟩
+          | stuck =>
+              refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+              intro output impossible
+              cases impossible
+          | expand uv =>
+              exact real_expand_endpoint_seeds_of_outer_induction
+                lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+                stored bodyId bodyIdentity holeKey fits admits graph templates checkEmpty edgesOf stop order
+                formulas solver recursiveDepth outerIH inventory caller memos before metadata seed ceiling
+                packet bounded known selectionMembers selectionLength initialMass reserved sourceGrowth
+                pastSeeds workFuel uv chosen

@@ -1,0 +1,124 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure emitted finish)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourceCurrentNativeNumericalSeedInvariant (Seeds)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+open EnumerationCorrectness (FragmentBound)
+
+private theorem actual_recorded_callback_endpoint_seeds_of_outer_induction
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth workFuel : Nat)
+    (outerIH : RealEagerEndpointSeedsAtDepth (bits := bits) sourceHeap entry body depth ordinary bodyId
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
+    (uv : Nat) (fragment : Fragments.Fragment Symbol) (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (allocated : FragmentBound before.core.counter fragment)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ nodeEntry rows level names,
+      ∀ selected ∈ edgesOf (.node nodeEntry rows level names), selected ∈ rows)
+    (selectionLength : ∀ nodeEntry rows level names,
+      (edgesOf (.node nodeEntry rows level names)).length ≤ rows.length)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : eagerReserved bits recursiveDepth seed ceiling)
+    (sourceGrowth : Grows sourceHeap caller.checked.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId caller.checked) :
+    ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+      (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+        (resumeWithNarrow (Typing := Typing) (width := bits + 2)
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+          stop order workFuel recursiveDepth)
+        graph templates stop order workFuel metadata uv fragment caller memos.query before)
+ := by
+  let recur := resumeWithNarrow (Typing := Typing) (width := bits + 2)
+    (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+      workFuel workFuel workFuel workFuel workFuel edgesOf)
+    (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+    stop order workFuel recursiveDepth
+  change ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+    (SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph templates stop order
+      workFuel metadata uv fragment caller memos.query before)
+  let raw := ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata
+    uv (.inl fragment) before.core)
+  by_cases successful : ∃ (flag : Bool) (updated : Metadata Typing)
+      (observed : EnumerationState.State Symbol Constraint), raw = [.ok ((flag, updated), observed)]
+  · obtain ⟨flag, updated, observed, recorded⟩ := successful
+    cases flag with
+    | true =>
+      rw [SourcePruningEnumerationSharedPreparedRecursive.continue_rejected recur graph templates
+        stop order workFuel metadata updated uv fragment caller memos.query before observed recorded]
+      constructor
+      · intro output impossible
+        cases impossible
+      · exact ⟨pastSeeds, sourceGrowth⟩
+    | false =>
+      have actual : EnumerationCorrectness.Success
+          (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (.inl fragment))
+          before.core (false, updated) observed := by
+        change Except.ok ((false, updated), observed) ∈ raw
+        rw [recorded]
+        exact List.mem_singleton_self _
+      obtain ⟨callbackPacket, _stable, frame, _types, _holes, _typing, fitted, alphabet⟩ :=
+        SourcePruningEnumerationRealWorkerCallbackResources.recorded_callback_current_at_original_budget
+          formulas solver inventory graph templates metadata uv fragment caller memos before seed
+          packet allocated bounded known workFuel (false, updated) observed actual
+      have massAfter : SourcePruningEnumerationPrefixAdmission.suspendedBound
+          (EnumerationExpandableIndex.frame observed before).core ≤ ceiling := by
+        change SourcePruningEnumerationPrefixAdmission.suspendedBound observed ≤ ceiling
+        rw [SourcePruningEnumerationPrefixAdmission.suspendedBound_values before.core observed frame.values]
+        exact mass
+      have inherited := outerIH inventory caller memos (EnumerationExpandableIndex.frame observed before)
+        updated seed ceiling callbackPacket fitted alphabet selectionMembers selectionLength massAfter
+        reserved sourceGrowth pastSeeds workFuel
+        (SourcePruningEnumerationRestart.decision stop order updated
+          (EnumerationExpandableIndex.frame observed before)) rfl
+      rw [SourcePruningEnumerationSharedPreparedRecursive.continue_recorded recur graph templates
+        stop order workFuel metadata updated uv fragment caller memos.query before observed recorded]
+      simpa only [recur] using inherited
+  · have stopped : SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph templates
+        stop order workFuel metadata uv fragment caller memos.query before =
+        .stopped [] (.callback uv raw) (some (caller, memos.query)) := by
+      unfold SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      dsimp only
+      split
+      · exact (successful ⟨true, _, _, by assumption⟩).elim
+      · exact (successful ⟨false, _, _, by assumption⟩).elim
+      · rfl
+    rw [stopped]
+    constructor
+    · intro output impossible
+      cases impossible
+    · intro reached _saved endpointSame
+      have callerSame : caller = reached :=
+        congrArg Prod.fst (Option.some.inj endpointSame)
+      cases callerSame
+      exact ⟨pastSeeds, sourceGrowth⟩
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

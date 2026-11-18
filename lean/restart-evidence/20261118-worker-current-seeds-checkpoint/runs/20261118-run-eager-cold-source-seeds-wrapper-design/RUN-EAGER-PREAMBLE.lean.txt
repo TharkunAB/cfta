@@ -1,0 +1,19 @@
+import MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+import MicroCFTA.SourceCurrentNativeNumericalSeedInvariant
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open InternedConstructorTemplates
+open EnumerationState (Graph)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (emitted)
+open SourceCurrentNativeNumericalSeedInvariant (Seeds)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false

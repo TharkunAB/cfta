@@ -1,0 +1,32 @@
+private theorem real_actual_source_task_endpoint_seeds_of_outer_induction
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (key : InternedBinderProtocol.NodeKey)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (outerIH : RealEagerEndpointSeedsAtDepth (bits := bits) sourceHeap entry
+      body depth ordinary bodyId holeKey fits admits graph templates checkEmpty edgesOf
+      stop order formulas solver recursiveDepth)
+    (selectionMembers : ∀ entry alternatives level names,
+      ∀ selected ∈ edgesOf (.node entry alternatives level names), selected ∈ alternatives)
+    (selectionLength : ∀ entry alternatives level names,
+      (edgesOf (.node entry alternatives level names)).length ≤ alternatives.length)
+    (root : IdentityActualSourceRoot bits) (task : IdentityActualSourceTask bits) :
+    RealActualSourceEndpointSeedsAt sourceHeap entry body depth ordinary bodyId
+      holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+      metadata uv formulas solver root task

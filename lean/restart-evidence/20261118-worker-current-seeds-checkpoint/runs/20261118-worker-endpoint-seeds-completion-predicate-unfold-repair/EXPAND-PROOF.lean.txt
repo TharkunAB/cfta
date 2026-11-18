@@ -1,0 +1,57 @@
+ := by
+  have prefixEndpoint := actual_selected_prefix_endpoint_seeds_and_growth
+    lib query signed whole accepted rootValue sourceHeap built entry body depth ordinary bodyId
+    holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before
+    packet sourceGrowth pastSeeds workFuel workFuel workFuel workFuel workFuel workFuel uv
+  rw [resumeWithNarrow]
+  generalize observedEq : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+    (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata
+    workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query = observed
+  have actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query = observed := observedEq
+  rw [actual] at prefixEndpoint
+  split <;> subst_vars
+  · dsimp only [ActualEmittedEndpointSeeds, emitted]
+    refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+    intro output impossible
+    cases impossible
+  · apply real_parked_restart_endpoint_seeds_of_outer_induction sourceHeap entry body depth ordinary bodyId
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+      outerIH inventory caller memos before metadata seed ceiling packet bounded known selectionMembers
+      selectionLength initialMass reserved sourceGrowth pastSeeds workFuel uv chosen
+    assumption
+  · dsimp only at prefixEndpoint
+    dsimp only [ActualEmittedEndpointSeeds, emitted]
+    refine ⟨?_, prefixEndpoint⟩
+    intro output impossible
+    cases impossible
+  · dsimp only at prefixEndpoint
+    dsimp only [ActualEmittedEndpointSeeds, emitted]
+    refine ⟨?_, prefixEndpoint⟩
+    intro output impossible
+    cases impossible
+  · have branch := real_right_prefix_endpoint_seeds_of_outer_induction
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+      universeStored bodyId bodyIdentity holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver recursiveDepth outerIH inventory caller memos before metadata seed ceiling packet
+      bounded known selectionMembers selectionLength initialMass reserved sourceGrowth pastSeeds
+      workFuel uv chosen actual
+    dsimp only at branch ⊢
+    split at branch <;> simp_all only
+  · dsimp only at prefixEndpoint
+    dsimp only [ActualEmittedEndpointSeeds, emitted]
+    constructor
+    · intro output impossible
+      cases impossible
+    · intro endpointCaller _endpointQueries endpointSame
+      have callerSame := congrArg Prod.fst (Option.some.inj endpointSame)
+      cases callerSame
+      exact prefixEndpoint
+  · dsimp only [ActualEmittedEndpointSeeds, emitted]
+    constructor
+    · intro output impossible
+      cases impossible
+    · intro endpointCaller _endpointQueries endpointSame
+      have callerSame := congrArg Prod.fst (Option.some.inj endpointSame)
+      cases callerSame
+      exact ⟨pastSeeds, sourceGrowth⟩

@@ -1,0 +1,36 @@
+private theorem actual_recorded_callback_endpoint_seeds_of_outer_induction
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth workFuel : Nat)
+    (outerIH : RealEagerEndpointSeedsAtDepth (bits := bits) sourceHeap entry body depth ordinary bodyId
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
+    (uv : Nat) (fragment : Fragments.Fragment Symbol) (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (allocated : FragmentBound before.core.counter fragment)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ nodeEntry rows level names,
+      ∀ selected ∈ edgesOf (.node nodeEntry rows level names), selected ∈ rows)
+    (selectionLength : ∀ nodeEntry rows level names,
+      (edgesOf (.node nodeEntry rows level names)).length ≤ rows.length)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : eagerReserved bits recursiveDepth seed ceiling)
+    (sourceGrowth : Grows sourceHeap caller.checked.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId caller.checked) :
+    ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+      (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+        (resumeWithNarrow (Typing := Typing) (width := bits + 2)
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+          stop order workFuel recursiveDepth)
+        graph templates stop order workFuel metadata uv fragment caller memos.query before)

@@ -1,0 +1,55 @@
+private theorem real_actual_source_rows_prefix_endpoint_seeds_step
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits) (height : Nat)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (nodeDepth : Nat)
+    (free : List InternedBinderProtocol.Reference) (bucket : List Suspended)
+    (rest : List (Node × List Suspended))
+    (selectionMembers : ∀ nodeEntry alternatives level names,
+      ∀ selected ∈ edgesOf (.node nodeEntry alternatives level names), selected ∈ alternatives)
+    (selectionLength : ∀ nodeEntry alternatives level names,
+      (edgesOf (.node nodeEntry alternatives level names)).length ≤ alternatives.length)
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.rows height {point with height := height + 1}
+          (.node parentEntry rows nodeDepth free) bucket rest) →
+      RealActualSourceEndpointSeedsAt sourceHeap entry body depth ordinary bodyId
+        holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth
+        workFuel metadata uv formulas solver root smaller) :
+    RealActualSourceEndpointSeedsAt sourceHeap entry body depth ordinary bodyId
+      holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth
+      workFuel metadata uv formulas solver root
+      (.rows height {point with height := height + 1}
+        (.node parentEntry rows nodeDepth free) bucket rest) ∧
+    ∀ (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+        (allInputs : List (Node × List Suspended)),
+      ActualFrameLedger formulas solver root metadata uv point.frame
+        scopeOriginal scopeBefore allInputs →
+      ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+        (.rows height {point with height := height + 1}
+          (.node parentEntry rows nodeDepth free) bucket rest) →
+      ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore allInputs
+        recursiveDepth (.rows height {point with height := height + 1}
+          (.node parentEntry rows nodeDepth free) bucket rest) →
+      Grows sourceHeap point.caller.checked.native.machine.heap →
+      Seeds sourceHeap entry body depth ordinary bodyId point.caller.checked →
+      ∀ (attempted remaining : List (EdgeValue Symbol Constraint)),
+        edgesOf (.node parentEntry rows nodeDepth free) = attempted ++ remaining →
+        ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+          (finish uv (actual_source_row_prefix_run_with_narrow
+            (SourcePruningOuterNarrow.narrow holeKey fits admits)
+            graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+            {point with height := height + 1} (.node parentEntry rows nodeDepth free)
+            bucket rest attempted))

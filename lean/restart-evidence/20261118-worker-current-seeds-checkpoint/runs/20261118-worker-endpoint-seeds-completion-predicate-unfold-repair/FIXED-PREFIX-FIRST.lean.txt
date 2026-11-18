@@ -1,0 +1,29 @@
+private theorem actual_selected_prefix_endpoint_seeds_and_growth
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (sourceGrowth : Grows sourceHeap caller.checked.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId caller.checked)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat) :
+    match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+      stop order metadata readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel
+      uv caller before memos.query with
+    | .narrowed _ _ reached _ _ _ _ _ =>
+        Seeds sourceHeap entry body depth ordinary bodyId reached.checked ∧
+          Grows sourceHeap reached.checked.native.machine.heap
+    | _ => True

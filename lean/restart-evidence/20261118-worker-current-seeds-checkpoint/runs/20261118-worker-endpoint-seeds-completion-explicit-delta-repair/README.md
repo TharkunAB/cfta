@@ -1,0 +1,11 @@
+This packet repairs the full later eleven-proof owner after actual76199 failed with fourteen diagnostics. All eleven reports from that failed run receive zero proof credit. The final Root receipt verifies 10,285 input pins. The failed run has results.json and no checked.json.
+
+ActualEmittedEndpointSeeds has a local irreducible attribute in the outer preamble. The original59197 attempt used eight `dsimp only` calls that made no progress. Removing those calls in7acc left the same predicate folded in76199. This repair explicitly expands that constant with body-local `delta ActualEmittedEndpointSeeds`. It changes no attributes.
+
+Only expand branches1,3,4,6,7 receive `delta ActualEmittedEndpointSeeds` followed by `simp only [emitted]`. Branch2 parked and branch5 right are exact. Only the none, done, and stuck outer branches receive the same delta followed by `simp only [resumeWithNarrow, emitted]`. These commands expose the conjunction and reduce the literal result. They add no proof premise or future supplier. Every other line in those proof bodies is exact. Nine other later proof bodies are exact.
+
+The frozen7967c754 packet is preserved as rejected authoring evidence. It incorrectly restored the eight original no-progress dsimp calls. Root caught that before a compiler run. It must not be selected. This new packet replaces those proposed normalizations with explicit delta; it does not claim that7967 ran or passed.
+
+All fifteen selected FIRSTs are exact, including corrected scan5b528. Invalid original scan89d3 remains preserved with no successful elaboration claim. OriginalOuter3714 and globaltask8eec remain exact. Assembly is the same68-byte import, whole fixed-four0e975 owner exact at68, and this APPEND. The previous entire later-eleven owner is not an exact prefix. No import, definition, hypothesis, runtime, fuel, limit, instance, or default changes. The probe selects11 private reports. The rebuilt4 have zero extra credit.
+
+This packet is UNCOMPILED and has zero proof credit. Root alone runs the compiler. The complete eager-worker query log, all worker admissions, native inhabitance, symbolic guard truth, Haskell correspondence, and ONE shared finite assignment for the original accepted root remain open. The future Origin candidate and paused coverage design remain outside this repair.

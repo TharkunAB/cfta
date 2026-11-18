@@ -1,0 +1,74 @@
+private theorem real_eager_full_result_query_coverage_at_original_budget
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (key : InternedBinderProtocol.NodeKey)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (universeStored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (recursiveDepth workFuel : Nat)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (metadata : Metadata Typing) (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ nodeEntry rows level names,
+      ∀ selected ∈ edgesOf (.node nodeEntry rows level names), selected ∈ rows)
+    (selectionLength : ∀ nodeEntry rows level names,
+      (edgesOf (.node nodeEntry rows level names)).length ≤ rows.length)
+    (initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : eagerReserved bits recursiveDepth seed ceiling)
+    (sourceGrowth : InternedConstructorTemplates.Grows sourceHeap caller.checked.native.machine.heap)
+    (pastSeeds : SourceCurrentNativeNumericalSeedInvariant.Seeds
+      sourceHeap entry body depth ordinary bodyId caller.checked)
+    (decision : Option SourcePruningEnumerationDriver.Next)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = decision) :
+    let outcome := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+        workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+      metadata caller memos.query before decision
+    ∃ operations : List (SourcePruningEnumerationInvocationEventLedger.Event (bits + 2)),
+      ActualFullOuterQueryCoverageAt (bits := bits)
+        holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata caller memos.query before decision outcome operations ∧
+      (∀ operation ∈ operations,
+        SourcePruningEnumerationInvocationEventLedger.AuthenticEvent operation) ∧
+      ∀ (nativeIndex : Nat) (start : Caller (bits + 2)) (saved : Queries)
+          (left right : Node) (actual : SourceEqualityNativeDemand.Outcome (bits + 2) Node),
+        (SourcePruningEnumerationInvocationNativeQueryProjection.nativeQueries operations)[nativeIndex]? =
+          some (start, saved, left, right, actual) →
+        ∃ profile : SourceCurrentAllocatedNativeResourceForecast.Profile,
+          SourceCurrentConjunctionClassScan.Ready start.checked ∧
+          SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile start.checked ∧
+          SourceCurrentAllocatedNativeCreditProfile.Admits bits profile ∧
+          Available start.checked.native.machine.heap left ∧
+          Available start.checked.native.machine.heap right ∧
+          left.free = [] ∧ right.free = [] ∧
+          actual = SourceEqualityNativeDemand.execute workFuel
+            (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+            start.checked ∧
+          (SourceCurrentNativeNumericalSeedInvariant.Seeds
+              sourceHeap entry body depth ordinary bodyId actual.state ∧
+            InternedConstructorTemplates.Grows sourceHeap actual.state.native.machine.heap) ∧
+          ∀ (count : Nat) (resume : SourceEqualityNativeDemand.Control Node)
+              (after : SourceEqualityNativeDemand.State (bits + 2)),
+            count ≤ workFuel →
+            SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace count
+              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+              start.checked resume after →
+            SourceCurrentNativeNumericalSeedInvariant.Seeds
+              sourceHeap entry body depth ordinary bodyId after ∧
+              InternedConstructorTemplates.Grows sourceHeap after.native.machine.heap

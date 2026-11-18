@@ -1,0 +1,206 @@
+ := by
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+    (resumeWithNarrow (Typing := Typing) (width := bits + 2)
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+        workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+      stop order workFuel recursiveDepth)
+    graph templates stop order workFuel metadata uv
+  let opaqueRun := SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty
+    workFuel workFuel workFuel workFuel workFuel uv scs value caller before memos.query
+  change ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+    (finish uv (SourcePruningEnumerationSharedReceiptContinuation.run hook caller memos.query opaqueRun))
+  have cost : scs.length + 1 ≤ bound + 1 := Nat.add_le_add_right bucketBound 1
+  have suspendedVariables : ∀ sc ∈ scs, sc.var < before.core.counter :=
+    ready.safe.1.values _ (List.mem_of_getElem? enumStored)
+  have pending := EnumerationReferences.pending_inputs before.core packet.pending uv (some handle) scs enumStored
+  obtain ⟨roots, paths, _storage, realized, counts, _flags⟩ := packet.valid
+  have queried :=
+    SourcePruningEnumerationSharedChildDispatchQueryEvents.observe_original_source_query_resources_and_seeds
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+      universeStored bodyId bodyIdentity seed formulas solver inventory caller before checkEmpty
+      scs value roots memos packet.context packet.safe paths counts suspendedVariables pending
+      realized available closed bounded (reserved.1.prefix cost) known sourceGrowth pastSeeds
+      workFuel workFuel workFuel workFuel workFuel
+  dsimp only at queried
+  obtain ⟨dispatchSame, returnedSeeds, _queries⟩ := queried
+  rw [dispatchSame] at returnedSeeds
+  have completedSemantics : ∀ (fragment : Fragments.Fragment Symbol)
+      (reached : Caller (bits + 2)) (saved : Queries) (after : Cached),
+      opaqueRun = some (.complete fragment reached saved after) →
+      (Seeds sourceHeap entry body depth ordinary bodyId reached.checked ∧
+        Grows sourceHeap reached.checked.native.machine.heap) →
+      ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+        (finish uv (SourcePruningEnumerationSharedReceiptContinuation.run hook caller memos.query
+          (some (.complete fragment reached saved after)))) := by
+    intro fragment reached saved after observed atReturned
+    obtain ⟨_largerBound, final, next, _replay, _post, querySame, _advance, admitted,
+        _pending, _history, afterFits, afterKnown, shape, _finalization⟩ :=
+      SourcePruningEnumerationSharedSelectedOpaqueDispatch.observed_complete_resources
+        seed formulas solver inventory caller memos metadata before checkEmpty uv handle scs value
+        packet ready enumStored incoming available closed dispatch bounded (reserved.1.prefix cost) known
+        workFuel workFuel workFuel workFuel workFuel fragment reached saved after observed
+    rcases shape with completed | stopped | rejected
+    · obtain ⟨produced, finished, same, afterPacket, _counter, afterMass⟩ := completed
+      have sameAfter : after = finished := (SelectedEdge.Result.complete.inj same).2.2.2
+      rw [← sameAfter] at afterPacket afterMass
+      have paddedFits : Fits (advance seed (bound + 1)).2 reached.checked :=
+        afterFits.mono (SourcePruningEnumerationSharedIncomingReservation.advance_count_profile_mono seed cost)
+      have paddedKnown : Heap (fun guard => guard ∈ (advance seed (bound + 1)).1)
+          reached.checked.native.machine.heap := by
+        intro key row found
+        exact (SourcePruningEnumerationSharedIncomingReservation.advance_count_alphabet_mono seed cost)
+          (afterKnown key row found)
+      have actualMass : SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ ceiling + bound := by
+        omega
+      have allocated : FragmentBound after.core.counter fragment := admitted.2.2.1
+      have callback := actual_recorded_callback_endpoint_seeds_of_outer_induction
+        sourceHeap entry body depth ordinary bodyId holeKey fits admits graph templates checkEmpty
+        edgesOf stop order formulas solver recursiveDepth workFuel outerIH next reached final after
+        metadata uv fragment (advance seed (bound + 1)) (ceiling + bound) afterPacket allocated
+        paddedFits paddedKnown selectionMembers selectionLength actualMass reserved.2
+        atReturned.2 atReturned.1
+      rw [querySame] at callback
+      have actualHook : ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+          (hook fragment reached saved after) := by
+        simpa only [hook] using callback
+      cases observedHook : hook fragment reached saved after with
+      | complete outputs actual saved =>
+        simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook,
+          finish, ActualEmittedEndpointSeeds, emitted] using actualHook
+      | stopped outputs reason endpoint =>
+        simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook,
+          finish, SourcePruningEnumerationSharedPreparedRecursive.endpoint,
+          ActualEmittedEndpointSeeds, emitted] using actualHook
+    · obtain ⟨finished, outer, waiting, impossible, _counter, _mass⟩ := stopped
+      cases impossible
+    · cases rejected
+  have stoppedSemantics (observation : ChildDispatch.Observation (bits + 2)) (candidate : Option Cached)
+      (noAdvance : NativeContinuations.advance (SelectedEdge.Result.stopped [] observation candidate) = none)
+      (atReturned : Seeds sourceHeap entry body depth ordinary bodyId observation.2.1.checked ∧
+        Grows sourceHeap observation.2.1.checked.native.machine.heap) :
+      ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+        (finish uv (SourcePruningEnumerationSharedReceiptContinuation.run hook caller memos.query
+          (some (.stopped [] observation candidate)))) := by
+    rcases observation with ⟨raw, reached, saved, outer, waiting⟩
+    have actual : SourcePruningEnumerationSharedReceiptContinuation.run hook caller memos.query
+        (some (.stopped [] (raw, reached, saved, outer, waiting) candidate)) =
+        .stopped [] [] (.edge (some (.stopped [] (raw, reached, saved, outer, waiting) candidate))
+          (reached, saved)) := by
+      simp only [SourcePruningEnumerationSharedReceiptContinuation.run, noAdvance, NativeContinuations.endpoint]
+    rw [actual]
+    constructor
+    · intro output impossible
+      cases impossible
+    · intro finalCaller _saved endpointSame
+      have callerSame : reached = finalCaller := congrArg Prod.fst (Option.some.inj endpointSame)
+      cases callerSame
+      exact atReturned
+  by_cases empty : value = .empty
+  · have observed : opaqueRun = some (.rejected caller memos.query before) := by
+      simpa only [opaqueRun, empty] using SourcePruningEnumerationSharedSelectedOpaqueDispatch.empty
+        checkEmpty workFuel workFuel workFuel workFuel workFuel uv scs caller before memos.query
+    rw [observed]
+    constructor
+    · intro output impossible
+      cases impossible
+    · exact ⟨pastSeeds, sourceGrowth⟩
+  · have receiptShape : opaqueRun =
+        match ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+            scs value caller before memos.query with
+        | ((.ok (some [.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+            match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+            | some finished => some (.complete fragment reached saved finished)
+            | none => some (.finalizeStopped fragment reached saved after)
+        | (observation, candidate) => some (.stopped [] observation candidate) := by
+      dsimp only [opaqueRun]
+      unfold SourcePruningEnumerationSharedSelectedOpaqueDispatch.run
+      rw [ite_eq_right empty]
+      generalize observed : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+        scs value caller before memos.query = receipt
+      cases value <;> simp only [dispatch, Bool.false_eq_true, ↓reduceIte]
+      all_goals
+        rcases receipt with ⟨⟨raw, reached, saved, outer, waiting⟩, candidate⟩
+        cases raw with
+        | error fault => rfl
+        | ok raw =>
+          cases raw with
+          | none => rfl
+          | some results =>
+            cases results with
+            | nil => rfl
+            | cons first rest =>
+              cases first with
+              | error fault => rfl
+              | ok payload =>
+                rcases payload with ⟨fragment, returned⟩
+                cases rest with
+                | cons second tail => rfl
+                | nil => cases candidate <;> rfl
+    rw [receiptShape]
+    cases childAt : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+        scs value caller before memos.query with
+    | mk observation candidate =>
+      rcases observation with ⟨raw, reached, saved, outer, waiting⟩
+      have atReturned : Seeds sourceHeap entry body depth ordinary bodyId reached.checked ∧
+          Grows sourceHeap reached.checked.native.machine.heap := by
+        simpa only [childAt] using returnedSeeds
+      cases raw with
+      | error fault =>
+        exact stoppedSemantics (.error fault, reached, saved, outer, waiting) candidate
+          (by cases candidate <;> rfl) atReturned
+      | ok possible =>
+        cases possible with
+        | none =>
+          exact stoppedSemantics (.ok none, reached, saved, outer, waiting) candidate
+            (by cases candidate <;> rfl) atReturned
+        | some results =>
+          cases results with
+          | nil =>
+            cases candidate with
+            | none => exact stoppedSemantics (.ok (some []), reached, saved, outer, waiting) none rfl atReturned
+            | some after =>
+              constructor
+              · intro output impossible
+                cases impossible
+              · exact atReturned
+          | cons first rest =>
+            cases first with
+            | error fault =>
+              exact stoppedSemantics (.ok (some (.error fault :: rest)), reached, saved, outer, waiting)
+                candidate (by cases candidate <;> rfl) atReturned
+            | ok pair =>
+              rcases pair with ⟨fragment, returned⟩
+              cases rest with
+              | cons second more =>
+                exact stoppedSemantics (.ok (some (.ok (fragment, returned) :: second :: more)),
+                  reached, saved, outer, waiting) candidate (by cases candidate <;> rfl) atReturned
+              | nil =>
+                cases candidate with
+                | none =>
+                  exact stoppedSemantics (.ok (some [.ok (fragment, returned)]), reached, saved, outer, waiting)
+                    none rfl atReturned
+                | some after =>
+                  change ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+                    (finish uv (SourcePruningEnumerationSharedReceiptContinuation.run hook caller memos.query
+                      (match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+                        workFuel uv fragment after with
+                      | some finished => some (.complete fragment reached saved finished)
+                      | none => some (.finalizeStopped fragment reached saved after))))
+                  cases finalized : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+                      workFuel uv fragment after with
+                  | none =>
+                    constructor
+                    · intro output impossible
+                      cases impossible
+                    · intro finalCaller _saved endpointSame
+                      have callerSame : reached = finalCaller :=
+                        congrArg Prod.fst (Option.some.inj endpointSame)
+                      cases callerSame
+                      exact atReturned
+                  | some finished =>
+                    exact completedSemantics fragment reached saved finished
+                      (SourcePruningEnumerationSharedSelectedOpaqueDispatch.finalized checkEmpty
+                        workFuel workFuel workFuel workFuel workFuel uv scs value caller reached before
+                        after finished memos.query saved fragment returned outer waiting empty dispatch childAt finalized)
+                      atReturned

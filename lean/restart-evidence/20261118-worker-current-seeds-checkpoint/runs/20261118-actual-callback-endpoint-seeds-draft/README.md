@@ -1,0 +1,9 @@
+This frozen candidate adds one private semantic callback factor. It preserves the entire prior selected-prefix endpoint candidate at offset zero. The FIRST was frozen before the proof. The context opens the existing FragmentBound name explicitly. It adds no imports, definitions, runtime code, proof limits, or public API.
+
+The inputs are the actual current Packet, allocated fragment, Fits, Heap, suspended mass, reservation, past source Seeds/Grows, and the legitimate OuterIH n. No caller supplies the callback's future result, Packet, Current, or Seeds. The callback depth and workFuel remain unchanged.
+
+The proof follows the one actual recordTypes list. A true singleton returns the same caller with no outputs. A false singleton supplies the actual updated metadata and observed core. recorded_callback_current_at_original_budget derives that same framed Packet, Fits, Heap, and frame. The frame's exact values equality retains the suspended mass bound. The proof applies OuterIH n at the same caller and memos, updated metadata, actual frame, original seed/ceiling, and literal actual restart decision with its reflexive receipt.
+
+Every other callback result stops with the actual caller and query memos. The proof retains all emitted output callers and the complete or actual Some stopped endpoint. It invents no caller for None. It does not change n to n-1 or compare independent callback histories.
+
+This factor is needed by the prepared opaque/terminal branch and can also serve the genuine captured finalizer cut. It is not the full prepared-root theorem. The renamed prepared-root FIRST0b8d, unchanged outer3714, and original standalone/global targets remain open. This packet was not compiled and receives zero theorem credit. Root owns all Source, Work, compiler, Git, and publication actions.

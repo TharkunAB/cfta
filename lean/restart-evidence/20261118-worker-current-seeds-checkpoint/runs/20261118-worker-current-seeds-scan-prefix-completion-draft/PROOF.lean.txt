@@ -1,0 +1,60 @@
+ := by
+  dsimp only
+  let parent : IdentityActualSourcePoint bits := {point with height := height + 1}
+  let incoming : Node := .node parentEntry rows depth free
+  let rowSeed := identity_actual_source_row_boundary recursiveDepth root.limit root.own
+    height parent attempted.length
+  have resourceDepth := real_eager_emitted_complete_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+  have resourceTaskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.rows height parent incoming bucket rest) →
+      RealActualSourceCorrectAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv formulas solver root smaller := by
+    intro smaller _decrease
+    exact real_actual_source_task_resources holeKey fits admits graph templates checkEmpty edgesOf
+      stop order recursiveDepth workFuel metadata uv formulas solver resourceDepth root
+      selectionMembers selectionLength smaller
+  have pastResources := real_actual_source_rows_prefix_resources
+    holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+    metadata uv formulas solver root point height parentEntry rows depth free bucket rest
+    selectionMembers selectionLength resourceTaskIH scopeOriginal scopeBefore allInputs
+    ancestors origin current attempted remaining sourceRows
+  rw [past] at pastResources
+  dsimp only [SourcePruningEnumerationSharedPreparedRecursive.finish] at pastResources
+  have entryInputs := current.1
+  obtain ⟨_shapes, _kept, inventory, memos, packet, _querySame, _previous,
+      _mass, _counted, _subset, _genuine⟩ := current.1
+  obtain ⟨next, final, post, querySame, _reachedPacket, prefixFits, prefixKnown,
+      _outputResources⟩ :=
+    SourcePruningEnumerationSharedPreparedRecursive.completed_captured_packet
+      formulas solver inventory parent.caller memos metadata parent.before rowSeed
+      earlier reached saved packet pastResources.2
+  have prefixInputs : IdentityActualSourcePoint.genericInputs formulas solver root
+      scopeOriginal metadata scopeBefore allInputs
+      {parent with caller := reached, queries := saved, seed := rowSeed}
+      ((incoming, bucket) :: rest) (parent.count + 1) := by
+    exact real_rows_inputs_native_post formulas solver root scopeOriginal metadata scopeBefore
+      allInputs parent ((incoming, bucket) :: rest) (parent.count + 1)
+      next reached final saved entryInputs post querySame
+  have semanticTaskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.rows height parent incoming bucket rest) →
+      RealActualSourceEndpointSeedsAt sourceHeap universeEntry universeBody universeDepth
+        universeOrdinary bodyId holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv formulas solver root smaller := by
+    intro smaller _decrease
+    exact real_actual_source_task_endpoint_seeds_at_original_budget
+      lib query signed whole accepted rootValue sourceHeap built key universeEntry universeBody
+      universeDepth universeOrdinary stored bodyId bodyIdentity holeKey fits admits graph templates
+      checkEmpty edgesOf stop order formulas solver recursiveDepth workFuel metadata uv
+      selectionMembers selectionLength root smaller
+  have semanticPrefix :=
+    (real_actual_source_rows_prefix_endpoint_seeds_step sourceHeap universeEntry universeBody
+      universeDepth universeOrdinary bodyId holeKey fits admits graph templates checkEmpty edgesOf
+      stop order recursiveDepth workFuel metadata uv formulas solver root point height parentEntry
+      rows depth free bucket rest selectionMembers selectionLength semanticTaskIH).2
+      scopeOriginal scopeBefore allInputs ancestors origin current sourceGrowth pastSeeds
+      attempted remaining sourceRows
+  rw [past] at semanticPrefix
+  exact ⟨semanticPrefix.2.2, semanticPrefix.2.1, prefixInputs, prefixFits, prefixKnown⟩

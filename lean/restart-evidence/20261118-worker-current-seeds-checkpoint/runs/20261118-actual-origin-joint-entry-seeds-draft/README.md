@@ -1,0 +1,13 @@
+This owner-local candidate derives one joint scope, Frame, Current, source growth, and Seeds for every task in a genuine ActualSourceOrigin history from one ordinary prepared root. It adds one private theorem. It adds no helper, definition, public export, runtime operation, import, or proof-limit change. FIRSTffbb was frozen before the proof.
+
+The inputs retain the original CURRENT accepted build, supplied genuine stored U and body identity, exact root, configuration, metadata, work and callback fuels, and ordinary captured-root resource admissions. Only the root caller supplies past Seeds and source growth. No per-task Current, Frame, Seeds, semantic result, Profile, or future supplier is an input. The proof derives Shapes, the resource all-depth theorem, and the semantic all-depth theorem internally.
+
+The proof inducts the supplied ActualSourceOrigin derivation. In capturedTuple, the resource and semantic prefix facts use the same completed-prefix equality. The actual preparation equality identifies the same staged data, residual, and own cache. Tuple-head and ordinary-row delegation retain the caller. In selectedOwn, original89d3 supplies the joint reached-prefix cut, including zero-output and empty prefixes. The actual own-current producer supplies the same nested tuple and frame.
+
+In selectedReturn, the proof eliminates the selected constructor of the SAME recovered FrameLedger. That constructor supplies the actual parent snapshot and captured preparation. The proof reconstructs the parent point from those stored values. It does not infer omitted before, mass, or seed fields from equal frame indices. The returned point ignores those omitted entry fields. The existing joint selected-return cut supplies the restored scope and semantic endpoint together.
+
+In fallbackChildTail, the proof applies the all-outcome child observer once. Its exact result is rewritten by the same actual ChildDispatch receipt. The actual fallback-current theorem supplies the continuation's frame and Current. The returned Seeds and growth use that same caller.
+
+The complete prior later-eleven owner is an exact prefix. Its prospective dependencies require Root compilation. This packet has not been compiled and has zero proof credit. Rebuilt prior proofs add no credit. No Source, Audit, active Work, compiler, Git, board, runtime, or cleanup operation ran here.
+
+This is an ordinary prepared-root entry producer. It does not yet supply an ordered complete worker query list, opaque-root coverage, or a public source initialization wrapper. It does not invent Mu existence for a Mu-free build. Native inhabitance, guard truth, Type/Marker compatibility, Haskell correspondence, and ONE finite assignment completing the original accepted root remain open.

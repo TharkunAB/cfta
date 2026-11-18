@@ -1,0 +1,5 @@
+Frozen design only. No Lean definition, theorem proof, runtime observer, history datatype, normal Source change, compiler invocation, or proof credit is added. The prospective FIRST refers to a deliberately undefined proof relation. It is not an elaborated declaration.
+
+The design extends the existing endpoint outer/task induction to full HookResult/Fold coverage. It preserves zero-output rows, stopped rows, callbacks before a stop, duplicates, caller/memo threading, exact frames, and original fuels. Source and candidate pins identify the exact definitions reviewed. Failed later-eleven attempts and prospective entry dependencies keep their separate status.
+
+The final source-name check corrected the proposed decision type to EnumerationState.Next, where the existing source declares it. The first design packet is preserved. Its misspelled SourcePruningEnumerationDriver.Next was never elaborated. This is a source-name correction in an unimplemented prospective FIRST, with no changed mathematical premise or implementation claim.

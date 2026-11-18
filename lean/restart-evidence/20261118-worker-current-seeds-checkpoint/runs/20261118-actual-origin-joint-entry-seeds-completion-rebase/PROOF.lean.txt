@@ -1,0 +1,205 @@
+ := by
+  have resourceDepth := real_eager_emitted_complete_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+  have outerDepth := real_eager_endpoint_seeds_at_every_depth (bits := bits)
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+    universeStored bodyId bodyIdentity holeKey fits admits graph templates checkEmpty edgesOf
+    stop order formulas solver recursiveDepth
+  have checkpoint := real_actual_prepared_scan_prefixes_at_any_budget
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+    recursiveDepth workFuel resourceDepth inventory root.caller memos metadata root.before
+    root.rawSeed root.ceiling uv handle root.scs parentEntry rows parentDepth free packet ready
+    enumStored incoming currentFits known mass bucketBound available closed nonterminal
+    selectionMembers selectionLength reserved
+  rw [querySame] at checkpoint
+  dsimp only at checkpoint
+  obtain ⟨heights, shapes, resourcePrefixes⟩ := checkpoint
+  have rootShapes : root.Shapes := by
+    simpa only [IdentityActualSourceRoot.Shapes, IdentityActualSourceRoot.limit,
+      IdentityActualSourceRoot.own, IdentityActualSourceRoot.start] using And.intro heights shapes
+  have rootPrefixes := actual_captured_root_prefix_endpoint_seeds_of_outer_induction
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+    universeStored bodyId bodyIdentity holeKey fits admits graph templates checkEmpty edgesOf
+    stop order formulas solver recursiveDepth workFuel outerDepth inventory root.caller memos
+    metadata root.before root.rawSeed root.ceiling uv handle root.scs parentEntry rows parentDepth
+    free packet ready enumStored incoming currentFits known mass bucketBound available closed
+    nonterminal selectionMembers selectionLength reserved sourceGrowth pastSeeds
+  rw [querySame] at rootPrefixes
+  have rootBounded : ∀ sc ∈ root.scs, sc.var < root.before.core.counter :=
+    ready.safe.1.values _ (List.mem_of_getElem? enumStored)
+  have rootPending := EnumerationReferences.pending_inputs root.before.core packet.pending uv
+    (some handle) root.scs enumStored
+  intro task origin
+  induction origin with
+  | capturedTuple attempted remaining edge residual processed outputs rowCaller rowQueries ownCache
+      staged selected past prepared =>
+    dsimp only [IdentityActualSourceTask.point]
+    have sourceRows : edgesOf (.node parentEntry rows parentDepth free) = attempted ++ edge :: remaining := by
+      simpa only [sourceNode] using selected
+    have prefixSemantics := rootPrefixes attempted (edge :: remaining) sourceRows
+    change ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+      (finish uv (SourcePruningEnumerationSharedBranching.scan
+        (actual_source_root_visit_with_narrow (bits := bits)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+          stop order recursiveDepth workFuel metadata uv root.scs)
+        root.before attempted root.caller root.queries)) at prefixSemantics
+    rw [past] at prefixSemantics
+    obtain ⟨next, final, post, prefixQuerySame, reachedPacket, prefixFits, prefixKnown,
+        _kept, _mass⟩ :=
+      (resourcePrefixes attempted (edge :: remaining) sourceRows).2.2
+        processed outputs rowCaller rowQueries past
+    have nativeFits : Fits (root.rowSeed recursiveDepth attempted.length).2 rowCaller.checked := by
+      simpa only [IdentityActualSourceRoot.rowSeed, IdentityActualSourceRoot.limit,
+        IdentityActualSourceRoot.own, IdentityActualSourceRoot.start] using prefixFits
+    have nativeKnown : Heap (fun guard => guard ∈ (root.rowSeed recursiveDepth attempted.length).1)
+        rowCaller.checked.native.machine.heap := by
+      simpa only [IdentityActualSourceRoot.rowSeed, IdentityActualSourceRoot.limit,
+        IdentityActualSourceRoot.own, IdentityActualSourceRoot.start] using prefixKnown
+    cases allowed : arityAllows edge.children.length root.scs with
+    | false =>
+      simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, Bool.false_eq_true,
+        ↓reduceIte] at prepared
+      cases prepared
+    | true =>
+      cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+      | none =>
+        simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte, projected] at prepared
+        cases prepared
+      | some projection =>
+        obtain ⟨tries, projectedResidual⟩ := projection
+        obtain ⟨rowOwn, preparedNow, ledger, _actualOrigin, current⟩ :=
+          real_actual_source_captured_own_current holeKey fits admits graph templates checkEmpty
+            edgesOf stop order recursiveDepth workFuel metadata uv handle formulas solver root
+            parentEntry rows parentDepth free sourceNode rootShapes available closed mass bucketBound
+            rootBounded rootPending ready enumStored incoming next rowCaller final rowQueries
+            reachedPacket prefixQuerySame post.effects.keeps attempted remaining edge tries
+            projectedResidual processed outputs selected past nativeFits nativeKnown reserved
+            selectionMembers selectionLength allowed projected
+        have shape := (List.cons.inj (Option.some.inj (prepared.symm.trans preparedNow))).1
+        have payloadSame := (Prod.mk.inj shape).1
+        have stagedSame := (Prod.mk.inj (Prod.mk.inj payloadSame).2).1
+        have residualSame := (Prod.mk.inj (Prod.mk.inj payloadSame).2).2
+        have cacheSame := (Prod.mk.inj shape).2
+        subst staged
+        subst residual
+        subst ownCache
+        refine ⟨rowCaller, rowOwn, _, ledger, current, ?_, ?_⟩
+        · exact prefixSemantics.2.2
+        · exact prefixSemantics.2.1
+  | tupleHead point count incomingNode bucket rest previous ih =>
+    dsimp only [IdentityActualSourceTask.point] at ih ⊢
+    obtain ⟨scopeOriginal, scopeBefore, allInputs, ledger, current, growth, seeds⟩ := ih
+    obtain ⟨_actualOrigin, childCurrent, _decrease⟩ := actual_source_cons_current
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+      stop order recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore
+      allInputs point count incomingNode bucket rest previous current
+    exact ⟨scopeOriginal, scopeBefore, allInputs, ledger, childCurrent, growth, seeds⟩
+  | ordinaryRows point height incomingNode bucket rest previous ordinaryBranch ih =>
+    dsimp only [IdentityActualSourceTask.point] at ih ⊢
+    obtain ⟨scopeOriginal, scopeBefore, allInputs, ledger, current, growth, seeds⟩ := ih
+    obtain ⟨_actualOrigin, rowsCurrent, _decrease⟩ := actual_source_ordinary_current
+      holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+      metadata uv formulas solver root scopeOriginal scopeBefore allInputs point height incomingNode
+      bucket rest previous ordinaryBranch current
+    exact ⟨scopeOriginal, scopeBefore, allInputs, ledger, rowsCurrent, growth, seeds⟩
+  | selectedOwn point height nodeEntry nodeRows nodeDepth nodeFree bucket rest attempted remaining
+      edge residual processed outputs rowCaller rowQueries rowOwn staged previous sourceRows
+      _selected past prepared _lower ih =>
+    dsimp only [IdentityActualSourceTask.point] at ih ⊢
+    obtain ⟨scopeOriginal, scopeBefore, allInputs, ancestors, rowCurrent, growth, seeds⟩ := ih
+    have admission := rowCurrent.2.2.2
+    obtain ⟨prefixGrowth, prefixSeeds, prefixInputs, prefixFits, prefixKnown⟩ :=
+      actual_source_rows_prefix_current_and_seeds_at_original_budget
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+        universeStored bodyId bodyIdentity holeKey fits admits graph templates checkEmpty edgesOf
+        stop order recursiveDepth workFuel metadata uv formulas solver selectionMembers selectionLength
+        root point height nodeEntry nodeRows nodeDepth nodeFree bucket rest scopeOriginal scopeBefore
+        allInputs ancestors previous rowCurrent growth seeds attempted (edge :: remaining) processed outputs
+        rowCaller rowQueries sourceRows past
+    cases allowed : arityAllows edge.children.length bucket with
+    | false =>
+      simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, Bool.false_eq_true,
+        ↓reduceIte] at prepared
+      cases prepared
+    | true =>
+      cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+      | none =>
+        simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte, projected] at prepared
+        cases prepared
+      | some projection =>
+        obtain ⟨tries, projectedResidual⟩ := projection
+        obtain ⟨actualOwn, preparedNow, _innerOrigin, ledger, current, _actualRow, _decrease⟩ :=
+          real_rows_selected_own_current holeKey fits admits graph templates checkEmpty edgesOf
+            stop order recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore
+            allInputs point height nodeEntry nodeRows nodeDepth nodeFree bucket rest attempted remaining
+            edge tries projectedResidual processed outputs rowCaller rowQueries previous ancestors
+            sourceRows past prefixInputs prefixFits prefixKnown admission
+            (selectionMembers nodeEntry nodeRows nodeDepth nodeFree)
+            (selectionLength nodeEntry nodeRows nodeDepth nodeFree) allowed projected
+        have shape := (List.cons.inj (Option.some.inj (prepared.symm.trans preparedNow))).1
+        have payloadSame := (Prod.mk.inj shape).1
+        have stagedSame := (Prod.mk.inj (Prod.mk.inj payloadSame).2).1
+        have residualSame := (Prod.mk.inj (Prod.mk.inj payloadSame).2).2
+        have cacheSame := (Prod.mk.inj shape).2
+        subst staged
+        subst residual
+        subst rowOwn
+        refine ⟨rowCaller, actualOwn, _, ledger, current, ?_, ?_⟩
+        · exact prefixGrowth
+        · exact prefixSeeds
+  | selectedReturn entryPoint currentPoint rest edge residual previous ih =>
+    dsimp only [IdentityActualSourceTask.point] at ih ⊢
+    obtain ⟨scopeOriginal, scopeBefore, allInputs, ledger, current, growth, seeds⟩ := ih
+    cases entryPoint with
+    | mk entryFrame entryCompleted entryCaller entryBefore entryQueries entryHeight entryCount
+        entryBound entryMass entrySeed =>
+      cases ledger with
+      | selected parent outerOriginal outerBefore outerInputs ancestors completedPrefix rest incomingNode
+          bucket capturedCaller capturedQueries capturedBefore actualOwn edge residual parentHeight
+          parentCount parentBound parentMass parentSeed inventory memos staged packet querySame
+          previousInputs member prepared snapshot =>
+        let parentPoint : IdentityActualSourcePoint bits := {
+          frame := parent
+          completed := completedPrefix
+          caller := scopeOriginal
+          before := capturedBefore
+          queries := capturedQueries
+          height := parentHeight
+          count := parentCount
+          bound := parentBound
+          mass := parentMass
+          seed := parentSeed }
+        obtain ⟨_returnedOrigin, returnedLedger, returnedCurrent, _numeric, _alphabet,
+            _checkedSame, returnedSeeds, returnedGrowth, _decrease, _endpointIff⟩ :=
+          actual_source_selected_return_current_and_endpoint_seeds
+            sourceHeap entry body depth ordinary bodyId holeKey fits admits graph templates
+            checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root
+            outerOriginal outerBefore outerInputs parentPoint currentPoint incomingNode bucket rest
+            edge residual scopeBefore staged ancestors snapshot prepared previous current growth seeds
+        refine ⟨outerOriginal, outerBefore, outerInputs, ?_, ?_, ?_, ?_⟩
+        · simpa only [IdentityActualSourceTask.point, identity_actual_source_return_point, parentPoint]
+            using returnedLedger
+        · simpa only [identity_actual_source_return_point, parentPoint] using returnedCurrent
+        · simpa only [IdentityActualSourceTask.point, identity_actual_source_return_point, parentPoint]
+            using returnedGrowth
+        · simpa only [IdentityActualSourceTask.point, identity_actual_source_return_point, parentPoint]
+            using returnedSeeds
+  | fallbackChildTail point incomingNode bucket rest fragment returned outer reached saved after
+      waiting previous fallback observed ih =>
+    dsimp only [IdentityActualSourceTask.point] at ih ⊢
+    obtain ⟨scopeOriginal, scopeBefore, allInputs, ancestors, current, growth, seeds⟩ := ih
+    have native := actual_source_child_query_resources_and_seeds
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary
+      universeStored bodyId bodyIdentity formulas solver root point scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth incomingNode bucket rest current growth seeds checkEmpty workFuel
+      workFuel workFuel workFuel workFuel
+    have returnedSemantics := native.2.1
+    rw [native.1, observed] at returnedSemantics
+    obtain ⟨_inputs, _returnedSame, _actualOrigin, returnedLedger, returnedCurrent,
+        _runtime, _decrease, _forecast, _included, _positions⟩ :=
+      actual_source_fallback_child_current holeKey fits admits graph templates checkEmpty edgesOf
+        stop order recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore
+        allInputs point incomingNode bucket rest previous ancestors current fallback fragment returned
+        outer reached saved after waiting observed
+    exact ⟨scopeOriginal, scopeBefore, allInputs, returnedLedger, returnedCurrent,
+      returnedSemantics.2, returnedSemantics.1⟩

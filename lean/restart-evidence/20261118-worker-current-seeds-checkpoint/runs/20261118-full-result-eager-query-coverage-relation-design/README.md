@@ -1,0 +1,3 @@
+Frozen design only. No Lean definition, theorem proof, runtime observer, history datatype, normal Source change, compiler invocation, or proof credit is added. The prospective FIRST refers to a deliberately undefined proof relation. It is not an elaborated declaration.
+
+The design extends the existing endpoint outer/task induction to full HookResult/Fold coverage. It preserves zero-output rows, stopped rows, callbacks before a stop, duplicates, caller/memo threading, exact frames, and original fuels. Source and candidate pins identify the exact definitions reviewed. Failed later-eleven attempts and prospective entry dependencies keep their separate status.

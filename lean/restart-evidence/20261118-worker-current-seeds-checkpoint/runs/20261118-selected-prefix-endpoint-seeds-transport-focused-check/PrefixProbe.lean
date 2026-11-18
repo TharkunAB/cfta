@@ -1,0 +1,203 @@
+import MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+import MicroCFTA.SourcePruningEnumerationSelectedPrefixNarrowNoNewMu
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure emitted finish)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourceCurrentNativeNumericalSeedInvariant (Seeds)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+open SourcePruningEnumerationNodes (lookupNode)
+private theorem actual_selected_prefix_endpoint_seeds_and_growth
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (sourceGrowth : Grows sourceHeap caller.checked.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId caller.checked)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat) :
+    match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+      stop order metadata readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel
+      uv caller before memos.query with
+    | .narrowed _ _ reached _ _ _ _ _ =>
+        Seeds sourceHeap entry body depth ordinary bodyId reached.checked ∧
+          Grows sourceHeap reached.checked.native.machine.heap
+    | _ => True
+ := by
+  have transport {first second : DecidableEq Symbol}
+      (snapshot : SourceEqualityNativeDemand.State (bits + 2))
+      (value : @Seeds first (inferInstance) (bits + 2) sourceHeap entry body depth ordinary bodyId snapshot) :
+      @Seeds second (inferInstance) (bits + 2) sourceHeap entry body depth ordinary bodyId snapshot := by
+    cases Subsingleton.elim first second
+    exact value
+  have facts : InternedNestedFacts.Facts caller.checked.native.machine.heap :=
+    packet.context.ready.semantic.ready.semantic.1.normal.facts
+  have sourcePrepared := SourceSynthesisCurrentUniverseOwnership.current_build_prepared
+    lib query signed whole accepted rootValue sourceHeap built
+  have currentPrepared := sourcePrepared.preserve pastSeeds.1
+  unfold SourcePruningEnumerationSelectedStep.runPrefix
+    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+  dsimp only
+  generalize ExceptT.run (getValue readFuel uv before.core) = read
+  cases read with
+  | nil => trivial
+  | cons first rest =>
+    cases rest with
+    | cons _ _ =>
+      cases first with
+      | error _ => trivial
+      | ok pair =>
+        obtain ⟨value, _readAfter⟩ := pair
+        cases value with
+        | eliminated | enumerated _ => trivial
+        | unenumerated handle _ => cases handle <;> trivial
+    | nil =>
+      cases first with
+      | error _ => trivial
+      | ok pair =>
+        obtain ⟨value, readAfter⟩ := pair
+        cases value with
+        | eliminated | enumerated _ => trivial
+        | unenumerated handle scs =>
+          cases handle with
+          | none => trivial
+          | some oldHandle =>
+            dsimp only
+            generalize ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+              caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter) = check
+            cases check with
+            | nil => trivial
+            | cons first rest =>
+              cases rest with
+              | cons _ _ =>
+                cases first with
+                | error _ => trivial
+                | ok pair =>
+                  obtain ⟨repeated, _checked⟩ := pair
+                  cases repeated <;> trivial
+              | nil =>
+                cases first with
+                | error _ => trivial
+                | ok pair =>
+                  obtain ⟨repeated, checked⟩ := pair
+                  cases repeated with
+                  | true => trivial
+                  | false =>
+                    cases decoded : lookupNode caller.checked.native.machine.heap oldHandle with
+                    | none => trivial
+                    | some oldValue =>
+                      have available : Available caller.checked.native.machine.heap oldValue := by
+                        cases oldHandle with
+                        | zero =>
+                          have same : Value.empty = oldValue := Option.some.inj decoded
+                          rw [← same]
+                          exact InternedProbeProvenance.empty_available _
+                        | succ identity =>
+                          cases issued : caller.checked.native.machine.heap.nodes.issued identity with
+                          | none =>
+                            simp only [lookupNode, issued] at decoded
+                            cases decoded
+                          | some cacheKey =>
+                            cases canonical : caller.checked.native.machine.heap.nodes.table cacheKey with
+                            | none =>
+                              simp only [lookupNode, issued, canonical] at decoded
+                              cases decoded
+                            | some cacheEntry =>
+                              by_cases winner : cacheEntry.identity = identity
+                              · exact facts.cached.nodes cacheKey oldValue (by
+                                  simpa only [lookupNode, issued, canonical, ite_eq_left winner] using decoded)
+                              · simp only [lookupNode, issued, canonical, ite_eq_right winner] at decoded
+                                cases decoded
+                      have retained := SourcePruningEnumerationAction.original_source_prepare_endpoint_preserves_seeds
+                        lib query signed whole accepted rootValue sourceHeap built entry body depth ordinary
+                        bodyId holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs
+                        oldValue caller facts decoded (transport caller.checked pastSeeds)
+                      have primitiveGrowth := SourcePruningEnumerationAction.prepare_endpoint_grows
+                        holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue
+                        caller facts currentPrepared available
+                      let nativeResult := SourcePruningEnumerationAction.prepare (EnumGuard := Constraint)
+                        holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue
+                        caller.checked.native.machine.heap
+                      let reached : Caller (bits + 2) := SourceCurrentAllocatedPartialState.advance caller
+                        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+                          ⟨nativeResult.state, caller.checked.operations⟩) caller.fourth caller.merge
+                      have endpoint : Seeds sourceHeap entry body depth ordinary bodyId reached.checked ∧
+                          Grows sourceHeap reached.checked.native.machine.heap :=
+                        ⟨transport reached.checked retained.2.2.2.2, grows_trans sourceGrowth primitiveGrowth⟩
+                      dsimp only [reached, nativeResult, SourcePruningEnumerationAction.prepare] at endpoint
+                      dsimp only
+                      generalize preparedAt : SourcePruningEnumerationAction.prepareWithNarrow
+                        (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata nativeFuel
+                        representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap =
+                          preparedResult at endpoint ⊢
+                      cases preparedResult with
+                      | failed fault heap => simpa only [MergedSourceComparison.Result.state] using endpoint
+                      | done pair heap =>
+                        obtain ⟨value, action⟩ := pair
+                        cases action with
+                        | none => simpa only [MergedSourceComparison.Result.state] using endpoint
+                        | some action =>
+                          dsimp only
+                          generalize ExceptT.run (action checked) = raw
+                          cases raw with
+                          | nil => simpa only [MergedSourceComparison.Result.state] using endpoint
+                          | cons first rest =>
+                            cases rest with
+                            | cons _ _ =>
+                              cases first with
+                              | error _ => simpa only [MergedSourceComparison.Result.state] using endpoint
+                              | ok pair =>
+                                obtain ⟨token, _observed⟩ := pair
+                                cases token
+                                simpa only [MergedSourceComparison.Result.state] using endpoint
+                            | nil =>
+                              cases first with
+                              | error _ => simpa only [MergedSourceComparison.Result.state] using endpoint
+                              | ok pair =>
+                                obtain ⟨token, observed⟩ := pair
+                                cases token
+                                dsimp only
+                                cases SourcePruningEnumerationNodes.encodeNode value with
+                                | none => simpa only [MergedSourceComparison.Result.state] using endpoint
+                                | some newHandle =>
+                                  dsimp only
+                                  cases SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel
+                                      uv oldHandle newHandle scs before observed with
+                                  | none => simpa only [MergedSourceComparison.Result.state] using endpoint
+                                  | some attached =>
+                                    have recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes
+                                        graph templates callbackFuel metadata uv (.inr newHandle) attached.core) =
+                                        [.ok ((false, metadata), attached.core)] := by
+                                      rw [SourcePruningRecordTypes.recordTypes_inr]
+                                      rfl
+                                    simpa only [recorded, MergedSourceComparison.Result.state] using endpoint
+
+#print axioms actual_selected_prefix_endpoint_seeds_and_growth
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
