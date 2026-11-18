@@ -1,0 +1,8 @@
+ :=
+  operations.flatMap fun operation =>
+    match operation with
+    | .prepare _ _ _ _ _ _ _ => []
+    | .residual _ _ _ _ _ _ _ => []
+    | .dispatch _ checkEmpty r n p h k scs incoming caller before queries _ _ =>
+        (SourcePruningEnumerationSharedChildDispatchQueryEvents.observe
+          checkEmpty r n p h k scs incoming caller before queries).2

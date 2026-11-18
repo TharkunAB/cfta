@@ -1,0 +1,8 @@
+theorem observe_exact
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (scs : List Suspended) (incoming : Node) (caller : Caller width)
+    (before : Cached) (queries : Queries) :
+    (observe checkEmpty representativeFuel nativeFuel p h indexFuel
+      scs incoming caller before queries).1 =
+      SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+        checkEmpty representativeFuel nativeFuel p h indexFuel scs incoming caller before queries

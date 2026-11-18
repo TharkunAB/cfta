@@ -1,0 +1,19 @@
+theorem native_query_origin
+    (operations : List (Operation width))
+    (authentic : ∀ operation ∈ operations,
+      SourcePruningEnumerationInvocationEventLedger.AuthenticEvent operation)
+    (nativeIndex : Nat) (queryEvent : QueryEvent width)
+    (found : (nativeQueries operations)[nativeIndex]? = some queryEvent) :
+    ∃ (operationIndex : Nat) (path : List Nat) (checkEmpty : Bool) (r n p h k : Nat)
+        (scs : List Suspended) (incoming : Node) (caller : Caller width)
+        (before : Cached) (queries : Queries) (recorded : Observation width)
+        (candidate : Option Cached) (localIndex : Nat),
+      operations[operationIndex]? = some (.dispatch path checkEmpty r n p h k
+        scs incoming caller before queries recorded candidate) ∧
+      SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+        checkEmpty r n p h k scs incoming caller before queries = (recorded, candidate) ∧
+      (SourcePruningEnumerationSharedChildDispatchQueryEvents.observe
+        checkEmpty r n p h k scs incoming caller before queries).1 = (recorded, candidate) ∧
+      ((SourcePruningEnumerationSharedChildDispatchQueryEvents.observe
+        checkEmpty r n p h k scs incoming caller before queries).2)[localIndex]? = some queryEvent ∧
+      nativeIndex = (nativeQueries (operations.take operationIndex)).length + localIndex

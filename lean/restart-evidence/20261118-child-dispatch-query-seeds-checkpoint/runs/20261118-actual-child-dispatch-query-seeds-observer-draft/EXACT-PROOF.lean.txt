@@ -1,0 +1,15 @@
+ := by
+  by_cases empty : incoming = .empty
+  · simp only [observe, ite_eq_left empty]
+  · cases partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | mk here descendants =>
+        cases here with
+        | nil => simp only [observe, ite_eq_right empty, partitioned]
+        | cons first rest =>
+            simp only [observe, ite_eq_right empty, partitioned]
+            exact (SourcePruningEnumerationSharedTerminalQueryEvents.run_observe_exact
+              checkEmpty representativeFuel nativeFuel p h indexFuel
+              first rest caller before incoming descendants queries).1.trans
+                (SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.terminal
+                  checkEmpty representativeFuel nativeFuel p h indexFuel scs incoming caller before queries
+                  first rest descendants partitioned).symm

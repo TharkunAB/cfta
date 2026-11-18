@@ -1,0 +1,34 @@
+theorem original_source_run_preserves_seeds
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
+    (checkEmpty : Bool) (scs : List Suspended) (incoming : Node)
+    (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter)
+    (pending : InputsPending before.core scs)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (available : Available beforeCaller.checked.native.machine.heap incoming)
+    (closed : incoming.free = [])
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed (scs.length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (sourceGrowth : Grows sourceHeap beforeCaller.checked.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId beforeCaller.checked)
+    (representativeFuel nativeFuel p h indexFuel : Nat) :
+    let actual := run checkEmpty representativeFuel nativeFuel p h indexFuel
+      scs incoming beforeCaller before memos.query
+    Seeds sourceHeap entry body depth ordinary bodyId actual.1.2.1.checked ∧
+      Grows sourceHeap actual.1.2.1.checked.native.machine.heap
