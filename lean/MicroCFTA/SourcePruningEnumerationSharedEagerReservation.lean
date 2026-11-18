@@ -45682,3 +45682,75 @@ private theorem real_eager_no_mu_endpoint_inventory_at_original_budget
     SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runWithNarrow] using actual
 
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open InternedConstructorTemplates
+open EnumerationState (Graph)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (emitted)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+theorem runEager_original_source_preserves_no_mu_inventory
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (sourceNoMu : ∀ (muKey : InternedBinderProtocol.NodeKey)
+      (muEntry : Cache.Interned InternedBinderProtocol.NodeKey) (muBody muDepth muOrdinary : Node),
+      sourceHeap.nodeRecords muKey ≠ some (.mu muEntry muBody muDepth muOrdinary))
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (workFuel recursiveDepth : Nat)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : Caller (bits + 2)) (memos : EndpointMemoGateTrace.Memos)
+    (before : Cached) (metadata : Metadata Typing) (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.2 caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1)
+      caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free,
+      ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free,
+      (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : eagerReserved bits recursiveDepth seed ceiling)
+    (sourceGrowth : InternedConstructorTemplates.Grows sourceHeap caller.checked.native.machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap caller.checked.native.machine.heap) :
+    let outcome := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEager
+      holeKey fits admits graph templates checkEmpty edgesOf stop order
+      workFuel recursiveDepth metadata caller memos.query before
+    let holds := fun endpoint : Caller (bits + 2) =>
+      InternedShallowHeap.NoNewMu sourceHeap endpoint.checked.native.machine.heap ∧
+        InternedConstructorTemplates.Grows sourceHeap endpoint.checked.native.machine.heap
+    (∀ output ∈ emitted outcome, holds output.caller) ∧
+      match outcome with
+      | .complete _ endpoint _ => holds endpoint
+      | .stopped _ _ reached =>
+          ∀ (endpoint : Caller (bits + 2)) (queries : SourceEndpointMemo.Memos),
+            reached = some (endpoint, queries) → holds endpoint
+ := by
+  exact real_eager_no_mu_endpoint_inventory_at_original_budget
+    (bits := bits) lib query signed whole accepted rootValue sourceHeap built sourceNoMu
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+    workFuel recursiveDepth inventory caller memos before metadata seed ceiling packet bounded known
+    selectionMembers selectionLength initialMass reserved sourceGrowth pastInventory
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
