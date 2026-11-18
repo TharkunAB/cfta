@@ -1,0 +1,21 @@
+  have normal := packet.context.ready.semantic.ready.semantic.1.normal
+  have unchanged : InternedShallowHeap.NoNewMu sourceHeap
+      output.caller.checked.native.machine.heap := endpointSeeds.1
+  have onlyU : ∀ (slot handle : Nat) (scs : List EnumerationState.Suspended),
+      output.cache.core.values[slot]? = some (.unenumerated (some handle) scs) →
+      ∀ value, lookupNode output.caller.checked.native.machine.heap handle = some value →
+      ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity := by
+    intro slot handle scs atSlot value decoded
+    obtain ⟨actualValue, actualRead, available, closed, _boundary, _emptyBucket⟩ :=
+      SourcePruningEnumerationRestart.done_pending_boundary
+        order metadata output.caller output.cache packet.valid done slot handle scs atSlot
+    have same : actualValue = value := Option.some.inj (actualRead.symm.trans decoded)
+    subst actualValue
+    exact SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+      lib query signed whole accepted rootValue sourceHeap built
+      key entry body depth ordinary stored output.caller.checked.native.machine.heap
+      normal.facts.coherent unchanged value available closed
+  exact done_current_assignment formulas solver ambient
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    order metadata inventory output.caller memos output.cache packet done irreducible sourceGrowth
+    onlyU noneBuckets
