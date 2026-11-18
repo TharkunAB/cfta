@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationPositiveProjection
 import MicroCFTA.SourcePruningEnumerationComputedSeedGuardTop
 import MicroCFTA.SourcePruningEnumerationSharedChildDispatchNoMuInventory
 import MicroCFTA.SourcePruningEnumerationInvocationNativeQueryProjection
@@ -45854,5 +45855,224 @@ theorem eagerFinal_top (depth : Nat) (seed : Seed) (ceiling : Nat)
         (fun retained current => eagerFinal depth current retained)
         (fun retained current currentTop => ih current retained currentTop)
         captured capturedTop
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationCachedOwn
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+set_option autoImplicit false
+
+private theorem prepared_singleton_obligations_and_no_residual
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (before after : Cached) (symbol : Symbol)
+    (staged : List (Node × List Suspended ×
+      Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))))
+    (residual : Option Constraint)
+    (positive : (SourceCompactGuards.positive edge.entry.key.constraint.guard).isSome = true)
+    (actual : prepare heap scs edge before = some [((symbol, staged, residual), after)]) :
+    after.core.obligations = before.core.obligations ∧ residual = none
+ := by
+  have suspendedSame : ∀ count (core : EnumerationState.State Symbol Constraint),
+      (EnumerationCorrectness.suspendedState count core).obligations = core.obligations := by
+    intro count
+    induction count with
+    | zero => intro core; rfl
+    | succ count ih =>
+        intro core
+        exact ih (allocated none core)
+  by_cases allowed : arityAllows edge.children.length scs = true
+  · cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none =>
+        simp [prepare, allowed, projected] at actual
+    | some projection =>
+        obtain ⟨tries, savedResidual⟩ := projection
+        have shape := prepare_inputs heap scs edge before after tries savedResidual
+          (symbol, staged, residual) projected actual
+        have residualSame : residual = savedResidual :=
+          congrArg Prod.snd (congrArg Prod.snd shape)
+        have scalars := prepare_scalars heap scs edge before after tries savedResidual
+          (symbol, staged, residual) projected actual
+        constructor
+        · rw [scalars.2.1]
+          exact suspendedSame tries.length before.core
+        · exact residualSame.trans
+            (SourcePruningEnumerationConstraint.project_positive_residual_none
+              edge.entry.key.constraint positive tries savedResidual projected)
+  · simp [prepare, allowed] at actual
+
+end MicroCFTA.SourcePruningEnumerationCachedOwn
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+set_option autoImplicit false
+
+private theorem identity_actual_frame_plan_top
+    (bits recursiveDepth limit own : Nat) (frame : IdentityActualCallbackFrame bits) :
+    ∀ retained current,
+      (∀ guard ∈ current.1, guard.guard = .top) →
+      ∀ guard ∈ (identity_actual_frame_plan recursiveDepth limit own frame retained current).1,
+        guard.guard = .top
+ := by
+  induction frame with
+  | captured _edge _residual _caller _queries =>
+      intro retained current currentTop
+      exact eagerFinal_top recursiveDepth current retained currentTop
+  | selected parent _completedPrefix _rest _edge _residual _caller _queries parentHeight remainingCount parentBound ih =>
+      intro retained current currentTop
+      exact tuplePlan_top (nodePlan limit own parentHeight) (nodePlan_top limit own parentHeight)
+        remainingCount parentBound retained (identity_actual_frame_plan recursiveDepth limit own parent)
+        ih current currentTop
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+set_option autoImplicit false
+
+private theorem actual_source_origin_computed_pools_top
+    {Typing : Type} (bits : Nat)
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (narrow : Metadata Typing → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (root : IdentityActualSourceRoot bits) (task : IdentityActualSourceTask bits)
+    (initialTop : ∀ guard ∈ root.rawSeed.1, guard.guard = .top)
+    (origin : ActualSourceOrigin narrow graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv root task) :
+    (∀ guard ∈ task.point.seed.1, guard.guard = .top) ∧
+    (∀ guard ∈ (task.entrySeed recursiveDepth root.limit root.own).1, guard.guard = .top) ∧
+    (∀ guard ∈ (task.goal recursiveDepth root.limit root.own).forecast.1, guard.guard = .top)
+ := by
+  have iterationTop :
+      ∀ (next : SourcePruningEnumerationSharedIncomingReservation.Seed →
+          SourcePruningEnumerationSharedIncomingReservation.Seed),
+        (∀ current, (∀ guard ∈ current.1, guard.guard = .top) →
+          ∀ guard ∈ (next current).1, guard.guard = .top) →
+        ∀ count current, (∀ guard ∈ current.1, guard.guard = .top) →
+          ∀ guard ∈ (SourcePruningEnumerationFiniteReservation.iterate next current count).1,
+            guard.guard = .top := by
+    intro next nextTop count
+    induction count with
+    | zero =>
+        intro current currentTop
+        exact currentTop
+    | succ count ih =>
+        intro current currentTop
+        exact ih (next current) (nextTop current currentTop)
+  have tailTop : ∀ (point : IdentityActualSourcePoint bits) (retained : Nat)
+      (current : SourcePruningEnumerationSharedIncomingReservation.Seed),
+      (∀ guard ∈ current.1, guard.guard = .top) →
+      ∀ guard ∈ (point.tailPlan recursiveDepth root.limit root.own retained current).1,
+        guard.guard = .top := by
+    intro point retained current currentTop
+    exact tuplePlan_top (nodePlan root.limit root.own point.height)
+      (nodePlan_top root.limit root.own point.height)
+      point.count point.bound retained
+      (identity_actual_frame_plan recursiveDepth root.limit root.own point.frame)
+      (identity_actual_frame_plan_top bits recursiveDepth root.limit root.own point.frame)
+      current currentTop
+  have rowBoundaryTop : ∀ (point : IdentityActualSourcePoint bits) (height index : Nat),
+      (∀ guard ∈ point.seed.1, guard.guard = .top) →
+      ∀ guard ∈ (identity_actual_source_row_boundary recursiveDepth root.limit root.own
+        height point index).1, guard.guard = .top := by
+    intro point height index pointTop
+    let tail := point.tailPlan recursiveDepth root.limit root.own
+    let row := fun current => tuplePlan (nodePlan root.limit root.own height)
+      root.limit (point.bound + root.own) point.mass tail current
+    let first := fallbackPlan point.bound point.mass tail point.seed
+    have firstTop : ∀ guard ∈ first.1, guard.guard = .top :=
+      fallbackPlan_top point.bound point.mass tail (tailTop point) point.seed pointTop
+    have rowTop : ∀ current, (∀ guard ∈ current.1, guard.guard = .top) →
+        ∀ guard ∈ (row current).1, guard.guard = .top := by
+      intro current currentTop
+      exact tuplePlan_top (nodePlan root.limit root.own height)
+        (nodePlan_top root.limit root.own height)
+        root.limit (point.bound + root.own) point.mass tail (tailTop point) current currentTop
+    change ∀ guard ∈ (SourcePruningEnumerationFiniteReservation.iterate row first index).1,
+      guard.guard = .top
+    exact iterationTop row rowTop index first firstTop
+  have rootRowsTop : ∀ index, ∀ guard ∈ (root.rowSeed recursiveDepth index).1,
+      guard.guard = .top := by
+    intro index
+    let continuation := fun retained current => eagerFinal recursiveDepth current retained
+    have continuationTop : ∀ retained current,
+        (∀ guard ∈ current.1, guard.guard = .top) →
+        ∀ guard ∈ (continuation retained current).1, guard.guard = .top := by
+      intro retained current currentTop
+      exact eagerFinal_top recursiveDepth current retained currentTop
+    let row := fun current => tuplePlan (nodePlan root.limit root.own (root.limit - 1))
+      root.limit (root.ceiling + root.own) root.ceiling continuation current
+    let first := fallbackPlan root.ceiling root.ceiling continuation root.start
+    have startTop : ∀ guard ∈ root.start.1, guard.guard = .top :=
+      SourcePruningEnumerationComputedSeedGuardTop.prepared_seed_top root.rawSeed initialTop
+    have firstTop : ∀ guard ∈ first.1, guard.guard = .top :=
+      fallbackPlan_top root.ceiling root.ceiling continuation continuationTop root.start startTop
+    have rowTop : ∀ current, (∀ guard ∈ current.1, guard.guard = .top) →
+        ∀ guard ∈ (row current).1, guard.guard = .top := by
+      intro current currentTop
+      exact tuplePlan_top (nodePlan root.limit root.own (root.limit - 1))
+        (nodePlan_top root.limit root.own (root.limit - 1))
+        root.limit (root.ceiling + root.own) root.ceiling continuation continuationTop current currentTop
+    change ∀ guard ∈ (SourcePruningEnumerationFiniteReservation.iterate row first index).1,
+      guard.guard = .top
+    exact iterationTop row rowTop index first firstTop
+  have pointTop : ∀ candidate,
+      ActualSourceOrigin narrow graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv root candidate →
+      ∀ guard ∈ candidate.point.seed.1, guard.guard = .top := by
+    intro candidate candidateOrigin
+    induction candidateOrigin with
+    | capturedTuple attempted _remaining _edge _residual _processed _outputs _rowCaller _rowQueries
+        _ownCache _staged _selected _past _prepared =>
+        exact rootRowsTop attempted.length
+    | tupleHead _point _count _incoming _bucket _rest _previous ih =>
+        exact ih
+    | ordinaryRows _point _height _incoming _bucket _rest _previous _ordinary ih =>
+        exact ih
+    | selectedOwn point height _parentEntry _rows _depth _free _bucket _rest attempted _remaining
+        _edge _residual _processed _outputs _caller _queries _rowOwn _staged _previous _sourceRows
+        _selected _past _prepared _lower ih =>
+        exact rowBoundaryTop {point with height := height + 1} height attempted.length ih
+    | selectedReturn _entry current _rest _edge _residual _previous ih =>
+        exact SourcePruningEnumerationComputedSeedGuardTop.shared_incoming_advance_top
+          current.seed ih (current.count * (current.bound + 1))
+    | fallbackChildTail point _incoming _bucket _rest _fragment _returned _outer _reached _saved
+        _after _waiting _previous _fallback _observed ih =>
+        exact SourcePruningEnumerationComputedSeedGuardTop.shared_incoming_advance_top
+          point.seed ih (point.bound + 1)
+  have currentTop := pointTop task origin
+  refine ⟨currentTop, ?_, ?_⟩
+  · cases task with
+    | tuple _point _remaining => exact currentTop
+    | child _point _incoming _bucket _rest => exact currentTop
+    | rows _height point _incoming _bucket _rest =>
+        exact fallbackPlan_top point.bound point.mass
+          (point.tailPlan recursiveDepth root.limit root.own) (tailTop point) point.seed currentTop
+  · cases task with
+    | tuple point _remaining =>
+        exact tuplePlan_top (nodePlan root.limit root.own point.height)
+          (nodePlan_top root.limit root.own point.height) point.count point.bound point.mass
+          (identity_actual_frame_plan recursiveDepth root.limit root.own point.frame)
+          (identity_actual_frame_plan_top bits recursiveDepth root.limit root.own point.frame)
+          point.seed currentTop
+    | child point _incoming _bucket _rest =>
+        exact nodePlan_top root.limit root.own point.height point.bound point.mass
+          (point.tailPlan recursiveDepth root.limit root.own) (tailTop point) point.seed currentTop
+    | rows height point _incoming _bucket _rest =>
+        exact rowBoundaryTop point height root.limit currentTop
 
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
