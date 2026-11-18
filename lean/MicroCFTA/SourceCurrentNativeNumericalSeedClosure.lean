@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationNativeRequestFields
 import MicroCFTA.SourceCurrentNativeNumericalCMHistory
 import MicroCFTA.SourceSynthesisCurrentUniverseWarmNoNewMu
 import MicroCFTA.SourceCurrentNativeNumericalSingletonProfiles
@@ -371,5 +372,84 @@ theorem original_universe_actual_query_sequence_seeds
     previous.2.2.2 (rootDomains index within) (rootAvailable index within)
     (rootClosed index within) (queryFuel index) (inputs index within) (fields index within)).2
       used rest after bounded actualPrefix
+
+end MicroCFTA.SourceCurrentNativeNumericalSeedInvariant
+
+namespace MicroCFTA.SourceCurrentNativeNumericalSeedInvariant
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionControl SourceRecursiveIntersectionDomain
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+set_option autoImplicit false
+
+/- Note [Resource admission at the actual native request]
+The current Ready, Fits and numeric admission facts supply both request plans.
+They apply at the same checked input and the original supplied native fuel.
+The existing private closure retains the genuine past Seeds at every prefix.
+This declaration does not produce those current resources for a source worker.
+-/
+
+theorem original_universe_resource_admitted_request_seeds
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {bits : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (rootRequest : NodeRequest Symbol Guard) (before : Checked (bits + 2))
+    (sourceGrowth : Grows sourceHeap before.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId before)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (rootAvailable : Available before.native.machine.heap rootRequest.left ∧
+      Available before.native.machine.heap rootRequest.right)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile)
+    (ready : SourceCurrentConjunctionClassScan.Ready before)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before)
+    (admitted : SourceCurrentAllocatedNativeCreditProfile.Admits bits profile)
+    (fuel : Nat) :
+    Seeds sourceHeap entry body depth ordinary bodyId
+      (SourceEqualityNativeDemand.execute fuel (.code (.node rootRequest .pure)) before).state ∧
+    ∀ (count : Nat) (rest : Control (Value Symbol Guard)) (after : Checked (bits + 2)),
+      count ≤ fuel → Trace count (.code (.node rootRequest .pure)) before rest after →
+      Seeds sourceHeap entry body depth ordinary bodyId after
+ := by
+  have plans := SourcePruningEnumerationNativeRequestFields.admitted_request_plans
+    profile before ready fits admitted rootRequest.left rootRequest.right
+    rootAvailable.1 rootAvailable.2 rootClosed.1 rootClosed.2 fuel
+  have requestSame :
+      (⟨IntersectionEmptyDomain.emptyDomain, rootRequest.left, rootRequest.right⟩ :
+        NodeRequest Symbol Guard) = rootRequest := by
+    cases rootRequest
+    cases rootDomain
+    rfl
+  have literal :
+      requestNode IntersectionEmptyDomain.emptyDomain rootRequest.left rootRequest.right =
+        .node rootRequest .pure := by
+    unfold requestNode
+    rw [requestSame]
+  have inputs : SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel
+      (.code (.node rootRequest .pure)) before := by
+    rw [← literal]
+    exact plans.1
+  have fields : SourceEqualityNativeDemandOperations.FieldsThrough fuel
+      (.code (.node rootRequest .pure)) before := by
+    rw [← literal]
+    exact plans.2
+  exact seeds_preserved_at_every_actual_query_endpoint
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    bodyId bodyIdentity rootRequest before ready.good.native sourceGrowth ready.good.operations
+    pastSeeds rootDomain rootAvailable rootClosed fuel inputs fields
 
 end MicroCFTA.SourceCurrentNativeNumericalSeedInvariant
