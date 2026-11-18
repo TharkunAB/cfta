@@ -1,0 +1,12 @@
+--- /home/tritlo/Code/mcfta/lean/restart-evidence/20261118-fold-query-seeds-check-control-draft/shadow-compile.py.txt
++++ /home/tritlo/Code/mcfta/lean/restart-evidence/20261118-terminal-source-seeds-combined-check-control-draft/shadow-compile.py.txt
+@@ -12,6 +12,9 @@
+ output = objects / 'MicroCFTA' / (module + '.olean')
+ assert not output.is_symlink(), 'A candidate output must not link to a normal cache object.'
+ assert not output.exists(), 'Use a fresh runtime for each check.'
++for previous in selection['compile_order'][:selection['compile_order'].index(module)]:
++    prior = objects / 'MicroCFTA' / (previous + '.olean')
++    assert prior.is_file() and not prior.is_symlink(), 'Compile the previous selected owner first.'
+ environment = dict(os.environ)
+ environment['LEAN_PATH'] = str(objects) + os.pathsep + environment.get('LEAN_PATH', '')
+ environment['LEAN_NUM_THREADS'] = '1'

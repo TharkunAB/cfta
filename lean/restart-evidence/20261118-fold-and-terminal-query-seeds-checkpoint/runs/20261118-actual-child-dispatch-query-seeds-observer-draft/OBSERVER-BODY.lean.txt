@@ -1,0 +1,13 @@
+ :=
+  if incoming = .empty then
+    (SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+      checkEmpty representativeFuel nativeFuel p h indexFuel scs incoming caller before queries, [])
+  else
+    match scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | ([], _) =>
+        (SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+          checkEmpty representativeFuel nativeFuel p h indexFuel scs incoming caller before queries, [])
+    | (first :: rest, descendants) =>
+        SourcePruningEnumerationSharedTerminalQueryEvents.runObserved
+          checkEmpty representativeFuel nativeFuel p h indexFuel
+          first rest caller before incoming descendants queries

@@ -1,0 +1,41 @@
+theorem fold_original_source_observe_preserves_seeds
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : Cached) (sources : List Nat)
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (targetPending : PendingAt before.core target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before.core source)
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed sources.length)
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (sourceGrowth : Grows sourceHeap beforeCaller.checked.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId beforeCaller.checked) :
+    let observed := foldObserved checkEmpty nativeFuel p h sources
+      beforeCaller before target memos.query
+    observed.1 = SourcePruningEnumerationSharedCachedTerminal.fold
+      checkEmpty nativeFuel p h sources beforeCaller before target memos.query ∧
+    (Seeds sourceHeap entry body depth ordinary bodyId observed.1.1.2.1.checked ∧
+      Grows sourceHeap observed.1.1.2.1.checked.native.machine.heap) ∧
+    ∀ start saved left right actual, (start, saved, left, right, actual) ∈ observed.2 →
+      actual = SourceEqualityNativeDemand.execute nativeFuel
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked ∧
+      (Seeds sourceHeap entry body depth ordinary bodyId actual.state ∧
+        Grows sourceHeap actual.state.native.machine.heap) ∧
+      ∀ (count : Nat) (rest : Control Node) (after : SourceEqualityNativeDemand.State (bits + 2)),
+        count ≤ nativeFuel → Trace count
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked rest after →
+        Seeds sourceHeap entry body depth ordinary bodyId after ∧
+          Grows sourceHeap after.native.machine.heap

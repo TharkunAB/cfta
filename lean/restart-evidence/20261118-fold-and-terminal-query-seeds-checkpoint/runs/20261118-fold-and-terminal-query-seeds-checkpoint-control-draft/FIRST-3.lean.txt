@@ -1,0 +1,50 @@
+theorem run_original_source_observe_preserves_seeds
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
+    (checkEmpty : Bool) (first : Suspended) (rest : List Suspended)
+    (incoming : Node) (incomingScs : List Suspended) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter)
+    (pending : InputsPending before.core (first :: rest))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (available : Available beforeCaller.checked.native.machine.heap incoming)
+    (closed : incoming.free = [])
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed ((first :: rest).length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (sourceGrowth : Grows sourceHeap beforeCaller.checked.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId beforeCaller.checked)
+    (representativeFuel nativeFuel p h indexFuel : Nat) :
+    let observed := runObserved checkEmpty representativeFuel nativeFuel p h indexFuel
+      first rest beforeCaller before incoming incomingScs memos.query
+    observed.1 = SourcePruningEnumerationSharedCachedTerminal.run
+      checkEmpty representativeFuel nativeFuel p h indexFuel
+      first rest beforeCaller before incoming incomingScs memos.query ∧
+    observed.1.1 = SourcePruningEnumerationSharedCachedTerminal.raw
+      checkEmpty representativeFuel nativeFuel p h first rest before.waiting
+      beforeCaller before.core incoming incomingScs memos.query ∧
+    (Seeds sourceHeap entry body depth ordinary bodyId observed.1.1.2.1.checked ∧
+      Grows sourceHeap observed.1.1.2.1.checked.native.machine.heap) ∧
+    ∀ start saved left right actual, (start, saved, left, right, actual) ∈ observed.2 →
+      actual = SourceEqualityNativeDemand.execute nativeFuel
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked ∧
+      (Seeds sourceHeap entry body depth ordinary bodyId actual.state ∧
+        Grows sourceHeap actual.state.native.machine.heap) ∧
+      ∀ (count : Nat) (resume : Control Node) (after : SourceEqualityNativeDemand.State (bits + 2)),
+        count ≤ nativeFuel → Trace count
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked resume after →
+        Seeds sourceHeap entry body depth ordinary bodyId after ∧
+          Grows sourceHeap after.native.machine.heap

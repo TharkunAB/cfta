@@ -1,0 +1,54 @@
+--- /home/tritlo/Code/mcfta/lean/restart-evidence/20261118-fold-query-seeds-check-control-draft/check-driver.py.txt
++++ /home/tritlo/Code/mcfta/lean/restart-evidence/20261118-terminal-source-seeds-combined-check-control-draft/check-driver.py.txt
+@@ -63,31 +63,35 @@
+     limits = {name: (cgroup / name).read_text().strip()
+         for name in ['memory.max', 'memory.high', 'memory.swap.max']}
+     assert limits == {'memory.max': '8589934592', 'memory.high': '8589934592', 'memory.swap.max': '0'}
+-    assert selection['expected_checks'] == 1
+-    assert selection['expected_public_axiom_reports'] == 2
++    assert selection['expected_checks'] == 2
++    assert selection['expected_public_axiom_reports'] == 3
+     assert selection['expected_explicit_private_axiom_reports'] == selection['expected_declaration_checks'] == 0
+-    run(selection['components'][0])
++    for component in selection['components']:
++        run(component)
+     verify_pins()
+     pins_stable = True
+ except Exception as error:
+     failure = {'type': type(error).__name__, 'message': str(error)}
+ passed = [item['exit'] == 0 and not item['diagnostics'] and not item['sorryAx']
+     and not item['nonstandard_axioms'] and item['declaration_checks'] == 0
+-    and item['total_axiom_reports'] == item['expected_axiom_reports'] == 2 for item in checks]
+-success = failure is None and pins_stable and len(checks) == 1 and all(passed)
++    and item['total_axiom_reports'] == item['expected_axiom_reports'] for item in checks]
++success = (failure is None and pins_stable and len(checks) == 2 and all(passed)
++    and sum(item['total_axiom_reports'] for item in checks) == 3)
+ report = {'at': datetime.datetime.now().astimezone().isoformat(), 'checks': checks,
+     'passed': passed, 'failure': failure, 'limits': limits,
+-    'single_component_checked': success, 'all_selected_statements_checked': success,
++    'both_components_checked': success, 'all_selected_statements_checked': success,
+     'entire_raw_semantic_prefix_exact': True,
+     'raw_and_cached_FIRST_headers_exact': True,
+     'actual_printed_public_axiom_reports': sum(item['total_axiom_reports'] for item in checks),
+-    'credited_public_reports': 2 if success else 0,
++    'credited_distinct_public_reports': 3 if success else 0,
++    'new_terminal_reports': 1 if success else 0, 'previously_checked_fold_reports_rebuilt': 2 if success else 0,
++    'additive_credit_for_rebuilt_fold_reports': 0,
+     'credited_raw_semantic_reports': 1 if success else 0,
+     'credited_cached_semantic_reports': 1 if success else 0,
+     'actual_explicit_private_axiom_reports': 0, 'actual_definition_declaration_checks': 0,
+     'new_private_helpers_transitive': 0, 'new_definitions': 0,
+     'all_original_FIRST_header_bytes_exact': True,
+-    'old_owner_bytes': 36968, 'old_owner_offset': 66,
++    'fold_old_owner_bytes': 36968, 'terminal_old_owner_bytes': 39276, 'both_old_owner_offsets': 66,
+     'old_owner_contiguous_block_preserved': True, 'fresh_credit_for_old_owner_theorems': 0,
+     'source_pins_unchanged': pins_stable, 'proof_credit': success,
+     'normal_Source_changed': False, 'published': False,
+@@ -95,6 +99,7 @@
+     'prior_publication_actual_session': selection['prior_publication_actual_session'],
+     'actual_rawFold_source_Seeds_transition_checked': success,
+     'actual_cached_fold_source_Seeds_transition_checked': success,
++    'actual_terminal_source_Seeds_transition_checked': success,
+     'all_original_supplied_fuels_and_endpoints_retained': True,
+     'proof_limits': 'unchanged old owner and default limits; no override',
+     'cache_data_copied': False,
