@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedChildDispatchQueryEvents
 import MicroCFTA.SourceSynthesisRealPrefixProgramSlots
 import MicroCFTA.SourceSynthesisObservedChildProgramSlots
 import MicroCFTA.SourceSynthesisActualEagerProgramFragmentRoles
@@ -36145,5 +36146,262 @@ theorem runEager_real_program_slots_at_any_budget
     selectionMembers selectionLength initialMass reserved valid literal marked slots workFuel
     (SourcePruningEnumerationRestart.decision stop order metadata before) index output rfl history
 
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState InternedConstructorTemplates InternedProbeProvenance
+open SourceCurrentNativeNumericalSeedInvariant (Seeds)
+open SourceRecursiveIntersectionCode (requestNode)
+open SourceEqualityNativeDemand (Control)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+/- Note [Actual Current supplies one all-outcome child query cut]
+The entry Current supplies the same packet, resource seed and pending bucket.
+The source root's Keeps receipt transports the actual incoming value.
+Fallback reservation restricts to the original bucket length plus one.
+The observer uses the same caller, cache, query memos and five supplied fuels.
+This cut preserves native prefixes before any later eager callback runs.
+The outer task and recursive-depth semantic induction remains open.
+-/
+
+private theorem actual_source_child_query_resources_and_seeds
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue sourceHeap)
+    (key : InternedBinderProtocol.NodeKey)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+    (scopeOriginal : Caller (bits + 2)) (metadata : Metadata Typing)
+    (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (recursiveDepth : Nat) (incoming : Node) (bucket : List Suspended)
+    (rest : List (Node × List Suspended))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.child point incoming bucket rest))
+    (sourceGrowth : Grows sourceHeap point.caller.checked.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId point.caller.checked)
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat) :
+    let observed := SourcePruningEnumerationSharedChildDispatchQueryEvents.observe
+      checkEmpty representativeFuel nativeFuel p h indexFuel
+      bucket incoming point.caller point.before point.queries
+    observed.1 = SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+      checkEmpty representativeFuel nativeFuel p h indexFuel
+      bucket incoming point.caller point.before point.queries ∧
+    (Seeds sourceHeap entry body depth ordinary bodyId observed.1.1.2.1.checked ∧
+      Grows sourceHeap observed.1.1.2.1.checked.native.machine.heap) ∧
+    ∀ start saved left right actual, (start, saved, left, right, actual) ∈ observed.2 →
+      ∃ consumed : Nat, consumed < bucket.length + 1 ∧
+        SourceCurrentConjunctionClassScan.Ready start.checked ∧
+        SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+          (SourcePruningEnumerationSharedIncomingReservation.advance point.seed consumed).2
+          start.checked ∧
+        SourceCurrentAllocatedNativeCreditProfile.Admits bits
+          (SourcePruningEnumerationSharedIncomingReservation.advance point.seed consumed).2 ∧
+        Available start.checked.native.machine.heap left ∧
+        Available start.checked.native.machine.heap right ∧
+        left.free = [] ∧ right.free = [] ∧
+        actual = SourceEqualityNativeDemand.execute nativeFuel
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked ∧
+        (Seeds sourceHeap entry body depth ordinary bodyId actual.state ∧
+          Grows sourceHeap actual.state.native.machine.heap) ∧
+        ∀ (count : Nat) (resume : Control Node)
+            (after : SourceEqualityNativeDemand.State (bits + 2)),
+          count ≤ nativeFuel → Trace count
+            (.code (requestNode IntersectionEmptyDomain.emptyDomain left right))
+            start.checked resume after →
+          Seeds sourceHeap entry body depth ordinary bodyId after ∧
+            Grows sourceHeap after.native.machine.heap
+ := by
+  obtain ⟨inputs, currentFits, known, reserved⟩ := current
+  obtain ⟨_shapes, kept, inventory, memos, packet, querySame, _previous,
+    _mass, _counted, _subset, genuine⟩ := inputs
+  obtain ⟨available, closed, _ranked, bucketBound, bounded, pending⟩ :=
+    genuine incoming bucket List.mem_cons_self
+  have admitted := nodeReserved_fallback bits root.limit root.own point.height point.bound point.mass
+    (point.tailPlan recursiveDepth root.limit root.own)
+    (point.tailReserved recursiveDepth root.limit root.own) point.seed reserved
+  have costLe : bucket.length + 1 ≤ point.bound + 1 :=
+    Nat.add_le_add_right bucketBound 1
+  have native := admitted.1.prefix costLe
+  obtain ⟨roots, paths, _storage, realized, counts, _flags⟩ := packet.valid
+  have preserved :=
+    SourcePruningEnumerationSharedChildDispatchQueryEvents.observe_original_source_query_resources_and_seeds
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      bodyId bodyIdentity point.seed formulas solver inventory point.caller point.before checkEmpty
+      bucket incoming roots memos packet.context packet.safe paths counts bounded pending realized
+      (kept.available incoming available) closed currentFits native known sourceGrowth pastSeeds
+      representativeFuel nativeFuel p h indexFuel
+  simpa only [querySame, IdentityActualSourceTask.point] using preserved
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure emitted finish)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourceCurrentNativeNumericalSeedInvariant (Seeds)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+private def ActualEmittedEndpointSeeds
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (bodyId : Nat)
+    (outcome : NativeContinuations.HookResult (Output (bits + 2) Typing)
+      (Failure (bits + 2) Typing) (bits + 2)) : Prop :=
+  let holds := fun caller : Caller (bits + 2) =>
+    Seeds sourceHeap entry body depth ordinary bodyId caller.checked ∧
+      Grows sourceHeap caller.checked.native.machine.heap
+  (∀ output ∈ emitted outcome, holds output.caller) ∧
+    match outcome with
+    | .complete _ caller _ => holds caller
+    | .stopped _ _ reached =>
+        ∀ (caller : Caller (bits + 2)) (queries : Queries),
+          reached = some (caller, queries) → holds caller
+
+private def RealActualSourceEndpointSeedsAt
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (task : IdentityActualSourceTask bits) : Prop :=
+  ∀ (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+      (allInputs : List (Node × List Suspended)),
+    ActualFrameLedger formulas solver root metadata uv task.point.frame
+      scopeOriginal scopeBefore allInputs →
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root task →
+    ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth task →
+    Grows sourceHeap task.point.caller.checked.native.machine.heap →
+    Seeds sourceHeap entry body depth ordinary bodyId task.point.caller.checked →
+    ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+      (finish uv (task.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv))
+
+private def RealEagerEndpointSeedsAtDepth
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat) : Prop :=
+  ∀ (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+      (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+      (metadata : Metadata Typing) (seed : Seed) (ceiling : Nat),
+    Packet formulas solver inventory caller memos metadata before →
+    SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.2 caller.checked →
+    Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap →
+    (∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows) →
+    (∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) →
+    SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling →
+    eagerReserved bits recursiveDepth seed ceiling →
+    Grows sourceHeap caller.checked.native.machine.heap →
+    Seeds sourceHeap entry body depth ordinary bodyId caller.checked →
+    ∀ (sameWorkFuel : Nat) (decision : Option Next),
+      SourcePruningEnumerationRestart.decision stop order metadata before = decision →
+      ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+        (resumeWithNarrow
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            sameWorkFuel sameWorkFuel sameWorkFuel sameWorkFuel sameWorkFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order sameWorkFuel recursiveDepth
+          metadata caller memos.query before decision)
+
+private theorem real_eager_endpoint_seeds_zero
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    RealEagerEndpointSeedsAtDepth (bits := bits) sourceHeap entry body depth ordinary bodyId
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver 0
+ := by
+  unfold RealEagerEndpointSeedsAtDepth
+  intro _inventory caller memos before metadata _seed _ceiling
+    _packet _bounded _known _selectionMembers _selectionLength _mass _reserved
+    sourceGrowth pastSeeds workFuel decision _chosen
+  cases decision with
+  | none =>
+      dsimp only [resumeWithNarrow, ActualEmittedEndpointSeeds, emitted]
+      refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+      intro output member
+      have same := List.mem_singleton.mp member
+      subst output
+      exact ⟨pastSeeds, sourceGrowth⟩
+  | some next =>
+      cases next with
+      | done =>
+          dsimp only [resumeWithNarrow, ActualEmittedEndpointSeeds, emitted]
+          refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+          intro output member
+          have same := List.mem_singleton.mp member
+          subst output
+          exact ⟨pastSeeds, sourceGrowth⟩
+      | stuck =>
+          dsimp only [resumeWithNarrow, ActualEmittedEndpointSeeds, emitted]
+          refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+          intro output impossible
+          cases impossible
+      | expand uv =>
+          dsimp only [resumeWithNarrow, ActualEmittedEndpointSeeds, emitted]
+          constructor
+          · intro output impossible
+            cases impossible
+          · intro reached _saved endpointSame
+            have callerSame : caller = reached :=
+              congrArg Prod.fst (Option.some.inj endpointSame)
+            cases callerSame
+            exact ⟨pastSeeds, sourceGrowth⟩
 
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
