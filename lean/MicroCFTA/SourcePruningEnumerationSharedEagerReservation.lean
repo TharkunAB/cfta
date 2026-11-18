@@ -39760,3 +39760,595 @@ theorem runEager_original_source_preserves_endpoint_seeds
     SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runWithNarrow] using actual
 
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualFullQueryCoverageRelations
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Edge" => EdgeValue Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Operation" => SourcePruningEnumerationInvocationEventLedger.Event
+local notation "Input" => Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)
+local notation "Row" => (Symbol × List Input × Option Constraint) × Cached
+local notation "Observation" => ChildDispatch.Observation
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+local notation "Hook" => NativeContinuations.HookResult
+  (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+set_option autoImplicit false
+
+mutual
+private inductive ActualFullOuterQueryCoverageAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) :
+    Nat → Nat → Metadata Typing → Caller (bits + 2) → Queries → Cached → Option Next →
+      Hook → List (Operation (bits + 2)) → Prop where
+  | none
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata caller queries before none
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel n metadata caller queries before none) []
+  | done
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata caller queries before (some .done)
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel n metadata caller queries before (some .done)) []
+  | stuck
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata caller queries before (some .stuck)
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel n metadata caller queries before (some .stuck)) []
+  | zero_expand
+      {workFuel uv : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order 0 workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel 0 metadata caller queries before (some (.expand uv))) []
+  | prefix_without_restart_or_child
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {observed : SourcePruningEnumerationSelectedStep.Result (bits + 2) Typing}
+      (actual : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries = observed)
+      (shape : match observed with
+              | .parked _ (some _) (some [.ok ((_, _), _)]) => False
+              | .narrowed _ _ _ _ action (some _) (some [.ok ((false, _), _)]) none =>
+                  action = some []
+              | _ => True)
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) []
+  | parked_restart
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {checked : Core} {parked : Cached}
+      {updated : Metadata Typing} {next : Option Next} {recorded : Core}
+      {events : List (Operation (bits + 2))}
+      (actual : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries = .parked checked (some parked) (some [.ok ((updated, next), recorded)]))
+      (restarted : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel updated caller queries (EnumerationExpandableIndex.frame recorded parked) next
+              (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel n updated caller queries (EnumerationExpandableIndex.frame recorded parked) next) events)
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) events
+  | preparation_without_child
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {checked : Core}
+      {prepared : MergedSourceComparison.Result Symbol Constraint
+        (Node × Option (EnumerateM Symbol Constraint Unit))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {action : Option (List (Except EnumerationState.Error (Unit × Core)))}
+      {after : Cached} {updated : Metadata Typing} {callbackCore : Core}
+      {observation : SourcePruningEnumerationSharedPreparedContinuations.Preparation}
+      (selected : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .narrowed checked prepared reached saved action (some after)
+          (some [.ok ((false, updated), callbackCore)]) none)
+      (actionNonempty : action ≠ some [])
+      (actual : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv reached after = observation)
+      (shape : match observation.2 with
+              | some (.done _ _) =>
+                  match observation.1 with
+                  | [.ok ((_, _, _, _), _)] => False
+                  | _ => True
+              | _ => True)
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) []
+  | prepared_ordinary_rows
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {checked : Core}
+      {prepared : MergedSourceComparison.Result Symbol Constraint
+        (Node × Option (EnumerateM Symbol Constraint Unit))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {action : Option (List (Except EnumerationState.Error (Unit × Core)))}
+      {after : Cached} {updated : Metadata Typing} {callbackCore : Core}
+      {handle : Nat} {scs : List Suspended} {decoded value : Node}
+      {entered : Core} {heap : InternedConstructorTemplates.State Symbol Constraint}
+      {rawSeed : Seed} {ceiling : Nat} {parentEntry : Cache.Interned InternedBinderProtocol.NodeKey}
+      {alternatives : List Edge} {nodeDepth : Nat} {free : List InternedBinderProtocol.Reference}
+      {events : List (Operation (bits + 2))}
+      (selected : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .narrowed checked prepared reached saved action (some after)
+          (some [.ok ((false, updated), callbackCore)]) none)
+      (actionNonempty : action ≠ some [])
+      (actual : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv reached after = ([.ok ((uv, handle, scs, decoded), entered)], some (.done value heap)))
+      (ordinaryValue : value = .node parentEntry alternatives nodeDepth free)
+      (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+      (children : ActualFullCapturedRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel updated uv
+              { caller := (SourcePruningEnumerationSelectedValueCaller.advance reached heap), queries := saved, before := (EnumerationExpandableIndex.frame entered after),
+                incoming := value, scs := scs, rawSeed := rawSeed, ceiling := ceiling }
+              (edgesOf value) (SourcePruningEnumerationSelectedValueCaller.advance reached heap) saved
+              (SourcePruningEnumerationSharedBranching.scan
+                (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel updated uv scs)
+                (EnumerationExpandableIndex.frame entered after) (edgesOf value) (SourcePruningEnumerationSelectedValueCaller.advance reached heap) saved) events)
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) events
+  | prepared_empty
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {checked : Core}
+      {prepared : MergedSourceComparison.Result Symbol Constraint
+        (Node × Option (EnumerateM Symbol Constraint Unit))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {action : Option (List (Except EnumerationState.Error (Unit × Core)))}
+      {after : Cached} {updated : Metadata Typing} {callbackCore : Core}
+      {handle : Nat} {scs : List Suspended} {decoded value : Node}
+      {entered : Core} {heap : InternedConstructorTemplates.State Symbol Constraint}
+      (selected : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .narrowed checked prepared reached saved action (some after)
+          (some [.ok ((false, updated), callbackCore)]) none)
+      (actionNonempty : action ≠ some [])
+      (actual : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv reached after = ([.ok ((uv, handle, scs, decoded), entered)], some (.done value heap)))
+      (empty : value = .empty)
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) []
+  | prepared_opaque_stopped
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {checked : Core}
+      {prepared : MergedSourceComparison.Result Symbol Constraint
+        (Node × Option (EnumerateM Symbol Constraint Unit))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {action : Option (List (Except EnumerationState.Error (Unit × Core)))}
+      {after : Cached} {updated : Metadata Typing} {callbackCore : Core}
+      {handle : Nat} {scs : List Suspended} {decoded value : Node}
+      {entered : Core} {heap : InternedConstructorTemplates.State Symbol Constraint}
+      {observation : Observation (bits + 2)} {candidate : Option Cached}
+      (selected : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .narrowed checked prepared reached saved action (some after)
+          (some [.ok ((false, updated), callbackCore)]) none)
+      (actionNonempty : action ≠ some [])
+      (actual : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv reached after = ([.ok ((uv, handle, scs, decoded), entered)], some (.done value heap)))
+      (nonempty : value ≠ .empty)
+      (opaqueMode : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal scs value = false)
+      (actualChild : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved = (observation, candidate))
+      (stopped : SourcePruningEnumerationSharedInvocationTrace.ShallowStopped observation candidate)
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) [.dispatch [] checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved observation candidate]
+  | prepared_opaque_finalize_stopped
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {checked : Core}
+      {prepared : MergedSourceComparison.Result Symbol Constraint
+        (Node × Option (EnumerateM Symbol Constraint Unit))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {action : Option (List (Except EnumerationState.Error (Unit × Core)))}
+      {after : Cached} {updated : Metadata Typing} {callbackCore : Core}
+      {handle : Nat} {scs : List Suspended} {decoded value : Node}
+      {entered : Core} {heap : InternedConstructorTemplates.State Symbol Constraint}
+      {fragment : Fragment} {returned outerCore : Core}
+      {childCaller : Caller (bits + 2)} {childQueries : Queries} {childCache : Cached}
+      {waiting : EnumerationWaitingIndex.Waiting}
+      (selected : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .narrowed checked prepared reached saved action (some after)
+          (some [.ok ((false, updated), callbackCore)]) none)
+      (actionNonempty : action ≠ some [])
+      (actual : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv reached after = ([.ok ((uv, handle, scs, decoded), entered)], some (.done value heap)))
+      (nonempty : value ≠ .empty)
+      (opaqueMode : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal scs value = false)
+      (actualChild : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved = ((.ok (some [.ok (fragment, returned)]), childCaller, childQueries, outerCore, waiting), some childCache))
+      (finalized : SourcePruningEnumerationFinalize.run childCaller.checked.native.machine.heap workFuel uv fragment childCache = none)
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) [.dispatch [] checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved (.ok (some [.ok (fragment, returned)]), childCaller, childQueries, outerCore, waiting) (some childCache)]
+  | prepared_opaque_callback_true
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {checked : Core}
+      {prepared : MergedSourceComparison.Result Symbol Constraint
+        (Node × Option (EnumerateM Symbol Constraint Unit))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {action : Option (List (Except EnumerationState.Error (Unit × Core)))}
+      {after : Cached} {updated : Metadata Typing} {callbackCore : Core}
+      {handle : Nat} {scs : List Suspended} {decoded value : Node}
+      {entered : Core} {heap : InternedConstructorTemplates.State Symbol Constraint}
+      {fragment : Fragment} {returned outerCore : Core}
+      {childCaller : Caller (bits + 2)} {childQueries : Queries} {childCache : Cached}
+      {waiting : EnumerationWaitingIndex.Waiting}
+      {finished : Cached} {nextMetadata : Metadata Typing} {nextCore : Core}
+      (selected : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .narrowed checked prepared reached saved action (some after)
+          (some [.ok ((false, updated), callbackCore)]) none)
+      (actionNonempty : action ≠ some [])
+      (actual : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv reached after = ([.ok ((uv, handle, scs, decoded), entered)], some (.done value heap)))
+      (nonempty : value ≠ .empty)
+      (opaqueMode : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal scs value = false)
+      (actualChild : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved = ((.ok (some [.ok (fragment, returned)]), childCaller, childQueries, outerCore, waiting), some childCache))
+      (finalized : SourcePruningEnumerationFinalize.run childCaller.checked.native.machine.heap workFuel uv fragment childCache = some finished)
+      (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel updated uv (.inl fragment) finished.core) = [.ok ((true, nextMetadata), nextCore)])
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) [.dispatch [] checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved (.ok (some [.ok (fragment, returned)]), childCaller, childQueries, outerCore, waiting) (some childCache)]
+  | prepared_opaque_callback_false
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {checked : Core}
+      {prepared : MergedSourceComparison.Result Symbol Constraint
+        (Node × Option (EnumerateM Symbol Constraint Unit))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {action : Option (List (Except EnumerationState.Error (Unit × Core)))}
+      {after : Cached} {updated : Metadata Typing} {callbackCore : Core}
+      {handle : Nat} {scs : List Suspended} {decoded value : Node}
+      {entered : Core} {heap : InternedConstructorTemplates.State Symbol Constraint}
+      {fragment : Fragment} {returned outerCore : Core}
+      {childCaller : Caller (bits + 2)} {childQueries : Queries} {childCache : Cached}
+      {waiting : EnumerationWaitingIndex.Waiting}
+      {finished : Cached} {nextMetadata : Metadata Typing} {nextCore : Core}
+      {events : List (Operation (bits + 2))}
+      (selected : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .narrowed checked prepared reached saved action (some after)
+          (some [.ok ((false, updated), callbackCore)]) none)
+      (actionNonempty : action ≠ some [])
+      (actual : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv reached after = ([.ok ((uv, handle, scs, decoded), entered)], some (.done value heap)))
+      (nonempty : value ≠ .empty)
+      (opaqueMode : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal scs value = false)
+      (actualChild : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved = ((.ok (some [.ok (fragment, returned)]), childCaller, childQueries, outerCore, waiting), some childCache))
+      (finalized : SourcePruningEnumerationFinalize.run childCaller.checked.native.machine.heap workFuel uv fragment childCache = some finished)
+      (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel updated uv (.inl fragment) finished.core) = [.ok ((false, nextMetadata), nextCore)])
+      (restarted : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel nextMetadata childCaller childQueries (EnumerationExpandableIndex.frame nextCore finished) (SourcePruningEnumerationRestart.decision stop order nextMetadata (EnumerationExpandableIndex.frame nextCore finished))
+              (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel n nextMetadata childCaller childQueries (EnumerationExpandableIndex.frame nextCore finished) (SourcePruningEnumerationRestart.decision stop order nextMetadata (EnumerationExpandableIndex.frame nextCore finished))) events)
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) (.dispatch [] checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved (.ok (some [.ok (fragment, returned)]), childCaller, childQueries, outerCore, waiting) (some childCache) :: events)
+  | prepared_opaque_callback_malformed
+      {n workFuel : Nat} {metadata : Metadata Typing}
+      {caller : Caller (bits + 2)} {queries : Queries} {before : Cached}
+      {uv : Nat} {checked : Core}
+      {prepared : MergedSourceComparison.Result Symbol Constraint
+        (Node × Option (EnumerateM Symbol Constraint Unit))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {action : Option (List (Except EnumerationState.Error (Unit × Core)))}
+      {after : Cached} {updated : Metadata Typing} {callbackCore : Core}
+      {handle : Nat} {scs : List Suspended} {decoded value : Node}
+      {entered : Core} {heap : InternedConstructorTemplates.State Symbol Constraint}
+      {fragment : Fragment} {returned outerCore : Core}
+      {childCaller : Caller (bits + 2)} {childQueries : Queries} {childCache : Cached}
+      {waiting : EnumerationWaitingIndex.Waiting}
+      {finished : Cached}
+      {raw : List (Except EnumerationState.Error ((Bool × Metadata Typing) × Core))}
+      (selected : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .narrowed checked prepared reached saved action (some after)
+          (some [.ok ((false, updated), callbackCore)]) none)
+      (actionNonempty : action ≠ some [])
+      (actual : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv reached after = ([.ok ((uv, handle, scs, decoded), entered)], some (.done value heap)))
+      (nonempty : value ≠ .empty)
+      (opaqueMode : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal scs value = false)
+      (actualChild : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved = ((.ok (some [.ok (fragment, returned)]), childCaller, childQueries, outerCore, waiting), some childCache))
+      (finalized : SourcePruningEnumerationFinalize.run childCaller.checked.native.machine.heap workFuel uv fragment childCache = some finished)
+      (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel updated uv (.inl fragment) finished.core) = raw)
+      (malformed : ∀ (flag : Bool) (nextMetadata : Metadata Typing) (nextCore : Core),
+        raw ≠ [.ok ((flag, nextMetadata), nextCore)])
+      : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order (n + 1) workFuel metadata caller queries before (some (.expand uv))
+                (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel (n + 1) metadata caller queries before (some (.expand uv))) [.dispatch [] checkEmpty workFuel workFuel workFuel workFuel workFuel scs value (SourcePruningEnumerationSelectedValueCaller.advance reached heap) (EnumerationExpandableIndex.frame entered after) saved (.ok (some [.ok (fragment, returned)]), childCaller, childQueries, outerCore, waiting) (some childCache)]
+
+private inductive ActualFullTaskQueryCoverageAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) :
+    Nat → Nat → Metadata Typing → Nat → IdentityActualSourceRoot bits → List (List Nat) →
+      IdentityActualSourceTask bits → Fold → List (Operation (bits + 2)) → Prop where
+  | tuple_cons
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {paths : List (List Nat)} {events : List (Operation (bits + 2))}
+      {count : Nat} {incoming : Node} {bucket : List Suspended} {rest : List (Node × List Suspended)}
+      (child : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root paths
+              (.child {point with count := count} incoming bucket rest) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.child {point with count := count} incoming bucket rest)) events)
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root paths
+                (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple {point with count := count + 1} ((incoming, bucket) :: rest))) events
+  | ordinary_child
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {paths : List (List Nat)} {events : List (Operation (bits + 2))}
+      {height : Nat} {incoming : Node} {bucket : List Suspended} {rest : List (Node × List Suspended)}
+      (ordinary : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = true)
+      (children : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root paths
+              (.rows height {point with height := height + 1} incoming bucket rest) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.rows height {point with height := height + 1} incoming bucket rest)) events)
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root paths
+                (.child {point with height := height + 1} incoming bucket rest) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.child {point with height := height + 1} incoming bucket rest)) events
+  | ordinary_rows
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {paths : List (List Nat)} {events : List (Operation (bits + 2))}
+      {height : Nat} {incoming : Node} {bucket : List Suspended} {rest : List (Node × List Suspended)}
+      (children : ActualFullRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root paths
+              height point incoming bucket rest (edgesOf incoming) point.caller point.queries (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv point incoming bucket rest (edgesOf incoming)) events)
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root paths
+                (.rows height point incoming bucket rest) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.rows height point incoming bucket rest)) events
+  | fallback_done
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {parents : List (List Nat)}
+      {events : List (Operation (bits + 2))}
+      {incoming : Node} {bucket : List Suspended} {rest : List (Node × List Suspended)}
+      {fragment : Fragment} {returned outerCore : Core} {after : Cached}
+      {reached : Caller (bits + 2)} {saved : Queries} {waiting : EnumerationWaitingIndex.Waiting}
+      (fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false)
+      (actual : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel bucket incoming point.caller point.before point.queries = ((.ok (some [.ok (fragment, returned)]), reached, saved, outerCore, waiting), some after))
+      (tail : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+              (.tuple {point with completed := point.completed ++ [fragment], caller := reached, before := after, queries := saved, mass := point.mass + point.bound, seed := advance point.seed (point.bound + 1)} rest) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple {point with completed := point.completed ++ [fragment], caller := reached, before := after, queries := saved, mass := point.mass + point.bound, seed := advance point.seed (point.bound + 1)} rest)) events)
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+                (.child point incoming bucket rest) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.child point incoming bucket rest)) (.dispatch (path ++ [point.completed.length]) checkEmpty workFuel workFuel workFuel workFuel workFuel bucket incoming point.caller point.before point.queries (.ok (some [.ok (fragment, returned)]), reached, saved, outerCore, waiting) (some after) :: events)
+  | fallback_stopped
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {parents : List (List Nat)}
+      {incoming : Node} {bucket : List Suspended} {rest : List (Node × List Suspended)}
+      {observation : Observation (bits + 2)} {candidate : Option Cached}
+      (fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false)
+      (actual : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel bucket incoming point.caller point.before point.queries = (observation, candidate))
+      (stopped : SourcePruningEnumerationSharedInvocationTrace.ShallowStopped observation candidate)
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+                (.child point incoming bucket rest) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.child point incoming bucket rest)) [.dispatch (path ++ [point.completed.length]) checkEmpty workFuel workFuel workFuel workFuel workFuel bucket incoming point.caller point.before point.queries observation candidate]
+  | selected_return
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {entryPoint current : IdentityActualSourcePoint bits}
+      {parentPath : List Nat} {ancestors : List (List Nat)}
+      {rest : List (Node × List Suspended)} {edge : Edge} {residual : Option Constraint}
+      {events : List (Operation (bits + 2))}
+      (tail : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (parentPath :: ancestors)
+              (.tuple (identity_actual_source_return_point entryPoint current edge residual) rest) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple (identity_actual_source_return_point entryPoint current edge residual) rest)) events)
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root ((parentPath ++ [entryPoint.completed.length]) :: parentPath :: ancestors)
+                (.tuple {current with frame := .selected entryPoint.frame entryPoint.completed rest edge residual entryPoint.caller entryPoint.queries entryPoint.height entryPoint.count entryPoint.bound} []) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple {current with frame := .selected entryPoint.frame entryPoint.completed rest edge residual entryPoint.caller entryPoint.queries entryPoint.height entryPoint.count entryPoint.bound} [])) (.residual (parentPath ++ [entryPoint.completed.length]) residual (.node edge.entry.key.symbol current.completed) current.caller current.queries current.before (SelectedEdge.finish residual (.node edge.entry.key.symbol current.completed) current.before) :: events)
+  | captured_finalize_stopped
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {edge : Edge} {residual : Option Constraint}
+      {frameCaller : Caller (bits + 2)} {frameQueries : Queries}
+      (finalized : SourcePruningEnumerationFinalize.run point.caller.checked.native.machine.heap workFuel uv (.node edge.entry.key.symbol point.completed) (SelectedEdge.finish residual (.node edge.entry.key.symbol point.completed) point.before) = none)
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root [path]
+                (.tuple {point with frame := .captured edge residual frameCaller frameQueries} []) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple {point with frame := .captured edge residual frameCaller frameQueries} [])) [.residual path residual (.node edge.entry.key.symbol point.completed) point.caller point.queries point.before (SelectedEdge.finish residual (.node edge.entry.key.symbol point.completed) point.before)]
+  | captured_callback_true
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {edge : Edge} {residual : Option Constraint}
+      {frameCaller : Caller (bits + 2)} {frameQueries : Queries}
+      {finished : Cached} {updated : Metadata Typing} {recordedCore : Core}
+      (finalized : SourcePruningEnumerationFinalize.run point.caller.checked.native.machine.heap workFuel uv (.node edge.entry.key.symbol point.completed) (SelectedEdge.finish residual (.node edge.entry.key.symbol point.completed) point.before) = some finished)
+      (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (.inl (.node edge.entry.key.symbol point.completed)) finished.core) = [.ok ((true, updated), recordedCore)])
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root [path]
+                (.tuple {point with frame := .captured edge residual frameCaller frameQueries} []) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple {point with frame := .captured edge residual frameCaller frameQueries} [])) [.residual path residual (.node edge.entry.key.symbol point.completed) point.caller point.queries point.before (SelectedEdge.finish residual (.node edge.entry.key.symbol point.completed) point.before)]
+  | captured_callback_false
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {edge : Edge} {residual : Option Constraint}
+      {frameCaller : Caller (bits + 2)} {frameQueries : Queries}
+      {finished : Cached} {updated : Metadata Typing} {recordedCore : Core}
+      {events : List (Operation (bits + 2))}
+      (finalized : SourcePruningEnumerationFinalize.run point.caller.checked.native.machine.heap workFuel uv (.node edge.entry.key.symbol point.completed) (SelectedEdge.finish residual (.node edge.entry.key.symbol point.completed) point.before) = some finished)
+      (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (.inl (.node edge.entry.key.symbol point.completed)) finished.core) = [.ok ((false, updated), recordedCore)])
+      (restarted : ActualFullOuterQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel updated point.caller point.queries (EnumerationExpandableIndex.frame recordedCore finished) (SourcePruningEnumerationRestart.decision stop order updated (EnumerationExpandableIndex.frame recordedCore finished))
+              (resumeWithNarrow (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf) (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel n updated point.caller point.queries (EnumerationExpandableIndex.frame recordedCore finished) (SourcePruningEnumerationRestart.decision stop order updated (EnumerationExpandableIndex.frame recordedCore finished))) events)
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root [path]
+                (.tuple {point with frame := .captured edge residual frameCaller frameQueries} []) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple {point with frame := .captured edge residual frameCaller frameQueries} [])) (.residual path residual (.node edge.entry.key.symbol point.completed) point.caller point.queries point.before (SelectedEdge.finish residual (.node edge.entry.key.symbol point.completed) point.before) :: events)
+  | captured_callback_malformed
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {edge : Edge} {residual : Option Constraint}
+      {frameCaller : Caller (bits + 2)} {frameQueries : Queries}
+      {finished : Cached}
+      {raw : List (Except EnumerationState.Error ((Bool × Metadata Typing) × Core))}
+      (finalized : SourcePruningEnumerationFinalize.run point.caller.checked.native.machine.heap workFuel uv (.node edge.entry.key.symbol point.completed) (SelectedEdge.finish residual (.node edge.entry.key.symbol point.completed) point.before) = some finished)
+      (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (.inl (.node edge.entry.key.symbol point.completed)) finished.core) = raw)
+      (malformed : ∀ (flag : Bool) (updated : Metadata Typing) (recordedCore : Core),
+        raw ≠ [.ok ((flag, updated), recordedCore)])
+      : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root [path]
+                (.tuple {point with frame := .captured edge residual frameCaller frameQueries} []) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple {point with frame := .captured edge residual frameCaller frameQueries} [])) [.residual path residual (.node edge.entry.key.symbol point.completed) point.caller point.queries point.before (SelectedEdge.finish residual (.node edge.entry.key.symbol point.completed) point.before)]
+
+private inductive ActualFullRowsQueryCoverageAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) :
+    Nat → Nat → Metadata Typing → Nat → IdentityActualSourceRoot bits → List (List Nat) →
+      Nat → IdentityActualSourcePoint bits → Node → List Suspended → List (Node × List Suspended) →
+      List Edge → Caller (bits + 2) → Queries → Fold → List (Operation (bits + 2)) → Prop where
+  | nil
+      {n workFuel uv height : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {parents : List (List Nat)} {incoming : Node} {bucket : List Suspended}
+      {rest : List (Node × List Suspended)} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      : ActualFullRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+                height point incoming bucket rest [] rowCaller rowQueries (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv {point with caller := rowCaller, queries := rowQueries} incoming bucket rest []) []
+  | unhandled_none
+      {n workFuel uv height : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {parents : List (List Nat)} {incoming : Node} {bucket : List Suspended}
+      {rest : List (Node × List Suspended)} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap bucket edge point.before = none)
+      : ActualFullRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+                height point incoming bucket rest (edge :: remaining) rowCaller rowQueries (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv {point with caller := rowCaller, queries := rowQueries} incoming bucket rest (edge :: remaining)) [.prepare (path ++ [point.completed.length]) bucket edge rowCaller point.before rowQueries none]
+  | unhandled_many
+      {n workFuel uv height : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {parents : List (List Nat)} {incoming : Node} {bucket : List Suspended}
+      {rest : List (Node × List Suspended)} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      {first second : Row} {later : List Row}
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap bucket edge point.before = some (first :: second :: later))
+      : ActualFullRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+                height point incoming bucket rest (edge :: remaining) rowCaller rowQueries (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv {point with caller := rowCaller, queries := rowQueries} incoming bucket rest (edge :: remaining)) [.prepare (path ++ [point.completed.length]) bucket edge rowCaller point.before rowQueries (some (first :: second :: later))]
+  | rejected
+      {n workFuel uv height : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {parents : List (List Nat)} {incoming : Node} {bucket : List Suspended}
+      {rest : List (Node × List Suspended)} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      {events : List (Operation (bits + 2))}
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap bucket edge point.before = some [])
+      (suffix : ActualFullRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+              height point incoming bucket rest remaining rowCaller rowQueries (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv {point with caller := rowCaller, queries := rowQueries} incoming bucket rest remaining) events)
+      : ActualFullRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+                height point incoming bucket rest (edge :: remaining) rowCaller rowQueries (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv {point with caller := rowCaller, queries := rowQueries} incoming bucket rest (edge :: remaining)) (.prepare (path ++ [point.completed.length]) bucket edge rowCaller point.before rowQueries (some []) :: events)
+  | own_complete
+      {n workFuel uv height : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {parents : List (List Nat)} {incoming : Node} {bucket : List Suspended}
+      {rest : List (Node × List Suspended)} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      {attempted : List Edge} {residual : Option Constraint} {ownCache : Cached}
+      {staged : List Input}
+      {prefixProcessed : List (SelectedEdge.Result (bits + 2))}
+      {prefixOutputs : List (Output (bits + 2) Typing)}
+      {processed : List (SelectedEdge.Result (bits + 2))}
+      {outputs : List (Output (bits + 2) Typing)}
+      {childEvents : List (Operation (bits + 2))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {suffixEvents : List (Operation (bits + 2))}
+      (sourceRows : edgesOf incoming = attempted ++ edge :: remaining)
+      (past : (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv point incoming bucket rest attempted) = .complete prefixProcessed prefixOutputs rowCaller rowQueries)
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap bucket edge point.before = some [((edge.entry.key.symbol, staged, residual), ownCache)])
+      (lower : ∀ child childBucket,
+              (child, childBucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+              MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height incoming)
+      (children : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root ((path ++ [point.completed.length]) :: path :: parents)
+              (.tuple (identity_actual_source_inner_point height root.limit root.own point rest edge residual rowCaller rowQueries ownCache (identity_actual_source_row_boundary n root.limit root.own height point attempted.length)) (staged.map (fun input => (input.1, input.2.1)))) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple (identity_actual_source_inner_point height root.limit root.own point rest edge residual rowCaller rowQueries ownCache (identity_actual_source_row_boundary n root.limit root.own height point attempted.length)) (staged.map (fun input => (input.1, input.2.1))))) childEvents)
+      (completed : (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple (identity_actual_source_inner_point height root.limit root.own point rest edge residual rowCaller rowQueries ownCache (identity_actual_source_row_boundary n root.limit root.own height point attempted.length)) (staged.map (fun input => (input.1, input.2.1))))) = .complete processed outputs reached saved)
+      (suffix : ActualFullRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+              height point incoming bucket rest remaining reached saved (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv {point with caller := reached, queries := saved} incoming bucket rest remaining) suffixEvents)
+      : ActualFullRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+                height point incoming bucket rest (edge :: remaining) rowCaller rowQueries (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv {point with caller := rowCaller, queries := rowQueries} incoming bucket rest (edge :: remaining)) (.prepare (path ++ [point.completed.length]) bucket edge rowCaller point.before rowQueries (some [((edge.entry.key.symbol, staged, residual), ownCache)]) :: (childEvents ++ suffixEvents))
+  | own_stopped
+      {n workFuel uv height : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {point : IdentityActualSourcePoint bits}
+      {path : List Nat} {parents : List (List Nat)} {incoming : Node} {bucket : List Suspended}
+      {rest : List (Node × List Suspended)} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      {attempted : List Edge} {residual : Option Constraint} {ownCache : Cached}
+      {staged : List Input}
+      {prefixProcessed : List (SelectedEdge.Result (bits + 2))}
+      {prefixOutputs : List (Output (bits + 2) Typing)}
+      {processed : List (SelectedEdge.Result (bits + 2))}
+      {outputs : List (Output (bits + 2) Typing)}
+      {childEvents : List (Operation (bits + 2))}
+      {stoppedAt : NativeContinuations.Stop (Failure (bits + 2) Typing) (bits + 2)}
+      (sourceRows : edgesOf incoming = attempted ++ edge :: remaining)
+      (past : (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv point incoming bucket rest attempted) = .complete prefixProcessed prefixOutputs rowCaller rowQueries)
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap bucket edge point.before = some [((edge.entry.key.symbol, staged, residual), ownCache)])
+      (lower : ∀ child childBucket,
+              (child, childBucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+              MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height incoming)
+      (children : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root ((path ++ [point.completed.length]) :: path :: parents)
+              (.tuple (identity_actual_source_inner_point height root.limit root.own point rest edge residual rowCaller rowQueries ownCache (identity_actual_source_row_boundary n root.limit root.own height point attempted.length)) (staged.map (fun input => (input.1, input.2.1)))) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple (identity_actual_source_inner_point height root.limit root.own point rest edge residual rowCaller rowQueries ownCache (identity_actual_source_row_boundary n root.limit root.own height point attempted.length)) (staged.map (fun input => (input.1, input.2.1))))) childEvents)
+      (stopped : (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple (identity_actual_source_inner_point height root.limit root.own point rest edge residual rowCaller rowQueries ownCache (identity_actual_source_row_boundary n root.limit root.own height point attempted.length)) (staged.map (fun input => (input.1, input.2.1))))) = .stopped processed outputs stoppedAt)
+      : ActualFullRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root (path :: parents)
+                height point incoming bucket rest (edge :: remaining) rowCaller rowQueries (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv {point with caller := rowCaller, queries := rowQueries} incoming bucket rest (edge :: remaining)) (.prepare (path ++ [point.completed.length]) bucket edge rowCaller point.before rowQueries (some [((edge.entry.key.symbol, staged, residual), ownCache)]) :: childEvents)
+
+private inductive ActualFullCapturedRowsQueryCoverageAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) :
+    Nat → Nat → Metadata Typing → Nat → IdentityActualSourceRoot bits → List Edge →
+      Caller (bits + 2) → Queries → Fold → List (Operation (bits + 2)) → Prop where
+  | nil
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      : ActualFullCapturedRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root
+                [] rowCaller rowQueries (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before [] rowCaller rowQueries) []
+  | unhandled_none
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap root.scs edge root.before = none)
+      : ActualFullCapturedRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root
+                (edge :: remaining) rowCaller rowQueries (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before (edge :: remaining) rowCaller rowQueries) [.prepare [] root.scs edge rowCaller root.before rowQueries none]
+  | unhandled_many
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      {first second : Row} {later : List Row}
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap root.scs edge root.before = some (first :: second :: later))
+      : ActualFullCapturedRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root
+                (edge :: remaining) rowCaller rowQueries (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before (edge :: remaining) rowCaller rowQueries) [.prepare [] root.scs edge rowCaller root.before rowQueries (some (first :: second :: later))]
+  | rejected
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      {events : List (Operation (bits + 2))}
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap root.scs edge root.before = some [])
+      (suffix : ActualFullCapturedRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root
+              remaining rowCaller rowQueries (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before remaining rowCaller rowQueries) events)
+      : ActualFullCapturedRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root
+                (edge :: remaining) rowCaller rowQueries (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before (edge :: remaining) rowCaller rowQueries) (.prepare [] root.scs edge rowCaller root.before rowQueries (some []) :: events)
+  | own_complete
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      {attempted : List Edge} {residual : Option Constraint} {ownCache : Cached}
+      {staged : List Input}
+      {prefixProcessed : List (SelectedEdge.Result (bits + 2))}
+      {prefixOutputs : List (Output (bits + 2) Typing)}
+      {processed : List (SelectedEdge.Result (bits + 2))}
+      {outputs : List (Output (bits + 2) Typing)}
+      {childEvents : List (Operation (bits + 2))}
+      {reached : Caller (bits + 2)} {saved : Queries}
+      {suffixEvents : List (Operation (bits + 2))}
+      (sourceRows : edgesOf root.incoming = attempted ++ edge :: remaining)
+      (past : (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before attempted root.caller root.queries) = .complete prefixProcessed prefixOutputs rowCaller rowQueries)
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap root.scs edge root.before = some [((edge.entry.key.symbol, staged, residual), ownCache)])
+      (children : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root [[]]
+              (.tuple { frame := .captured edge residual rowCaller rowQueries, completed := [], caller := rowCaller, before := ownCache, queries := rowQueries, height := root.limit - 1, count := root.limit, bound := root.ceiling + root.own, mass := root.ceiling, seed := root.rowSeed n attempted.length } (staged.map (fun input => (input.1, input.2.1)))) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple { frame := .captured edge residual rowCaller rowQueries, completed := [], caller := rowCaller, before := ownCache, queries := rowQueries, height := root.limit - 1, count := root.limit, bound := root.ceiling + root.own, mass := root.ceiling, seed := root.rowSeed n attempted.length } (staged.map (fun input => (input.1, input.2.1))))) childEvents)
+      (completed : (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple { frame := .captured edge residual rowCaller rowQueries, completed := [], caller := rowCaller, before := ownCache, queries := rowQueries, height := root.limit - 1, count := root.limit, bound := root.ceiling + root.own, mass := root.ceiling, seed := root.rowSeed n attempted.length } (staged.map (fun input => (input.1, input.2.1))))) = .complete processed outputs reached saved)
+      (suffix : ActualFullCapturedRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root
+              remaining reached saved (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before remaining reached saved) suffixEvents)
+      : ActualFullCapturedRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root
+                (edge :: remaining) rowCaller rowQueries (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before (edge :: remaining) rowCaller rowQueries) (.prepare [] root.scs edge rowCaller root.before rowQueries (some [((edge.entry.key.symbol, staged, residual), ownCache)]) :: (childEvents ++ suffixEvents))
+  | own_stopped
+      {n workFuel uv : Nat} {metadata : Metadata Typing}
+      {root : IdentityActualSourceRoot bits} {rowCaller : Caller (bits + 2)} {rowQueries : Queries}
+      {edge : Edge} {remaining : List Edge}
+      {attempted : List Edge} {residual : Option Constraint} {ownCache : Cached}
+      {staged : List Input}
+      {prefixProcessed : List (SelectedEdge.Result (bits + 2))}
+      {prefixOutputs : List (Output (bits + 2) Typing)}
+      {processed : List (SelectedEdge.Result (bits + 2))}
+      {outputs : List (Output (bits + 2) Typing)}
+      {childEvents : List (Operation (bits + 2))}
+      {stoppedAt : NativeContinuations.Stop (Failure (bits + 2) Typing) (bits + 2)}
+      (sourceRows : edgesOf root.incoming = attempted ++ edge :: remaining)
+      (past : (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before attempted root.caller root.queries) = .complete prefixProcessed prefixOutputs rowCaller rowQueries)
+      (actual : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap root.scs edge root.before = some [((edge.entry.key.symbol, staged, residual), ownCache)])
+      (children : ActualFullTaskQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root [[]]
+              (.tuple { frame := .captured edge residual rowCaller rowQueries, completed := [], caller := rowCaller, before := ownCache, queries := rowQueries, height := root.limit - 1, count := root.limit, bound := root.ceiling + root.own, mass := root.ceiling, seed := root.rowSeed n attempted.length } (staged.map (fun input => (input.1, input.2.1)))) (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple { frame := .captured edge residual rowCaller rowQueries, completed := [], caller := rowCaller, before := ownCache, queries := rowQueries, height := root.limit - 1, count := root.limit, bound := root.ceiling + root.own, mass := root.ceiling, seed := root.rowSeed n attempted.length } (staged.map (fun input => (input.1, input.2.1))))) childEvents)
+      (stopped : (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv (.tuple { frame := .captured edge residual rowCaller rowQueries, completed := [], caller := rowCaller, before := ownCache, queries := rowQueries, height := root.limit - 1, count := root.limit, bound := root.ceiling + root.own, mass := root.ceiling, seed := root.rowSeed n attempted.length } (staged.map (fun input => (input.1, input.2.1))))) = .stopped processed outputs stoppedAt)
+      : ActualFullCapturedRowsQueryCoverageAt holeKey fits admits graph templates checkEmpty edgesOf stop order n workFuel metadata uv root
+                (edge :: remaining) rowCaller rowQueries (SourcePruningEnumerationSharedBranching.scan (actual_source_root_visit_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order n workFuel metadata uv root.scs) root.before (edge :: remaining) rowCaller rowQueries) (.prepare [] root.scs edge rowCaller root.before rowQueries (some [((edge.entry.key.symbol, staged, residual), ownCache)]) :: childEvents)
+
+end
+
+end ActualFullQueryCoverageRelations
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
