@@ -1,0 +1,234 @@
+from pathlib import Path
+import hashlib
+import json
+import re
+import subprocess
+
+ROOT = Path('/home/tritlo/Code/mcfta')
+BASE = ROOT/'lean/restart-evidence'
+WORK = BASE/'20261118-worker-endpoint-seeds-zero-work'
+PRIOR = BASE/'20261118-invocation-native-query-projection-work'
+PRIOR_RUN = BASE/'20261118-invocation-native-query-projection-publication'
+LEAF_WORK = BASE/'20261118-actual-source-child-query-seeds-work'
+OWNER = 'lean/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean'
+SOURCE = '08bc975d5073bbc96129b8183245080650e677c4'
+CHECKPOINT = '51ff371093cf387f351c1f30428b48d9f9cf25be'
+LIMITS = {'memory.max':'8589934592','memory.high':'8589934592','memory.swap.max':'0'}
+SHA = lambda data: hashlib.sha256(data).hexdigest()
+read = lambda path: json.loads(path.read_text())
+bound = set()
+OVERRIDES = globals().get('OVERRIDES', {})
+
+
+def verify(path, record):
+    data = path.read_bytes()
+    assert SHA(data) == (record['sha256'] if isinstance(record,dict) else record),str(path)
+    if isinstance(record,dict) and 'bytes' in record:
+        assert len(data) == record['bytes'],str(path)
+    bound.add(path)
+    return data
+
+
+def records(value):
+    if isinstance(value,list):
+        return [(item.get('file',item.get('path')),item) for item in value]
+    if 'files' in value:
+        return records(value['files'])
+    if 'pins' in value:
+        return records(value['pins'])
+    return value.items()
+
+
+def historical(name, record):
+    digest = record['sha256'] if isinstance(record,dict) else record
+    for path in [ROOT/name,ROOT/OVERRIDES.get(name,name)]:
+        if path.is_file() and SHA(path.read_bytes()) == digest:
+            return verify(path,record)
+    raise AssertionError(('Unmapped historical pin',name))
+
+
+def packet(path, digest=None):
+    manifest = json.loads(verify(path/'MANIFEST.json',digest or SHA((path/'MANIFEST.json').read_bytes())))
+    for name,record in records(manifest['files']):
+        verify(path/name,record)
+    return manifest
+
+
+def pin_map(path, digest=None, count=None):
+    values = json.loads(verify(path,digest or SHA(path.read_bytes())))
+    if count is not None:
+        assert len(values) == count
+    for name,record in values.items():
+        historical(name,record)
+    return values
+
+
+def clean_check(item, reports, declarations):
+    assert item['exit'] == 0 and item['total_axiom_reports'] == reports
+    assert not item['diagnostics'] and not item['sorryAx'] and not item['nonstandard_axioms']
+    assert item['declaration_checks'] == declarations
+    assert item['axiom_groups'] + item['axiom_free_reports'] == reports
+
+
+def private_check(work, verified_name, actual_name, declarations):
+    verified,actual = read(work/verified_name),read(work/actual_name)
+    assert verified['actual_terminal'] and actual['actual_terminal']
+    assert verified['actual_terminal_exit'] == actual['actual_terminal_exit'] == 0
+    assert verified['actual_session'] == actual['actual_session']
+    assert verified['source_commit'] == SOURCE and not verified['normal_Source_changed']
+    assert verified['credited_public_reports'] == 0 and verified['credited_private_reports'] == 1
+    assert verified['proof_credit'] and verified['source_pins_unchanged']
+    assert verified['definition_axiom_credit'] == 0
+    runtime = BASE/verified['runtime']
+    checked = json.loads(verify(runtime/'checked.json',verified['checked_sha256']))
+    assert checked == json.loads(verify(runtime/'results.json',verified['results_sha256']))
+    assert checked['checks'] == verified['checks'] and checked['limits'] == LIMITS
+    assert len(checked['checks']) == 1
+    clean_check(checked['checks'][0],1,declarations)
+    pin_map(runtime/'source-pins.json',verified['source_pins_sha256'],verified['pins_independently_reverified'])
+    control = BASE/verified['selected_control']
+    assert verified['selected_control'] == actual['selected_control']
+    assert verified['selected_control_manifest_sha256'] == actual['selected_control_manifest_sha256']
+    packet(control,verified['selected_control_manifest_sha256'])
+    for path in [work/verified_name,work/actual_name,runtime/(checked['checks'][0]['name']+'.txt')]:
+        bound.add(path)
+    return verified,actual,runtime,checked['checks'][0]
+
+
+def preflight(control):
+    packet(control)
+    for name,record in records(read(control/'RECEIPT-PINS.json')):
+        verify(ROOT/name,record)
+    baseline_path = ROOT/read(control/'EXPECTED-STAGE.json')['source_baseline_path']
+    baseline = read(baseline_path)
+    assert baseline['source_commit'] == SOURCE and baseline['source_files'] == 6286
+    assert len(baseline['sources']) == 6286 and len(baseline['toolchain']) == 4
+    assert set(baseline['sources']) == {str(path.relative_to(ROOT)) for path in (ROOT/'lean/MicroCFTA').glob('*.lean')}
+    for name,record in {**baseline['sources'],**baseline['toolchain']}.items():
+        historical(name,record)
+    bound.add(baseline_path)
+    assert subprocess.check_output(['git','branch','--show-current'],cwd=ROOT).decode().strip() == 'formalize'
+    subprocess.run(['git','merge-base','--is-ancestor',CHECKPOINT,'HEAD'],cwd=ROOT,check=True)
+    assert not subprocess.check_output(['git','diff','--cached','--name-only'],cwd=ROOT)
+    changed = subprocess.check_output(['git','diff','--name-only',SOURCE,'HEAD'],cwd=ROOT).decode().splitlines()
+    assert all(name in ['NEXT-PROMPT.md','HANDOFF.md','FINDINGS.md'] or name.startswith('lean/restart-evidence/') for name in changed)
+    subprocess.run(['git','diff','--quiet',SOURCE,'HEAD','--','lean/MicroCFTA','shell.nix','lean/lean-toolchain','lean/lakefile.toml','lean/lake-manifest.json'],cwd=ROOT,check=True)
+    commit,actual = read(PRIOR/'SOURCE-COMMIT.json'),read(PRIOR/'SOURCE-COMMIT-ACTUAL-RUN.json')
+    assert commit['source_commit'] == actual['source_commit'] == SOURCE
+    assert commit['actual_terminal'] and actual['actual_terminal']
+    assert commit['actual_terminal_exit'] == actual['actual_terminal_exit'] == 0
+    push = read(PRIOR/'PUSH-VERIFIED.json')
+    assert push['source_commit'] == SOURCE and push['checkpoint_commit'] == push['remote_commit'] == CHECKPOINT
+    assert push['actual_push_terminal'] and push['actual_remote_check_terminal']
+    assert push['actual_push_terminal_exit'] == push['actual_remote_check_terminal_exit'] == push['postpush_current_tree_verifier_terminal_exit'] == 0
+    publication,publication_actual = read(PRIOR/'PUBLICATION-VERIFIED.json'),read(PRIOR/'PUBLICATION-ACTUAL-RUN.json')
+    assert publication['actual_terminal'] and publication_actual['actual_terminal']
+    assert publication['actual_terminal_exit'] == publication_actual['actual_terminal_exit'] == 0
+    assert publication['actual_session'] == publication_actual['actual_session'] == commit['publication_actual_session']
+    prior_checked = json.loads(verify(PRIOR_RUN/'checked.json',publication['checked_sha256']))
+    assert prior_checked == json.loads(verify(PRIOR_RUN/'results.json',publication['results_sha256']))
+    assert prior_checked['all_five_gates_passed'] and prior_checked['source_pins_unchanged']
+    assert prior_checked['checks'] == publication['checks']
+    for item,reports,declarations in zip(prior_checked['checks'],[744,1,339,744,744],[0,1,0,0,0]):
+        clean_check(item,reports,declarations)
+    pin_map(PRIOR_RUN/'source-pins.json',publication['source_pins_sha256'],publication['pins_independently_reverified'])
+    assert prior_checked['resource_and_component_probes'] == 538
+    assert prior_checked['resource_owner_reports_inherited'] == 264
+    for name in ['SOURCE-COMMIT.json','SOURCE-COMMIT-ACTUAL-RUN.json','PUSH-VERIFIED.json','PUBLICATION-VERIFIED.json','PUBLICATION-ACTUAL-RUN.json']:
+        bound.add(PRIOR/name)
+    leaf = private_check(LEAF_WORK,'REPAIR-CHECK-VERIFIED.json','REPAIR-CHECK-ACTUAL-RUN.json',0)
+    zero_names = read(control/'PRIVATE-CHECKS.json')['zero']
+    zero = private_check(WORK,zero_names['verified'],zero_names['actual'],3)
+    assert leaf[0]['actual_session'] == 79066
+    assert zero[0]['rebuilt_prior_leaf_extra_credit'] == 0
+    rejected = read(LEAF_WORK/'FIRST-CHECK-REJECTED.json')
+    failed_run = BASE/rejected['runtime']
+    failed = json.loads(verify(failed_run/'results.json',rejected['results_sha256']))
+    assert rejected['actual_session'] == 15463 and rejected['actual_terminal'] and rejected['actual_terminal_exit'] == 1
+    assert not failed['proof_credit'] and failed['credited_private_reports'] == 0 and not (failed_run/'checked.json').exists()
+    assert failed['checks'] == rejected['checks'] and len(failed['checks']) == 1
+    assert failed['checks'][0]['diagnostics'] == 1 and failed['checks'][0]['sorryAx']
+    pin_map(failed_run/'source-pins.json',rejected['source_pins_sha256'],rejected['pins_independently_reverified'])
+    bound.update([LEAF_WORK/'FIRST-CHECK-REJECTED.json',failed_run/(failed['checks'][0]['name']+'.txt')])
+    zero_rejected = read(WORK/'FIRST-CHECK-REJECTED.json')
+    zero_failed_run = BASE/zero_rejected['runtime']
+    zero_failed = json.loads(verify(zero_failed_run/'results.json',zero_rejected['results_sha256']))
+    assert zero_rejected['actual_session'] == 78387 and zero_rejected['actual_terminal'] and zero_rejected['actual_terminal_exit'] == 1
+    assert not zero_failed['proof_credit'] and zero_failed['credited_private_reports'] == 0
+    assert not (zero_failed_run/'checked.json').exists() and zero_failed['checks'] == zero_rejected['checks']
+    assert len(zero_failed['checks']) == 1
+    assert zero_failed['checks'][0]['diagnostics'] == 6 and not zero_failed['checks'][0]['sorryAx']
+    assert zero_failed['checks'][0]['total_axiom_reports'] == 0 and zero_failed['checks'][0]['declaration_checks'] == 3
+    pin_map(zero_failed_run/'source-pins.json',zero_rejected['source_pins_sha256'],zero_rejected['pins_independently_reverified'])
+    bound.update([WORK/'FIRST-CHECK-REJECTED.json',zero_failed_run/(zero_failed['checks'][0]['name']+'.txt')])
+    # Protected process visibility errors remain part of the actual cleanup receipt.
+    cleanup = read(LEAF_WORK/'REPAIR-TMP-CLEANUP-RESULT.json')
+    assert cleanup['actual_session'] == leaf[0]['actual_session']
+    assert cleanup['owned_terminal_only'] and cleanup['scope_ActiveState'] == 'inactive'
+    assert cleanup['generated_terminal_outputs_only'] and cleanup['no_source_or_normal_cache_data_unlinked']
+    assert cleanup['normal_cache_preserved'] and cleanup['all_targets_removed'] and cleanup['unknown_tmp_entries_preserved']
+    assert cleanup['live_process_references'] == [] and cleanup['no_cache_data_copied']
+    bound.add(LEAF_WORK/'REPAIR-TMP-CLEANUP-RESULT.json')
+    component = read(control/'COMPONENT.json')
+    chosen = BASE/component['packet']
+    packet(chosen,component['manifest_sha256'])
+    prefix = BASE/component['prefix_packet']
+    packet(prefix,component['prefix_manifest_sha256'])
+    raw = verify(chosen/component['source'],{'sha256':component['raw_sha256'],'bytes':component['raw_bytes']})
+    original = BASE/component['original_packet']
+    packet(original,component['original_manifest_sha256'])
+    original_header = verify(original/'FIRST-HEADER.lean.txt',component['original_FIRST_sha256'])
+    corrected_header = (chosen/'FIRST-HEADER.lean.txt').read_bytes()
+    assert corrected_header == original_header.replace(b'RealEagerEndpointSeedsAtDepth sourceHeap',b'RealEagerEndpointSeedsAtDepth (bits := bits) sourceHeap',1)
+    assert original_header != corrected_header and component['FIRST_bytes_changed']
+    original_raw = (original/component['source']).read_bytes()
+    assert raw == original_raw.replace(original_header.rstrip(),corrected_header.rstrip(),1)
+    for filename in ['PROOF.lean.txt','MOTIVE-DEFINITIONS.lean.txt','PRIVATE-OWNER-PROBES.lean.txt','DEFINITION-CHECKS.lean.txt']:
+        assert (chosen/filename).read_bytes() == (original/filename).read_bytes()
+    assert (zero_failed_run/'source/MicroCFTA'/component['source']).read_bytes() == original_raw+b'\n'+(original/'COMBINED-PROBES.lean.txt').read_bytes()
+    bound.add(zero_failed_run/'source/MicroCFTA'/component['source'])
+    for candidate in [chosen,prefix]:
+        for filename in ['SOURCE-PINS.json','ADDITIONAL-SOURCE-PINS.json','DEPENDENCY-PINS.json']:
+            if (candidate/filename).exists():
+                for name,record in records(read(candidate/filename)):
+                    historical(name,record)
+    prefix_raw = verify(prefix/component['source'],{'sha256':component['prefix_sha256'],'bytes':component['prefix_bytes']})
+    assert raw == prefix_raw + (chosen/'APPEND.lean.txt').read_bytes()
+    assert SHA((chosen/'APPEND.lean.txt').read_bytes()) == component['append_sha256']
+    old = historical(OWNER,baseline['sources'][OWNER])
+    assert len(old) == 2533565 and raw[72:72+len(old)] == old
+    assert raw[:72] == (prefix/'IMPORTS.lean.txt').read_bytes()
+    assert raw[:72] == b'import MicroCFTA.SourcePruningEnumerationSharedChildDispatchQueryEvents\n'
+    assert (leaf[2]/'source/MicroCFTA'/component['source']).read_bytes() == prefix_raw+b'\n'+(prefix/'PRIVATE-OWNER-PROBES.lean.txt').read_bytes()
+    assert (zero[2]/'source/MicroCFTA'/component['source']).read_bytes() == raw+b'\n'+(chosen/'COMBINED-PROBES.lean.txt').read_bytes()
+    for path in [leaf[2]/'source/MicroCFTA'/component['source'],zero[2]/'source/MicroCFTA'/component['source']]:
+        bound.add(path)
+    headers = [(prefix/'FIRST-HEADER.lean.txt','f6331f13cf92ceaf4c524a70e5750b3b24fa4f28236cd8b9075b189ce5e8c2e0'),(chosen/'FIRST-HEADER.lean.txt',component['headers']['FIRST-HEADER.lean.txt'])]
+    for path,digest in headers:
+        header = verify(path,digest).rstrip()
+        assert raw.count(header) == 1 and re.match(rb'\s*:= by',raw[raw.index(header)+len(header):])
+    motives = verify(chosen/'MOTIVE-DEFINITIONS.lean.txt',component['headers']['MOTIVE-DEFINITIONS.lean.txt'])
+    assert raw.count(motives.rstrip()) == 1
+    probes = verify(control/'STRICT-OWNER-PROBES.lean.txt',read(control/'EXPECTED-STAGE.json')['strict_probes_sha256'])
+    assert probes == (prefix/'PRIVATE-OWNER-PROBES.lean.txt').read_bytes()+(chosen/'PRIVATE-OWNER-PROBES.lean.txt').read_bytes()+(chosen/'DEFINITION-CHECKS.lean.txt').read_bytes()
+    assert re.findall(r'^#print axioms (\S+)',probes.decode(),re.M) == component['private_qnames']
+    assert re.findall(r'^#check (\S+)',probes.decode(),re.M) == component['definition_qnames']
+    normal = {path.stem:path for path in (ROOT/'lean/MicroCFTA').glob('*.lean')}
+    active,seen,order,graph = [],set(),[],{}
+    def visit(name):
+        assert name not in active,name
+        if name in seen:
+            return
+        active.append(name)
+        text = raw.decode() if name == component['module'] else normal[name].read_text()
+        graph[name] = re.findall(r'^import MicroCFTA\.([A-Za-z0-9_]+)\s*$',text,re.M)
+        for child in graph[name]:
+            visit(child)
+        active.pop(); seen.add(name); order.append(name)
+    visit(component['module'])
+    topology = read(control/'TOPOLOGICAL-ORDER.json')
+    assert graph == topology['direct_imports'] and order == topology['full_transitive_order']
+    fresh_groups = leaf[3]['axiom_groups']+zero[3]['axiom_groups']
+    fresh_free = leaf[3]['axiom_free_reports']+zero[3]['axiom_free_reports']
+    assert fresh_groups+fresh_free == 2
+    return baseline,component,raw,probes,leaf,zero,prior_checked,{'axiom_groups':fresh_groups,'axiom_free_reports':fresh_free}

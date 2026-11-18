@@ -1,0 +1,204 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-worker-endpoint-seeds-zero-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:36367:4: error: don't know how to synthesize implicit argument `bits`
+  @RealEagerEndpointSeedsAtDepth Typing Key
+    (?m.9 sourceHeap entry body depth ordinary bodyId holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver)
+    inst✝² inst✝¹ inst✝ sourceHeap entry body depth ordinary bodyId holeKey fits admits graph templates checkEmpty
+    edgesOf stop order formulas solver 0
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+sourceHeap : InternedConstructorTemplates.State Symbol Constraint
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Node
+bodyId : Nat
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+⊢ Nat
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-worker-endpoint-seeds-zero-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:36377:18: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-worker-endpoint-seeds-zero-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:36386:22: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-worker-endpoint-seeds-zero-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:36393:22: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-worker-endpoint-seeds-zero-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:36398:10: error: Tactic `constructor` failed: no applicable constructor found
+
+case some.expand
+Typing Key : Type
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+sourceHeap : InternedConstructorTemplates.State Symbol Constraint
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Node
+bodyId : Nat
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+_inventory : SourceCurrentAllocatedNativeInventoryState.Inventory
+caller :
+  Caller
+    (?m.9 sourceHeap entry body depth ordinary bodyId holeKey fits admits graph templates checkEmpty edgesOf stop order
+        formulas solver +
+      2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+_seed : Seed
+_ceiling : Nat
+_packet : Packet formulas solver _inventory caller memos metadata before
+_bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits _seed.snd caller.checked
+_known : Heap (fun guard => guard ∈ _seed.fst) caller.checked.native.machine.heap
+_selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (selected : EdgeValue Symbol Constraint),
+    selected ∈ edgesOf (Value.node entry rows depth free) → selected ∈ rows
+_selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+_mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ _ceiling
+_reserved :
+  eagerReserved
+    (?m.9 sourceHeap entry body depth ordinary bodyId holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver)
+    0 _seed _ceiling
+sourceGrowth : Grows sourceHeap caller.checked.native.machine.heap
+pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId caller.checked
+workFuel uv : Nat
+_chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+⊢ (∀
+      (output :
+        Output
+          (?m.9 sourceHeap entry body depth ordinary bodyId holeKey fits admits graph templates checkEmpty edgesOf stop
+              order formulas solver +
+            2)
+          Typing),
+      output ∈ [] →
+        Seeds sourceHeap entry body depth ordinary bodyId output.caller.checked ∧
+          Grows sourceHeap output.caller.checked.native.machine.heap) ∧
+    ∀
+      (caller_1 :
+        Caller
+          (?m.9 sourceHeap entry body depth ordinary bodyId holeKey fits admits graph templates checkEmpty edgesOf stop
+              order formulas solver +
+            2))
+      (queries : Queries),
+      some (caller, memos.query) = some (caller_1, queries) →
+        Seeds sourceHeap entry body depth ordinary bodyId caller_1.checked ∧
+          Grows sourceHeap caller_1.checked.native.machine.heap
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.ActualEmittedEndpointSeeds {Typing : Type} {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (bodyId : Nat)
+  (outcome :
+    MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult
+      (MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing)
+      (MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Failure (bits + 2) Typing) (bits + 2)) :
+  Prop
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.RealActualSourceEndpointSeedsAt {Typing Key : Type}
+  {bits : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (bodyId : Nat) (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (recursiveDepth workFuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (root : MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceRoot bits)
+  (task : MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceTask bits) : Prop
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.RealEagerEndpointSeedsAtDepth {Typing Key : Type} {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (bodyId : Nat) (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (recursiveDepth : Nat) : Prop
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-worker-endpoint-seeds-zero-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:36412:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_eager_endpoint_seeds_zero`
+Traceback (most recent call last):
+  File "/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-worker-endpoint-seeds-zero-check/shadow-compile.py", line 18, in <module>
+    subprocess.run([
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['lean', '-j1', '-DwarningAsError=true', '-R', '/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-worker-endpoint-seeds-zero-check/source', '-o', '/tmp/mcfta-worker-endpoint-seeds-zero-fdeetrr_/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.olean', '/home/tritlo/Code/mcfta/lean/restart-evidence/20261118-worker-endpoint-seeds-zero-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean']' returned non-zero exit status 1.

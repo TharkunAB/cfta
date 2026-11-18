@@ -1,0 +1,21 @@
+ := by
+  unfold RealActualSourceEndpointSeedsAt
+  intro scopeOriginal scopeBefore allInputs ledger origin current sourceGrowth pastSeeds
+  obtain ⟨headOrigin, headCurrent, decrease⟩ :=
+    actual_source_cons_current (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      formulas solver root scopeOriginal scopeBefore allInputs point count incoming bucket rest
+      origin current
+  have inherited := taskIH (.child {point with count := count} incoming bucket rest) decrease
+    scopeOriginal scopeBefore allInputs ledger headOrigin headCurrent sourceGrowth pastSeeds
+  have runtime := actual_source_tuple_cons_run (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+    point count incoming bucket rest
+  change ActualEmittedEndpointSeeds sourceHeap universeEntry universeBody universeDepth
+    universeOrdinary bodyId
+    (finish uv (IdentityActualSourceTask.runWithNarrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+      stop order recursiveDepth workFuel metadata uv
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest))))
+  rw [runtime]
+  exact inherited

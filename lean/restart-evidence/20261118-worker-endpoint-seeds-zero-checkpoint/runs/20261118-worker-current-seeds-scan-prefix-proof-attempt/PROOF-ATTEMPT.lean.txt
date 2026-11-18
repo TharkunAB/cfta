@@ -1,0 +1,56 @@
+ := by
+  dsimp only
+  by_cases noRows : attempted = []
+  · subst attempted
+    change NativeContinuations.Result.complete [] [] point.caller point.queries =
+      NativeContinuations.Result.complete processed earlier reached saved at past
+    obtain ⟨_processedSame, _outputsSame, callerSame, queriesSame⟩ :=
+      NativeContinuations.Result.complete.inj past
+    cases callerSame
+    cases queriesSame
+    refine ⟨sourceGrowth, pastSeeds, ?_, ?_, ?_⟩
+    · exact current.1
+    · exact current.2.1
+    · exact current.2.2.1
+  · let parent : IdentityActualSourcePoint bits := {point with height := height + 1}
+    let incoming : Node := .node parentEntry rows depth free
+    let rowSeed := identity_actual_source_row_boundary recursiveDepth root.limit root.own
+      height parent attempted.length
+    have resourceDepthIH := real_eager_emitted_complete_at_every_depth (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+    have resourceTaskIH : ∀ smaller : IdentityActualSourceTask bits,
+        smaller.work root.limit < IdentityActualSourceTask.work root.limit
+          (.rows height parent incoming bucket rest) →
+        RealActualSourceCorrectAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+          recursiveDepth workFuel metadata uv formulas solver root smaller := by
+      intro smaller _decrease
+      exact real_actual_source_task_resources holeKey fits admits graph templates checkEmpty edgesOf
+        stop order recursiveDepth workFuel metadata uv formulas solver resourceDepthIH root
+        selectionMembers selectionLength smaller
+    have pastResources := real_actual_source_rows_prefix_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+      metadata uv formulas solver root point height parentEntry rows depth free bucket rest
+      selectionMembers selectionLength resourceTaskIH scopeOriginal scopeBefore allInputs
+      ancestors origin current attempted remaining sourceRows
+    rw [past] at pastResources
+    dsimp only [SourcePruningEnumerationSharedPreparedRecursive.finish] at pastResources
+    have entryInputs := current.1
+    obtain ⟨_shapes, _kept, inventory, memos, packet, _querySame, _previous,
+      _mass, _counted, _subset, _genuine⟩ := current.1
+    obtain ⟨next, final, post, querySame, _reachedPacket, prefixFits, prefixKnown,
+        _outputResources⟩ :=
+      SourcePruningEnumerationSharedPreparedRecursive.completed_captured_packet
+        formulas solver inventory parent.caller memos metadata parent.before rowSeed
+        earlier reached saved packet pastResources.2
+    have prefixInputs : IdentityActualSourcePoint.genericInputs formulas solver root
+        scopeOriginal metadata scopeBefore allInputs
+        {parent with caller := reached, queries := saved, seed := rowSeed}
+        ((incoming, bucket) :: rest) (parent.count + 1) := by
+      exact real_rows_inputs_native_post formulas solver root scopeOriginal metadata scopeBefore
+        allInputs parent ((incoming, bucket) :: rest) (parent.count + 1)
+        next reached final saved entryInputs post querySame
+    have actualGrowth : InternedProbeProvenance.Grows sourceHeap
+        reached.checked.native.machine.heap :=
+      InternedProbeProvenance.grows_trans sourceGrowth post.effects.keeps.growth
+    refine ⟨actualGrowth, ?_, prefixInputs, prefixFits, prefixKnown⟩
+    -- OPEN: source Seeds at reached.checked after the literal completed row callbacks.

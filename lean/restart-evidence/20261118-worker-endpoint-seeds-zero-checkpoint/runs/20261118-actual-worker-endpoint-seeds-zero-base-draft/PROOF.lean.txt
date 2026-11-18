@@ -1,0 +1,37 @@
+ := by
+  unfold RealEagerEndpointSeedsAtDepth
+  intro _inventory caller memos before metadata _seed _ceiling
+    _packet _bounded _known _selectionMembers _selectionLength _mass _reserved
+    sourceGrowth pastSeeds workFuel decision _chosen
+  cases decision with
+  | none =>
+      dsimp only [resumeWithNarrow, ActualEmittedEndpointSeeds, emitted]
+      refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+      intro output member
+      have same := List.mem_singleton.mp member
+      subst output
+      exact ⟨pastSeeds, sourceGrowth⟩
+  | some next =>
+      cases next with
+      | done =>
+          dsimp only [resumeWithNarrow, ActualEmittedEndpointSeeds, emitted]
+          refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+          intro output member
+          have same := List.mem_singleton.mp member
+          subst output
+          exact ⟨pastSeeds, sourceGrowth⟩
+      | stuck =>
+          dsimp only [resumeWithNarrow, ActualEmittedEndpointSeeds, emitted]
+          refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+          intro output impossible
+          cases impossible
+      | expand uv =>
+          dsimp only [resumeWithNarrow, ActualEmittedEndpointSeeds, emitted]
+          constructor
+          · intro output impossible
+            cases impossible
+          · intro reached _saved endpointSame
+            have callerSame : caller = reached :=
+              congrArg Prod.fst (Option.some.inj endpointSame)
+            cases callerSame
+            exact ⟨pastSeeds, sourceGrowth⟩

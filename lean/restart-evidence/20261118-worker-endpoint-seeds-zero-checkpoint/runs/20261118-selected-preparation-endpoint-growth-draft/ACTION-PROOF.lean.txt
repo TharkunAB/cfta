@@ -1,0 +1,12 @@
+ := by
+  change Grows caller.checked.native.machine.heap
+    (prepare (EnumGuard := Constraint) holeKey fits admits metadata nativeFuel
+      representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap).state
+  have growth := outer_narrow_grows holeKey fits admits metadata nativeFuel uv oldValue
+    caller.checked.native.machine.heap facts prepared available
+  cases actual : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue
+      caller.checked.native.machine.heap with
+  | done value after | failed fault after =>
+      simpa only [prepare, prepareWithNarrow, actual, MergedSourceComparison.Result.state] using growth
+
+end MicroCFTA.SourcePruningEnumerationAction

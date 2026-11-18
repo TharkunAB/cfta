@@ -1,0 +1,77 @@
+private def ActualEmittedEndpointSeeds
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (bodyId : Nat)
+    (outcome : NativeContinuations.HookResult (Output (bits + 2) Typing)
+      (Failure (bits + 2) Typing) (bits + 2)) : Prop :=
+  let holds := fun caller : Caller (bits + 2) =>
+    Seeds sourceHeap entry body depth ordinary bodyId caller.checked ∧
+      Grows sourceHeap caller.checked.native.machine.heap
+  (∀ output ∈ emitted outcome, holds output.caller) ∧
+    match outcome with
+    | .complete _ caller _ => holds caller
+    | .stopped _ _ reached =>
+        ∀ (caller : Caller (bits + 2)) (queries : Queries),
+          reached = some (caller, queries) → holds caller
+
+private def RealActualSourceEndpointSeedsAt
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (task : IdentityActualSourceTask bits) : Prop :=
+  ∀ (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+      (allInputs : List (Node × List Suspended)),
+    ActualFrameLedger formulas solver root metadata uv task.point.frame
+      scopeOriginal scopeBefore allInputs →
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root task →
+    ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth task →
+    Grows sourceHeap task.point.caller.checked.native.machine.heap →
+    Seeds sourceHeap entry body depth ordinary bodyId task.point.caller.checked →
+    ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+      (finish uv (task.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv))
+
+private def RealEagerEndpointSeedsAtDepth
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node)
+    (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat) : Prop :=
+  ∀ (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+      (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+      (metadata : Metadata Typing) (seed : Seed) (ceiling : Nat),
+    Packet formulas solver inventory caller memos metadata before →
+    SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.2 caller.checked →
+    Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap →
+    (∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows) →
+    (∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) →
+    SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling →
+    eagerReserved bits recursiveDepth seed ceiling →
+    Grows sourceHeap caller.checked.native.machine.heap →
+    Seeds sourceHeap entry body depth ordinary bodyId caller.checked →
+    ∀ (sameWorkFuel : Nat) (decision : Option Next),
+      SourcePruningEnumerationRestart.decision stop order metadata before = decision →
+      ActualEmittedEndpointSeeds sourceHeap entry body depth ordinary bodyId
+        (resumeWithNarrow
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            sameWorkFuel sameWorkFuel sameWorkFuel sameWorkFuel sameWorkFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order sameWorkFuel recursiveDepth
+          metadata caller memos.query before decision)

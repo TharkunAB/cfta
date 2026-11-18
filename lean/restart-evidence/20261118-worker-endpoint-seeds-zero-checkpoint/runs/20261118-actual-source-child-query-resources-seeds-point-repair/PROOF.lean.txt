@@ -1,0 +1,21 @@
+ := by
+  obtain ⟨inputs, currentFits, known, reserved⟩ := current
+  obtain ⟨_shapes, kept, inventory, memos, packet, querySame, _previous,
+    _mass, _counted, _subset, genuine⟩ := inputs
+  obtain ⟨available, closed, _ranked, bucketBound, bounded, pending⟩ :=
+    genuine incoming bucket List.mem_cons_self
+  have admitted := nodeReserved_fallback bits root.limit root.own point.height point.bound point.mass
+    (point.tailPlan recursiveDepth root.limit root.own)
+    (point.tailReserved recursiveDepth root.limit root.own) point.seed reserved
+  have costLe : bucket.length + 1 ≤ point.bound + 1 :=
+    Nat.add_le_add_right bucketBound 1
+  have native := admitted.1.prefix costLe
+  obtain ⟨roots, paths, _storage, realized, counts, _flags⟩ := packet.valid
+  have preserved :=
+    SourcePruningEnumerationSharedChildDispatchQueryEvents.observe_original_source_query_resources_and_seeds
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      bodyId bodyIdentity point.seed formulas solver inventory point.caller point.before checkEmpty
+      bucket incoming roots memos packet.context packet.safe paths counts bounded pending realized
+      (kept.available incoming available) closed currentFits native known sourceGrowth pastSeeds
+      representativeFuel nativeFuel p h indexFuel
+  simpa only [querySame, IdentityActualSourceTask.point] using preserved
