@@ -983,7 +983,9 @@ compositions total parts = [first : rest | first <- [0 .. total], rest <- compos
 
 {- | The application of a head to argument states, when their base types
 unify with the parameters: the transition with its guard and its inferred
-result type. A head is applied to all its parameters.
+result type. A head is applied to all its parameters. For a callback,
+the guard checks its result refinement at every input in the required domain.
+See Note [Callback contracts].
 -}
 application :: Maybe Formula.Term -> Text -> RType -> [State] -> Maybe Pending
 application function name typ arguments = do
@@ -994,7 +996,10 @@ application function name typ arguments = do
         named = [(Name formal, Formula.Var (contractName index)) | (index, formal) <- zip [0 ..] formals]
         obligations =
             [ Formula.substitute ((value, Formula.Var (contractName index)) : named) requirement
-            | (index, (_, RBase _ requirement)) <- zip [0 ..] parameters
+            | (index, (_, parameter)) <- zip [0 ..] parameters
+            , let requirement = case parameter of
+                    RBase _ predicate -> predicate
+                    RArrow{} -> lifted (Formula.Var value) parameter
             , requirement /= Top
             ]
         base = baseOf (substituteBase substitution (resultOf typ))
@@ -1005,6 +1010,15 @@ application function name typ arguments = do
         Pending name (RBase base refinement) arguments obligations (map (Formula.substitute named) (pathConditionsOf name))
   where
     unifyParameter substitution (expected, actual) = unify substitution expected actual
+
+{- Note [Callback contracts]
+----------------------------
+The logic treats the application function @ap@ as total. 'lifted' encodes
+facts about the results of calls that meet the declared input refinement.
+A complete subtyping check must also prove that the declared input covers
+the required input. When the required result is unrefined, the result
+obligation is 'Top' even if the input refinements differ.
+-}
 
 {- | The path condition of each parameter of a head, over the formal
 parameters: the branches of @if@ are used under its condition and its
