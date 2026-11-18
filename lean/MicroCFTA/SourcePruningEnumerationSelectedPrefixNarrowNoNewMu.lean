@@ -69,7 +69,7 @@ private theorem outer_narrow_noNewMu
         exact narrowAt_noNewMu fits admits fuel (holeKey metadata.typing uv) _ before
           facts prepared available
 
-private theorem prepare_noNewMu
+theorem prepare_noNewMu
     (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
     (admits : Key → Node → Bool) (metadata : SourcePruningRecordTypes.Metadata Typing)
     (nativeFuel representativeFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)

@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedQueryNoMuInventory
 import MicroCFTA.SourcePruningEnumerationSharedIncomingQuerySeeds
 import MicroCFTA.SourcePruningEnumerationSharedDispatchQueryEventResources
 import MicroCFTA.SourcePruningEnumerationSharedFoldResources
@@ -909,5 +910,332 @@ theorem fold_original_source_observe_preserves_seeds
                                     rcases List.mem_append.mp combined with fromHead | fromTail
                                     · exact headConclusion.2 start saved left right actual fromHead
                                     · exact tailSeeds.2 start saved left right actual fromTail
+
+end MicroCFTA.SourcePruningEnumerationSharedTerminalFoldQueryEvents
+
+namespace MicroCFTA.SourcePruningEnumerationSharedTerminalFoldQueryEvents
+open Cache EnumerationCorrectness EnumerationCompleteness
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationObservation (PendingRealized)
+open SourcePruningEnumerationSharedIncomingReservation (Seed step Reserved)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceEqualityNativeDemand (Control)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionControl SourceRecursiveIntersectionCode
+open InternedBinderProtocol (NodeKey)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+/- Note [No Mu through the actual ordered folds]
+Each head uses the checked primitive law at its actual input caller.
+The successful singleton supplies the same next Post and resources.
+Inventory and growth at that reached caller feed the literal tail.
+A missing cache uses the raw tail. A present cache uses the cached tail.
+All stopped branches retain their actual endpoints and ordered events.
+See the primitive query law for the enabled-empty skip.
+-/
+
+theorem rawFold_original_source_observe_preserves_no_mu_inventory
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (sourceNoMu : ∀ (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node),
+      sourceHeap.nodeRecords key ≠ some (.mu entry body depth ordinary))
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : Core) (sources : List Nat)
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (targetPending : PendingAt before target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before source)
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed sources.length)
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (sourceGrowth : Grows sourceHeap beforeCaller.checked.native.machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap beforeCaller.checked.native.machine.heap) :
+    let observed := rawFoldObserved checkEmpty nativeFuel p h sources
+      beforeCaller before target memos.query
+    observed.1 = SourcePruningEnumerationSharedCachedTerminal.rawFold
+      checkEmpty nativeFuel p h sources beforeCaller before target memos.query ∧
+    (InternedShallowHeap.NoNewMu sourceHeap observed.1.2.1.checked.native.machine.heap ∧
+      Grows sourceHeap observed.1.2.1.checked.native.machine.heap) ∧
+    ∀ start saved left right actual, (start, saved, left, right, actual) ∈ observed.2 →
+      actual = SourceEqualityNativeDemand.execute nativeFuel
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked ∧
+      (InternedShallowHeap.NoNewMu sourceHeap actual.state.native.machine.heap ∧
+        Grows sourceHeap actual.state.native.machine.heap) ∧
+      ∀ (count : Nat) (rest : Control Node) (after : SourceEqualityNativeDemand.State (bits + 2)),
+        count ≤ nativeFuel → Trace count
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked rest after →
+        InternedShallowHeap.NoNewMu sourceHeap after.native.machine.heap ∧
+          Grows sourceHeap after.native.machine.heap
+ := by
+  dsimp only
+  refine ⟨(rawFold_exact checkEmpty nativeFuel p h sources beforeCaller before target memos.query).1, ?_⟩
+  induction sources generalizing seed inventory beforeCaller before memos with
+  | nil =>
+      refine ⟨⟨pastInventory, sourceGrowth⟩, ?_⟩
+      intro start saved left right actual member
+      simp only [rawFoldObserved, List.not_mem_nil] at member
+  | cons source rest ih =>
+      cases observedHead : SourcePruningEnumerationSharedDispatchQueryEvents.observe
+          checkEmpty nativeFuel p h beforeCaller before source target memos.query with
+      | mk observation events =>
+          rcases observation with ⟨outcome, reached, queries⟩
+          have headReservation : Reserved bits seed 1 := reserved.prefix (by simp)
+          have headInventory := SourcePruningEnumerationSharedDispatchQueryEvents.original_source_observe_preserves_no_mu_inventory
+            lib query signed whole accepted rootValue sourceHeap built sourceNoMu seed formulas solver inventory beforeCaller before memos initial realized fits
+            headReservation sourceGrowth pastInventory checkEmpty nativeFuel p h source target
+          simp only [observedHead] at headInventory
+          have headConclusion :
+              (InternedShallowHeap.NoNewMu sourceHeap reached.checked.native.machine.heap ∧
+                Grows sourceHeap reached.checked.native.machine.heap) ∧
+              ∀ start saved left right actual, (start, saved, left, right, actual) ∈ events →
+                actual = SourceEqualityNativeDemand.execute nativeFuel
+                  (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked ∧
+                (InternedShallowHeap.NoNewMu sourceHeap actual.state.native.machine.heap ∧
+                  Grows sourceHeap actual.state.native.machine.heap) ∧
+                ∀ (count : Nat) (resume : Control Node)
+                  (after : SourceEqualityNativeDemand.State (bits + 2)),
+                  count ≤ nativeFuel → Trace count
+                    (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked resume after →
+                  InternedShallowHeap.NoNewMu sourceHeap after.native.machine.heap ∧
+                    Grows sourceHeap after.native.machine.heap := by
+            refine ⟨headInventory.2.1, ?_⟩
+            intro start saved left right actual member
+            exact (headInventory.2.2 start saved left right actual member).2.2
+          cases outcome with
+          | error fault =>
+              simpa only [rawFoldObserved, rawHeadObserved, observedHead] using headConclusion
+          | ok possible =>
+              cases possible with
+              | none =>
+                  simpa only [rawFoldObserved, rawHeadObserved, observedHead] using headConclusion
+              | some action =>
+                  cases actionRead : ExceptT.run (action before) with
+                  | nil =>
+                      simpa only [rawFoldObserved, rawHeadObserved, observedHead, actionRead] using headConclusion
+                  | cons first tail =>
+                      cases first with
+                      | error fault =>
+                          simpa only [rawFoldObserved, rawHeadObserved, observedHead, actionRead] using headConclusion
+                      | ok pair =>
+                          rcases pair with ⟨resultUnit, middle⟩
+                          cases resultUnit
+                          cases tail with
+                          | cons second remaining =>
+                              simpa only [rawFoldObserved, rawHeadObserved, observedHead, actionRead] using headConclusion
+                          | nil =>
+                              have dispatchRun : SourcePruningEnumerationSharedDispatch.dispatch
+                                  checkEmpty nativeFuel p h beforeCaller before source target memos.query =
+                                    (.ok (some action), reached, queries) := headInventory.1.symm
+                              obtain ⟨next, final, post, querySame, middleRealized, middleTarget,
+                                  middleSelected, middleFits, middleKnown⟩ :=
+                                SourcePruningEnumerationSharedCachedTerminal.observed_singleton
+                                  seed formulas solver inventory beforeCaller before source target rest checkEmpty memos
+                                  initial realized targetPending selected fits reserved.head known dispatchRun actionRead
+                              have tailInventory := ih (step seed) next reached middle final post.context middleRealized
+                                middleTarget middleSelected middleFits reserved.tail middleKnown
+                                headInventory.2.1.2 headInventory.2.1.1
+                              rw [querySame] at tailInventory
+                              refine ⟨?_, ?_⟩
+                              · simpa only [rawFoldObserved, rawHeadObserved, observedHead, actionRead] using tailInventory.1
+                              · intro start saved left right actual member
+                                have combined : (start, saved, left, right, actual) ∈
+                                    events ++ (rawFoldObserved checkEmpty nativeFuel p h rest
+                                      reached middle target queries).2 := by
+                                  simpa only [rawFoldObserved, rawHeadObserved, observedHead, actionRead] using member
+                                rcases List.mem_append.mp combined with fromHead | fromTail
+                                · exact headConclusion.2 start saved left right actual fromHead
+                                · exact tailInventory.2 start saved left right actual fromTail
+
+end MicroCFTA.SourcePruningEnumerationSharedTerminalFoldQueryEvents
+
+namespace MicroCFTA.SourcePruningEnumerationSharedTerminalFoldQueryEvents
+open Cache EnumerationCorrectness EnumerationCompleteness
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationObservation (PendingRealized)
+open SourcePruningEnumerationSharedIncomingReservation (Seed step Reserved)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceEqualityNativeDemand (Control)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionControl SourceRecursiveIntersectionCode
+open InternedBinderProtocol (NodeKey)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+theorem fold_original_source_observe_preserves_no_mu_inventory
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (sourceNoMu : ∀ (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node),
+      sourceHeap.nodeRecords key ≠ some (.mu entry body depth ordinary))
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : Cached) (sources : List Nat)
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (targetPending : PendingAt before.core target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before.core source)
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed sources.length)
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (sourceGrowth : Grows sourceHeap beforeCaller.checked.native.machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap beforeCaller.checked.native.machine.heap) :
+    let observed := foldObserved checkEmpty nativeFuel p h sources
+      beforeCaller before target memos.query
+    observed.1 = SourcePruningEnumerationSharedCachedTerminal.fold
+      checkEmpty nativeFuel p h sources beforeCaller before target memos.query ∧
+    (InternedShallowHeap.NoNewMu sourceHeap observed.1.1.2.1.checked.native.machine.heap ∧
+      Grows sourceHeap observed.1.1.2.1.checked.native.machine.heap) ∧
+    ∀ start saved left right actual, (start, saved, left, right, actual) ∈ observed.2 →
+      actual = SourceEqualityNativeDemand.execute nativeFuel
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked ∧
+      (InternedShallowHeap.NoNewMu sourceHeap actual.state.native.machine.heap ∧
+        Grows sourceHeap actual.state.native.machine.heap) ∧
+      ∀ (count : Nat) (rest : Control Node) (after : SourceEqualityNativeDemand.State (bits + 2)),
+        count ≤ nativeFuel → Trace count
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked rest after →
+        InternedShallowHeap.NoNewMu sourceHeap after.native.machine.heap ∧
+          Grows sourceHeap after.native.machine.heap
+ := by
+  dsimp only
+  refine ⟨(fold_observe_exact checkEmpty nativeFuel p h sources beforeCaller before target memos.query).1, ?_⟩
+  induction sources generalizing seed inventory beforeCaller before memos with
+  | nil =>
+      refine ⟨⟨pastInventory, sourceGrowth⟩, ?_⟩
+      intro start saved left right actual member
+      simp only [foldObserved, List.not_mem_nil] at member
+  | cons source rest ih =>
+      cases observedHead : SourcePruningEnumerationSharedDispatchQueryEvents.observe
+          checkEmpty nativeFuel p h beforeCaller before.core source target memos.query with
+      | mk observation events =>
+          rcases observation with ⟨outcome, reached, queries⟩
+          have headReservation : Reserved bits seed 1 := reserved.prefix (by simp)
+          have headInventory := SourcePruningEnumerationSharedDispatchQueryEvents.original_source_observe_preserves_no_mu_inventory
+            lib query signed whole accepted rootValue sourceHeap built sourceNoMu seed formulas solver inventory beforeCaller before.core memos initial realized fits
+            headReservation sourceGrowth pastInventory checkEmpty nativeFuel p h source target
+          simp only [observedHead] at headInventory
+          have headConclusion :
+              (InternedShallowHeap.NoNewMu sourceHeap reached.checked.native.machine.heap ∧
+                Grows sourceHeap reached.checked.native.machine.heap) ∧
+              ∀ start saved left right actual, (start, saved, left, right, actual) ∈ events →
+                actual = SourceEqualityNativeDemand.execute nativeFuel
+                  (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked ∧
+                (InternedShallowHeap.NoNewMu sourceHeap actual.state.native.machine.heap ∧
+                  Grows sourceHeap actual.state.native.machine.heap) ∧
+                ∀ (count : Nat) (resume : Control Node)
+                  (after : SourceEqualityNativeDemand.State (bits + 2)),
+                  count ≤ nativeFuel → Trace count
+                    (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) start.checked resume after →
+                  InternedShallowHeap.NoNewMu sourceHeap after.native.machine.heap ∧
+                    Grows sourceHeap after.native.machine.heap := by
+            refine ⟨headInventory.2.1, ?_⟩
+            intro start saved left right actual member
+            exact (headInventory.2.2 start saved left right actual member).2.2
+          cases outcome with
+          | error fault =>
+              simpa only [foldObserved, cachedAdapterObserved, rawHeadObserved, observedHead] using headConclusion
+          | ok possible =>
+              cases possible with
+              | none =>
+                  simpa only [foldObserved, cachedAdapterObserved, rawHeadObserved, observedHead] using headConclusion
+              | some action =>
+                  cases actionRead : ExceptT.run (action before.core) with
+                  | nil =>
+                      simpa only [foldObserved, cachedAdapterObserved, rawHeadObserved, observedHead, actionRead] using headConclusion
+                  | cons first tail =>
+                      cases first with
+                      | error fault =>
+                          simpa only [foldObserved, cachedAdapterObserved, rawHeadObserved, observedHead, actionRead] using headConclusion
+                      | ok pair =>
+                          rcases pair with ⟨resultUnit, middle⟩
+                          cases resultUnit
+                          cases tail with
+                          | cons second remaining =>
+                              simpa only [foldObserved, cachedAdapterObserved, rawHeadObserved, observedHead, actionRead] using headConclusion
+                          | nil =>
+                              have dispatchRun : SourcePruningEnumerationSharedDispatch.dispatch
+                                  checkEmpty nativeFuel p h beforeCaller before.core source target memos.query =
+                                    (.ok (some action), reached, queries) := headInventory.1.symm
+                              obtain ⟨next, final, post, querySame, middleRealized, middleTarget,
+                                  middleSelected, middleFits, middleKnown⟩ :=
+                                SourcePruningEnumerationSharedCachedTerminal.observed_singleton
+                                  seed formulas solver inventory beforeCaller before.core source target rest checkEmpty memos
+                                  initial realized targetPending selected fits reserved.head known dispatchRun actionRead
+                              cases cacheRead : SourcePruningEnumerationCachedAdapter.adapt
+                                  reached.checked.native.machine.heap before source target [.ok ((), middle)] with
+                              | none =>
+                                  have tailInventory := (rawFold_original_source_observe_preserves_no_mu_inventory
+                                    lib query signed whole accepted rootValue sourceHeap built sourceNoMu (step seed) formulas solver next reached middle rest
+                                    checkEmpty nativeFuel p h target final post.context middleRealized middleTarget
+                                    middleSelected middleFits reserved.tail middleKnown
+                                    headInventory.2.1.2 headInventory.2.1.1).2
+                                  rw [querySame] at tailInventory
+                                  refine ⟨?_, ?_⟩
+                                  · simpa only [foldObserved, cachedAdapterObserved, rawHeadObserved,
+                                      observedHead, actionRead, cacheRead] using tailInventory.1
+                                  · intro start saved left right actual member
+                                    have combined : (start, saved, left, right, actual) ∈
+                                        events ++ (rawFoldObserved checkEmpty nativeFuel p h rest
+                                          reached middle target queries).2 := by
+                                      simpa only [foldObserved, cachedAdapterObserved, rawHeadObserved,
+                                        observedHead, actionRead, cacheRead] using member
+                                    rcases List.mem_append.mp combined with fromHead | fromTail
+                                    · exact headConclusion.2 start saved left right actual fromHead
+                                    · exact tailInventory.2 start saved left right actual fromTail
+                              | some recovered =>
+                                  have tailInventory := ih (step seed) next reached
+                                    (EnumerationExpandableIndex.frame middle recovered) final post.context middleRealized
+                                    middleTarget middleSelected middleFits reserved.tail middleKnown
+                                    headInventory.2.1.2 headInventory.2.1.1
+                                  rw [querySame] at tailInventory
+                                  refine ⟨?_, ?_⟩
+                                  · simpa only [foldObserved, cachedAdapterObserved, rawHeadObserved,
+                                      observedHead, actionRead, cacheRead] using tailInventory.1
+                                  · intro start saved left right actual member
+                                    have combined : (start, saved, left, right, actual) ∈
+                                        events ++ (foldObserved checkEmpty nativeFuel p h rest reached
+                                          (EnumerationExpandableIndex.frame middle recovered) target queries).2 := by
+                                      simpa only [foldObserved, cachedAdapterObserved, rawHeadObserved,
+                                        observedHead, actionRead, cacheRead] using member
+                                    rcases List.mem_append.mp combined with fromHead | fromTail
+                                    · exact headConclusion.2 start saved left right actual fromHead
+                                    · exact tailInventory.2 start saved left right actual fromTail
 
 end MicroCFTA.SourcePruningEnumerationSharedTerminalFoldQueryEvents
