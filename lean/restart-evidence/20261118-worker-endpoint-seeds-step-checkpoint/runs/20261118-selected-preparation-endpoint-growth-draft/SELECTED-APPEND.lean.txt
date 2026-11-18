@@ -1,0 +1,104 @@
+
+namespace MicroCFTA.SourcePruningEnumerationSelectedValue
+open InternedConstructorTemplates InternedProbeProvenance
+variable {Symbol Guard : Type} [DecidableEq (EdgeKey Symbol Guard)]
+
+/- Note [Growth follows the actual selected preparation outcome]
+The stored unfolding and exposure receipts retain their actual heap histories.
+Node reconstruction extends the exact exposure endpoint.
+The proof covers failed, pending and exhausted native outcomes.
+NoNewMu does not supply these growth facts.
+-/
+
+private theorem actual_run_grows
+    (fuel : Nat) (value : Value Symbol Guard) (before : State Symbol Guard)
+    (facts : InternedNestedFacts.Facts before)
+    (prepared : MergedPhysicalWarmup.Prepared before)
+    (available : Available before value) :
+    Grows before (run fuel value before).state
+ := by
+  cases value with
+  | empty | reference | node => exact InternedConstructorTemplates.grows_refl before
+  | mu entry body depth ordinary =>
+      have growth := (InternedStoredSubstitution.unfold_verified
+        (.mu entry body depth ordinary) before facts available).growth
+      rw [← InternedFreshOrdinaryStoredSubstitution.unfold_eq
+        (.mu entry body depth ordinary) before prepared available] at growth
+      cases actual : InternedFreshOrdinaryStoredSubstitution.unfold
+          (.mu entry body depth ordinary) before with
+      | done result after | pending key after =>
+          simpa only [run, actual, InternedNestedConstruction.Outcome.state,
+            MergedSourceComparison.Result.state] using growth
+  | union entry members depth free =>
+      have verified := MergedFreshOrdinaryExposure.nodeEdges_verified fuel
+        (.union entry members depth free) before facts prepared available
+      have growth := verified.growth
+      cases actual : MergedFreshOrdinaryExposure.nodeEdges fuel
+          (.union entry members depth free) before with
+      | done rows middle =>
+          have first : Grows before middle := by
+            simpa only [actual, MergedSourceExposure.Result.state] using growth
+          have middleFacts : InternedNestedFacts.Facts middle := by
+            simpa only [actual, MergedSourceExposure.Result.state] using verified.facts
+          have constructed := InternedConstructorTemplates.run_correct
+            (makeNode rows) middle middleFacts.coherent.valid
+          simpa only [run, actual, MergedSourceComparison.Result.state] using
+            InternedConstructorTemplates.grows_trans first constructed.2
+      | unresolved name after | pending key after | exhausted after =>
+          simpa only [run, actual, MergedSourceExposure.Result.state,
+            MergedSourceComparison.Result.state] using growth
+
+end MicroCFTA.SourcePruningEnumerationSelectedValue
+
+namespace MicroCFTA.SourcePruningEnumerationSelectedPreparation
+open EnumerationCorrectness InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Queries" => SourceEndpointMemo.Memos
+variable {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+attribute [local instance] SourcePruningEnumerationEntry.entryMonadList
+
+/-- Every actual selected preparation endpoint retains the input heap records. -/
+theorem run_endpoint_grows
+    (entryFuel nativeFuel uv : Nat) (caller : Caller width) (before : Cached) (queries : Queries)
+    (facts : InternedNestedFacts.Facts caller.checked.native.machine.heap)
+    (prepared : MergedPhysicalWarmup.Prepared caller.checked.native.machine.heap)
+    (total : UnionFind.Total before.core.representatives) :
+    Grows caller.checked.native.machine.heap
+      (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller queries
+        (run entryFuel nativeFuel uv caller before)).1.checked.native.machine.heap
+ := by
+  unfold run
+  generalize reading : ExceptT.run (SourcePruningEnumerationEntry.enter
+    caller.checked.native.machine.heap entryFuel uv before.core) = raw
+  cases raw with
+  | nil => exact InternedConstructorTemplates.grows_refl _
+  | cons first rest =>
+      cases rest with
+      | cons another remaining =>
+          cases first <;> exact InternedConstructorTemplates.grows_refl _
+      | nil =>
+          cases first with
+          | error fault => exact InternedConstructorTemplates.grows_refl _
+          | ok pair =>
+              obtain ⟨⟨target, handle, scs, value⟩, entered⟩ := pair
+              have actual : Success (SourcePruningEnumerationEntry.enter
+                  caller.checked.native.machine.heap entryFuel uv) before.core
+                  (target, handle, scs, value) entered := by
+                rw [Success, reading]
+                exact List.mem_singleton_self _
+              obtain ⟨_size, _path, _stored, _values, decoded, _ancestry, _expansion⟩ :=
+                SourcePruningEnumerationEntry.enter_recorded_bucket_origin
+                  caller.checked.native.machine.heap entryFuel uv before.core entered
+                  target handle scs value total actual
+              have available := lookup_available caller.checked.native.machine.heap
+                handle value facts decoded
+              exact SourcePruningEnumerationSelectedValue.actual_run_grows
+                nativeFuel value caller.checked.native.machine.heap facts prepared available
+
+end MicroCFTA.SourcePruningEnumerationSelectedPreparation

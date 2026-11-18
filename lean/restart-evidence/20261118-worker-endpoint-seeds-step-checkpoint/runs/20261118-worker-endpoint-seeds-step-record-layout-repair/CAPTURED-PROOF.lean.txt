@@ -1,0 +1,175 @@
+ := by
+  unfold RealActualSourceEndpointSeedsAt
+  intro scopeOriginal scopeBefore allInputs ledger _origin current sourceGrowth pastSeeds
+  cases ledger with
+  | captured inventory entryCaller memos entryQueries before rowOwn scs row rowResidual handle
+      staged packet _querySame ready stored incoming prepared =>
+    obtain ⟨inputs, currentFits, known, reserved⟩ := current
+    obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, history,
+      mass, _counted, _included, _genuine⟩ := inputs
+    let callbackSeed := SourcePruningEnumerationSharedIncomingReservation.advance
+      point.seed (point.count * (point.bound + 1))
+    let callbackMass := point.mass + point.count * point.bound
+    let fragment : Fragments.Fragment Symbol := .node edge.entry.key.symbol point.completed
+    let childAfter := SelectedEdge.finish residual fragment point.before
+    let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+      (width := bits + 2) (Output := Output (bits + 2) Typing)
+      (Reason := Failure (bits + 2) Typing)
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+    let recur := resumeWithNarrow (Typing := Typing) (width := bits + 2) child
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+      stop order workFuel recursiveDepth
+    let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      recur graph templates stop order workFuel metadata uv
+    have callbackReserved : eagerReserved bits recursiveDepth callbackSeed callbackMass :=
+      tupleReserved_first_callback bits root.limit root.own point.height point.count
+        point.bound point.mass
+        (fun retained seed => eagerFinal recursiveDepth seed retained)
+        (fun retained seed => eagerReserved bits recursiveDepth seed retained) point.seed reserved
+    have callbackFits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+        callbackSeed.2 point.caller.checked := currentFits.mono
+      (SourcePruningEnumerationSharedIncomingReservation.advance_profile_ge point.seed
+        (point.count * (point.bound + 1)))
+    have callbackKnown : Heap (fun guard => guard ∈ callbackSeed.1)
+        point.caller.checked.native.machine.heap := by
+      intro key row found
+      exact (SourcePruningEnumerationSharedIncomingReservation.advance_alphabet_ge point.seed
+        (point.count * (point.bound + 1))) (known key row found)
+    have data := actual_observed_own_tuple_child_inputs formulas solver inventory capturedCaller
+      memos metadata before scs edge residual scopeBefore staged packet prepared
+      point.completed point.caller point.queries point.before history
+    have childMass : SourcePruningEnumerationPrefixAdmission.suspendedBound
+        childAfter.core ≤ callbackMass := by
+      change SourcePruningEnumerationPrefixAdmission.suspendedBound point.before.core ≤
+        point.mass + point.count * point.bound
+      exact Nat.le_trans mass (Nat.le_add_right _ _)
+    have callback : ActualEmittedEndpointSeeds sourceHeap universeEntry universeBody
+        universeDepth universeOrdinary bodyId
+        (finish uv ((actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+          (.captured edge residual capturedCaller capturedQueries)).1
+          point.completed point.caller point.queries point.before)) := by
+      rw [actual_source_frame_callbacks]
+      change ActualEmittedEndpointSeeds sourceHeap universeEntry universeBody
+        universeDepth universeOrdinary bodyId
+        (finish uv (match SourcePruningEnumerationFinalize.run
+          point.caller.checked.native.machine.heap workFuel uv fragment childAfter with
+          | some finished => SourcePruningEnumerationSharedReceiptContinuation.run
+              hook capturedCaller capturedQueries
+              (some (.complete fragment point.caller point.queries finished))
+          | none => SourcePruningEnumerationSharedReceiptContinuation.run
+              hook capturedCaller capturedQueries
+              (some (.finalizeStopped fragment point.caller point.queries childAfter))))
+      cases observedFinish : SourcePruningEnumerationFinalize.run
+          point.caller.checked.native.machine.heap workFuel uv fragment childAfter with
+      | none =>
+        constructor
+        · intro output impossible
+          cases impossible
+        · intro reached _saved endpointSame
+          have callerSame : point.caller = reached :=
+            congrArg Prod.fst (Option.some.inj endpointSame)
+          cases callerSame
+          exact ⟨pastSeeds, sourceGrowth⟩
+      | some finished =>
+        obtain ⟨next, final, finalFuel, canonicalAfter, _post, querySame, finalAt,
+            finishedPacket, finalFragmentBound, _core, finalMass, _stored, _root⟩ :=
+          finalize_child_inputs_packet formulas solver capturedCaller point.caller metadata
+            before childAfter uv handle scs fragment point.queries ready stored incoming data
+        have observedLater := SourcePruningEnumerationFinalize.run_some_moreFuel
+          point.caller.checked.native.machine.heap workFuel finalFuel uv fragment childAfter
+          finished observedFinish
+        have canonicalLater := finalAt workFuel
+        rw [Nat.add_comm workFuel finalFuel] at observedLater
+        have sameCache : canonicalAfter = finished :=
+          Option.some.inj (canonicalLater.symm.trans observedLater)
+        subst canonicalAfter
+        have finishedMass : SourcePruningEnumerationPrefixAdmission.suspendedBound
+            finished.core ≤ callbackMass := Nat.le_trans finalMass childMass
+        have actualHook : ActualEmittedEndpointSeeds sourceHeap universeEntry universeBody
+            universeDepth universeOrdinary bodyId
+            (hook fragment point.caller point.queries finished) := by
+          let raw := ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel
+            metadata uv (.inl fragment) finished.core)
+          by_cases successful : ∃ (flag : Bool) (updated : Metadata Typing)
+              (observed : EnumerationState.State Symbol Constraint),
+              raw = [.ok ((flag, updated), observed)]
+          · obtain ⟨flag, updated, observed, recorded⟩ := successful
+            cases flag with
+            | true =>
+              change ActualEmittedEndpointSeeds sourceHeap universeEntry universeBody
+                universeDepth universeOrdinary bodyId
+                (SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+                  graph templates stop order workFuel metadata uv fragment
+                  point.caller point.queries finished)
+              rw [SourcePruningEnumerationSharedPreparedRecursive.continue_rejected
+                recur graph templates stop order workFuel metadata updated uv fragment
+                point.caller point.queries finished observed recorded]
+              refine ⟨?_, ⟨pastSeeds, sourceGrowth⟩⟩
+              intro output impossible
+              cases impossible
+            | false =>
+              have actual : EnumerationCorrectness.Success
+                  (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+                    (.inl fragment)) finished.core (false, updated) observed := by
+                change Except.ok ((false, updated), observed) ∈ raw
+                rw [recorded]
+                exact List.mem_singleton_self _
+              obtain ⟨callbackPacket, _stable, frame, _types, _holes, _typing,
+                  fitted, alphabet⟩ :=
+                SourcePruningEnumerationRealWorkerCallbackResources.recorded_callback_current_at_original_budget
+                  formulas solver next graph templates metadata uv fragment point.caller final
+                  finished callbackSeed finishedPacket finalFragmentBound callbackFits
+                  callbackKnown workFuel (false, updated) observed actual
+              have massAfter : SourcePruningEnumerationPrefixAdmission.suspendedBound
+                  (EnumerationExpandableIndex.frame observed finished).core ≤ callbackMass := by
+                change SourcePruningEnumerationPrefixAdmission.suspendedBound observed ≤ callbackMass
+                rw [SourcePruningEnumerationPrefixAdmission.suspendedBound_values
+                  finished.core observed frame.values]
+                exact finishedMass
+              have inherited := outerIH next point.caller final
+                (EnumerationExpandableIndex.frame observed finished) updated callbackSeed
+                callbackMass callbackPacket fitted alphabet selectionMembers selectionLength
+                massAfter callbackReserved sourceGrowth pastSeeds workFuel
+                (SourcePruningEnumerationRestart.decision stop order updated
+                  (EnumerationExpandableIndex.frame observed finished)) rfl
+              rw [querySame] at inherited
+              change ActualEmittedEndpointSeeds sourceHeap universeEntry universeBody
+                universeDepth universeOrdinary bodyId
+                (SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+                  graph templates stop order workFuel metadata uv fragment
+                  point.caller point.queries finished)
+              rw [SourcePruningEnumerationSharedPreparedRecursive.continue_recorded
+                recur graph templates stop order workFuel metadata updated uv fragment
+                point.caller point.queries finished observed recorded]
+              simpa only [recur, child] using inherited
+          · have stopped : hook fragment point.caller point.queries finished =
+                .stopped [] (.callback uv raw) (some (point.caller, point.queries)) := by
+              change SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+                graph templates stop order workFuel metadata uv fragment
+                point.caller point.queries finished = _
+              unfold SourcePruningEnumerationSharedPreparedRecursive.continueWith
+              dsimp only
+              split
+              · exact (successful ⟨true, _, _, by assumption⟩).elim
+              · exact (successful ⟨false, _, _, by assumption⟩).elim
+              · rfl
+            rw [stopped]
+            constructor
+            · intro output impossible
+              cases impossible
+            · intro reached _saved endpointSame
+              have callerSame : point.caller = reached :=
+                congrArg Prod.fst (Option.some.inj endpointSame)
+              cases callerSame
+              exact ⟨pastSeeds, sourceGrowth⟩
+        cases observedHook : hook fragment point.caller point.queries finished with
+        | complete outputs reached saved =>
+          simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook,
+            finish, ActualEmittedEndpointSeeds, emitted] using actualHook
+        | stopped outputs reason endpoint =>
+          simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook,
+            finish, SourcePruningEnumerationSharedPreparedRecursive.endpoint,
+            ActualEmittedEndpointSeeds, emitted] using actualHook
+    simpa only [IdentityActualSourceTask.runWithNarrow,
+      SourcePruningEnumerationSharedChildVisitors.visitChildren, List.append_nil] using callback

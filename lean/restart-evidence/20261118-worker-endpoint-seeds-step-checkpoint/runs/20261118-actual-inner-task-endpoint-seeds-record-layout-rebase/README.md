@@ -1,0 +1,7 @@
+This is a frozen, uncompiled record-layout rebase. The full owner is the exact Root151c selected/tuple/captured repair prefix, followed by the original fallback, rows, and inner APPEND bytes. It also equals the original full b67 owner with exactly the original selected-return FIRST925a replaced once by Root's corrected FIRST4cb.
+
+The old selected FIRST is not byte-equal to the corrected FIRST. The difference is only two whitespace joins in multiline record-field applications. Every non-whitespace source byte is unchanged. The fallback FIRSTfac2, rows FIRSTd914, and inner FIRSTcc35 are byte-exact. Their complete proofs and appends are byte-exact. All earlier packets remain unchanged.
+
+The explicit fixture selects the three later private clauses. It does not recount the selected, tuple-cons, or captured prefix. There are no new runtime definitions, public declarations, proof limits, or imports. The inner theorem still requires the legitimate OuterIH n at the unchanged callback depth. It does not discharge that hypothesis. The original standalone8eec, corrected outer3714, original89d3, whole-worker coverage, and one finite accepted original-root completion remain open.
+
+The original fixed-batch failure and Root's repair remain separate evidence. This packet has not been compiled and receives zero theorem credit. Root owns all normal Source, Work, compiler, Git, and publication operations.

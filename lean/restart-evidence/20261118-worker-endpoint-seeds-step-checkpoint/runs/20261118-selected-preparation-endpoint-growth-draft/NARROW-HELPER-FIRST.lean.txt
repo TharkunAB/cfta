@@ -1,0 +1,7 @@
+private theorem narrowAt_grows
+    (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (fuel : Nat) (key : Key) (value : Node) (before : State Symbol Constraint)
+    (facts : InternedNestedFacts.Facts before)
+    (prepared : MergedPhysicalWarmup.Prepared before)
+    (available : Available before value) :
+    Grows before (SourcePruningNativeView.narrowAt fits admits fuel key value before).state

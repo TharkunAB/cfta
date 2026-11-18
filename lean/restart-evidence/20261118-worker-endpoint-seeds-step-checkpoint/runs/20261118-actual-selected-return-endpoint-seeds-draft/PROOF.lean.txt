@@ -1,0 +1,20 @@
+ := by
+  dsimp only
+  obtain ⟨returnedOrigin, returnedAncestors, returnedCurrent, numeric, alphabet⟩ :=
+    actual_source_selected_return_current holeKey fits admits graph templates checkEmpty edgesOf
+      stop order recursiveDepth workFuel metadata uv formulas solver root outerOriginal outerBefore
+      outerInputs entry current incoming bucket rest edge residual rowOwn staged
+      ancestors snapshot prepared origin innerCurrent
+  refine ⟨returnedOrigin, returnedAncestors, returnedCurrent, numeric, alphabet,
+    rfl, ?_, ?_, ?_, ?_⟩
+  · simpa only [identity_actual_source_return_point] using pastSeeds
+  · simpa only [identity_actual_source_return_point] using sourceGrowth
+  · exact identity_actual_source_selected_return_work root.limit entry current rest edge residual
+  · have selectedRun := actual_source_selected_return_run holeKey fits admits graph templates
+      checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv entry current rest edge residual
+    dsimp only at selectedRun
+    rw [selectedRun]
+    cases actual : IdentityActualSourceTask.runWithNarrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+      stop order recursiveDepth workFuel metadata uv
+      (.tuple (identity_actual_source_return_point entry current edge residual) rest) <;> rfl

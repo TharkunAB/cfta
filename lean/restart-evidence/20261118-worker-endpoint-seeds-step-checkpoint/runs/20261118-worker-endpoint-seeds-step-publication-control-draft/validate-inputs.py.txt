@@ -1,0 +1,211 @@
+from pathlib import Path
+import hashlib
+import json
+import re
+import subprocess
+
+ROOT = Path('/home/tritlo/Code/mcfta')
+BASE = ROOT/'lean/restart-evidence'
+WORK = BASE/'20261118-worker-endpoint-seeds-step-work'
+PRIOR = BASE/'20261118-worker-endpoint-seeds-zero-work'
+PRIOR_RUN = BASE/'20261118-worker-endpoint-seeds-zero-fixture-repair-publication'
+SOURCE = '60824ae753b260f486726d256290f5ed683ff46c'
+CHECKPOINT = '7e0d728d1a90bdd6f9150e031f27deea3eddb3b1'
+LIMITS = {'memory.max':'8589934592','memory.high':'8589934592','memory.swap.max':'0'}
+SHA = lambda data: hashlib.sha256(data).hexdigest()
+read = lambda path: json.loads(path.read_text())
+bound = set()
+OVERRIDES = globals().get('OVERRIDES',{})
+
+
+def verify(path,record):
+    data = path.read_bytes()
+    assert SHA(data) == (record['sha256'] if isinstance(record,dict) else record),str(path)
+    if isinstance(record,dict) and 'bytes' in record:
+        assert len(data) == record['bytes'],str(path)
+    bound.add(path)
+    return data
+
+
+def records(value):
+    if isinstance(value,list):
+        return [(item.get('file',item.get('path')),item) for item in value]
+    if 'files' in value:
+        return records(value['files'])
+    if 'pins' in value:
+        return records(value['pins'])
+    return value.items()
+
+
+def historical(name,record):
+    digest = record['sha256'] if isinstance(record,dict) else record
+    for path in [ROOT/name,ROOT/OVERRIDES.get(name,name)]:
+        if path.is_file() and SHA(path.read_bytes()) == digest:
+            return verify(path,record)
+    raise AssertionError(('Unmapped historical pin',name))
+
+
+def packet(path,digest=None):
+    value = json.loads(verify(path/'MANIFEST.json',digest or SHA((path/'MANIFEST.json').read_bytes())))
+    for name,record in records(value['files']):
+        verify(path/name,record)
+
+
+def pin_map(path,digest,count):
+    values = json.loads(verify(path,digest))
+    assert len(values) == count
+    for name,record in values.items():
+        historical(name,record)
+    return values
+
+
+def clean(item,reports,declarations=0):
+    assert item['exit'] == 0 and item['total_axiom_reports'] == reports
+    assert not item['diagnostics'] and not item['sorryAx'] and not item['nonstandard_axioms']
+    assert item['declaration_checks'] == declarations
+    assert item['axiom_groups']+item['axiom_free_reports'] == reports
+
+
+def preflight(control):
+    packet(control)
+    for name,record in records(read(control/'RECEIPT-PINS.json')):
+        verify(ROOT/name,record)
+    stage = read(control/'EXPECTED-STAGE.json')
+    baseline = json.loads(verify(ROOT/stage['source_baseline_path'],stage['source_baseline_sha256']))
+    assert baseline['source_commit'] == SOURCE and len(baseline['sources']) == 6286 and len(baseline['toolchain']) == 4
+    assert {str(path.relative_to(ROOT)) for path in (ROOT/'lean/MicroCFTA').glob('*.lean')} == set(baseline['sources'])
+    for name,record in {**baseline['sources'],**baseline['toolchain']}.items():
+        historical(name,record)
+    assert subprocess.check_output(['git','branch','--show-current'],cwd=ROOT).decode().strip() == 'formalize'
+    subprocess.run(['git','merge-base','--is-ancestor',CHECKPOINT,'HEAD'],cwd=ROOT,check=True)
+    assert not subprocess.check_output(['git','diff','--cached','--name-only'],cwd=ROOT)
+    changes = subprocess.check_output(['git','diff','--name-only',SOURCE,'HEAD'],cwd=ROOT).decode().splitlines()
+    assert all(name in ['NEXT-PROMPT.md','HANDOFF.md','FINDINGS.md'] or name.startswith('lean/restart-evidence/') for name in changes)
+    subprocess.run(['git','diff','--quiet',SOURCE,'HEAD','--','lean/MicroCFTA','shell.nix','lean/lean-toolchain','lean/lakefile.toml','lean/lake-manifest.json'],cwd=ROOT,check=True)
+    push,source = read(PRIOR/'PUSH-VERIFIED.json'),read(PRIOR/'SOURCE-COMMIT.json')
+    assert push['source_commit'] == source['source_commit'] == SOURCE
+    assert push['checkpoint_commit'] == push['remote_commit'] == CHECKPOINT
+    assert push['actual_push_terminal'] and push['actual_remote_check_terminal']
+    assert push['actual_push_terminal_exit'] == push['actual_remote_check_terminal_exit'] == push['postpush_current_tree_verifier_terminal_exit'] == 0
+    prior_verified,prior_actual = read(PRIOR/'PUBLICATION-VERIFIED.json'),read(PRIOR/'PUBLICATION-ACTUAL-RUN.json')
+    assert prior_verified['actual_terminal'] and prior_actual['actual_terminal']
+    assert prior_verified['actual_terminal_exit'] == prior_actual['actual_terminal_exit'] == 0
+    assert prior_verified['actual_session'] == prior_actual['actual_session'] == source['publication_actual_session']
+    prior = json.loads(verify(PRIOR_RUN/'checked.json',prior_verified['checked_sha256']))
+    assert prior == json.loads(verify(PRIOR_RUN/'results.json',prior_verified['results_sha256']))
+    assert prior['checks'] == prior_verified['checks'] and prior['all_five_gates_passed'] and prior['source_pins_unchanged']
+    for item,reports,declarations in zip(prior['checks'],[744,2,339,744,744],[0,3,0,0,0]):
+        clean(item,reports,declarations)
+    assert prior['combined_reports'] == 540 and prior['resource_owner_reports_inherited'] == 264
+    pin_map(PRIOR_RUN/'source-pins.json',prior_verified['source_pins_sha256'],prior_verified['pins_independently_reverified'])
+    bound.update(PRIOR/name for name in ['PUSH-VERIFIED.json','SOURCE-COMMIT.json','PUBLICATION-VERIFIED.json','PUBLICATION-ACTUAL-RUN.json'])
+    private_names = read(control/'PRIVATE-CHECK.json')
+    verified,actual = read(WORK/private_names['verified']),read(WORK/private_names['actual'])
+    assert verified['actual_terminal'] and actual['actual_terminal'] and verified['actual_terminal_exit'] == actual['actual_terminal_exit'] == 0
+    assert verified['actual_session'] == actual['actual_session']
+    assert verified['source_commit'] == SOURCE and not verified['normal_Source_changed']
+    run = BASE/verified['runtime']
+    checked = json.loads(verify(run/'checked.json',verified['checked_sha256']))
+    assert checked == json.loads(verify(run/'results.json',verified['results_sha256']))
+    assert checked['checks'] == verified['checks'] and checked['proof_credit'] and checked['source_pins_unchanged']
+    assert checked['limits'] == LIMITS and checked['credited_public_reports'] == 2 and checked['credited_private_reports'] == 3
+    assert checked['new_private_theorems'] == 6 and checked['growth_helpers_transitive_without_explicit_report'] == 3
+    assert checked['new_definitions'] == checked['actual_definition_declaration_checks'] == checked['definition_axiom_credit'] == 0
+    assert checked['rebuilt_Source65_leaf_and_zero_base_extra_credit'] == 0
+    pin_map(run/'source-pins.json',verified['source_pins_sha256'],verified['pins_independently_reverified'])
+    control_name = verified.get('selected_control') or verified['control']
+    control_hash = verified.get('selected_control_manifest_sha256') or verified['control_manifest_sha256']
+    private_control = BASE/control_name
+    assert control_name == actual['selected_control'] and control_hash == actual['selected_control_manifest_sha256']
+    packet(private_control,control_hash)
+    bound.update([WORK/private_names['verified'],WORK/private_names['actual']])
+    rejected = read(WORK/'FIRST-CHECK-REJECTED.json')
+    failed_run = BASE/rejected['runtime']
+    failed = json.loads(verify(failed_run/'results.json',rejected['results_sha256']))
+    assert rejected['actual_session'] == 21212 and rejected['actual_terminal'] and rejected['actual_terminal_exit'] == 1
+    assert not failed['proof_credit'] and failed['credited_public_reports'] == failed['credited_private_reports'] == 0
+    assert not (failed_run/'checked.json').exists() and failed['checks'] == rejected['checks']
+    assert [item['diagnostics'] for item in failed['checks']] == [0,0,2]
+    assert not any(item['sorryAx'] for item in failed['checks'])
+    pin_map(failed_run/'source-pins.json',rejected['source_pins_sha256'],rejected['pins_independently_reverified'])
+    packet(BASE/rejected['control'],rejected['control_manifest_sha256'])
+    bound.update([WORK/'FIRST-CHECK-REJECTED.json',WORK/'PRIVATE-CHECK-ACTUAL-RUN.json'])
+    bound.update(failed_run/(item['name']+'.txt') for item in failed['checks'])
+    selected = read(private_control/'SELECTION.json')
+    components = read(control/'COMPONENTS.json')['components']
+    assert len(components) == len(checked['checks']) == 3
+    assert [item['module'] for item in components] == selected['compile_order'] == stage['compile_order']
+    raw_sources,probes,classification = {},{},{'all':{'axiom_groups':0,'axiom_free_reports':0},'public':{'axiom_groups':0,'axiom_free_reports':0},'private':{'axiom_groups':0,'axiom_free_reports':0}}
+    for component,original,item in zip(components,selected['components'],checked['checks']):
+        assert {k:v for k,v in component.items() if k != 'source_path'} == original
+        assert item['name'] == component['module'] and item['report_kind'] == component['report_kind']
+        clean(item,component['expected_axiom_reports'])
+        chosen = BASE/component['packet'];packet(chosen,component['manifest_sha256'])
+        raw = verify(chosen/component['source'],{'bytes':component['raw_bytes'],'sha256':component['raw_sha256']})
+        old = historical(component['old_owner_source'],baseline['sources'][component['old_owner_source']])
+        assert len(old) == component['old_owner_bytes'] and component['old_owner_offset'] == 0 and raw.startswith(old)
+        if 'append' in component:
+            append = verify(chosen/component['append'],component['append_sha256'])
+            assert raw == old+append
+        if component['packet'] == '20261118-worker-endpoint-seeds-step-record-layout-repair':
+            repair = read(chosen/'REPAIR-COMPARISON.json')
+            original_path = BASE/repair['original_packet'];packet(original_path,repair['original_manifest_sha256'])
+            original_raw = verify(original_path/component['source'],repair['original_raw_sha256'])
+            original_header = (chosen/'ORIGINAL-SELECTED-RETURN-FIRST.lean.txt').read_bytes()
+            corrected_header = (chosen/'SELECTED-RETURN-FIRST.lean.txt').read_bytes()
+            assert original_header != corrected_header
+            assert re.sub(rb'\s+',b'',original_header) == re.sub(rb'\s+',b'',corrected_header)
+            assert raw == original_raw.replace(original_header.rstrip(),corrected_header.rstrip(),1)
+            for new_name,original_packet in [('SELECTED-PROOF.lean.txt','20261118-actual-selected-return-endpoint-seeds-draft'),('TUPLE-PROOF.lean.txt','20261118-actual-tuple-cons-endpoint-seeds-step-draft'),('CAPTURED-PROOF.lean.txt','20261118-actual-captured-nil-endpoint-seeds-step-draft')]:
+                assert (chosen/new_name).read_bytes() == (BASE/original_packet/'PROOF.lean.txt').read_bytes()
+            assert repair['source65_entire_prefix_exact'] and repair['selected_FIRST_bytes_changed']
+            assert not repair['original_selected_FIRST_successfully_elaborated']
+            assert not repair['old_selected_and_tuple_entire_candidate_prefix_byte_equality_claimed']
+        if 'exact_prefix_chain' in component and component['packet'] != '20261118-worker-endpoint-seeds-step-record-layout-repair':
+            previous = old
+            for entry in component['exact_prefix_chain']:
+                path = BASE/entry['packet'];packet(path,entry['manifest_sha256'])
+                next_raw = (path/component['source']).read_bytes()
+                assert next_raw.startswith(previous)
+                previous = next_raw
+            assert previous == raw
+        for header in component['headers']:
+            data = verify(BASE/header['packet']/header['file'],header['sha256']).rstrip()
+            assert raw.count(data) == 1 and re.match(rb'\s*:= by',raw[raw.index(data)+len(data):])
+        probe_path = private_control/component['probe'] if component['probe_origin'] == 'control' else chosen/component['probe']
+        probe = verify(probe_path,component['probe_sha256'])
+        assert re.findall(r'^#print axioms (\S+)',probe.decode(),re.M) == component['public_qnames']+component['private_qnames']
+        assert b'#check ' not in probe
+        assert (run/'source/MicroCFTA'/component['source']).read_bytes() == raw+b'\n'+probe
+        bound.update([run/'source/MicroCFTA'/component['source'],run/(component['module']+'.txt')])
+        for path in [chosen]+[BASE/x['packet'] for x in component.get('exact_prefix_chain',[])]:
+            for f in path.glob('*PINS*.json'):
+                for name,record in records(read(f)):
+                    if isinstance(name,str) and name.startswith(('lean/','shell.nix')) and isinstance(record,(dict,str)):
+                        historical(name,record)
+        raw_sources[component['module']],probes[component['module']] = raw,probe
+        for key in ['axiom_groups','axiom_free_reports']:
+            classification['all'][key] += item[key];classification[component['report_kind']][key] += item[key]
+    public = b''.join(probes[c['module']] for c in components if c['report_kind'] == 'public')
+    assert public == (control/'PUBLIC-PROBES.lean.txt').read_bytes() and public.count(b'#print axioms ') == 2
+    audit = historical('lean/MicroCFTA/Audit.lean',baseline['sources']['lean/MicroCFTA/Audit.lean'])
+    assert len(audit) == 436723 and audit.count(b'#print axioms ') == 744
+    for component in components:
+        assert len(re.findall(rb'^import MicroCFTA\.'+component['module'].encode()+rb'\s*$',audit,re.M)) == 1
+    assert all(q.encode() not in audit for c in components for q in c['public_qnames'])
+    normal = {path.stem:path for path in (ROOT/'lean/MicroCFTA').glob('*.lean')}
+    active,seen,order,graph = [],set(),[],{}
+    def visit(name):
+        assert name not in active,name
+        if name in seen:
+            return
+        active.append(name);text = raw_sources[name].decode() if name in raw_sources else normal[name].read_text()
+        graph[name] = re.findall(r'^import MicroCFTA\.([A-Za-z0-9_]+)\s*$',text,re.M)
+        for child in graph[name]:
+            visit(child)
+        active.pop();seen.add(name);order.append(name)
+    for name in stage['compile_order']:
+        visit(name)
+    topology = read(control/'TOPOLOGICAL-ORDER.json')
+    assert topology['direct_imports'] == graph and topology['full_transitive_order'] == order
+    return stage,baseline,components,raw_sources,probes,public,verified,actual,prior,classification

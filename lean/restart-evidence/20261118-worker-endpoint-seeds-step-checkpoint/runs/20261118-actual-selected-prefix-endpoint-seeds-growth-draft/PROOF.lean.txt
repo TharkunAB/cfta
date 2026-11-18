@@ -1,0 +1,130 @@
+ := by
+  have facts : InternedNestedFacts.Facts caller.checked.native.machine.heap :=
+    packet.context.ready.semantic.ready.semantic.1.normal.facts
+  have sourcePrepared := SourceSynthesisCurrentUniverseOwnership.current_build_prepared
+    lib query signed whole accepted rootValue sourceHeap built
+  have currentPrepared := sourcePrepared.preserve pastSeeds.1
+  unfold SourcePruningEnumerationSelectedStep.runPrefix
+    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+  dsimp only
+  generalize ExceptT.run (getValue readFuel uv before.core) = read
+  cases read with
+  | nil => trivial
+  | cons first rest =>
+    cases rest with
+    | cons _ _ =>
+      cases first with
+      | error _ => trivial
+      | ok pair =>
+        obtain ⟨value, _readAfter⟩ := pair
+        cases value with
+        | eliminated | enumerated _ => trivial
+        | unenumerated handle _ => cases handle <;> trivial
+    | nil =>
+      cases first with
+      | error _ => trivial
+      | ok pair =>
+        obtain ⟨value, readAfter⟩ := pair
+        cases value with
+        | eliminated | enumerated _ => trivial
+        | unenumerated handle scs =>
+          cases handle with
+          | none => trivial
+          | some oldHandle =>
+            dsimp only
+            generalize ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+              caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter) = check
+            cases check with
+            | nil => trivial
+            | cons first rest =>
+              cases rest with
+              | cons _ _ =>
+                cases first with
+                | error _ => trivial
+                | ok pair =>
+                  obtain ⟨repeated, _checked⟩ := pair
+                  cases repeated <;> trivial
+              | nil =>
+                cases first with
+                | error _ => trivial
+                | ok pair =>
+                  obtain ⟨repeated, checked⟩ := pair
+                  cases repeated with
+                  | true => trivial
+                  | false =>
+                    cases decoded : lookupNode caller.checked.native.machine.heap oldHandle with
+                    | none => trivial
+                    | some oldValue =>
+                      have available : Available caller.checked.native.machine.heap oldValue := by
+                        cases oldHandle with
+                        | zero =>
+                          have same : Value.empty = oldValue := Option.some.inj decoded
+                          rw [← same]
+                          exact InternedProbeProvenance.empty_available _
+                        | succ identity =>
+                          cases issued : caller.checked.native.machine.heap.nodes.issued identity with
+                          | none =>
+                            simp only [lookupNode, issued] at decoded
+                            cases decoded
+                          | some cacheKey =>
+                            cases canonical : caller.checked.native.machine.heap.nodes.table cacheKey with
+                            | none =>
+                              simp only [lookupNode, issued, canonical] at decoded
+                              cases decoded
+                            | some cacheEntry =>
+                              by_cases winner : cacheEntry.identity = identity
+                              · exact facts.cached.nodes cacheKey oldValue (by
+                                  simpa only [lookupNode, issued, canonical, ite_eq_left winner] using decoded)
+                              · simp only [lookupNode, issued, canonical, ite_eq_right winner] at decoded
+                                cases decoded
+                      have retained := SourcePruningEnumerationAction.original_source_prepare_endpoint_preserves_seeds
+                        lib query signed whole accepted rootValue sourceHeap built entry body depth ordinary
+                        bodyId holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs
+                        oldValue caller facts decoded pastSeeds
+                      have primitiveGrowth := SourcePruningEnumerationAction.prepare_endpoint_grows
+                        holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue
+                        caller facts currentPrepared available
+                      have endpoint := And.intro retained.2.2.2.2 (grows_trans sourceGrowth primitiveGrowth)
+                      dsimp only [SourcePruningEnumerationAction.prepare] at endpoint
+                      dsimp only
+                      generalize preparedAt : SourcePruningEnumerationAction.prepareWithNarrow
+                        (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata nativeFuel
+                        representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap =
+                          preparedResult at endpoint ⊢
+                      cases preparedResult with
+                      | failed fault heap => exact endpoint
+                      | done pair heap =>
+                        obtain ⟨value, action⟩ := pair
+                        cases action with
+                        | none => exact endpoint
+                        | some action =>
+                          dsimp only
+                          generalize ExceptT.run (action checked) = raw
+                          cases raw with
+                          | nil => exact endpoint
+                          | cons first rest =>
+                            cases rest with
+                            | cons _ _ =>
+                              cases first with
+                              | error _ => exact endpoint
+                              | ok pair =>
+                                obtain ⟨token, _observed⟩ := pair
+                                cases token
+                                exact endpoint
+                            | nil =>
+                              cases first with
+                              | error _ => exact endpoint
+                              | ok pair =>
+                                obtain ⟨token, observed⟩ := pair
+                                cases token
+                                dsimp only
+                                cases SourcePruningEnumerationNodes.encodeNode value with
+                                | none => exact endpoint
+                                | some newHandle =>
+                                  dsimp only
+                                  cases SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel
+                                      uv oldHandle newHandle scs before observed with
+                                  | none => exact endpoint
+                                  | some attached =>
+                                    rw [SourcePruningRecordTypes.recordTypes_inr]
+                                    exact endpoint

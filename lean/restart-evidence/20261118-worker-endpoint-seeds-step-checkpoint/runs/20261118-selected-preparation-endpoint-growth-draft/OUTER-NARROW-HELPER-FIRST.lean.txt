@@ -1,0 +1,9 @@
+private theorem outer_narrow_grows
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (fuel uv : Nat) (value : Node) (before : State Symbol Constraint)
+    (facts : InternedNestedFacts.Facts before)
+    (prepared : MergedPhysicalWarmup.Prepared before)
+    (available : Available before value) :
+    Grows before
+      (SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv value before).state

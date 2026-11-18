@@ -1,0 +1,8 @@
+theorem run_endpoint_grows
+    (entryFuel nativeFuel uv : Nat) (caller : Caller width) (before : Cached) (queries : Queries)
+    (facts : InternedNestedFacts.Facts caller.checked.native.machine.heap)
+    (prepared : MergedPhysicalWarmup.Prepared caller.checked.native.machine.heap)
+    (total : UnionFind.Total before.core.representatives) :
+    Grows caller.checked.native.machine.heap
+      (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller queries
+        (run entryFuel nativeFuel uv caller before)).1.checked.native.machine.heap
