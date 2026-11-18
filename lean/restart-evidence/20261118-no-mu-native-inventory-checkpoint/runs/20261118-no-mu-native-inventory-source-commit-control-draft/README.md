@@ -1,0 +1,1 @@
+OPEN single-public-law control. Root owns freeze and execution. The selected no-Mu request law retains the supplied native fuel, all execute outcomes and every bounded actual prefix. It adds no helper or definition. It does not prove the no-Mu worker attachment, full query coverage, native inhabitance or joint finite completion. No future pass or audit count is assumed.

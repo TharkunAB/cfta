@@ -1,0 +1,188 @@
+import MicroCFTA.SourcePruningEnumerationNativeRequestFields
+import MicroCFTA.SourceCurrentNativeConsistentOptionalOwner
+import MicroCFTA.SourceCurrentNativeMuOptionalSite
+import MicroCFTA.SourceCurrentNativeMuStoppingSite
+import MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback
+
+namespace MicroCFTA.SourceCurrentNativeNoMuInventory
+open InternedConstructorTemplates SourceRecursiveIntersectionCode
+open InternedProbeProvenance (Available)
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+set_option autoImplicit false
+
+theorem resource_admitted_no_mu_request_inventory
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {bits : Nat}
+    (before : Checked (bits + 2))
+    (noMu : ∀ (key : InternedBinderProtocol.NodeKey)
+      (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (body depth ordinary : Node),
+      before.native.machine.heap.nodeRecords key ≠ some (.mu entry body depth ordinary))
+    (left right : Node)
+    (leftAvailable : Available before.native.machine.heap left)
+    (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile)
+    (ready : SourceCurrentConjunctionClassScan.Ready before)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before)
+    (admitted : SourceCurrentAllocatedNativeCreditProfile.Admits bits profile)
+    (nativeFuel : Nat) :
+    (InternedShallowHeap.NoNewMu before.native.machine.heap
+        (SourceEqualityNativeDemand.execute nativeFuel
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state.native.machine.heap ∧
+      Grows before.native.machine.heap
+        (SourceEqualityNativeDemand.execute nativeFuel
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state.native.machine.heap) ∧
+    ∀ (count : Nat) (rest : Control Node) (after : Checked (bits + 2)),
+      count ≤ nativeFuel →
+      Trace count (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before rest after →
+      InternedShallowHeap.NoNewMu before.native.machine.heap after.native.machine.heap ∧
+        Grows before.native.machine.heap after.native.machine.heap
+ := by
+  have muOperand : ∀ (domain : IntersectionFlatMemoKeyDomain.DomainKey) (first second : Node),
+      (SourceRecursiveIntersectionControl.decision domain first second = .bothMu ∨
+        SourceRecursiveIntersectionControl.decision domain first second = .leftMu ∨
+        SourceRecursiveIntersectionControl.decision domain first second = .rightMu) →
+      (∃ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node),
+        first = .mu entry body depth ordinary) ∨
+      (∃ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node),
+        second = .mu entry body depth ordinary) := by
+    intro domain first second selected
+    have selectedPayload :
+        SourceRecursiveIntersectionControl.payload first second = .bothMu ∨
+        SourceRecursiveIntersectionControl.payload first second = .leftMu ∨
+        SourceRecursiveIntersectionControl.payload first second = .rightMu := by
+      cases emptyTest : SourceRecursiveIntersectionControl.hasEmpty first second with
+      | true =>
+          simp only [SourceRecursiveIntersectionControl.decision, emptyTest, ite_true] at selected
+          rcases selected with impossible | impossible | impossible <;> cases impossible
+      | false =>
+          simp only [SourceRecursiveIntersectionControl.decision, emptyTest,
+            Bool.false_eq_true, ite_false] at selected
+          cases resetTest : SourceRecursiveIntersectionControl.reset domain first second with
+          | true =>
+              simp only [resetTest, ite_true] at selected
+              rcases selected with impossible | impossible | impossible <;> cases impossible
+          | false =>
+              simp only [resetTest, Bool.false_eq_true, ite_false] at selected
+              cases selfTest : SourceRecursiveIntersectionControl.closedSelf first second with
+              | true =>
+                  simp only [selfTest, ite_true] at selected
+                  rcases selected with impossible | impossible | impossible <;> cases impossible
+              | false =>
+                  simp only [selfTest, Bool.false_eq_true, ite_false] at selected
+                  cases swapTest : SourceRecursiveIntersectionControl.greater first second with
+                  | true =>
+                      simp only [swapTest, ite_true] at selected
+                      rcases selected with impossible | impossible | impossible <;> cases impossible
+                  | false =>
+                      simp only [swapTest, Bool.false_eq_true, ite_false] at selected
+                      cases firstId : SourceRecursiveIntersectionControl.identity first with
+                      | none =>
+                          simp only [firstId] at selected
+                          rcases selected with impossible | impossible | impossible <;> cases impossible
+                      | some firstName =>
+                          cases secondId : SourceRecursiveIntersectionControl.identity second with
+                          | none =>
+                              simp only [firstId, secondId] at selected
+                              rcases selected with impossible | impossible | impossible <;> cases impossible
+                          | some secondName =>
+                              simp only [firstId, secondId] at selected
+                              by_cases seen : SourceRecursiveIntersectionControl.pair firstName secondName ∈ domain.seen
+                              · simp only [seen, ite_true] at selected
+                                rcases selected with impossible | impossible | impossible <;> cases impossible
+                              · simpa only [seen, ite_false] using selected
+    cases first <;> cases second <;>
+      first
+      | exact Or.inl ⟨_, _, _, _, rfl⟩
+      | exact Or.inr ⟨_, _, _, _, rfl⟩
+      | rcases selectedPayload with impossible | impossible | impossible <;> cases impossible
+
+  /- Note [A new Mu requires an earlier Mu]
+  The actual optional site has one physical compiler owner.
+  Its Mu operand is resident at a strictly earlier prefix of the same query.
+  Strong induction excludes that earlier record in a heap without Mu.
+  -/
+  have earlierMu : ∀ (siteFuel : Nat) (pair : Nat × Nat) (siteBody : Node)
+      (siteNext : Node → Code Symbol Guard Node) (siteBefore : Checked (bits + 2)),
+      Trace siteFuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before
+        (.code (.optionalBinder pair siteBody siteNext)) siteBefore →
+      ∃ (count : Nat) (rest : Control Node) (after : Checked (bits + 2))
+          (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node),
+        count < siteFuel ∧
+        Trace count (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before rest after ∧
+        after.native.machine.heap.nodeRecords entry.key = some (.mu entry body depth ordinary) := by
+    intro siteFuel pair siteBody siteNext siteBefore siteTrace
+    obtain ⟨queryFuel, childFuel, queried, callerNext, queryBefore, handle, chosen, running,
+        first, second, total, earlier, queryInputs, _selected, _demanded, _suspended,
+        _evaluating, _machine, _queryStep, recursive, _ownerRest⟩ :=
+      SourceCurrentNativeConsistentOptionalOwner.request
+        (⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ :
+          SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+        siteFuel before siteBefore pair siteBody siteNext ready.good.native siteTrace
+    rcases muOperand queried.domain.key queried.left queried.right recursive with
+      ⟨entry, body, depth, ordinary, same⟩ | ⟨entry, body, depth, ordinary, same⟩
+    · have available : Available queryBefore.native.machine.heap queried.left := queryInputs.1.2.1
+      rw [same] at available
+      exact ⟨queryFuel, .code (.node queried callerNext), queryBefore, entry, body, depth, ordinary,
+        by omega, earlier, available.resident entry rfl⟩
+    · have available : Available queryBefore.native.machine.heap queried.right := queryInputs.1.2.2
+      rw [same] at available
+      exact ⟨queryFuel, .code (.node queried callerNext), queryBefore, entry, body, depth, ordinary,
+        by omega, earlier, available.resident entry rfl⟩
+
+  have prefixNoMu : ∀ (count : Nat) (rest : Control Node) (after : Checked (bits + 2)),
+      Trace count (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before rest after →
+      ∀ (key : InternedBinderProtocol.NodeKey)
+        (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node),
+        after.native.machine.heap.nodeRecords key ≠ some (.mu entry body depth ordinary) := by
+    intro count
+    induction count using Nat.strongRecOn with
+    | ind count ih =>
+        intro rest after actual key entry body depth ordinary present
+        rcases SourceCurrentNativeMuOptionalSite.trace actual ready.good.heap.semantic
+            key entry body depth ordinary present with prior | site
+        · exact noMu key entry body depth ordinary prior
+        · obtain ⟨siteFuel, suffixFuel, pair, siteBody, siteNext, siteBefore, _siteAfter,
+              _result, _heap, total, siteTrace, _siteRest⟩ := site
+          obtain ⟨queryFuel, queryRest, queryAfter, earlierEntry, earlierBody, earlierDepth,
+              earlierOrdinary, smaller, earlier, stored⟩ :=
+            earlierMu siteFuel pair siteBody siteNext siteBefore siteTrace
+          exact ih queryFuel (by omega) queryRest queryAfter earlier
+            earlierEntry.key earlierEntry earlierBody earlierDepth earlierOrdinary stored
+
+  have plans := SourcePruningEnumerationNativeRequestFields.admitted_request_plans
+    profile before ready fits admitted left right
+    leftAvailable rightAvailable leftClosed rightClosed nativeFuel
+  have endpointInventory : InternedShallowHeap.NoNewMu before.native.machine.heap
+      (SourceEqualityNativeDemand.execute nativeFuel
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state.native.machine.heap := by
+    intro key entry body depth ordinary present
+    rcases SourceCurrentNativeMuStoppingSite.execute plans.1 ready.good.heap.semantic
+        key entry body depth ordinary present with prior | site
+    · exact prior
+    · obtain ⟨siteFuel, _remainingFuel, pair, siteBody, siteNext, siteBefore, _call,
+          _siteStep, _total, siteTrace, _siteRest⟩ := site
+      obtain ⟨queryFuel, queryRest, queryAfter, earlierEntry, earlierBody, earlierDepth,
+          earlierOrdinary, _smaller, earlier, stored⟩ :=
+        earlierMu siteFuel pair siteBody siteNext siteBefore siteTrace
+      exact False.elim (prefixNoMu queryFuel queryRest queryAfter earlier
+        earlierEntry.key earlierEntry earlierBody earlierDepth earlierOrdinary stored)
+  have endpointEffects := SourceCurrentAllocatedNativePhysicalExecution.execute_invariants
+    nativeFuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before
+    ready.good.native ready.good.heap plans.1
+  refine ⟨⟨endpointInventory, endpointEffects.2.1.heap⟩, ?_⟩
+  intro count rest after _bounded actual
+  have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects actual ready.good
+    (SourcePruningEnumerationNativeRequestGuardHeap.request_allocated before left right)
+  refine ⟨?_, reached.2.1.heap⟩
+  intro key entry body depth ordinary present
+  exact False.elim (prefixNoMu count rest after actual key entry body depth ordinary present)
+
+end MicroCFTA.SourceCurrentNativeNoMuInventory
+
+#print axioms MicroCFTA.SourceCurrentNativeNoMuInventory.resource_admitted_no_mu_request_inventory

@@ -1,0 +1,27 @@
+theorem resource_admitted_no_mu_request_inventory
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {bits : Nat}
+    (before : Checked (bits + 2))
+    (noMu : ∀ (key : InternedBinderProtocol.NodeKey)
+      (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (body depth ordinary : Node),
+      before.native.machine.heap.nodeRecords key ≠ some (.mu entry body depth ordinary))
+    (left right : Node)
+    (leftAvailable : Available before.native.machine.heap left)
+    (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile)
+    (ready : SourceCurrentConjunctionClassScan.Ready before)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before)
+    (admitted : SourceCurrentAllocatedNativeCreditProfile.Admits bits profile)
+    (nativeFuel : Nat) :
+    (InternedShallowHeap.NoNewMu before.native.machine.heap
+        (SourceEqualityNativeDemand.execute nativeFuel
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state.native.machine.heap ∧
+      Grows before.native.machine.heap
+        (SourceEqualityNativeDemand.execute nativeFuel
+          (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state.native.machine.heap) ∧
+    ∀ (count : Nat) (rest : Control Node) (after : Checked (bits + 2)),
+      count ≤ nativeFuel →
+      Trace count (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before rest after →
+      InternedShallowHeap.NoNewMu before.native.machine.heap after.native.machine.heap ∧
+        Grows before.native.machine.heap after.native.machine.heap

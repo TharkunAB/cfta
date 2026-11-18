@@ -1,0 +1,1 @@
+This check resolves all five selected actual input maps from the checked Source and toolchain, this archive, or the hash-bound prior archives. It rehashes each used archived payload after decompression. Restore the original input paths before a fresh compiler replay. The archive verifier checks saved bytes without replaying the compiler. This check adds no theorem credit.

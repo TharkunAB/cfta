@@ -1,0 +1,145 @@
+from pathlib import Path
+import hashlib
+import json
+import re
+import subprocess
+ROOT = Path('/home/tritlo/Code/mcfta')
+BASE = ROOT/'lean/restart-evidence'
+WORK = BASE/'20261118-no-mu-native-inventory-work'
+PRIOR = BASE/'20261118-source-inventory-local-coverage-work'
+PRIOR_RUN = BASE/'20261118-source-inventory-local-coverage-publication'
+SOURCE = 'a789d75bf0ac472447d09547e380c30904225509'
+CHECKPOINT = 'ef5cd82556c4edc671fcbecd8197ae222b11f3b1'
+AUDIT = 'lean/MicroCFTA/Audit.lean'
+SHA = lambda data: hashlib.sha256(data).hexdigest()
+read = lambda path: json.loads(path.read_text())
+bound = set()
+OVERRIDES = globals().get('OVERRIDES',{})
+
+def records(value):
+    if isinstance(value,list):
+        return [(e.get('file',e.get('path')),e) for e in value]
+    for key in ['files','pins','immutable_dependencies']:
+        if key in value:
+            return records(value[key])
+    return value.items()
+
+def verify(path,record):
+    data = path.read_bytes()
+    assert SHA(data) == (record['sha256'] if isinstance(record,dict) else record),str(path)
+    if isinstance(record,dict) and 'bytes' in record:
+        assert len(data) == record['bytes'],str(path)
+    bound.add(path)
+    return data
+
+def packet(path,digest=None):
+    manifest = read(path/'MANIFEST.json') if digest is None else json.loads(verify(path/'MANIFEST.json',digest))
+    for name,record in records(manifest):
+        verify(path/name,record)
+    bound.add(path/'MANIFEST.json')
+
+def pins(path,digest=None,count=None):
+    value = json.loads(verify(path,digest)) if digest else read(path)
+    value = dict(records(value))
+    if count is not None:
+        assert len(value) == count
+    for name,record in value.items():
+        verify(ROOT/OVERRIDES.get(name,name),record)
+    return value
+
+def preflight(control):
+    assert (control/'STATUS.txt').read_text().startswith('FROZEN'),'OPEN control; do not execute.'
+    packet(control)
+    for name,record in records(read(control/'SOURCE-PINS.json')):
+        verify(ROOT/name,record)
+    stage = read(control/'EXPECTED-STAGE.json')
+    assert stage['source_baseline'] == SOURCE and stage['prior_checkpoint'] == CHECKPOINT
+    assert (stage['source_files'],stage['audit_imports'],stage['audit_reports'],stage['independent_reports']) == (6291,5291,752,347)
+    assert (stage['fresh_public_reports'],stage['fresh_private_reports'],stage['inherited_reports'],stage['combined_reports']) == (1,0,568,569)
+    assert stage['new_public_theorems'] == stage['new_modules'] == 1
+    assert stage['new_private_theorems'] == stage['new_private_helpers_transitive'] == stage['new_definitions'] == stage['definition_checks'] == stage['definition_axiom_credit'] == stage['changed_existing_owners'] == 0
+    assert set(stage['baseline_overrides']) == {AUDIT}
+    component = read(control/'COMPONENTS.json')['components'][0]
+    assert stage['components'] == [component] and stage['compile_order'] == [component['module']]
+    assert set(stage['exact_Source_write_paths']) == {component['source_path'],AUDIT}
+    push = read(ROOT/stage['prior_checkpoint_push_receipt'])
+    assert push['source_commit'] == SOURCE and push['checkpoint_commit'] == push['remote_commit'] == CHECKPOINT
+    assert push['actual_push_terminal'] and push['actual_remote_check_terminal']
+    assert push['actual_push_terminal_exit'] == push['actual_remote_check_terminal_exit'] == push['postpush_current_tree_verifier_terminal_exit'] == 0
+    prior,prior_actual = read(PRIOR/'PUBLICATION-VERIFIED.json'),read(PRIOR/'PUBLICATION-ACTUAL-RUN.json')
+    assert prior['actual_terminal'] and prior_actual['actual_terminal'] and prior['actual_terminal_exit'] == prior_actual['actual_terminal_exit'] == 0
+    assert prior['actual_session'] == prior_actual['actual_session'] == 17653
+    inherited = json.loads(verify(PRIOR_RUN/'checked.json',prior['checked_sha256']))
+    assert inherited == json.loads(verify(PRIOR_RUN/'results.json',prior['results_sha256'])) and inherited['checks'] == prior['checks']
+    assert inherited['combined_reports'] == 568 and [e['total_axiom_reports'] for e in inherited['checks']] == [751,4,346,751,751]
+    assert all(e['exit'] == 0 and not e['diagnostics'] and not e['sorryAx'] and not e['nonstandard_axioms'] for e in inherited['checks'])
+    pins(PRIOR_RUN/'source-pins.json',prior['source_pins_sha256'],prior['pins_independently_reverified'])
+    baseline = json.loads(verify(ROOT/stage['source_baseline_path'],stage['source_baseline_sha256']))
+    assert len(baseline['sources']) == 6290 and len(baseline['toolchain']) == 4
+    for name,record in {**baseline['sources'],**baseline['toolchain']}.items():
+        verify(ROOT/OVERRIDES.get(name,name),record)
+    private = read(control/'PRIVATE-CHECK.json')
+    verified,actual = read(ROOT/private['verified_receipt']),read(ROOT/private['actual_receipt'])
+    assert verified['actual_terminal'] and actual['actual_terminal'] and verified['actual_terminal_exit'] == actual['actual_terminal_exit'] == 0
+    assert verified['actual_session'] == actual['actual_session'] == private['actual_session']
+    run = BASE/verified['runtime']
+    checked = json.loads(verify(run/'checked.json',verified['checked_sha256']))
+    assert checked == json.loads(verify(run/'results.json',verified['results_sha256'])) and checked['checks'] == verified['checks']
+    assert checked['proof_credit'] and checked['source_pins_unchanged']
+    assert len(checked['checks']) == 1 and checked['checks'][0]['total_axiom_reports'] == 1 and checked['checks'][0]['declaration_checks'] == 0
+    item = checked['checks'][0]
+    assert item['exit'] == 0 and not item['diagnostics'] and not item['sorryAx'] and not item['nonstandard_axioms']
+    assert checked['limits'] == {'memory.max':'8589934592','memory.high':'8589934592','memory.swap.max':'0'}
+    pins(run/'source-pins.json',verified['source_pins_sha256'],verified['pins_independently_reverified'])
+    packet(BASE/private['control'],private['control_manifest_sha256'])
+    selected = BASE/component['packet']
+    packet(selected,component['manifest_sha256'])
+    for filename in ['SOURCE-PINS.json','DEPENDENCY-PINS.json']:
+        pins(selected/filename)
+    raw = verify(selected/component['source'],{'bytes':component['raw_bytes'],'sha256':component['raw_sha256']})
+    probe = verify(selected/component['probe'],component['probe_sha256'])
+    assert (run/'source/MicroCFTA'/component['source']).read_bytes() == raw+b'\n'+probe
+    for name,digest in component['headers'].items():
+        header = verify(selected/name,digest)
+        layouts = [header]+([header[:-1]] if header.endswith(b'\n') else [])
+        assert sum(raw.count(layout+b' := by\n') for layout in layouts) == 1
+    assert raw.count(verify(selected/component['proof'],component['proof_sha256'])) == 1
+    assert re.findall(r'^#print axioms (\S+)',probe.decode(),re.M) == component['public_qnames'] and b'#check ' not in probe
+    output = (run/(item['name']+'.txt')).read_text()
+    entries = re.findall(r"'([^']+)' (depends on axioms:\s*\[([^]]*)\]|does not depend on any axioms)",output,re.S)
+    assert len(entries) == 1 and entries[0][0] == component['public_qnames'][0]
+    _,kind,axioms = entries[0]
+    assert {a.strip() for a in axioms.split(',') if a.strip()} <= {'propext','Classical.choice','Quot.sound'}
+    one = dict(axiom_groups=int(kind.startswith('depends on axioms:')),axiom_free_reports=int(kind == 'does not depend on any axioms'),private=False)
+    assert one['axiom_groups'] == item['axiom_groups'] and one['axiom_free_reports'] == item['axiom_free_reports']
+    classification = dict(axiom_groups=one['axiom_groups'],axiom_free_reports=one['axiom_free_reports'],public={k:one[k] for k in ['axiom_groups','axiom_free_reports']},per_qname={component['public_qnames'][0]:one})
+    old_audit = verify(ROOT/OVERRIDES.get(AUDIT,AUDIT),baseline['sources'][AUDIT])
+    assert old_audit == (control/'AUDIT-BEFORE.lean.txt').read_bytes() and len(old_audit) == 437705
+    imports = verify(control/'IMPORTS.lean.txt',stage['audit_import_prefix_sha256'])
+    assert imports == b'import MicroCFTA.SourceCurrentNativeNoMuInventory\n' and len(imports) == 50 and imports.strip() not in old_audit.splitlines()
+    public = verify(control/'PUBLIC-PROBES.lean.txt',stage['public_probes_sha256'])
+    assert public == probe
+    audit = imports+old_audit+b'\n'+public
+    assert audit[50:50+437705] == old_audit and len(audit) == stage['staged_audit_bytes'] and SHA(audit) == stage['staged_audit_sha256']
+    assert len(re.findall(rb'^import ',audit,re.M)) == 5291 and audit.count(b'#print axioms ') == 752
+    assert len(set(baseline['sources'])-{AUDIT}) == stage['old_other_Source_files_byte_exact'] == 6289
+    normal = {p.stem:p for p in (ROOT/'lean/MicroCFTA').glob('*.lean')}
+    graph,order,seen,active = {},[],set(),[]
+    def visit(name):
+        assert name not in active
+        if name in seen:
+            return
+        active.append(name)
+        text = raw.decode() if name == component['module'] else normal[name].read_text()
+        graph[name] = re.findall(r'^import MicroCFTA\.([A-Za-z0-9_]+)\s*$',text,re.M)
+        for dependency in graph[name]:
+            visit(dependency)
+        active.pop();seen.add(name);order.append(name)
+    visit(component['module'])
+    topology = read(control/'TOPOLOGICAL-ORDER.json')
+    assert graph == topology['direct_imports'] and order == topology['full_transitive_order']
+    git = lambda *args: subprocess.check_output(['git',*args],cwd=ROOT)
+    assert git('branch','--show-current').decode().strip() == 'formalize' and git('rev-parse','HEAD').decode().strip() == CHECKPOINT
+    assert not git('diff','--cached','--name-only')
+    assert set(git('diff','--name-only','HEAD').decode().splitlines()) == ({AUDIT} if OVERRIDES else set())
+    return stage,baseline,component,raw,probe,audit,verified,inherited,classification
