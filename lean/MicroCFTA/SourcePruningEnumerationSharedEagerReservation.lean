@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationComputedSeedGuardTop
 import MicroCFTA.SourcePruningEnumerationSharedChildDispatchNoMuInventory
 import MicroCFTA.SourcePruningEnumerationInvocationNativeQueryProjection
 import MicroCFTA.SourcePruningEnumerationSelectedPreparationNoNewMu
@@ -45752,5 +45753,106 @@ theorem runEager_original_source_preserves_no_mu_inventory
     holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
     workFuel recursiveDepth inventory caller memos before metadata seed ceiling packet bounded known
     selectionMembers selectionLength initialMass reserved sourceGrowth pastInventory
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationFiniteReservation (iterate)
+set_option autoImplicit false
+
+private theorem fallbackPlan_top (bound ceiling : Nat)
+    (continuation : Nat → Seed → Seed)
+    (continuationTop : ∀ retained current,
+      (∀ guard ∈ current.1, guard.guard = .top) →
+      ∀ guard ∈ (continuation retained current).1, guard.guard = .top)
+    (seed : Seed) (initialTop : ∀ guard ∈ seed.1, guard.guard = .top) :
+    ∀ guard ∈ (fallbackPlan bound ceiling continuation seed).1, guard.guard = .top
+ := by
+  change ∀ guard ∈ (continuation (ceiling + bound) (advance seed (bound + 1))).1,
+    guard.guard = .top
+  exact continuationTop (ceiling + bound) (advance seed (bound + 1))
+    (SourcePruningEnumerationComputedSeedGuardTop.shared_incoming_advance_top seed initialTop (bound + 1))
+
+private theorem tuplePlan_top
+    (child : Nat → Nat → (Nat → Seed → Seed) → Seed → Seed)
+    (childTop : ∀ bound ceiling continuation,
+      (∀ retained current,
+        (∀ guard ∈ current.1, guard.guard = .top) →
+        ∀ guard ∈ (continuation retained current).1, guard.guard = .top) →
+      ∀ seed, (∀ guard ∈ seed.1, guard.guard = .top) →
+        ∀ guard ∈ (child bound ceiling continuation seed).1, guard.guard = .top)
+    (count : Nat) :
+    ∀ bound ceiling continuation,
+      (∀ retained current,
+        (∀ guard ∈ current.1, guard.guard = .top) →
+        ∀ guard ∈ (continuation retained current).1, guard.guard = .top) →
+      ∀ seed, (∀ guard ∈ seed.1, guard.guard = .top) →
+        ∀ guard ∈ (tuplePlan child count bound ceiling continuation seed).1, guard.guard = .top
+ := by
+  induction count with
+  | zero =>
+      intro bound ceiling continuation continuationTop seed initialTop
+      exact continuationTop ceiling seed initialTop
+  | succ count ih =>
+      intro bound ceiling continuation continuationTop seed initialTop
+      exact childTop bound ceiling
+        (fun retained current => tuplePlan child count bound retained continuation current)
+        (fun retained current currentTop => ih bound retained continuation continuationTop current currentTop)
+        seed initialTop
+
+private theorem nodePlan_top (limit own height : Nat) :
+    ∀ bound ceiling continuation,
+      (∀ retained current,
+        (∀ guard ∈ current.1, guard.guard = .top) →
+        ∀ guard ∈ (continuation retained current).1, guard.guard = .top) →
+      ∀ seed, (∀ guard ∈ seed.1, guard.guard = .top) →
+        ∀ guard ∈ (nodePlan limit own height bound ceiling continuation seed).1, guard.guard = .top
+ := by
+  induction height with
+  | zero =>
+      intro bound ceiling continuation continuationTop seed initialTop
+      exact fallbackPlan_top bound ceiling continuation continuationTop seed initialTop
+  | succ height ih =>
+      intro bound ceiling continuation continuationTop seed initialTop
+      let first := fallbackPlan bound ceiling continuation seed
+      let row := fun current => tuplePlan (nodePlan limit own height)
+        limit (bound + own) ceiling continuation current
+      have firstTop : ∀ guard ∈ first.1, guard.guard = .top :=
+        fallbackPlan_top bound ceiling continuation continuationTop seed initialTop
+      have rowTop : ∀ current, (∀ guard ∈ current.1, guard.guard = .top) →
+          ∀ guard ∈ (row current).1, guard.guard = .top := by
+        intro current currentTop
+        exact tuplePlan_top (nodePlan limit own height) ih
+          limit (bound + own) ceiling continuation continuationTop current currentTop
+      have iteratedTop : ∀ count current, (∀ guard ∈ current.1, guard.guard = .top) →
+          ∀ guard ∈ (iterate row current count).1, guard.guard = .top := by
+        intro count
+        induction count with
+        | zero =>
+            intro current currentTop
+            exact currentTop
+        | succ count next =>
+            intro current currentTop
+            exact next (row current) (rowTop current currentTop)
+      change ∀ guard ∈ (iterate row first limit).1, guard.guard = .top
+      exact iteratedTop limit first firstTop
+
+theorem eagerFinal_top (depth : Nat) (seed : Seed) (ceiling : Nat)
+    (initialTop : ∀ guard ∈ seed.1, guard.guard = .top) :
+    ∀ guard ∈ (eagerFinal depth seed ceiling).1, guard.guard = .top
+ := by
+  induction depth generalizing seed ceiling with
+  | zero => exact initialTop
+  | succ depth ih =>
+      let captured := SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed
+      let limit := SourceCurrentConstrainedCapTargetForecast.scalar captured.2
+      let own := SourcePruningEnumerationGuardWidth.width captured.1
+      have capturedTop : ∀ guard ∈ captured.1, guard.guard = .top :=
+        SourcePruningEnumerationComputedSeedGuardTop.prepared_seed_top seed initialTop
+      exact nodePlan_top limit own limit ceiling ceiling
+        (fun retained current => eagerFinal depth current retained)
+        (fun retained current currentTop => ih current retained currentTop)
+        captured capturedTop
 
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
