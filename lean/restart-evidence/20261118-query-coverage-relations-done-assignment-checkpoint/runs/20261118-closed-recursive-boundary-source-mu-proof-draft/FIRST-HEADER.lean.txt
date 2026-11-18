@@ -1,0 +1,14 @@
+theorem closed_recursive_boundary_has_source_mu
+    {Symbol Guard : Type}
+    (sourceHeap heap : InternedConstructorTemplates.State Symbol Guard)
+    (normal : InternedStoredMuOrigins.Normal heap)
+    (irreducible : SourceCurrentRequiredUnionNormal.UnionNormal heap)
+    (inventory : InternedShallowHeap.NoNewMu sourceHeap heap)
+    (value : InternedConstructorTemplates.Value Symbol Guard)
+    (available : InternedProbeProvenance.Available heap value)
+    (closed : value.free = [])
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true) :
+    ∃ (key : InternedBinderProtocol.NodeKey)
+      (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (body depth ordinary : InternedConstructorTemplates.Value Symbol Guard),
+      sourceHeap.nodeRecords key = some (.mu entry body depth ordinary)
