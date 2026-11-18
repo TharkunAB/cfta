@@ -1,0 +1,27 @@
+theorem original_source_prepare_endpoint_preserves_seeds
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (nativeFuel representativeFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)
+    (oldValue : Node) (caller : Caller width)
+    (facts : InternedNestedFacts.Facts caller.checked.native.machine.heap)
+    (decoded : lookupNode caller.checked.native.machine.heap oldHandle = some oldValue)
+    (pastSeeds : SourceCurrentNativeNumericalSeedInvariant.Seeds
+      sourceHeap entry body depth ordinary bodyId caller.checked) :
+    let prepared := prepare (EnumGuard := Constraint) holeKey fits admits metadata nativeFuel
+      representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap
+    let reached := SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        ⟨prepared.state, caller.checked.operations⟩) caller.fourth caller.merge
+    InternedShallowHeap.NoNewMu caller.checked.native.machine.heap reached.checked.native.machine.heap ∧
+      reached.checked.native.nodes = caller.checked.native.nodes ∧
+      reached.checked.native.edges = caller.checked.native.edges ∧
+      reached.checked.native.machine.domains = caller.checked.native.machine.domains ∧
+      SourceCurrentNativeNumericalSeedInvariant.Seeds
+        sourceHeap entry body depth ordinary bodyId reached.checked

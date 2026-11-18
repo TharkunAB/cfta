@@ -1,0 +1,22 @@
+ := by
+  cases handle with
+  | zero =>
+      have same : Value.empty = value := Option.some.inj present
+      rw [← same]
+      exact InternedProbeProvenance.empty_available heap
+  | succ identity =>
+      cases issued : heap.nodes.issued identity with
+      | none =>
+          simp only [lookupNode, issued] at present
+          cases present
+      | some key =>
+          cases canonical : heap.nodes.table key with
+          | none =>
+              simp only [lookupNode, issued, canonical] at present
+              cases present
+          | some entry =>
+              by_cases winner : entry.identity = identity
+              · exact facts.cached.nodes key value (by
+                  simpa only [lookupNode, issued, canonical, ite_eq_left winner] using present)
+              · simp only [lookupNode, issued, canonical, ite_eq_right winner] at present
+                cases present

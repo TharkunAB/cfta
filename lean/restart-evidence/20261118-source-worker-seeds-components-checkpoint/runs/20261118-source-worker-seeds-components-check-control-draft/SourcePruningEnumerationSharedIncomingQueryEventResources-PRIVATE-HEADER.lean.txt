@@ -1,0 +1,10 @@
+private theorem observe_right_available
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
+    (beforeCaller : Caller (bits + 2)) (before : EnumerationState.State Symbol EnumGuard)
+    (uv : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before) :
+    ∀ start saved left right actual,
+      (start, saved, left, right, actual) ∈
+        (observe checkEmpty representativeFuel nativeFuel p h
+          beforeCaller before uv incoming incomingScs queries).2 →
+      Available beforeCaller.checked.native.machine.heap right ∧ right.free = []

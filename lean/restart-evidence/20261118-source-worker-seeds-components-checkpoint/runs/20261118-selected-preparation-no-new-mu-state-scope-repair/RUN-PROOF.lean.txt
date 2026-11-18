@@ -1,0 +1,27 @@
+ := by
+  cases value with
+  | empty | reference | node => exact InternedShallowHeap.noNewMu_refl before
+  | mu entry body depth ordinary =>
+      have retained := MergedPhysicalWarmup.unfold_noNewMu
+        (.mu entry body depth ordinary) before prepared available
+      rw [← InternedFreshOrdinaryStoredSubstitution.unfold_eq
+        (.mu entry body depth ordinary) before prepared available] at retained
+      cases actual : InternedFreshOrdinaryStoredSubstitution.unfold
+          (.mu entry body depth ordinary) before with
+      | done result after | pending key after =>
+          simpa only [run, actual, InternedNestedConstruction.Outcome.state,
+            MergedSourceComparison.Result.state] using retained
+  | union entry members depth free =>
+      have retained := (MergedFreshOrdinaryExposure.nodeEdges_verified fuel
+        (.union entry members depth free) before facts prepared available).unchanged
+      cases actual : MergedFreshOrdinaryExposure.nodeEdges fuel
+          (.union entry members depth free) before with
+      | done rows middle =>
+          have first : InternedShallowHeap.NoNewMu before middle := by
+            simpa only [actual, MergedSourceExposure.Result.state] using retained
+          simpa only [run, actual, MergedSourceComparison.Result.state] using
+            InternedShallowHeap.noNewMu_trans first
+              (InternedShallowHeap.makeNode_noNewMu rows middle)
+      | unresolved name after | pending key after | exhausted after =>
+          simpa only [run, actual, MergedSourceExposure.Result.state,
+            MergedSourceComparison.Result.state] using retained

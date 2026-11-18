@@ -1,0 +1,13 @@
+ := by
+  dsimp only
+  have receipt := observe_exact checkEmpty nativeFuel p h caller before source target memos.query
+  refine ⟨receipt.1, ?_⟩
+  intro start saved left right actual member
+  obtain ⟨startSame, savedSame, actualSame⟩ := receipt.2.2.2 start saved left right actual member
+  have operands := observe_operands_available checkEmpty nativeFuel p h caller before source target
+    memos.query realized start saved left right actual member
+  subst start
+  exact ⟨rfl, savedSame, initial.ready, fits, reserved.head,
+    operands.1, operands.2.1, operands.2.2.1, operands.2.2.2, actualSame⟩
+
+end MicroCFTA.SourcePruningEnumerationSharedDispatchQueryEvents

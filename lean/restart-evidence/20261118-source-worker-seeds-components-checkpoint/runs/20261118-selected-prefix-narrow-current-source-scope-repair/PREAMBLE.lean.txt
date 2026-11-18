@@ -1,0 +1,16 @@
+import MicroCFTA.SourcePruningEnumerationAction
+import MicroCFTA.SourceCurrentAllocatedQueryMemo
+import MicroCFTA.SourceSynthesisCurrentUniverseOwnership
+import MicroCFTA.SourceCurrentNativeNumericalSeedInvariant
+
+set_option autoImplicit false
+
+namespace MicroCFTA.SourcePruningEnumerationAction
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+variable {Typing Key : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]

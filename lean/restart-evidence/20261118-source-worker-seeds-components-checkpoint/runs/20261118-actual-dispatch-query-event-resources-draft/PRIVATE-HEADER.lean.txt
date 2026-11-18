@@ -1,0 +1,10 @@
+private theorem observe_operands_available
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (caller : Caller (bits + 2))
+    (before : EnumerationState.State Symbol EnumGuard) (source target : Nat) (queries : Queries)
+    (realized : PendingRealized caller.checked.native.machine.heap before) :
+    ∀ start saved left right actual,
+      (start, saved, left, right, actual) ∈
+        (observe checkEmpty nativeFuel p h caller before source target queries).2 →
+      Available caller.checked.native.machine.heap left ∧
+      Available caller.checked.native.machine.heap right ∧
+      left.free = [] ∧ right.free = []

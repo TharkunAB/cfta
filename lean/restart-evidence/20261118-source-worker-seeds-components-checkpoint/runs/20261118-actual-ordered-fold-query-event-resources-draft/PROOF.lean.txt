@@ -1,0 +1,87 @@
+ := by
+  dsimp only
+  refine ⟨(rawFold_exact checkEmpty nativeFuel p h sources beforeCaller before target memos.query).1, ?_⟩
+  induction sources generalizing seed inventory beforeCaller before memos with
+  | nil =>
+      intro start saved left right actual member
+      simp only [rawFoldObserved, List.not_mem_nil] at member
+  | cons source rest ih =>
+      intro start saved left right actual member
+      cases observedHead : SourcePruningEnumerationSharedDispatchQueryEvents.observe
+          checkEmpty nativeFuel p h beforeCaller before source target memos.query with
+      | mk observation events =>
+          rcases observation with ⟨outcome, reached, queries⟩
+          have headReservation : Reserved bits seed 1 := reserved.prefix (by simp)
+          have headResources := SourcePruningEnumerationSharedDispatchQueryEvents.observe_query_resources
+            seed formulas solver inventory beforeCaller before memos initial realized fits
+            headReservation checkEmpty nativeFuel p h source target
+          simp only [observedHead] at headResources
+          have atHead :
+              (start, saved, left, right, actual) ∈ events →
+              ∃ consumed : Nat, consumed < (source :: rest).length ∧
+                SourceCurrentConjunctionClassScan.Ready start.checked ∧
+                Fits (advance seed consumed).2 start.checked ∧
+                SourceCurrentAllocatedNativeCreditProfile.Admits bits (advance seed consumed).2 ∧
+                Available start.checked.native.machine.heap left ∧
+                Available start.checked.native.machine.heap right ∧
+                left.free = [] ∧ right.free = [] ∧
+                actual = SourceEqualityNativeDemand.execute nativeFuel
+                  (.code (SourceRecursiveIntersectionCode.requestNode
+                    IntersectionEmptyDomain.emptyDomain left right)) start.checked := by
+            intro fromHead
+            refine ⟨0, Nat.zero_lt_succ _, ?_⟩
+            simpa only [SourcePruningEnumerationSharedIncomingReservation.advance_zero] using
+              (headResources.2 start saved left right actual fromHead).2.2
+          cases outcome with
+          | error fault =>
+              apply atHead
+              simpa only [rawFoldObserved, rawHeadObserved, observedHead] using member
+          | ok possible =>
+              cases possible with
+              | none =>
+                  apply atHead
+                  simpa only [rawFoldObserved, rawHeadObserved, observedHead] using member
+              | some action =>
+                  cases actionRead : ExceptT.run (action before) with
+                  | nil =>
+                      apply atHead
+                      simpa only [rawFoldObserved, rawHeadObserved, observedHead, actionRead] using member
+                  | cons first tail =>
+                      cases first with
+                      | error fault =>
+                          apply atHead
+                          simpa only [rawFoldObserved, rawHeadObserved, observedHead, actionRead] using member
+                      | ok pair =>
+                          rcases pair with ⟨unit, middle⟩
+                          cases unit
+                          cases tail with
+                          | cons second remaining =>
+                              apply atHead
+                              simpa only [rawFoldObserved, rawHeadObserved, observedHead, actionRead] using member
+                          | nil =>
+                              have combined : (start, saved, left, right, actual) ∈
+                                  events ++ (rawFoldObserved checkEmpty nativeFuel p h rest
+                                    reached middle target queries).2 := by
+                                simpa only [rawFoldObserved, rawHeadObserved, observedHead, actionRead] using member
+                              rcases List.mem_append.mp combined with fromHead | fromTail
+                              · exact atHead fromHead
+                              · have dispatchRun : SourcePruningEnumerationSharedDispatch.dispatch
+                                    checkEmpty nativeFuel p h beforeCaller before source target memos.query =
+                                      (.ok (some action), reached, queries) := headResources.1.symm
+                                obtain ⟨next, final, post, querySame, middleRealized, middleTarget,
+                                    middleSelected, middleFits, middleKnown⟩ :=
+                                  SourcePruningEnumerationSharedCachedTerminal.observed_singleton
+                                    seed formulas solver inventory beforeCaller before source target rest checkEmpty memos
+                                    initial realized targetPending selected fits reserved.head known dispatchRun actionRead
+                                have tailMember : (start, saved, left, right, actual) ∈
+                                    (rawFoldObserved checkEmpty nativeFuel p h rest
+                                      reached middle target final.query).2 := by
+                                  simpa only [querySame] using fromTail
+                                obtain ⟨consumed, bounded, resources⟩ :=
+                                  ih (step seed) next reached middle final post.context middleRealized
+                                    middleTarget middleSelected middleFits reserved.tail middleKnown
+                                    start saved left right actual tailMember
+                                refine ⟨consumed + 1, Nat.succ_lt_succ bounded, ?_⟩
+                                simpa only [SourcePruningEnumerationSharedIncomingReservation.advance_succ] using resources
+
+end MicroCFTA.SourcePruningEnumerationSharedTerminalFoldQueryEvents

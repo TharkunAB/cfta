@@ -1,0 +1,13 @@
+theorem run_endpoint_no_new_mu_and_tables
+    (entryFuel nativeFuel uv : Nat) (caller : Caller width) (before : Cached) (queries : Queries)
+    (facts : InternedNestedFacts.Facts caller.checked.native.machine.heap)
+    (prepared : MergedPhysicalWarmup.Prepared caller.checked.native.machine.heap)
+    (total : UnionFind.Total before.core.representatives) :
+    let endpoint := SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller queries
+      (run entryFuel nativeFuel uv caller before)
+    InternedShallowHeap.NoNewMu caller.checked.native.machine.heap endpoint.1.checked.native.machine.heap ∧
+      endpoint.1.checked.native.nodes = caller.checked.native.nodes ∧
+      endpoint.1.checked.native.edges = caller.checked.native.edges ∧
+      endpoint.1.checked.native.machine.domains = caller.checked.native.machine.domains ∧
+      endpoint.1.checked.operations = caller.checked.operations ∧
+      endpoint.2 = queries
