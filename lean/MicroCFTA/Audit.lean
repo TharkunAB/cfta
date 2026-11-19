@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentRealDoneSatisfiesInventory
 import MicroCFTA.SourcePruningEnumerationComputedSeedGuardTop
 import MicroCFTA.SourcePruningEnumerationPositiveProjection
 import MicroCFTA.SourceSynthesisCurrentGuardPoolPositivity
@@ -7365,3 +7366,5 @@ run_cmd do
   Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
 
 #print axioms MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_real_preserves_obligations_at_any_budget
+
+#print axioms MicroCFTA.SourceSynthesisCurrentRealDoneSatisfiesInventory.accepted_real_done_satisfies_from_original_inventory
