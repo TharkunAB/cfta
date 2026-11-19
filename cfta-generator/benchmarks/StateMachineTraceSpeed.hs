@@ -9,6 +9,7 @@ has the same support with a different distribution.
 -}
 module Main (main) where
 
+import Control.Monad ((>=>))
 import System.Environment (getArgs)
 import qualified Test.QuickCheck as QC
 
@@ -32,8 +33,8 @@ runFamily :: String -> Int -> IO ()
 runFamily engine bound = withZ3Assuming [] solverAssumptions $ \solver -> do
     let checked result = either (fail . LTAGen.explain) pure result
     generators <- case engine of
-        "separate" -> traverse (\n -> compileTracesOfLength solver n >>= checked) [0 .. bound]
-        "automaton" -> traverse (\n -> compileTraceAutomaton solver n >>= checked) [0 .. bound]
+        "separate" -> traverse (compileTracesOfLength solver >=> checked) [0 .. bound]
+        "automaton" -> traverse (compileTraceAutomaton solver >=> checked) [0 .. bound]
         "prelinked" -> do
             table <- deriveTraceTransitions solver >>= checked
             putStrLn $ "accepted-rows=" <> show (length $ traceTransitionRows table)

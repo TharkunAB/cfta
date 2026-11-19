@@ -1,6 +1,8 @@
 module Data.CFTA.Gen.Refinement.StateMachineTraceSpec (spec) where
 
+import Control.Monad (replicateM, (>=>))
 import Data.List (sort)
+import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
@@ -33,13 +35,13 @@ spec =
         it "prelinks the liquid transition relation and preserves the automaton's annotated ranks" $
             withZ3Assuming [] solverAssumptions $ \solver -> do
                 table <- deriveTraceTransitions solver >>= Support.rightOrFail
-                let states = [StackState types | n <- [0 .. maximumStackDepth], types <- sequence $ replicate n [TInt, TBool]]
+                let states = [StackState types | n <- [0 .. maximumStackDepth], types <- replicateM n [TInt, TBool]]
                     commands = map Push [IntValue 0, IntValue 1, BoolValue False, BoolValue True] <> [Add, And, Equal, Not, Pop]
                     expected =
                         [ (input, command, after)
                         | input <- Nothing : map Just states
                         , command <- commands
-                        , Just (_, after) <- [modelStep (maybe (StackState []) id input) command]
+                        , Just (_, after) <- [modelStep (fromMaybe (StackState []) input) command]
                         ]
                 sort (traceTransitionRows table) `shouldBe` sort expected
                 let checkRanks n = do
@@ -62,7 +64,7 @@ spec =
         it "reuses finite transition decisions across lengths and preserves every small rank" $
             withZ3Assuming [] solverAssumptions $ \solver -> do
                 family <- compileTracesThrough solver 4 >>= Support.rightOrFail
-                separate <- traverse (\n -> compileTracesOfLength solver n >>= Support.rightOrFail) [0 .. 4]
+                separate <- traverse (compileTracesOfLength solver >=> Support.rightOrFail) [0 .. 4]
                 let compiled = LTAGen.familyGenerators family
                 map values compiled `shouldBe` map values separate
                 map termsOf compiled `shouldBe` map termsOf separate
