@@ -27,6 +27,7 @@ module Data.CFTA.Gen.Refinement (
     elements,
     every,
     pool,
+    checkedPool,
     Refined (..),
     namedPool,
     leaf,
@@ -53,6 +54,8 @@ module Data.CFTA.Gen.Refinement (
     compile,
     compileAssuming,
     compileWith,
+    CompiledFamily (familyGenerators, transitionDecisions, transitionReuses),
+    compileFamilyWith,
     validOutcomes,
 ) where
 
@@ -81,7 +84,13 @@ import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Internal.Automaton (datatypeDecoder, declarationOrder, undecodableConstructor)
 import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import Data.CFTA.Gen.Internal.Types (Gen (..), Language (..), Recipe (..), withRecipe, pattern Transparent)
-import Data.CFTA.Gen.Refinement.Internal.Compile (namedTerms, spineArity, validOutcomes)
+import Data.CFTA.Gen.Refinement.Internal.Compile (
+    CompiledFamily (..),
+    compileFamilyWith,
+    namedTerms,
+    spineArity,
+    validOutcomes,
+ )
 import qualified Data.CFTA.Gen.Refinement.Internal.Compile as Compile
 import Data.CFTA.Generic (TypedFTA, constructorLabel, constructorName, datatypeDecode, datatypeFTA)
 import Data.CFTA.Index (ArgumentIndex (..), Depth)
@@ -239,6 +248,15 @@ checkPool solver entries =
     check (member, refinement) = do
         verdict <- entails solver (refinementFormula (.== literal member)) (refinementFormula refinement)
         pure [member | verdict /= Yes]
+
+{- | Build a refined pool after the solver proves each literal's annotation.
+On failure, return the unproved values in pool order. On success, keep every
+entry and its rank, including repeated values. See 'checkPool' for time limits.
+-}
+checkedPool :: (Literal a, Show a) => Entailment -> [(a, Refinement)] -> IO (Either [a] (LTAGen a))
+checkedPool solver entries = do
+    unproved <- checkPool solver entries
+    pure $ if null unproved then Right (pool entries) else Left unproved
 
 {- | Keep the most specific entries of each class of a pool.
 

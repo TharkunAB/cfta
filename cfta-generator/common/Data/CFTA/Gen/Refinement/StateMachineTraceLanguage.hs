@@ -46,7 +46,12 @@ module Data.CFTA.Gen.Refinement.StateMachineTraceLanguage (
     tracesOfLength,
     traceAutomaton,
     compileTracesOfLength,
+    compileTracesThrough,
     compileTraceAutomaton,
+    TraceTransitions,
+    deriveTraceTransitions,
+    traceTransitionRows,
+    prelinkedTraces,
     tracesUpTo,
     naiveTraceGen,
     qsmTraceGen,
@@ -64,6 +69,7 @@ import Control.Monad (foldM, guard)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, mapMaybe)
+import qualified Data.Set as Set
 import Data.String (fromString)
 import qualified Test.QuickCheck as QC
 
@@ -79,6 +85,7 @@ import Data.CFTA.Refinement (
     Node (Node),
     Symbol (..),
     noConstraint,
+    nodeEdges,
     validate,
     pattern Transition,
  )
@@ -214,7 +221,13 @@ Haskell model, decides which transitions survive. The graph grows linearly
 with trace length.
 -}
 traceAutomaton :: Int -> Either AutomatonError Automaton
-traceAutomaton requestedLength = validate rootNode >> pure rootNode
+traceAutomaton = traceAutomatonWith stepConstraint (\_ _ -> candidates)
+  where
+    candidates = [(input, rank) | input <- stackStates, (rank, _) <- rankedContracts]
+
+-- | Build the trace graph from ordered predecessor and command alternatives.
+traceAutomatonWith :: Constraint -> (Int -> StackState -> [(StackState, Int)]) -> Int -> Either AutomatonError Automaton
+traceAutomatonWith stepGuard predecessors requestedLength = validate rootNode >> pure rootNode
   where
     traceLength = max 0 requestedLength
     rootNode
@@ -233,13 +246,13 @@ traceAutomaton requestedLength = validate rootNode >> pure rootNode
             , output <- stackStates
             ]
                 <> [ (CommandNode contractRank, Node [contractTransition contractRank contract])
-                   | (contractRank, contract) <- zip [0 ..] commandContractValues
+                   | (contractRank, contract) <- rankedContracts
                    ]
                 <> [(FormalNode, Node [Transition "model" stateRange [] noConstraint])]
                 <> [ ( PostNode contractRank
                      , Node [Transition "post-state" (contractPostState contract) [] noConstraint]
                      )
-                   | (contractRank, contract) <- zip [0 ..] commandContractValues
+                   | (contractRank, contract) <- rankedContracts
                    ]
 
     stepTransitions prefixLength output =
@@ -249,9 +262,8 @@ traceAutomaton requestedLength = validate rootNode >> pure rootNode
             [ nodes LazyMap.! TraceNode (prefixLength - 1) input
             , nodes LazyMap.! CommandNode contractRank
             ]
-            (validStep (argument 0) (argument 1))
-        | input <- stackStates
-        , (contractRank, _) <- zip [0 ..] commandContractValues
+            stepGuard
+        | (input, contractRank) <- predecessors prefixLength output
         ]
 
     contractTransition contractRank contract =
@@ -269,6 +281,68 @@ data TraceNodeKey
     | PostNode !Int
     deriving (Eq, Ord)
 
+-- | Predecessors and command-schema ranks by initial step and output stack.
+newtype TraceTransitions = TraceTransitions (Map.Map (Bool, StackState) [(StackState, Int)])
+
+-- | Prove the complete finite step relation with the ordinary liquid compiler.
+deriveTraceTransitions :: Entailment -> IO (Either LTAGen.GenError TraceTransitions)
+deriveTraceTransitions solver = do
+    compiled <- LTAGen.compileFamilyWith solver $ map witnesses stackStates
+    pure $ do
+        family <- compiled
+        byOutput <- traverse LTAGen.values $ LTAGen.familyGenerators family
+        let accepted = Map.fromList $ zip stackStates (map Set.fromList byOutput)
+        pure
+            $ TraceTransitions
+            $ Map.fromList
+                [ ( (initial, output)
+                  , [ (input, rank)
+                    | input <- if initial then [emptyState] else stackStates
+                    , (rank, _) <- rankedContracts
+                    , Set.member (if initial then Nothing else Just input, rank) (accepted Map.! output)
+                    ]
+                  )
+                | initial <- [True, False]
+                , output <- stackStates
+                ]
+  where
+    witnesses output =
+        LTAGen.refinedNode "step" (const $ stateRefinement output) stepConstraint $
+            (,) <$> predecessors <*> schemas
+    schemas = LTAGen.oneof [rank <$ contractGenerator contract | (rank, contract) <- rankedContracts]
+    -- validStep reads only the predecessor root. Keep its exact symbol, refinement and leafness.
+    predecessors =
+        LTAGen.oneof $
+            (Nothing <$ initialTracePrefix)
+                : [ LTAGen.refinedNode "step" (const $ stateRefinement input) noConstraint $
+                        Just input <$ witness <* witness
+                  | input <- stackStates
+                  ]
+    witness = LTAGen.leaf () "witness" (const stateRange)
+
+-- | Inspect every accepted input, command and output. 'Nothing' denotes the initial node.
+traceTransitionRows :: TraceTransitions -> [(Maybe StackState, Command, StackState)]
+traceTransitionRows (TraceTransitions table) =
+    [ (if initial then Nothing else Just input, contractCommand (contracts Map.! rank), output)
+    | ((initial, output), predecessors) <- Map.toList table
+    , (input, rank) <- predecessors
+    ]
+  where
+    contracts = Map.fromList rankedContracts
+
+-- | Link only the transitions proved under the table's solver assumptions.
+prelinkedTraces :: TraceTransitions -> Int -> Either LTAGen.GenError (LTAGen.LTAGen Trace)
+prelinkedTraces (TraceTransitions table) length_ = do
+    graph <- either (Left . LTAGen.InvalidSupport) Right $ traceAutomatonWith noConstraint predecessors length_
+    -- The liquid import orders root groups by their observed symbol and refinement.
+    let groups =
+            Map.fromListWith
+                (<>)
+                [(RefinedSymbol symbol refinement, [edge]) | edge@(Transition symbol refinement _ _) <- nodeEdges graph]
+    pure $ decodeTrace <$> LTAGen.uniformly [LTAGen.fromAutomaton (Node edges) | edges <- Map.elems groups]
+  where
+    predecessors n output = table Map.! (n == 1, output)
+
 {- | Compile 'tracesOfLength' for one length.
 
 Z3 decides each step once for each tuple of a prefix group and a command
@@ -282,6 +356,12 @@ compileTracesOfLength ::
 compileTracesOfLength entailment traceLength =
     LTAGen.compileWith entailment $ tracesOfLength traceLength
 
+-- | Compile lengths zero through the bound with shared prefixes and transition decisions.
+compileTracesThrough :: Entailment -> Int -> IO (Either LTAGen.GenError (LTAGen.CompiledFamily Trace))
+compileTracesThrough entailment maximumLength =
+    LTAGen.compileFamilyWith entailment $
+        zipWith (\_ prefix -> finishTracePrefix <$> prefix) [0 .. maximumLength] (iterate extendTrace initialTracePrefix)
+
 -- | Compile the finite-state trace LTA and decode its accepted terms.
 compileTraceAutomaton ::
     Entailment ->
@@ -292,11 +372,10 @@ compileTraceAutomaton entailment traceLength =
         Left err -> pure $ Left $ LTAGen.InvalidSupport err
         Right automaton ->
             LTAGen.compileWith entailment $ decodeTrace <$> LTAGen.fromAutomaton automaton
-  where
-    decodeTrace term =
-        case traceFromLiquidTerm term of
-            Just trace -> trace
-            Nothing -> error "compileTraceAutomaton: invalid trace term"
+
+-- | Decode a term accepted by the trace automaton.
+decodeTrace :: Term Symbol -> Trace
+decodeTrace term = fromMaybe (error "invalid trace term") $ traceFromLiquidTerm term
 
 -- | Constructor labels for the reusable command schemas.
 commandSymbols :: [(Symbol, Command)]
@@ -597,6 +676,10 @@ validStep previous command =
             descendant command [1] `isSubtypeOf` root
         ]
 
+-- | Apply the step guard to the trace graph's predecessor and command children.
+stepConstraint :: Constraint
+stepConstraint = validStep (argument 0) (argument 1)
+
 -- | Extend a trace prefix in O(1), using a placeholder for rejected candidates.
 predictPrefixStep :: TracePrefix -> Command -> TracePrefix
 predictPrefixStep previous command =
@@ -623,6 +706,10 @@ data CommandContract = CommandContract
     , contractInputSpace :: !Formula
     , contractPostState :: !Formula
     }
+
+-- | Command schemas in the declaration order used by the trace graph.
+rankedContracts :: [(Int, CommandContract)]
+rankedContracts = zip [0 ..] commandContractValues
 
 -- | The eleven schemas from which every trace layer is constructed.
 commandContractValues :: [CommandContract]

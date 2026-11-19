@@ -1,25 +1,58 @@
-{- | Compare five exact-uniform generators and one QSM-style baseline.
+{- | Compare seven exact-uniform generators and one QSM-style baseline.
 
 The naive generator rejects whole raw command sequences, the bespoke generator
 tracks exact suffix counts in Haskell, the QSM-style generator chooses a valid
 next command from the current model, the ranked control hand-codes one global
-rank decoder, and two LTA rows compile the qualified-do surface and the
-hand-built trace automaton. Every engine except QSM-style online generation
-is exact-uniform; QSM has the same support but intentionally uses a different
-distribution.
+rank decoder, and four LTA rows compile the generator surface and the trace
+automaton with and without finite transition tables. QSM-style generation
+has the same support with a different distribution.
 -}
 module Main (main) where
 
+import System.Environment (getArgs)
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.StateMachineTraceLanguage
-import Data.CFTA.Index (Cardinality (..))
+import Data.CFTA.Index (Cardinality (..), Rank (..))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3Assuming)
 import GeneratorSpeedHarness (Benchmark (..), benchmarkMain)
 
 main :: IO ()
-main = benchmarkMain benchmark
+main = do
+    args <- getArgs
+    case args of
+        ["family", engine, bound] -> runFamily engine (read bound)
+        _ -> benchmarkMain benchmark
+
+{- | Compile the same exact-length roots with each engine. Include rank decoding
+in the checksum so both runs force the resulting languages.
+-}
+runFamily :: String -> Int -> IO ()
+runFamily engine bound = withZ3Assuming [] solverAssumptions $ \solver -> do
+    let checked result = either (fail . LTAGen.explain) pure result
+    generators <- case engine of
+        "separate" -> traverse (\n -> compileTracesOfLength solver n >>= checked) [0 .. bound]
+        "automaton" -> traverse (\n -> compileTraceAutomaton solver n >>= checked) [0 .. bound]
+        "prelinked" -> do
+            table <- deriveTraceTransitions solver >>= checked
+            putStrLn $ "accepted-rows=" <> show (length $ traceTransitionRows table)
+            traverse (checked . prelinkedTraces table) [0 .. bound]
+        "indexed" -> do
+            family <- compileTracesThrough solver bound >>= checked
+            putStrLn $
+                "decisions=" <> show (LTAGen.transitionDecisions family) <> " reuses=" <> show (LTAGen.transitionReuses family)
+            pure $ LTAGen.familyGenerators family
+        _ -> fail "usage: family (separate|indexed|automaton|prelinked) maximum-length"
+    checksum <- traverse (checked . score) generators
+    putStrLn $ "counts-and-rank-checksums=" <> show checksum
+  where
+    score generator = do
+        Cardinality n <- LTAGen.cardinality generator
+        traces <- traverse (LTAGen.unrank generator . Rank) [0, n `div` 2, n - 1]
+        pure (n, map commandSequence traces)
+    -- Command codes are distinct and below 32. Keep their order in the signature.
+    commandSequence = foldl' (\code event -> code * 32 + toInteger (commandScore $ eventCommand event)) 1 . traceEvents
 
 -- | Typed stack-machine trace benchmark configuration.
 benchmark :: Benchmark Trace
@@ -33,7 +66,9 @@ benchmark =
             , "bespoke"
             , "ranked"
             , "lta-do"
+            , "lta-indexed"
             , "lta-automaton"
+            , "lta-prelinked"
             ]
         , benchmarkSampleCount = 20000
         , benchmarkMembers = \length_ -> traceCount length_ (StackState [])
@@ -48,9 +83,17 @@ prepare "qsm-online" length_ = pure $ qsmTraceGen length_
 prepare "bespoke" length_ = pure $ handwrittenTraceGen length_
 prepare "ranked" length_ = pure $ rankedTraceGen length_
 prepare "lta" length_ = prepare "lta-do" length_
-prepare "lta-do" length_ =
+prepare engine length_ | engine == "lta-do" || engine == "lta-indexed" =
     withZ3Assuming [] solverAssumptions $ \solver -> do
-        result <- compileTracesOfLength solver length_
+        result <-
+            if engine == "lta-do"
+                then compileTracesOfLength solver length_
+                else do
+                    compiled <- LTAGen.compileFamilyWith solver [tracesOfLength length_]
+                    case fmap LTAGen.familyGenerators compiled of
+                        Left err -> pure $ Left err
+                        Right [generator] -> pure $ Right generator
+                        Right _ -> fail "expected one compiled length"
         case result of
             Left err -> fail $ "could not compile LTA benchmark: " <> LTAGen.explain err
             Right compiled
@@ -63,6 +106,10 @@ prepare "lta-automaton" length_ =
         case result of
             Left err -> fail $ "could not compile the trace automaton: " <> LTAGen.explain err
             Right compiled -> pure $ LTAGen.toGen compiled
+prepare "lta-prelinked" length_ =
+    withZ3Assuming [] solverAssumptions $ \solver -> do
+        table <- deriveTraceTransitions solver
+        either (fail . LTAGen.explain) (pure . LTAGen.toGen) $ table >>= (\proved -> prelinkedTraces proved length_)
 prepare engine _ = fail $ "unknown engine: " <> engine
 
 -- | Force every trace field and reduce it to a stable checksum contribution.
