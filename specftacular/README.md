@@ -76,6 +76,16 @@ affect the rules that prune later terms. `--recheck N` tests each new law
 again on N random cases of sizes 1 to 8 and drops a law that one of them
 refutes (0 by default).
 
+`Specftacular.FiniteLaw` can check a candidate equation exhaustively in a
+declared finite signature. Supply each sort's observation classes and a
+total table for each first-order operation. `proveOn` checks the equation
+at each assignment admitted by its guard. `applyAt` returns its right-hand
+value only at those assignments. `promote` admits an equation for use in
+contexts when it covers every assignment and every operation preserves
+the observation classes. `derives` uses the resulting theory on ground
+terms from that signature. The `example-guarded-law` executable checks
+the candidate `abs x = id x` found on an LTA-generated interval.
+
 Use `A`, `B`, `C`, `D`, and `Acc` as abstract type parameters in a signature.
 Each constant must be parametric in these types. It must not inspect their
 representation or capture class dictionaries for them. Use concrete types

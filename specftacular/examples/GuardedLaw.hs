@@ -8,7 +8,9 @@ import qualified Data.CFTA.Gen.Refinement as LTA
 import Data.CFTA.Refinement.Symbolic (Symbolic (..), (.&&))
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isNothing)
+import qualified Data.Set as Set
 import qualified Specftacular.DecisionTree as Tree
+import qualified Specftacular.FiniteLaw as Finite
 import Specftacular.Types (Case (..), Term, TestCase (ValidationCase), apply, toValue, valuesEqual)
 import qualified Specftacular.Types as Spec
 
@@ -26,19 +28,31 @@ discover lower upper = do
             let cases = zipWith (\i x -> Case (ValidationCase i 0) (Map.singleton "x" (toValue x))) [0 ..] inputs
             found <- Tree.insertWith Nothing (==) equal cases absolute (observe abs) (Tree.leafWith identity (observe replacement))
             case found of
-                Tree.EqualTo term | term == identity -> pure (inputs, Just rewrite)
+                Tree.EqualTo term | term == identity -> do
+                    law <- either fail pure (checkScope inputs)
+                    pure (inputs, Just (Finite.applyAt law . Map.singleton "x"))
                 Tree.Distinct _ -> pure (inputs, Nothing)
                 _ -> fail "could not compare abs and id"
   where
     inRange :: (Symbolic e) => e -> Truth e
     inRange x = fromInteger lower .<= x .&& x .<= fromInteger upper
-    rewrite x
-        | inRange x = Just (replacement x)
-        | otherwise = Nothing
     replacement = id :: Integer -> Integer
     identity, absolute :: Term
-    identity = Spec.Term "id" []
-    absolute = Spec.Term "abs" []
+    identity = call "id"
+    absolute = call "abs"
+    call name = Spec.Term "app" [num, Spec.Term name [endo], Spec.Term "x" [num]]
+    num = Spec.Term "Integer" []
+    endo = Spec.Term "->" [Spec.Term "(->)" [], num, num]
+    -- Include negative controls and every result of the two functions.
+    checkScope inputs = do
+        let values = Set.fromList (inputs ++ map negate inputs)
+            functions = [(0, replacement), (1, abs)]
+            carriers = Map.fromList [(num, Map.fromSet id values), (endo, Map.fromList [(i, i) | (i, _) <- functions])]
+            constant i = Finite.Operation [] endo (Map.singleton [] i)
+            rows = Map.fromList [([i, x], f x) | (i, f) <- functions, x <- Set.toList values]
+            ops = Map.fromList [("id", constant 0), ("abs", constant 1), ("app", Finite.Operation [endo, num] num rows)]
+        theory <- Finite.finiteTheory carriers ops
+        Finite.proveOn theory (Map.singleton "x" num) (fmap inRange . Map.lookup "x") absolute identity
     equal = valuesEqual (toValue ((==) :: Integer -> Integer -> Bool))
     observe :: (Integer -> Integer) -> Tree.Evaluator
     observe f = Tree.Evaluator Map.empty (\values -> apply (toValue f) (values Map.! "x"))
