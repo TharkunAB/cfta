@@ -18,6 +18,7 @@ module Data.CFTA.Refinement.Guard (
     requires,
     ContractBuilder (contractArity, contractFormulaFrom),
     contract,
+    proposition,
     MeasureBuilder (measureArity, measureTermFrom),
     measureTerm,
     isSubtypeOf,
@@ -191,6 +192,23 @@ contract builder =
     renumbered named conjunct =
         substitute [(contractTermName old, variable $ contractTermName new) | (new, old) <- zip [0 ..] named] conjunct
 
+{- | Prove one formula with the refinements of all the bound positions.
+
+Each binding gives a free variable in the formula the value at its position.
+Every bound position contributes its refinement, even when the formula omits
+its variable. Several variables can name the same position. If bindings repeat
+a variable, the first binding supplies its value. Other free names refer to
+the surrounding solver scope.
+
+The solver checks the complete formula as one proposition. Use the Boolean
+operators in "Data.CFTA.Refinement.Expression" to build that formula.
+-}
+proposition :: [(String, Path)] -> Formula -> Constraint
+proposition bindings formula =
+    semanticConstraint $ Holds (map snd bindings) (substitute names formula)
+  where
+    names = [(name, variable $ contractTermName index) | (index, (name, _)) <- zip [0 ..] bindings]
+
 -- | Require the left position's refinement to be a subtype of the right one.
 isSubtypeOf :: Path -> Path -> Constraint
 isSubtypeOf subtype supertype = semanticConstraint $ Entails subtype supertype
@@ -243,8 +261,8 @@ notGuard = semanticConstraint . Not . constraintAsGuard
 
 A guard written as a function receives one position per child, in order, and
 the construction fails when the counts differ. It also fails when a 'contract'
-names more terms than the constructor has children, because such a contract
-holds for no term. 'automaton' collects the checked transitions of one node.
+or 'proposition' names a child outside the constructor's children.
+'automaton' collects the checked transitions of one node.
 -}
 transition ::
     (GuardBuilder guard) =>
@@ -267,7 +285,7 @@ transition symbol refinement children guard =
     built = buildGuard guard
 
 {- | One more than the largest child index that a 'Holds' atom of a constraint
-names, when the constraint has such an atom. Only 'contract' makes these atoms.
+names, when the constraint has such an atom.
 -}
 contractReach :: Constraint -> Maybe Arity
 contractReach constraint = case [index | Holds targets _ <- atoms (constraintAsGuard constraint), ChildIndex index : _ <- map unPath targets] of
