@@ -1,3 +1,4 @@
+import MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
 import MicroCFTA.SourceSynthesisCurrentRealDoneSatisfiesInventory
 import MicroCFTA.SourcePruningEnumerationComputedSeedGuardTop
 import MicroCFTA.SourcePruningEnumerationPositiveProjection
@@ -7368,3 +7369,83 @@ run_cmd do
 #print axioms MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_real_preserves_obligations_at_any_budget
 
 #print axioms MicroCFTA.SourceSynthesisCurrentRealDoneSatisfiesInventory.accepted_real_done_satisfies_from_original_inventory
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
+    `MicroCFTA.InternedFreshOrdinaryNoUnionRecords.bind_no_union
+  unless name.toString == "_private.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.0.MicroCFTA.InternedFreshOrdinaryNoUnionRecords.bind_no_union" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
+    `MicroCFTA.InternedFreshOrdinaryNoUnionRecords.makeNode_no_union
+  unless name.toString == "_private.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.0.MicroCFTA.InternedFreshOrdinaryNoUnionRecords.makeNode_no_union" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
+    `MicroCFTA.InternedFreshOrdinaryNoUnionRecords.makeEdge_no_union
+  unless name.toString == "_private.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.0.MicroCFTA.InternedFreshOrdinaryNoUnionRecords.makeEdge_no_union" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
+    `MicroCFTA.InternedFreshOrdinaryNoUnionRecords.filter_no_union
+  unless name.toString == "_private.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.0.MicroCFTA.InternedFreshOrdinaryNoUnionRecords.filter_no_union" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
+    `MicroCFTA.InternedFreshOrdinaryNoUnionRecords.complete_no_union
+  unless name.toString == "_private.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.0.MicroCFTA.InternedFreshOrdinaryNoUnionRecords.complete_no_union" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
+    `MicroCFTA.InternedFreshOrdinaryNoUnionRecords.request_no_union
+  unless name.toString == "_private.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.0.MicroCFTA.InternedFreshOrdinaryNoUnionRecords.request_no_union" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+#print axioms MicroCFTA.InternedFreshOrdinaryNoUnionRecords.build_no_union
+
+#print axioms MicroCFTA.InternedFreshOrdinaryNoUnionRecords.buildMany_no_union
+
+#print axioms MicroCFTA.InternedFreshOrdinaryNoUnionRecords.buildEdges_no_union
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.encode_union_free
+  unless name.toString == "_private.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.0.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.encode_union_free" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.encodeMany_union_free
+  unless name.toString == "_private.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.0.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.encodeMany_union_free" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords
+    `MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.encodeEdges_union_free
+  unless name.toString == "_private.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.0.MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.encodeEdges_union_free" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+#print axioms MicroCFTA.InternedFreshOrdinaryStoredNoUnionRecords.execute_no_union
