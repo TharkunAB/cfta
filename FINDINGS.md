@@ -1,3 +1,12 @@
+[2026-11-19 04:07 CET] Usage pause threshold: 50 percent
+
+Matti changed the pause threshold from 80 percent to 50 percent. Pause when
+a current measured reading is at least 50 percent. Save the current work and
+notify Matti. This instruction supersedes the older threshold in historical
+notes. The latest reading is 48 percent at 2026-11-19T03:06:52.735Z.
+The compact progress checkpoint is pushed as 9395f538d on origin/formalize.
+The restricted constructor and stored-encoding drafts remain uncompiled.
+
 [2026-11-19 04:01 CET] Causal compatibility: checked components and one bounded diagnostic
 
 Source80 remains the strongest published theorem. For each emitted output of
