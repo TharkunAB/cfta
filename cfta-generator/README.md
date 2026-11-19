@@ -1277,9 +1277,13 @@ holds only when those refinements refute it. Here the ranges order
 three pairs: `(1,3)`, `(1,5)`, and `(3,5)`. The contract names the children as
 a function signature names its parameters, and the do-block binds their values.
 
-The generator trusts a pool's refinements. It does not inspect a Haskell value
-to prove its refinement. `checkPool solver ranged` asks the solver to prove
-each refinement for its value, and returns the values that it cannot prove.
+The generator trusts the refinements supplied to `pool`. For values with a
+literal representation, `checkedPool solver ranged` builds the pool only
+after the solver proves each annotation at its value. It returns the values
+with unproved annotations on failure. `checkPool solver ranged` runs the same
+check and returns that list directly. Distinct annotations and repeated
+entries retain their own ranks. A decoded value receives the combined
+probability of its ranks.
 [`LiquidPairs.hs`](https://github.com/TharkunAB/cfta/blob/main/cfta-generator/examples/LiquidPairs.hs)
 runs this program with `checkPool`, and CI runs it with the other examples.
 `compileAssuming` adds ambient facts, such as `[variable "input" .== 2]`, that
@@ -1498,6 +1502,12 @@ encodings, where a function type is a subtree of the term: for example
 selects the argument's second child. Raw `Constraint` values remain
 available and retain the paper's Boolean meaning for missing paths.
 
+Use `proposition [("left", argument 0), ("right", argument 1)] formula` to
+prove a whole source formula in one solver call. Each listed position
+contributes its refinement, even when its variable is absent from the
+conclusion. This matters for a disjunction whose truth follows from the
+context even though the context proves neither disjunct individually.
+
 A constructor without a condition or a contract is built at once, like any
 other generator. A constructor that needs the solver defers the generator:
 `cardinality`, `unrank`, and `support` report `SourceRequiresCompilation` until
@@ -1527,6 +1537,12 @@ a failure. A guard the symbolic counter cannot count is a failure only in an
 import without a depth bound. Ranks are
 deterministic for a fixed generator. A changed pool, bound, or
 specification can change them.
+
+`compileFamilyWith` compiles a finite list of roots using the same solver,
+recipe caches, and closed transition tables. A table entry records a decided
+guard for the full tuple of observations that guard reads. The compiler
+keeps the rank order and weights of each root. Open integer groups and
+structural equalities use the usual compilation path.
 
 ### Import an LTA
 
@@ -2094,6 +2110,15 @@ specific term of each refinement. A refinement is a conjunction of
 qualifiers from the library and the query, so similarity is a subset test.
 With `optionConditionals`, a solution can be a conditional `if c t e`.
 
+Write a refined callback parameter as
+`f:(x:{v:Int | v = 0} -> {v:Int | v >= 0})`. The supplied function's
+declared input must cover every required input. At those inputs its declared
+result must imply the required result. Each binder is in scope in its result,
+so a callback contract can also use earlier component parameters. The same
+checks apply in synthesis and in both single-program checkers. Library
+providers remain responsible for the truth of their component signatures.
+[CIRT §6](https://arxiv.org/html/2611.20867v1#S6)
+
 The `hegel` benchmark runs recreated versions of the paper's RQ1 queries.
 The paper does not print its specifications, so the queries follow its
 one-line descriptions over small libraries with precise specifications,
@@ -2422,6 +2447,18 @@ cost of a solver-backed setup phase and a larger retained rank index.
 Naive rejection times out at length 20 for the 20,000-sample workload. At length
 12 it is already 79x slower than LTA do and allocates 833.7 KB per accepted
 trace.
+
+`compileFamilyWith` shares closed transition decisions across lengths. The
+stack example also proves all 65 compatible rows of its finite step relation
+once. The prelinked route builds each length from those rows in the same
+order as the guarded automaton. It reuses the existing graph ranker and
+decoder. The tests compare the table with the independent stack interpreter
+and compare the annotated ranks with the guarded route.
+
+```sh
+cabal bench state-machine-trace-speed --benchmark-options='family automaton 10'
+cabal bench state-machine-trace-speed --benchmark-options='family prelinked 10'
+```
 
 `compile` caches each entailment obligation for one compilation, and it checks
 a generated witness directly. It groups the children of a constructor by the
