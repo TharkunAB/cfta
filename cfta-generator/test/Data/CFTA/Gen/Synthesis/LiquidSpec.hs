@@ -68,6 +68,92 @@ spec = describe "Data.CFTA.Gen.Synthesis.Liquid" $ do
             checker <- Liquid.preciseChecker solver library (Liquid.LiquidQuery [] goal)
             Liquid.checkProgram checker (program "identity") >>= (`shouldBe` True)
             Liquid.checkProgram checker (program "zero") >>= (`shouldBe` False)
+
+    it "requires callback domain coverage even with an unrefined result" $
+        withZ3Timeout 1000 [(Name "ap", FunctionSort [IntSort, IntSort] IntSort)] [] $ \solver -> do
+            let int = Synthesis.TCons "Int" []
+                integer = Liquid.plain int
+                required = ("arg" .: Liquid.refined int (.== 0)) --> integer
+                narrow = ("x" .: Liquid.refined int (.>= 1)) --> integer
+                wide = ("x" .: integer) --> integer
+                consumer = ("callback" .: required) --> integer
+                query = Liquid.LiquidQuery [] integer
+                options = Liquid.defaultOptions{Liquid.optionMaximumSize = 1}
+                verify (typ, valid) = do
+                    let library = [("callAtZero", consumer), ("supplied", typ)]
+                        program = Synthesis.App (Synthesis.Var "callAtZero") (Synthesis.Var "supplied")
+                    result <- Liquid.synthesize solver options library query
+                    fmap (map Liquid.renderTerm . Liquid.outcomeSolutions) result
+                        `shouldBe` Right ["callAtZero supplied" | valid]
+                    abstracted <- Liquid.checker solver library query
+                    precise <- Liquid.preciseChecker solver library query
+                    Liquid.checkProgram abstracted program >>= (`shouldBe` valid)
+                    Liquid.checkProgram precise program >>= (`shouldBe` valid)
+            mapM_ verify [(narrow, False), (wide, True)]
+
+    it "checks nested arrow binders with lexical scope" $
+        withZ3Timeout 1000 [(Name "ap", FunctionSort [IntSort, IntSort] IntSort)] [] $ \solver -> do
+            let parse = either fail pure . Liquid.parseRType
+            supplied <- parse "x:{v:Int | v == 7} -> x:{v:Int | v == x + 1} -> {v:Int | v == x}"
+            good <- parse "f:(a:{v:Int | v == 7} -> b:{v:Int | v == 8} -> {v:Int | v == 8}) -> Int"
+            bad <- parse "f:(a:{v:Int | v == 7} -> b:{v:Int | v == 9} -> {v:Int | v == 9}) -> Int"
+            ordinary <- parse "f:(Int -> Int) -> Int"
+            let int = Synthesis.TCons "Int" []
+                query =
+                    Liquid.LiquidQuery
+                        [("callback", supplied), ("restricted", ("x" .: Liquid.refined int (.== 7)) --> Liquid.plain int)]
+                        (Liquid.plain int)
+                library = [("valid", good), ("invalid", bad), ("ordinary", ordinary), ("curried", supplied)]
+                program headName argument = Synthesis.App (Synthesis.Var headName) (Synthesis.Var argument)
+            Liquid.parseRType (Text.pack (Liquid.renderRType good)) `shouldBe` Right good
+            checker <- Liquid.preciseChecker solver library query
+            Liquid.checkProgram checker (program "valid" "callback") >>= (`shouldBe` True)
+            Liquid.checkProgram checker (program "valid" "curried") >>= (`shouldBe` True)
+            Liquid.checkProgram checker (program "invalid" "callback") >>= (`shouldBe` False)
+            Liquid.checkProgram checker (program "ordinary" "restricted") >>= (`shouldBe` False)
+
+    it "renders the refinement value separately from an arrow or quantifier binding" $ do
+        let roundtrip source = do
+                typ <- either fail pure $ Liquid.parseRType source
+                Liquid.parseRType (Text.pack (Liquid.renderRType typ)) `shouldBe` Right typ
+        mapM_ roundtrip ["x:Int -> {r:Int | forall v. r = x + v}", "v:Int -> {r:Int | r = v}"]
+
+    it "retains callback contracts after a reduction round" $
+        withZ3Timeout 1000 [(Name "ap", FunctionSort [IntSort, IntSort] IntSort)] [] $ \solver -> do
+            let int = Synthesis.TCons "Int" []
+                integer = Liquid.plain int
+                unit = Liquid.plain (Synthesis.TCons "Unit" [])
+                exactly n = Liquid.refined int (.== n)
+                required = ("arg" .: Liquid.refined int (.== variable "n")) --> integer
+                consumer = ("n" .: integer) --> ("f" .: required) --> exactly 9
+                callback n = ("x" .: exactly n) --> integer
+                library =
+                    [ ("consume", consumer)
+                    , ("seven", ("u" .: unit) --> exactly 7)
+                    , ("unit", unit)
+                    , ("good", callback 7)
+                    , ("bad", callback 8)
+                    ]
+                query = Liquid.LiquidQuery [] (exactly 9)
+                options = Liquid.defaultOptions{Liquid.optionMaximumSize = 2}
+            result <- Liquid.synthesize solver options library query
+            fmap (map Liquid.renderTerm . Liquid.outcomeSolutions) result
+                `shouldBe` Right ["consume (seven unit) good"]
+
+    it "checks the declared domain of a function-valued solution" $
+        withZ3Timeout 1000 [(Name "ap", FunctionSort [IntSort, IntSort] IntSort)] [] $ \solver -> do
+            let int = Synthesis.TCons "Int" []
+                integer = Liquid.plain int
+                narrow = ("x" .: Liquid.refined int (.== 7)) --> integer
+                wide = ("x" .: integer) --> integer
+                goal = Liquid.plain (Synthesis.TFun int int)
+                query = Liquid.LiquidQuery [("narrow", narrow), ("wide", wide)] goal
+                options = Liquid.defaultOptions{Liquid.optionMaximumSize = 1}
+            result <- Liquid.synthesize solver options [] query
+            fmap (map Liquid.renderTerm . Liquid.outcomeSolutions) result `shouldBe` Right ["wide"]
+            checker <- Liquid.preciseChecker solver [] query
+            Liquid.checkProgram checker (Synthesis.Var "narrow") >>= (`shouldBe` False)
+            Liquid.checkProgram checker (Synthesis.Var "wide") >>= (`shouldBe` True)
   where
     rename :: Text -> Text
     rename "rev" = "r@v"
