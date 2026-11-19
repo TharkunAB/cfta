@@ -26,6 +26,12 @@ The benchmark executables take the term size and the search phase as arguments.
 The golden test suite compares the discovered laws with `test/golden/`.
 `GOLDEN_ACCEPT=1` updates these files.
 
+Run `cabal run example-conditional-zip` to discover a conditional law.
+A liquid tree automaton generates pairs of Boolean lists of equal length,
+up to length two. Specftacular discovers the zip/unzip equation over that
+witness type. The example checks it on all 21 witnesses and tests the
+guard on all 28 unequal-length pairs.
+
 The package was imported from
 [`TharkunAB/specftacular` at `948a246`](https://github.com/TharkunAB/specftacular/tree/948a24694256758e53925d3bd498efe05f668f51).
 
