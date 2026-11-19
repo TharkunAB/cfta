@@ -1,3 +1,16 @@
+[2026-11-19 04:58 CET] Paused at the requested 50 percent usage limit
+
+Measured usage reached50 percent at2026-11-19T03:56:43.077Z. No further proof
+job was started. Source81 code d02df8ee9 and checkpoint b69e3a920 are pushed to
+origin/formalize. The remote commit and the current-tree archive were verified.
+The complete handoff is below. The pause receipt is
+lean/restart-evidence/20261119-source81-usage-pause/PUSH-AND-PAUSE.json.
+
+The next proof step derives the initial absence of union records from accepted
+source construction. The largest soundness gap is still one compatible finite
+model for all causal historical constraints, then original-root acceptance.
+The full goal is paused and remains incomplete. Resume only when Matti asks.
+
 [2026-11-19 04:48 CET] Source81: stored substitution preserves heaps without union records
 
 Pause when measured primary usage is at least 50 percent. Matti changed the
