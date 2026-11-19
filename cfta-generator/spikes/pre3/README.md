@@ -86,6 +86,49 @@ constraint check, the counts and weights of the accepted terms, and
 their ranks. The experiment covers this structural grammar and these
 token spellings.
 
+## Prefilter in front of the CFTA cursor
+
+The follow-up uses the text and vocabulary masks from the local
+`spike/pre3-text-mask` checkout at `4fd22c59e4`. Its language requires both
+children of `+` to be equal. The syntax index ignores that equality. The
+filtered route asks the CFTA text cursor about each token that the index
+offers. The cursor still rejects invalid tokens. For example, after `a+`
+the syntax index offers both `a` and `b`, and CFTA offers only `a`.
+
+At size 7 the full vocabulary trie and the filtered route returned exactly
+the same offered IDs on 3,271 infix and 3,885 prefix queries. A separate
+size-15 prefix batch of 41 queries returned the same rows in three routes.
+In two matched runs starting fresh processes, the trie took 20.27 and
+20.74 s wall time. Scanning every token directly with CFTA took 16.34 and
+17.18 s. Building and running the Python index, passing the candidate
+file, and checking it with CFTA took 12.84 and 13.70 s.
+
+| Notation and bound | CFTA trie (µs) | CFTA after filtering (µs) | Syntax index (µs) | Sum (µs) |
+| --- | ---: | ---: | ---: | ---: |
+| Infix 7 | 0.69 | 0.17 | 0.75 | 0.92 |
+| Prefix 7 | 1.15 | 0.27 | 0.89 | 1.16 |
+| Prefix 15 | 1.52 | 0.42 | 1.13 | 1.56 |
+
+These are median warm process CPU microseconds per query from three
+processes and 2,000 batches each. The sum excludes transfer overhead and
+estimates the compute cost of filtering on every query. The benefit on
+this fixture is in the first batch of the larger prefix workload. The
+size-15 infix trie run was stopped after 91 s near its 3 GiB heap limit.
+The fixture measures offered token IDs, including EOS, for this grammar.
+
+Run the cursor test from a Nix shell for the local text-mask checkout.
+Use the pinned tokenizer JSON described below. Add `bench` to repeat the
+warm measurements.
+
+```sh
+spike=/path/to/prefilter/cfta-generator/spikes/pre3
+bash "$spike/cursor-prefilter.sh" "$PWD" /path/to/tokenizer.json /tmp/cfta-cursor-results
+```
+
+The text-mask checkout supplies `Data.CFTA.Mask.Text` and
+`Data.CFTA.Mask.Vocabulary`. The Python comparison below only requires
+the stack-index spike checkout.
+
 ## Run the checks
 
 Download the pinned Qwen tokenizer JSON. Its SHA-256 is
