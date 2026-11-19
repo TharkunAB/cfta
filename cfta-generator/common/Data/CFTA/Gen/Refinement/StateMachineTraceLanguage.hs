@@ -51,6 +51,7 @@ module Data.CFTA.Gen.Refinement.StateMachineTraceLanguage (
     TraceTransitions,
     deriveTraceTransitions,
     traceTransitionRows,
+    traceTransitionIndices,
     prelinkedTraces,
     tracesUpTo,
     naiveTraceGen,
@@ -71,6 +72,7 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Set as Set
 import Data.String (fromString)
+import qualified Data.Text as Text
 import qualified Test.QuickCheck as QC
 
 import Data.CFTA.Formula (conjunction, disjunction)
@@ -99,6 +101,7 @@ import Data.CFTA.Refinement.Guard (
     root,
     withActualFor,
  )
+import Data.CFTA.Symbol (symbolText)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -329,6 +332,17 @@ traceTransitionRows (TraceTransitions table) =
     ]
   where
     contracts = Map.fromList rankedContracts
+
+{- | Read the schema names and every output block in the compiled graph table.
+Each block keeps the predecessor and schema indices in link order.
+-}
+traceTransitionIndices :: TraceTransitions -> ([String], [(Bool, Int, [(Int, Int)])])
+traceTransitionIndices (TraceTransitions table) =
+    ( [Text.unpack $ symbolText $ contractSymbol contract | (_, contract) <- rankedContracts]
+    , [ (initial, encodeState output, [(encodeState input, rank) | (input, rank) <- inputs])
+      | ((initial, output), inputs) <- Map.toList table
+      ]
+    )
 
 -- | Link only the transitions proved under the table's solver assumptions.
 prelinkedTraces :: TraceTransitions -> Int -> Either LTAGen.GenError (LTAGen.LTAGen Trace)

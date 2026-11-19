@@ -10,21 +10,71 @@ has the same support with a different distribution.
 module Main (main) where
 
 import Control.Monad ((>=>))
+import Data.List (intercalate, sortOn)
+import qualified Data.Text as Text
 import System.Environment (getArgs)
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.StateMachineTraceLanguage
-import Data.CFTA.Index (Cardinality (..), Rank (..))
+import Data.CFTA.Index (Cardinality (..), Rank (..), everyRank)
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3Assuming)
+import Data.CFTA.Symbol (symbolText)
+import qualified Data.CFTA.Term as Term
 import GeneratorSpeedHarness (Benchmark (..), benchmarkMain)
 
 main :: IO ()
 main = do
     args <- getArgs
     case args of
+        ["compiled-stack"] -> withZ3Assuming [] solverAssumptions $ \solver -> do
+            table <- deriveTraceTransitions solver >>= either (fail . LTAGen.explain) pure
+            exportCompiledStack table
         ["family", engine, bound] -> runFamily engine (read bound)
         _ -> benchmarkMain benchmark
+
+-- | Export the complete decision table, each link order, and small annotated rank streams.
+exportCompiledStack :: TraceTransitions -> IO ()
+exportCompiledStack table = do
+    row $ "schemas" : names
+    mapM_ decisions [True, False]
+    mapM_ links [True, False]
+    mapM_ ranks [0 .. 2]
+  where
+    (names, blocks) = traceTransitionIndices table
+    ordered initial = sortOn fst [(out, edges) | (first, out, edges) <- blocks, initial == first]
+    states = map fst $ ordered False
+    row = putStrLn . intercalate "\t"
+    kind True = "start"
+    kind False = "step"
+    decisions initial = mapM_ one $ if initial then [0] else states
+      where
+        one input = row $ [kind initial, show input] <> map (cell input) [0 .. length names - 1]
+        cell input choice = case [show out | (out, edges) <- ordered initial, (input, choice) `elem` edges] of
+            [] -> "-"
+            outputs -> intercalate "," outputs
+    links initial =
+        mapM_
+            ( \(out, edges) -> row $ ["order", kind initial, show out] <> [show input <> "/" <> show choice | (input, choice) <- edges]
+            )
+            $ ordered initial
+    checked result = either (fail . LTAGen.explain) pure result
+    ranks n = do
+        generator <- checked $ prelinkedTraces table n
+        count <- checked $ LTAGen.cardinality generator
+        mapM_ (emit generator) $ everyRank count
+      where
+        emit generator rank = do
+            term <- checked $ LTAGen.termAt generator rank
+            case LTAGen.surface term of
+                [trace] -> do
+                    events <- schemas trace
+                    row ["rank", show n, intercalate "," events]
+                _ -> fail "expected one annotated trace"
+    schemas (Term.Node symbol children) = case (Text.unpack (symbolText symbol), children) of
+        ("start", []) -> pure []
+        ("step", [previous, command]) -> (<> [Text.unpack $ symbolText $ Term.rootLabel command]) <$> schemas previous
+        _ -> fail "expected a start or step node"
 
 {- | Compile the same exact-length roots with each engine. Include rank decoding
 in the checksum so both runs force the resulting languages.

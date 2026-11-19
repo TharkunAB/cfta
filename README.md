@@ -107,6 +107,15 @@ abstract stack contracts against an independent interpreter and proves
 that reusing transition decisions preserves enumeration order. Run it with
 `lean +leanprover/lean4:v4.26.0 docs/proofs/IndexedTrace.lean`.
 
+Run `scripts/check-compiled-stack.sh` to check the actual Z3-compiled table
+against that interpreter. Lean checks every output and rejection, the order
+of every predecessor block, and the schema sequence at each rank through
+length two.
+At length two, Haskell rank zero pushes integer 0 and then pops it. The
+Lean interpreter's forward enumeration starts with two pushes of integer 0.
+The [correspondence check](docs/proofs/CompiledStack.lean) covers this bounded
+stack fixture and its output states. Replies are decoded separately.
+
 The optional [cfta-serialization](cfta-serialization/README.md) package prints
 and parses complete graphs, source documents, and languages as readable text.
 A parsed value is equal to the saved value, so a query built on it gives the
