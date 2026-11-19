@@ -7283,3 +7283,85 @@ run_cmd do
     throwError "Unexpected private declaration name"
   Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
 
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_prefix_candidate_obligations
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_prefix_candidate_obligations" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_captured_row_obligations
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_captured_row_obligations" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_prepared_scan_obligations
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_prepared_scan_obligations" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_opaque_terminal_obligations
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_opaque_terminal_obligations" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_successful_prepared_obligations
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_successful_prepared_obligations" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_prepared_obligations
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_prepared_obligations" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_parked_restart_obligations
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_parked_restart_obligations" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_right_prefix_prepared_obligations
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_right_prefix_prepared_obligations" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_expand_obligations
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_expand_obligations" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+run_cmd do
+  let name := Lean.mkPrivateNameCore
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+    `MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_eager_obligations_at_every_depth
+  unless name.toString == "_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_eager_obligations_at_every_depth" do
+    throwError "Unexpected private declaration name"
+  Lean.Elab.Command.elabCommand (← `(#print axioms $(Lean.mkIdent name)))
+
+#print axioms MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_real_preserves_obligations_at_any_budget
