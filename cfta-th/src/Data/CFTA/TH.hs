@@ -47,6 +47,7 @@ deriveNode source = do
     unless (null context) $ unsupported "datatype contexts"
     view <- generatedName lookupTypeName source
     child <- newName "e"
+    -- See Note [Matching a node view to a datatype] in Data.CFTA.Gen.Refinement.Derive.
     alternatives <- forM constructors $ \constructor -> do
         (name, arity) <- case constructor of
             NormalC name fields -> pure (name, length fields)

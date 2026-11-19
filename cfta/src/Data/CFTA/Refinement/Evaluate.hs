@@ -159,6 +159,7 @@ evaluateScopedGuard ::
     IO Verdict
 evaluateScopedGuard entailment observedAt sameAt guard = evaluateWith [] guard
   where
+    -- See Note [Actual values in scoped guards].
     (freshValues, ambiguousValues) = substitutionValues observedAt (sameAt []) guard
 
     decide = decideWith []
@@ -325,11 +326,22 @@ data ResolvedSubstitution = ResolvedSubstitution
     , resolvedIdentityKnown :: Bool
     }
 
-{- | Allocate distinct values for actual positions that share a name.
+{- Note [Actual values in scoped guards]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A substitution relates a formal name to the value at an actual position.
+An unambiguous name retains its ambient meaning. Repeated positions share
+one value. Distinct actual terms with the same name need separate solver
+values. Add each actual's refinement to the antecedent at its own value.
+Nested substitutions change the guard while the actual values and their
+assumptions stay in the ambient scope.
 
-An unambiguous name retains its ambient meaning. Repeated positions share one
-value. Distinct positions with the same name receive separate solver values.
+Sparse observations can leave actual identity undecided. A temporary fresh
+value can change which substitution takes precedence. It can also prevent
+an enclosing substitution from renaming a shared value. Return Unknown
+when this ambiguity can change the result.
 -}
+
+-- | Allocate distinct solver values where actual terms can share a name.
 substitutionValues ::
     (Path -> Maybe Observed) ->
     (Path -> Path -> Maybe Bool) ->
@@ -473,14 +485,9 @@ substituteObservation scopes observation = foldl apply observation scopes
             | (Symbol formal, Symbol actual) <- Map.toList replacements
             ]
 
-{- | Add the instantiated refinement of every actual argument to an entailment
-antecedent.
-
-Substitution changes a formal name to the actual term's symbol. This assumption
-connects that symbol back to the refinement carried by the actual subtree, so
-dependent results compose through non-leaf nodes as well as named pool entries.
-Actual terms belong to the surrounding environment. Guard substitutions do not
-rename their value identities or their refinement assumptions.
+{- | Add the refinements of actual terms to the entailment antecedent.
+This also connects dependent results through non-leaf nodes.
+See Note [Actual values in scoped guards].
 -}
 withActualAssumptions :: [[ResolvedSubstitution]] -> Formula -> Formula
 withActualAssumptions scopes predicate =

@@ -119,11 +119,18 @@ type LTAGen = Gen Symbol
 -- | A grouped generator over liquid tree automata.
 type LTAGrouped key = Grouped Symbol key
 
-{- | The observations that identify one group: the label at each observed
-path, and whether that node is a leaf. A path that a member does not have is
-absent. The position orders the groups of one language by the first member
-that has their observations, so ranks follow source order.
+{- Note [Ordering refinement groups]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A guard reads the label and leafness of each observed path. A missing path
+has no observation. The compiler groups members that have the same observations
+so it can decide the guard for the group.
+
+Order these groups by the first member with those observations in the source
+language. When groups merge, use the position of the first group. This keeps
+the source group order when a later operation observes fewer paths.
 -}
+
+-- | The observations of one group and its position in the source order.
 data ObservationKey = ObservationKey
     { keyPosition :: !Int
     , keyObservations :: !Observations
@@ -134,10 +141,8 @@ data ObservationKey = ObservationKey
 noObservations :: ObservationKey
 noObservations = ObservationKey 0 Map.empty
 
-{- | Regroup by observations, positioned by first appearance.
-
-The keys of the given groups are in source order. Groups with the same
-observations merge, and the merged group takes the position of the first.
+{- | Regroup by observations in order of first appearance.
+See Note [Ordering refinement groups].
 -}
 reposition :: (key -> Observations) -> LTAGrouped key a -> LTAGrouped ObservationKey a
 reposition observationsOf grouped = regroupOn rekey grouped

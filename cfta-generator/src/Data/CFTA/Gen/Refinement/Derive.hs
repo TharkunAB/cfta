@@ -579,10 +579,25 @@ checkNodeView names rules = checkNodeFields @a @node checkKinds
 {- | Check that a node view has the constructors of the datatype, in order: as
 many, each with as many fields, and each with a name that starts with the name
 of the datatype's constructor in its place. A view that fits every datatype
-('AnyNode') passes.
+('AnyNode') passes. See Note [Matching a node view to a datatype].
 -}
 checkNodeShape :: forall a node. (HasFTA a, NodeView node) => Either DeriveLTAError ()
 checkNodeShape = checkNodeFields @a @node (\_ _ _ -> Right ())
+
+{- Note [Matching a node view to a datatype]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A node view and its source datatype have separate Generic representations.
+The derivation pairs their constructors by declaration position. It pairs
+the fields of each constructor in the same way. For example, if Add and
+Sub each have two fields, exchanging AddNode and SubNode preserves the
+arities but assigns each rule to the wrong constructor.
+
+checkNodeFields checks the constructor count and the arity at each position.
+It also checks that each view constructor name starts with the source name
+at that position. The refinement checker adds a field-kind check for scalar
+values and records of measures. AnyNode supplies no shape and skips these
+checks.
+-}
 
 {- | 'checkNodeShape' with a check of the fields of each constructor, after
 its arity and before the names. The function receives the name of the

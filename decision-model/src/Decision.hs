@@ -65,6 +65,19 @@ data Question = Question
 question :: Text -> Text -> [Option] -> Question
 question = Question "q0"
 
+{- Note [Scores follow option order]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The reply from scoreOptions has no option names. Its element at position i
+is the score for questionOptions at position i. A backend must reconstruct
+that order from its reply. For example, Ollama returns a map by option name.
+Traversing the map in key order could assign a law the score of another law
+when ranked pairs the scores with the original items.
+
+A wrapper that changes the options must restore the correspondence.
+chunked drops the extra "none" score from each part before it joins the
+parts. bothOrders reverses the backward scores before it averages them.
+-}
+
 {- | A model gives one score for each option of a question, in the order of
 the options. A higher score is likelier, and a score is not negative. A model
 can fail, with a message.
@@ -102,6 +115,7 @@ asks the parts one after the other, and stops at the first failure. It gives
 the scores of the options of the question, without the scores of the options
 "none". A score is relative to the other options of its part, so a
 comparison of the scores of two parts is approximate.
+See Note [Scores follow option order].
 -}
 chunked :: Int -> DecisionModel -> DecisionModel
 chunked n model = DecisionModel $ \q -> case chunks n q of
@@ -118,7 +132,7 @@ chunked n model = DecisionModel $ \q -> case chunks n q of
 {- | A model that asks each question two times: with the options in their
 order, and in the reverse order. The score of an option is the mean of its two
 scores. The scores of a model depend on the order of the options, and the
-mean removes most of this bias.
+mean removes most of this bias. See Note [Scores follow option order].
 -}
 bothOrders :: DecisionModel -> DecisionModel
 bothOrders model = DecisionModel $ \q -> do

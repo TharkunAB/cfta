@@ -433,6 +433,7 @@ typingParts Typing{typingBound = bound, typingInputs = inputs, typingRoots = roo
     -- The constructor of the node of a rule, and its children, when they fit
     -- its fields. The node view fits the datatype, so the position is one of
     -- its constructors and the node has as many fields.
+    -- See Note [Matching a node view to a datatype] in Data.CFTA.Gen.Refinement.Derive.
     checked index node = case drop position declared of
         constructor : _
             | Just children <- sequence fields
