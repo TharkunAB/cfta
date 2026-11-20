@@ -2,6 +2,14 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add `Data.CFTA.Abstraction`: `checkAbstraction` checks with a solver that
+  the refined variants of each production cover its refinement and add no
+  value, and `checkOverlaps` reports two variants with a common value as a
+  warning. Each report keeps the verdict `No` or `Unknown`; a time limit is
+  `Unknown`.
+- `Data.CFTA.Lowering`: `newConstructors` gives the constructors with an
+  expansion, and `checkProductions` gives each failure of `checkLowering`
+  with its state and production.
 Before release, the package was called `microcfta`.
 
 - An `FTA` allows a symbol at several arities, as an interned `Node` does.
@@ -88,6 +96,13 @@ Before release, the package was called `microcfta`.
 - Template exclusion computes the copies of an edge once for each wanted
   and unwanted parts, symbol, and child shapes. On Specftacular's HugeLists
   6-p4 this cut 3.8% of allocation and time, with the same laws.
+- Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
+  a language version to the version before it. `lift` gives the inverse image
+  of an automaton, and `checkLowering` checks a later grammar against an
+  earlier one. `compose` makes one lowering of two. It reports an expansion
+  that applies an earlier constructor to the wrong number of children.
+- `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
+  `mod` of SMT-LIB.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
