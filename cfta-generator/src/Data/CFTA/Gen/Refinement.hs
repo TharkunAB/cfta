@@ -57,6 +57,9 @@ module Data.CFTA.Gen.Refinement (
     CompiledFamily (familyGenerators, transitionDecisions, transitionReuses),
     compileFamilyWith,
     validOutcomes,
+
+    -- * Ranks of terms
+    ranksOfSurface,
 ) where
 
 import Control.Applicative ((<|>))
@@ -92,6 +95,7 @@ import Data.CFTA.Gen.Refinement.Internal.Compile (
     validOutcomes,
  )
 import qualified Data.CFTA.Gen.Refinement.Internal.Compile as Compile
+import Data.CFTA.Gen.Refinement.Internal.Rank (ranksOfSurface)
 import Data.CFTA.Generic (TypedFTA, constructorLabel, constructorName, datatypeDecode, datatypeFTA)
 import Data.CFTA.Index (ArgumentIndex (..), Depth)
 import Data.CFTA.Refinement (
