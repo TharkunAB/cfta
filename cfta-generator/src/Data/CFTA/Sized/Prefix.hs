@@ -121,6 +121,7 @@ module Data.CFTA.Sized.Prefix (
     Completions,
     prefixCompletions,
     prefixCompletionsWith,
+    preimageCompletionsWith,
     afterToken,
     afterPrefix,
     completionPrefix,
@@ -178,6 +179,7 @@ import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints), unPathEClas
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
 import Data.CFTA.Interned (Node (Node), edgeChildren, fromFTA, nodeEdges, nodeIdentity, setChildren)
+import Data.CFTA.Lowering (Lowering, lower)
 import Data.CFTA.Path (ChildIndex (..), Path, getPath, path, unPath)
 import Data.CFTA.Ranked (Ranked, WeightedIndexed (..), fromWeightedIndexedOnDemand)
 import Data.CFTA.Ranked.Internal (fromSizeClasses)
@@ -296,6 +298,39 @@ prefixCompletionsWith entailment size automaton = case prefixCompletions size au
     Right completions -> pure completions
     Left _ -> decided =<< deciding entailment size automaton
 
+{- | The bounded source terms whose lowering the target accepts.
+
+The bound is on source nodes. The result keeps source terms and their order.
+It combines source and target verdicts. A term with an invalid lowering or
+a 'No' on either side is rejected. The solver can leave other terms 'Unknown'.
+
+This operation lists the bounded source candidates before returning prefix
+queries. It shares target verdicts across candidates with equal lowered
+subterms. The target is checked on complete lowered terms with no size bound.
+-}
+preimageCompletionsWith ::
+    (Ord source, Ord target) =>
+    Entailment ->
+    Size ->
+    Lowering Symbol ->
+    FTA.PlainFTA source Symbol ->
+    FTA.PlainFTA target Symbol ->
+    IO (Completions Symbol)
+preimageCompletionsWith entailment size@(Size bound) lowering source target = do
+    completions <- prefixCompletionsWith entailment size source
+    (targetVerdict, _) <- memoryOfVerdicts entailment (\state -> Map.findWithDefault [] state rows)
+    let candidates = case completionsRoute completions of
+            Indexed{} -> [(term, preorder term, Yes) | term <- completionTerms completions]
+            Listed _ listed -> listed
+    checked <- traverse (check targetVerdict) candidates
+    pure $ emptyPrefix $ Listed bound [entry | entry@(_, _, verdict) <- checked, verdict /= No]
+  where
+    rows = Map.map (zip [0 ..]) $ FTA.transitionTable target
+    check targetVerdict (term, tokens, sourceVerdict) = do
+        verdict <-
+            andVerdicts [pure sourceVerdict, maybe (pure No) (targetVerdict $ FTA.initialState target) $ lower lowering term]
+        pure (term, tokens, verdict)
+
 {- | The completions of a prefix of an automaton with guards, whose verdicts the
 solver decides when a query needs them. The candidates and their verdicts are
 those of 'prefixCompletionsWith'. Each value of a walk shares the memories of
@@ -375,7 +410,8 @@ verdicts, so the number changes only the time of a query.
 -}
 decidingWithCap :: (Ord state) => Int -> Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO Deciding
 decidingWithCap cap entailment (Size bound) automaton = do
-    (stateVerdict, constraintVerdict) <- memoryOfVerdicts entailment numberedRows
+    (stateVerdict, constraintVerdict) <-
+        memoryOfVerdicts entailment (\state -> IntMap.findWithDefault [] state numberedRows)
     let machine =
             Machine
                 { machineTokens =
@@ -1434,10 +1470,11 @@ before its children, so a constraint that fails rejects the term without the
 verdicts of the children.
 -}
 memoryOfVerdicts ::
+    (Ord state) =>
     Entailment ->
-    IntMap.IntMap [(Int, FTA.Transition Int Symbol Constraint)] ->
-    IO (Int -> Term Symbol -> IO Verdict, Int -> Int -> Term Symbol -> IO Verdict)
-memoryOfVerdicts entailment rows = do
+    (state -> [(Int, FTA.Transition state Symbol Constraint)]) ->
+    IO (state -> Term Symbol -> IO Verdict, state -> Int -> Term Symbol -> IO Verdict)
+memoryOfVerdicts entailment row = do
     states <- newIORef Map.empty
     constraints <- newIORef Map.empty
     let remembered memory key decide = do
@@ -1448,7 +1485,6 @@ memoryOfVerdicts entailment rows = do
                     verdict <- decide
                     modifyIORef' memory $ Map.insert key verdict
                     pure verdict
-        row state = IntMap.findWithDefault [] state rows
         constraintOf state index term =
             let constraint = maybe noConstraint FTA.transitionConstraint $ lookup index $ row state
              in remembered

@@ -22,6 +22,7 @@ import Data.CFTA.Constraint (
 import qualified Data.CFTA.Equality as ECTA
 import Data.CFTA.Index (Cardinality (..), Size (..))
 import Data.CFTA.Interned (fromFTA)
+import Data.CFTA.Lowering (Expansion (..), Lowering, mkLowering)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Refinement.Denotation (accepts)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
@@ -142,6 +143,46 @@ spec = describe "Data.CFTA.Sized.Prefix with a solver" $ do
         (isJust stepped, maskCalls <= eagerCalls, made < eagerCalls) `shouldBe` (True, True, True)
     it "rejects a constrained automaton without a solver" $
         either Just (const Nothing) (prefixCompletions 3 guardedPairs) `shouldBe` Just ResidualGuard
+    describe "bounded preimages" $ do
+        it "compares lowered children and keeps the original terms and their prefixes" $ do
+            let transition label children constraint = FTA.Transition (sym label) children constraint
+                spine state leaf = (state, [transition leaf [] noConstraint, transition "c" [state] noConstraint])
+                concrete = automaton "s" [("s", [transition "g" ["left", "right"] noConstraint]), spine "left" "a", spine "right" "b"]
+                target = automaton "s" [("s", [transition "g" ["left", "left"] equalChildren]), spine "left" "a"]
+                chain depth leaf = iterate (\term -> Term.Node (sym "c") [term]) (Term.Leaf (sym leaf)) !! depth
+                pair left right = Term.Node (sym "g") [chain left "a", chain right "b"]
+                lowering = checkedLowering [(sym "b", 0, Apply (sym "a") [])]
+            completions <- preimageCompletionsWith unusedEntailment 7 lowering concrete target
+            completionTerms completions `shouldBe` [pair n n | n <- [0 .. 2]]
+            fmap completeVerdict (afterPrefix completions $ preorder $ pair 1 2) `shouldBe` Nothing
+            fmap nextTokens (afterPrefix completions [(sym "g", 2), (sym "c", 1), (sym "a", 0)])
+                `shouldBe` Just [((sym "c", 1), 1)]
+
+        it "combines source and target verdicts and retains only genuinely undecided terms" $ do
+            let pair left right = Term.Node (sym "g") [Term.Leaf (number left), Term.Leaf (number right)]
+            completions <- preimageCompletionsWith partialEntailment 3 (checkedLowering []) guardedPairs (pairsWith secondAboveOne)
+            completionTerms completions `shouldBe` [pair 2 2]
+            sort (undecidedTerms completions) `shouldBe` sort [pair 2 3, pair 3 2, pair 3 3]
+
+        it "uses only the source bound and rejects malformed constructors" $ do
+            let leaf = Term.Leaf (sym "a")
+                good = Term.Node (sym "d") [leaf]
+                bad = Term.Node (sym "d") [leaf, leaf]
+                target =
+                    automaton
+                        "s"
+                        [ ("s", [FTA.Transition (sym "g") ["left", "right"] noConstraint])
+                        , ("left", [FTA.Transition (sym "a") [] noConstraint])
+                        , ("right", [FTA.Transition (sym "a") [] noConstraint])
+                        ]
+                lowering = checkedLowering [(sym "d", 1, Apply (sym "g") [Child 0, Child 0])]
+            small <- preimageCompletionsWith unusedEntailment 2 lowering (FTA.fromTerms [good, bad]) target
+            larger <- preimageCompletionsWith unusedEntailment 3 lowering (FTA.fromTerms [good, bad]) target
+            (completionTerms small, completionTerms larger) `shouldBe` ([good], [good])
+
+-- | Construct a valid lowering for a test fixture.
+checkedLowering :: [(Symbol, Int, Expansion Symbol)] -> Lowering Symbol
+checkedLowering = either (error . show) id . mkLowering
 
 {- | The completions and the undecided completions of each prefix, against a
 search of every term over the symbols of the automaton: a term is accepted
