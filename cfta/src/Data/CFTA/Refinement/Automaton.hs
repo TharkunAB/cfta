@@ -16,6 +16,8 @@ module Data.CFTA.Refinement.Automaton (
     transitionSymbol,
     transitionRefinement,
     AutomatonError (..),
+    StratificationError (..),
+    fromStratified,
     validate,
     explicitView,
     fromViewError,
@@ -24,12 +26,15 @@ module Data.CFTA.Refinement.Automaton (
     transitionsAt,
 ) where
 
+import Control.Monad.State.Strict (evalStateT, gets, modify')
+import Control.Monad.Trans.Class (lift)
 import Data.Bifunctor (first)
 import Data.Containers.ListUtils (nubOrdOn)
 import qualified Data.IntMap.Strict as IntMap
 import Data.List ((!?))
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
+import Numeric.Natural (Natural)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Index (Arity (..))
@@ -104,6 +109,50 @@ data AutomatonError
         -- | The count that the guard, contract, or result names.
         !Arity
     deriving (Eq, Show)
+
+-- | A malformed indexed dependency or automaton.
+data StratificationError state
+    = -- | A parent and child whose measures did not strictly decrease.
+      NonDecreasingIndex !state !state
+    | -- | A structural error in the resulting automaton.
+      InvalidStratifiedAutomaton !AutomatonError
+    deriving (Eq, Show)
+
+{- | Build an LTA from finite rows at natural-number levels.
+
+Each child must have a strictly smaller measure than its parent. The check
+examines every reached dependency, including those on edges that a guard
+could reject. Shared indices reuse one node. Symbols, child positions, and
+guards use the ordinary interned representation.
+-}
+fromStratified ::
+    (Ord state) =>
+    (state -> Natural) ->
+    (state -> [FTA.Transition state Symbol Constraint]) ->
+    state ->
+    Either (StratificationError state) Automaton
+fromStratified measure rows initial = do
+    root <- evalStateT (build initial) Map.empty
+    root <$ first InvalidStratifiedAutomaton (validate root)
+  where
+    build state = do
+        known <- gets (Map.lookup state)
+        case known of
+            Just node -> pure node
+            Nothing -> do
+                edges <- traverse (buildEdge state) (rows state)
+                let node = Node edges
+                modify' (Map.insert state node)
+                pure node
+
+    buildEdge parent row = do
+        children <- traverse child (FTA.transitionChildren row)
+        pure $ mkEdge (FTA.transitionSymbol row) children (FTA.transitionConstraint row)
+      where
+        level = measure parent
+        child state
+            | measure state < level = build state
+            | otherwise = lift $ Left $ NonDecreasingIndex parent state
 
 {- | Check the structure of an LTA.
 

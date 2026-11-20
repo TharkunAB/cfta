@@ -6,18 +6,23 @@ import qualified Data.Set as Set
 
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldMatchList, shouldSatisfy)
 
+import qualified Data.CFTA as FTA
 import Data.CFTA.Refinement (
     AutomatonError (CyclicGuardReference, GuardArityMismatch, OpenAutomaton),
     Guard (Entails, Satisfies),
     Node (Mu, Node, Rec),
     RecNodeId (RecUnint),
+    StratificationError (NonDecreasingIndex),
     Symbol (RefinedSymbol),
     Verdict (..),
     accepts,
     automatonAlphabet,
     constraintAsGuard,
     denotationAtMost,
+    edgeChildren,
     edgeConstraint,
+    edgeSymbol,
+    fromStratified,
     mkEdge,
     noConstraint,
     nodeEdges,
@@ -102,3 +107,35 @@ spec =
 
         it "rejects free recursive references" $
             validate (Rec $ RecUnint 0) `shouldBe` Left OpenAutomaton
+
+        it "rejects reachable dependencies that stay level or increase" $ do
+            let step child = FTA.Transition "step" [child] noConstraint
+                same _ = [step 1]
+                equalRank _ = [step False]
+                increases 2 = [step 1]
+                increases _ = [step 2]
+            fromStratified id same 1 `shouldBe` Left (NonDecreasingIndex 1 1)
+            fromStratified (const 0) equalRank True `shouldBe` Left (NonDecreasingIndex True False)
+            fromStratified id increases 2 `shouldBe` Left (NonDecreasingIndex 1 2)
+
+        it "shares a decreasing child and keeps the transition's refinements and guard" $ do
+            let nonNegative v = v .>= 0
+                guard = path [0] `requires` nonNegative
+                pair = RefinedSymbol "pair" (refinementFormula (.== 1))
+                leaf = RefinedSymbol "zero" (refinementFormula nonNegative)
+                rows 1 = [FTA.Transition pair [0, 0] guard]
+                rows _ = [FTA.Transition leaf [] noConstraint]
+            case fromStratified id rows 1 of
+                Left err -> expectationFailure $ show err
+                Right root -> case nodeEdges root of
+                    [edge] -> do
+                        edgeSymbol edge `shouldBe` pair
+                        edgeConstraint edge `shouldBe` guard
+                        case edgeChildren edge of
+                            [left, right] -> do
+                                left `shouldBe` right
+                                map edgeSymbol (nodeEdges left) `shouldBe` [leaf]
+                            other -> expectationFailure $ show other
+                        let zero = Term.Node leaf []
+                        accepts tableEntailment root (Term.Node pair [zero, zero]) >>= (`shouldBe` Yes)
+                    other -> expectationFailure $ show other
