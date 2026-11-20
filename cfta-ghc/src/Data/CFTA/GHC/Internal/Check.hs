@@ -43,17 +43,8 @@ happen: when the step brought an equality, or when some wanted has no
 unification variable left. The solver's own unifications and defaulting are
 undone after each solver call, so only the unifier's results stay.
 
-A step writes unification variables and does not undo itself. A caller that
-backtracks freezes the walker's variables before the step and restores them
-after it ('freeze', 'restore'). GHC's 'GHC.Tc.Errors.Hole.withoutUnification'
-makes the variables that were flexible flexible again, which is enough for
-one check. It is not enough for a walk that keeps a checked prefix from one
-program to the next: GHC's zonker writes the zonked type back into a filled
-variable (Note [Sharing in zonking]), so a variable filled before the freeze
-can come to point past a variable that the restore makes flexible again. So
-a freeze here keeps the contents of every unification variable that the
-walker reaches, also through filled ones, and a restore writes all of them
-back.
+The caller uses 'freeze' and 'restore' to backtrack. See
+Note [Restoring GHC unification variables].
 -}
 module Data.CFTA.GHC.Internal.Check (
     -- * Leaves
@@ -401,8 +392,8 @@ metasOf = filter (\variable -> isTcTyVar variable && isMetaTyVar variable) . tyC
 the leaf does not fit, or when a wanted cannot be solved any more. With
 'True' for the last argument, the wanteds are known to be good (an earlier
 step of a walker with the same 'StateKey' and the same leaf passed), so the
-solver does not run. The step writes unification variables; freeze before
-it to undo it.
+solver does not run. See Note [Restoring GHC unification variables] for
+backtracking.
 -}
 step :: Environment -> Walker -> Leaf -> Int -> Bool -> TcM (Maybe Walker)
 step environment walker leaf children known = case walkerGoals walker of
@@ -594,11 +585,24 @@ definitelyNotEqual relation = go
         ForAllTy{} -> True
         _ -> False
 
+{- Note [Restoring GHC unification variables]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A step writes unification variables. Freeze before the step and restore
+after it when the search tries a different continuation of the same prefix.
+
+For a single hole-fit check, GHC's withoutUnification makes the variables
+that were flexible flexible again. The walker also retains filled variables
+from a checked prefix. Zonking can write a filled type back into a variable
+and bypass a reference that restore makes flexible again. Save the contents
+of every reachable unification variable, including those reached through
+filled variables. Restore writes those contents back.
+-}
+
 -- | The contents of unification variables at a freeze.
 newtype Frozen = Frozen [(TcTyVar, MetaDetails)]
 
 {- | Keep the contents of every unification variable that the walker reaches,
-also through filled variables.
+also through filled variables. See Note [Restoring GHC unification variables].
 -}
 freeze :: Environment -> Walker -> TcM Frozen
 freeze environment walker = do

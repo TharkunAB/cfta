@@ -366,9 +366,7 @@ nodeIdentity (InternedUnion alternatives) = internedUnionId alternatives
 nodeIdentity (Rec (RecInt i)) = i
 nodeIdentity _ = error "nodeIdentity: unexpected empty or unresolved node"
 
-{- | The interned identity of an edge. Identities follow the order in which
-the process interns edges, so they depend on what it built before.
--}
+-- | The interned identity of an edge. See Note [Interned identity supplies].
 edgeIdentity :: Edge symbol -> EdgeId
 edgeIdentity = edgeId
 
@@ -450,7 +448,17 @@ instance Hashable (UninternedNode symbol) where
                 `hashWithSalt` depthShape
                 `hashWithSalt` s
 
--- | Typed node caches share one identity sequence across all automaton types.
+{- Note [Interned identity supplies]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Each symbol type has its own cache. All node caches draw from one node
+identity supply, including caches for recursive nodes. All edge caches draw
+from a separate edge identity supply. The supplies assign identities in the
+order the process creates the objects. Use these identities for in-process
+comparison and memoization. A portable rank or snapshot needs an order
+derived from the language.
+-}
+
+-- | The node caches by symbol type. See Note [Interned identity supplies].
 nodeCaches :: CacheFamily
 nodeCaches = unsafePerformIO newCacheFamily
 {-# NOINLINE nodeCaches #-}
@@ -507,7 +515,7 @@ instance (Hashable symbol) => Hashable (UninternedEdge symbol) where
     hashWithSalt salt (UninternedEdge symbol children ecs) =
         salt `hashWithSalt` symbol `hashWithSalt` children `hashWithSalt` ecs
 
--- | Typed edge caches share one identity sequence across all automaton types.
+-- | The edge caches by symbol type. See Note [Interned identity supplies].
 edgeCaches :: CacheFamily
 edgeCaches = unsafePerformIO newCacheFamily
 {-# NOINLINE edgeCaches #-}
@@ -818,28 +826,23 @@ substFree' env node = case substitutionPlan node of
 
 -- Substitution internals
 
-{- | A graph rebuild prepared for an environment of recursive substitutions.
+{- Note [Reusing substitution plans]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Memoization needs the outer SubstitutionPlan constructor before the plan
+recurses. Forcing the function inside that constructor prepares the child
+plans before the function takes an environment. Applying the plan can then
+reuse that traversal for each environment. An application rebuilds the
+affected graph and returns subgraphs without free variables unchanged.
 
-This datatype should satisfy two properties for 'substitutionPlan' to work
-correctly:
-
-1. Forcing the @SubstitutionPlan@ to WHNF should not result in any recursive calls
-   (so that the recursion isn't totally unrolled before memoization can happen).
-2. But forcing the /function inside/ the @SubstitutionPlan@ to WHNF /should/
-   perform all recursive calls before the function is executed; applying the
-   function should not call 'substitutionPlan' again.
-
-Preparing the plan therefore does the expensive traversal once, independently
-of the substitution environment. Applying it still rebuilds the graph for each
-environment, except a subgraph without free variables, which it returns
-unchanged. See @intersect@ for an operation that can avoid an environment
-altogether; substitution cannot, because the environment is part of its input.
+An environment is part of the input to substitution. Intersection can use
+a key without an environment.
 -}
+
+-- | A graph rebuild prepared for an environment of recursive substitutions.
 data SubstitutionPlan symbol a = SubstitutionPlan (Map RecNodeId (Node symbol) -> a)
 
-{- | Commute @[]@ and @SubstitutionPlan@.
-
-Forces all elements in the list
+{- | Commute @[]@ and @SubstitutionPlan@. Force each child plan before
+applying the result. See Note [Reusing substitution plans].
 -}
 {-# INLINEABLE sequenceSubstitutionPlans #-}
 sequenceSubstitutionPlans :: [SubstitutionPlan symbol a] -> SubstitutionPlan symbol [a]
@@ -860,7 +863,7 @@ genericSubstitutionPlanCache :: TypeableMemoCache
 genericSubstitutionPlanCache = unsafePerformIO newTypeableMemoCache
 {-# NOINLINE genericSubstitutionPlanCache #-}
 
-{- | Extract the shape from a term
+{- | Extract the shape from a term. See Note [Reusing substitution plans].
 
 Any free variables in the original node become holes that the resulting
 plan fills from its environment.

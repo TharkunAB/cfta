@@ -178,18 +178,26 @@ type FTAGen symbol = Gen symbol
 leaf :: (Hashable symbol, Typeable symbol) => a -> symbol -> Gen symbol a
 leaf value symbol = node symbol $ pure value
 
+{- Note [Ranks of imported automata]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Order constructors by arity and then by the order of the symbol. Symbols
+compare by text and then by refinement. Order alternatives with the same
+symbol and arity by the structure of their children. This rule applies to acyclic and cyclic automata. It gives a
+stable order across processes. Nullary constructors come first, so
+shrinking moves toward leaves.
+
+See Note [Interned identity supplies] in Data.CFTA.Interned.Type for the
+process-local order of interned identities.
+-}
+
 {- | Read an automaton as a generator of the terms it accepts.
 
 The automaton is the support, unchanged. An acyclic automaton gives a finite
 generator with one rank per distinct term. Where alternatives overlap or an
 equality reaches below direct children, the count is symbolic.
 
-Ranks order constructors by arity, then by the 'Ord' of the symbol. 'Symbol'
-orders by text, so ranks do not depend on the order in which the process
-interned the symbols. Alternatives with the same symbol and arity are ordered
-by the structure of their children, in an acyclic and in a cyclic automaton, so
-their ranks do not depend on interning order either. Nullary constructors come
-first, so shrinking moves toward leaves.
+See Note [Ranks of imported automata] for the constructor and alternative
+order.
 
 A cyclic automaton gives a recursive generator counted by size, the number of
 term nodes, so 'upToSize' draws uniformly from the terms of at most a given
@@ -231,6 +239,7 @@ fromAutomatonWithLeaves leaves = Flat.fromAutomatonWithLeaves leaves id
 A leaf has depth zero. The result is the finite generator 'fromAutomaton'
 gives for an acyclic automaton: each distinct term has one rank, unranking
 constructs only the selected term, and shrinks remain in the language.
+See Note [Ranks of imported automata].
 -}
 fromAutomatonUpToDepth ::
     (Ord symbol, Hashable symbol, Typeable symbol) =>

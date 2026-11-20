@@ -258,7 +258,7 @@ rtypeParser = arrow +++ base
     arrow = do
         name <- identifier
         _ <- token ":"
-        parameter <- base
+        parameter <- between (token "(") (token ")") arrow +++ base
         _ <- token "->"
         RArrow (Text.pack name) parameter <$> rtypeParser
     base = braces +++ (plain <$> typeParser)
@@ -370,15 +370,19 @@ p <=> q = (p ==> q) .&& (q ==> p)
 truth :: Expr -> Formula -> Formula
 truth v formula = (v .== 1 .|| v .== 0) .&& ((v .== 1) <=> formula)
 
-{- | A refinement type in the syntax of 'parseRType', with @v@ for the value of
-each refinement. For a type that 'parseRType' gives, 'parseRType' reads the
-result back to the same type if the type has no other name @v@.
--}
+-- | A refinement type in the syntax of 'parseRType', with a fresh value binder.
 renderRType :: RType -> String
 renderRType typ = case typ of
     RArrow name parameter result -> Text.unpack name <> ":" <> renderParameter parameter <> " -> " <> renderRType result
     RBase base Top -> Synthesis.renderType base
-    RBase base formula -> "{v:" <> Synthesis.renderType base <> " | " <> formulaText 0 formula <> "}"
+    RBase base formula ->
+        let used = Formula.freeNames formula <> bindersIn formula
+            choose i =
+                let candidate = if i == (0 :: Integer) then "v" else "v" <> show i
+                 in if Name (Text.pack candidate) `elem` used then choose (i + 1) else candidate
+            binder = choose 0
+            rendered = Formula.substitute [(value, Formula.Var (Name (Text.pack binder)))] formula
+         in "{" <> binder <> ":" <> Synthesis.renderType base <> " | " <> formulaText 0 rendered <> "}"
   where
     renderParameter parameter = case parameter of
         RBase TFun{} Top -> "(" <> renderRType parameter <> ")"
@@ -420,6 +424,16 @@ renderRType typ = case typ of
         _ -> "(" <> Formula.renderTerm term <> ")"
     parenthesize True text = "(" <> text <> ")"
     parenthesize False text = text
+
+-- | The quantifier names in a surface proposition.
+bindersIn :: Formula -> [Name]
+bindersIn formula = case formula of
+    And parts -> concatMap bindersIn parts
+    Or parts -> concatMap bindersIn parts
+    Not inner -> bindersIn inner
+    Forall bound inner -> map fst bound <> bindersIn inner
+    Exists bound inner -> map fst bound <> bindersIn inner
+    _ -> []
 
 -- Synthesis
 
@@ -475,6 +489,8 @@ transitions are its terms.
 -}
 data State = State
     { stateType :: RType
+    , stateContract :: Maybe RType
+    -- ^ The declared arrow of a function value, before refinement abstraction.
     , stateRequirement :: Formula
     -- ^ A condition on the query arguments under which the term is defined: 'Top' for most terms.
     , stateNode :: Automaton
@@ -507,7 +523,7 @@ synthesize entailment options components query = do
             | otherwise = do
                 new <- catMaybes <$> traverse realize (applications heads bySize size)
                 let built = Map.insert size new bySize
-                reduced <- reduceRound counted (optionReduction options) functions built
+                reduced <- reduceRound counted (optionReduction options) built
                 when (optionTrace options) $ do
                     queries <- readIORef counter
                     unknown <- readIORef undecided
@@ -555,7 +571,6 @@ synthesize entailment options components query = do
     go 1 (Map.singleton 0 leaves)
   where
     heads = headsOf components query
-    functions = Map.fromList [(name, typ) | (name, typ@RArrow{}) <- components <> liquidArguments query]
 
 {- | The heads of a query: the components and the query arguments of function
 type, each with its function value in the logic.
@@ -679,8 +694,8 @@ checkerWith abstracts entailment components query = do
             RBase base goal -> do
                 found <- pendingOf program >>= maybe (pure Nothing) precise
                 case found of
-                    Just State{stateType = RBase actual refinement}
-                        | actual == base -> (== Yes) <$> entailsWithBindings counted [] refinement goal
+                    Just state@State{stateType = RBase actual refinement}
+                        | actual == base -> (== Yes) <$> entailsWithBindings counted [] refinement (goalRequirement base goal state)
                     _ -> pure False
     pure $ Checker check ((,) <$> readIORef counter <*> readIORef undecided)
   where
@@ -693,11 +708,12 @@ stateCount :: Map Int [State] -> Int
 stateCount = sum . map length . Map.elems
 
 {- | A term of a state before its refinement is abstracted: its name, its type
-with the precise refinement, its children, what the children must satisfy
-for each refined parameter, and the condition under which each child is used.
+with the precise refinement, a declared arrow if present, its children,
+what the children must satisfy for each refined parameter, and the
+condition under which each child is used.
 The last two are over the children's names in a guard.
 -}
-data Pending = Pending Text RType [State] [Formula] [Formula]
+data Pending = Pending Text RType (Maybe RType) [State] [Formula] [Formula]
 
 -- | The term of a query argument: its value is the argument.
 argumentLeaf :: (Text, RType) -> Pending
@@ -706,6 +722,7 @@ argumentLeaf (name, typ) = case typ of
         Pending
             name
             (RBase base (Formula.conjunction [Atom Formula.Eq (Formula.Var value) (Formula.Var (Name name)), refinement]))
+            Nothing
             []
             []
             []
@@ -716,6 +733,7 @@ argumentLeaf (name, typ) = case typ of
                 (baseOf typ)
                 (Formula.conjunction [Atom Formula.Eq (Formula.Var value) (Formula.Var (Name name)), lifted (Formula.Var value) typ])
             )
+            (Just typ)
             []
             []
             []
@@ -723,7 +741,7 @@ argumentLeaf (name, typ) = case typ of
 -- | The term of a component as a value: a constant, or a function passed as an argument.
 componentLeaf :: Component -> Pending
 componentLeaf (name, typ) = case typ of
-    RBase{} -> Pending name typ [] [] []
+    RBase{} -> Pending name typ Nothing [] [] []
     RArrow{} ->
         Pending
             name
@@ -733,14 +751,14 @@ componentLeaf (name, typ) = case typ of
                     [Atom Formula.Eq (Formula.Var value) (Formula.Var (functionConstant name)), lifted (Formula.Var value) typ]
                 )
             )
+            (Just typ)
             []
             []
             []
 
 {- | Whether a component is a value: a constant, or a function of one
-parameter of a base type to a base type, as @incr@. A function of more
-parameters, or with a function parameter, is only applied: its value would
-bring nested quantifiers into every refinement that uses it.
+parameter of a base type to a base type, as @incr@. These are the functions
+that the search considers for an ordinary function parameter.
 -}
 firstOrder :: RType -> Bool
 firstOrder typ = case typ of
@@ -751,16 +769,23 @@ firstOrder typ = case typ of
     isFunctionType TFun{} = True
     isFunctionType _ = False
 
-{- | Whether a component is a leaf: a constant, or a function value of
-'firstOrder' type when a head of the library or the query takes a function.
-Without such a head, a function value has no use.
+{- | Whether a component is a leaf. At a function-valued goal or an explicit
+arrow parameter, also consider curried and higher-order functions of the
+required erased type.
 -}
 valued :: [Component] -> LiquidQuery -> RType -> Bool
 valued components query typ = case typ of
     RBase{} -> True
-    RArrow{} -> firstOrder typ && any takesFunction (components <> liquidArguments query)
+    RArrow{} ->
+        (isFunction (baseOf $ liquidGoal query) && fits (liquidGoal query))
+            || any wantsValue [parameter | (_, head') <- components <> liquidArguments query, (_, parameter) <- parametersOf head']
   where
-    takesFunction (_, head') = any (isFunction . baseOf . snd) (parametersOf head')
+    wantsValue parameter =
+        (firstOrder typ && isFunction (baseOf parameter))
+            || case parameter of
+                RArrow{} -> fits parameter
+                RBase{} -> False
+    fits expected = isJust $ unify Map.empty (baseOf expected) (baseOf typ)
     isFunction TFun{} = True
     isFunction _ = False
 
@@ -781,18 +806,103 @@ argument that satisfies the parameter, the application of the function
 satisfies the result. A function parameter's own type is the assumption.
 -}
 lifted :: Formula.Term -> RType -> Formula
-lifted function typ = case typ of
-    RBase _ refinement -> Formula.substitute [(value, function)] refinement
+lifted function typ = liftedIn [] (termNames function <> typeNames typ) function typ
+
+-- | The names to avoid when opening an arrow type.
+typeNames :: RType -> [Name]
+typeNames (RBase _ refinement) = Formula.freeNames refinement
+typeNames (RArrow name parameter result) = Name name : (typeNames parameter <> typeNames result)
+
+-- | The free names of a term, including names of measures.
+termNames :: Formula.Term -> [Name]
+termNames term = Formula.freeNames (Atom Formula.Eq term term)
+
+-- | The first fresh name in the solver's integer representation of values.
+freshBinder :: [Name] -> Name
+freshBinder used = go (0 :: Int)
+  where
+    go index =
+        let name = Name ("__cfta_callback_" <> Text.pack (show index))
+         in if name `elem` used then go (index + 1) else name
+
+-- | The predicate a type supplies about a value in its lexical scope.
+liftedIn :: [(Name, Formula.Term)] -> [Name] -> Formula.Term -> RType -> Formula
+liftedIn scope used function typ = case typ of
+    RBase _ refinement -> Formula.substitute ((value, function) : scope) refinement
     RArrow name parameter result ->
-        let bound = Name ("__cfta_bound_" <> name)
+        let bound = freshBinder used
             argument = Formula.Var bound
-            assumption = case parameter of
-                RBase _ refinement -> Formula.substitute [(value, argument)] refinement
-                RArrow{} -> lifted argument parameter
-            conclusion = Formula.substitute [(Name name, argument)] (lifted (applied function (Formula.Var (Name name))) result)
-         in if conclusion == Top
-                then Top
-                else Forall [(bound, IntSort)] (if assumption == Top then conclusion else Formula.implies assumption conclusion)
+            inner = bound : used
+            assumption = liftedIn scope inner argument parameter
+            conclusion = liftedIn ((Name name, argument) : scope) inner (applied function argument) result
+         in universal bound (simplifiedImplication assumption conclusion)
+
+-- | Bind a value variable unless the judgment already holds.
+universal :: Name -> Formula -> Formula
+universal _ Top = Top
+universal bound formula = Forall [(bound, IntSort)] formula
+
+-- | A consequence under an assumption, with trivial implications removed.
+simplifiedImplication :: Formula -> Formula -> Formula
+simplifiedImplication Top conclusion = conclusion
+simplifiedImplication _ Top = Top
+simplifiedImplication assumption conclusion
+    | assumption == conclusion = Top
+    | otherwise = Formula.implies assumption conclusion
+
+-- | Read a declared arrow or the unrefined arrow inside a plain base type.
+arrowOf :: Name -> RType -> Maybe (Name, RType, RType)
+arrowOf _ (RArrow name parameter result) = Just (Name name, parameter, result)
+arrowOf fresh (RBase (TFun parameter result) _) = Just (fresh, plain parameter, plain result)
+arrowOf _ _ = Nothing
+
+{- Note [Callback contracts]
+----------------------------
+The logical measure @ap@ is total. A result implication about @ap@ cannot
+show that a callback accepts its required input. Keep the declaration of a
+function value and compare it to the expected type. At an arrow, check the
+input in reverse and the output under a fresh input of the expected type.
+At a base type, check predicate implication at a fresh value. The scope of
+each binder starts in its result, so a nested binder can shadow an earlier
+parameter without changing the nested parameter's own type.
+-}
+
+-- | The subtyping judgment after the erased types have been unified.
+implements :: [(Name, Formula.Term)] -> RType -> RType -> Formula
+implements expectedScope actual expected = compareTypes [] expectedScope used actual expected
+  where
+    used = typeNames actual <> typeNames expected <> concatMap (termNames . snd) expectedScope
+    compareTypes fromScope toScope names from to =
+        case (arrowOf bound from, arrowOf bound to) of
+            (Just (x, domain, result), Just (y, required, wanted)) ->
+                Formula.conjunction
+                    [ compareTypes toScope fromScope inner required domain
+                    , universal bound $
+                        simplifiedImplication
+                            (liftedIn toScope inner argument required)
+                            (compareTypes ((x, argument) : fromScope) ((y, argument) : toScope) inner result wanted)
+                    , case to of
+                        RBase _ Top -> Top
+                        RBase{} -> baseRequirement
+                        RArrow{} -> Top
+                    ]
+            (Nothing, Nothing) -> baseRequirement
+            _ -> Bottom
+      where
+        bound = freshBinder names
+        inner = bound : names
+        argument = Formula.Var bound
+        baseRequirement =
+            universal bound $
+                simplifiedImplication
+                    (liftedIn fromScope inner argument from)
+                    (liftedIn toScope inner argument to)
+
+-- | A plain function goal requires the whole erased input type.
+goalRequirement :: Type -> Formula -> State -> Formula
+goalRequirement base predicate state = case stateContract state of
+    Nothing -> predicate
+    Just declared -> Formula.conjunction [predicate, implements [] declared (plain base)]
 
 {- | The head @if c t e@ at a base type: the value is @t@ when @c@ is one, and
 @e@ otherwise. Its branches are used under these conditions.
@@ -836,7 +946,7 @@ the term is left out. The guard then holds: it is the condition implies the
 obligation. A term whose requirement the query rules out is left out.
 -}
 realizeWith :: Entailment -> Maybe [Formula] -> (Type -> Formula -> IO Formula) -> Pending -> IO (Maybe State)
-realizeWith entailment conditions abstract (Pending name typ children obligations pathConditions) = do
+realizeWith entailment conditions abstract (Pending name typ contract children obligations pathConditions) = do
     discharged <- traverse discharge obligations
     inherited <- traverse inherit (zip children (pathConditions <> repeat Top))
     case sequence discharged of
@@ -863,7 +973,7 @@ realizeWith entailment conditions abstract (Pending name typ children obligation
     assumedOf states =
         Formula.conjunction
             [ Formula.substitute [(value, Formula.Var (contractName index))] refinement
-            | (index, State (RBase _ refinement) _ _) <- zip [0 ..] states
+            | (index, State (RBase _ refinement) _ _ _) <- zip [0 ..] states
             ]
     holds antecedent consequent = (== Yes) <$> entailsWithBindings entailment [] antecedent consequent
     discharge obligation = case conditions of
@@ -891,9 +1001,11 @@ realizeWith entailment conditions abstract (Pending name typ children obligation
             pure $
                 State
                     (RBase base refinement)
+                    contract
                     requirement
-                    (Node [Transition (labelled name base requirement) refinement (map stateNode children) guard])
-        RArrow{} -> pure $ State typ requirement (Node [Transition (Symbol (escapeName name)) Top (map stateNode children) guard])
+                    (Node [Transition (labelled name base requirement contract) refinement (map stateNode children) guard])
+        RArrow{} ->
+            pure $ State typ contract requirement (Node [Transition (Symbol (escapeName name)) Top (map stateNode children) guard])
 
 -- | The first element for which an action gives 'True'.
 findM :: (Monad m) => (a -> m Bool) -> [a] -> m (Maybe a)
@@ -910,8 +1022,8 @@ terms of one base type and one requirement. The name is escaped
 ('escapeName'), so the first at sign ends it, also when the name or the
 label has an at sign.
 -}
-labelled :: Text -> Type -> Formula -> Symbol
-labelled name base requirement = Symbol (escapeName name <> "@" <> labelOf base requirement)
+labelled :: Text -> Type -> Formula -> Maybe RType -> Symbol
+labelled name base requirement contract = Symbol (escapeName name <> "@" <> labelOf base requirement contract)
 
 {- | A name with no at sign: each backslash becomes two, and each at sign
 becomes a backslash and @a@. A name without them does not change.
@@ -932,9 +1044,12 @@ unescapeName = Text.pack . go . Text.unpack
     go [] = []
 
 -- | The base type, and the requirement after a question mark unless it is 'Top'.
-labelOf :: Type -> Formula -> Text
-labelOf base requirement =
-    Text.pack (renderType base) <> if requirement == Top then "" else "?" <> Text.pack (Formula.renderFormula requirement)
+labelOf :: Type -> Formula -> Maybe RType -> Text
+labelOf base requirement contract =
+    case contract of
+        Nothing ->
+            Text.pack (renderType base) <> if requirement == Top then "" else "?" <> Text.pack (Formula.renderFormula requirement)
+        Just typ -> "?" <> Text.pack (show (typ, requirement))
 
 -- | A base type as text, as in @List a@.
 renderType :: Type -> String
@@ -984,7 +1099,9 @@ compositions total parts = [first : rest | first <- [0 .. total], rest <- compos
 
 {- | The application of a head to argument states, when their base types
 unify with the parameters: the transition with its guard and its inferred
-result type. A head is applied to all its parameters.
+result type. A head is applied to all its parameters. For a callback, the
+guard checks domain coverage and the result refinement on that domain.
+See Note [Callback contracts].
 -}
 application :: Maybe Formula.Term -> Text -> RType -> [State] -> Maybe Pending
 application function name typ arguments = do
@@ -993,9 +1110,22 @@ application function name typ arguments = do
         foldM unifyParameter Map.empty (zip (map (baseOf . snd) parameters) (map (baseOf . stateType) arguments))
     let formals = map fst parameters
         named = [(Name formal, Formula.Var (contractName index)) | (index, formal) <- zip [0 ..] formals]
+        scopes = scanl (flip (:)) [] named
         obligations =
-            [ Formula.substitute ((value, Formula.Var (contractName index)) : named) requirement
-            | (index, (_, RBase _ requirement)) <- zip [0 ..] parameters
+            [ requirement
+            | (index, ((_, parameter), child, scope)) <- zip [0 ..] (zip3 parameters arguments scopes)
+            , let required = substituteBase substitution parameter
+                  actual = Formula.Var (contractName index)
+                  used = termNames actual <> typeNames required <> concatMap (termNames . snd) scope
+                  requirement = case stateContract child of
+                    Nothing -> liftedIn scope used actual required
+                    Just supplied -> case required of
+                        RArrow{} -> implements scope supplied required
+                        RBase parameterBase _ ->
+                            Formula.conjunction
+                                [ liftedIn scope used actual required
+                                , implements scope supplied (plain parameterBase)
+                                ]
             , requirement /= Top
             ]
         base = baseOf (substituteBase substitution (resultOf typ))
@@ -1003,7 +1133,13 @@ application function name typ arguments = do
             RBase _ result -> inferred function formals (pathConditionsOf name) arguments result
             RArrow{} -> Top
     pure $
-        Pending name (RBase base refinement) arguments obligations (map (Formula.substitute named) (pathConditionsOf name))
+        Pending
+            name
+            (RBase base refinement)
+            Nothing
+            arguments
+            obligations
+            (map (Formula.substitute (reverse named)) (pathConditionsOf name))
   where
     unifyParameter substitution (expected, actual) = unify substitution expected actual
 
@@ -1036,7 +1172,7 @@ inferred function formals pathConditions arguments result =
                    ]
         )
   where
-    actually = Formula.substitute (zip (map Name formals) (map fst actuals))
+    actually = Formula.substitute (reverse (zip (map Name formals) (map fst actuals)))
     nodes = map stateNode arguments
     actuals =
         [ case stateType argument of
@@ -1055,8 +1191,6 @@ definedValue refinement = case refinement of
     Atom Formula.Eq term (Formula.Var name) | name == value && value `notElem` termNames term -> Just term
     And parts -> foldr (\part found -> definedValue part <|> found) Nothing parts
     _ -> Nothing
-  where
-    termNames term = Formula.freeNames (Atom Formula.Eq term term)
 
 -- Qualifiers
 
@@ -1332,8 +1466,8 @@ substituteBase substitution typ = case typ of
 of another's. The root has a transition for each state with its size, and
 the states are read back from the reduced automaton.
 -}
-reduceRound :: Entailment -> Reduction -> Map Text RType -> Map Int [State] -> IO (Either String (Map Int [State]))
-reduceRound entailment reduction functions bySize = do
+reduceRound :: Entailment -> Reduction -> Map Int [State] -> IO (Either String (Map Int [State]))
+reduceRound entailment reduction bySize = do
     let root =
             Node
                 [ Transition (Symbol ("size:" <> Text.pack (show size))) Top [stateNode state] noConstraint
@@ -1357,11 +1491,11 @@ reduceRound entailment reduction functions bySize = do
                     Left err -> Left (show err)
                     Right found -> either (Left . show) Right (minimize automaton found)
             | otherwise -> pure (Right automaton)
-    pure $ readBack functions labels <$> minimized
+    pure $ readBack labels <$> minimized
   where
     labels =
         Map.fromList
-            [ (labelOf base (stateRequirement state), (base, stateRequirement state))
+            [ (labelOf base (stateRequirement state) (stateContract state), (base, stateRequirement state, stateContract state))
             | states <- Map.elems bySize
             , state@State{stateType = RBase base _} <- states
             ]
@@ -1371,11 +1505,13 @@ of qualifiers that holds every qualifier it implies, so one refinement implies
 another when it has all the other's qualifiers. The subtype must also be
 defined wherever the supertype is: each condition of its requirement is a
 condition of the supertype's. No solver is asked.
+Function values with contracts keep distinct states. Their declared types
+govern compatibility at their uses.
 -}
-stateSubtyping :: Map Text (Type, Formula) -> Subtyping
+stateSubtyping :: Map Text (Type, Formula, Maybe RType) -> Subtyping
 stateSubtyping labels = Subtyping $ \_ low high ->
     pure $ case (labelled' low, labelled' high) of
-        (Just (lowBase, lowRequirement), Just (highBase, highRequirement))
+        (Just (lowBase, lowRequirement, Nothing), Just (highBase, highRequirement, Nothing))
             | lowBase == highBase
             , includes highRequirement lowRequirement
             , includes (transitionRefinement low) (transitionRefinement high) ->
@@ -1392,8 +1528,8 @@ conjuncts (And parts) = concatMap conjuncts parts
 conjuncts formula = [formula]
 
 -- | The states of each size of a reduced automaton.
-readBack :: Map Text RType -> Map Text (Type, Formula) -> Automaton -> Map Int [State]
-readBack functions labels root =
+readBack :: Map Text (Type, Formula, Maybe RType) -> Automaton -> Map Int [State]
+readBack labels root =
     Map.fromListWith (flip (<>)) $
         [ (read (Text.unpack (Text.drop 5 (symbolText (transitionSymbol keeper)))), [state])
         | keeper <- nodeEdges root
@@ -1406,9 +1542,9 @@ readBack functions labels root =
         [] -> Nothing
         transitions@(first : _) -> case unlabelled (transitionSymbol first) of
             (_, Just rendered) -> do
-                (base, requirement) <- Map.lookup rendered labels
-                Just $ State (RBase base (Formula.disjunction (map transitionRefinement transitions))) requirement node
-            (name, Nothing) -> (\typ -> State typ Top node) <$> Map.lookup name functions
+                (base, requirement, contract) <- Map.lookup rendered labels
+                Just $ State (RBase base (Formula.disjunction (map transitionRefinement transitions))) contract requirement node
+            (_, Nothing) -> Nothing
 
 -- The goal
 
@@ -1439,7 +1575,10 @@ goalAutomaton entailment conditionals goal states = case goal of
         let candidates = direct <> branched
             root =
                 Node
-                    [Transition "goal" Top [stateNode state] (semanticConstraint (Satisfies (path [0]) refinement)) | state <- candidates]
+                    [ Transition "goal" Top [stateNode state] $
+                        semanticConstraint (Satisfies (path [0]) (goalRequirement base refinement state))
+                    | state <- candidates
+                    ]
         if null candidates
             then pure (Right Nothing)
             else either (Left . show) (Right . Just) <$> prune entailment root
@@ -1463,7 +1602,7 @@ goalAutomaton entailment conditionals goal states = case goal of
                     defined' <- holds (Formula.conjunction [known, under]) (stateRequirement term)
                     if unreachable || not defined'
                         then pure False
-                        else holds (Formula.conjunction [known, under, stateRequirement term, facts]) refinement
+                        else holds (Formula.conjunction [known, under, stateRequirement term, facts]) (goalRequirement base refinement term)
                 RArrow{} -> pure False
         true <- findM (solves chosen) terms
         false <- findM (solves (Not chosen)) terms

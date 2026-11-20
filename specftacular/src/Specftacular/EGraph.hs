@@ -8,7 +8,8 @@ directions ('EG.equation'): its template variables are pattern variables,
 and its type variables are sort variables.
 
 'equalUnder' builds an e-graph for one query, so its answer depends only on
-the laws, the two terms, and the limits.
+the laws, the two terms, and the limits. Search supplies conjectures as its
+premises. "Specftacular.FiniteLaw" checks premises for one finite signature.
 -}
 module Specftacular.EGraph (
     EGraphLimits (..),

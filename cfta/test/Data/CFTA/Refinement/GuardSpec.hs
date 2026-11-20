@@ -32,8 +32,17 @@ import Data.CFTA.Refinement (
     validate,
     pattern Transition,
  )
-import Data.CFTA.Refinement.Expression (false, refinementFormula, true, variable, (.&&), (.==), (.>), (.>=))
-import Data.CFTA.Refinement.Guard (anyOf, buildGuard, isSameTermAs, notGuard, requires, withActualFor)
+import Data.CFTA.Refinement.Expression (false, refinementFormula, true, variable, (.&&), (.==), (.>), (.>=), (.||))
+import Data.CFTA.Refinement.Guard (
+    anyOf,
+    buildGuard,
+    contract,
+    isSameTermAs,
+    notGuard,
+    proposition,
+    requires,
+    withActualFor,
+ )
 import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..), withZ3, withZ3Timeout)
 import Data.CFTA.Refinement.TestSupport (tableEntailment)
 import Data.CFTA.Symbol (valueName)
@@ -57,6 +66,54 @@ spec =
                 guard = buildGuard $ \denominator -> denominator `requires` nonNegative
                 term = Term.Node (RefinedSymbol "divide" true) [Term.Node (RefinedSymbol "n" true) []]
             evaluateConstraint tableEntailment guard term >>= (`shouldBe` No)
+
+        it "proves the whole proposition when neither disjunct is provable" $
+            withZ3 [] $ \solver -> do
+                let child = path [0]
+                    x = variable "x"
+                    positive = child `requires` (.> 0)
+                    whole = proposition [("x", child)] (x .> 0 .|| 0 .>= x)
+                    term = Term.Node (RefinedSymbol "root" true) [Term.Node (RefinedSymbol "child" true) []]
+                whole
+                    `shouldBe` semanticConstraint (Holds [child] (variable (contractTermName 0) .> 0 .|| 0 .>= variable (contractTermName 0)))
+                evaluateConstraint solver whole term >>= (`shouldBe` Yes)
+                evaluateConstraint solver (anyOf [positive, notGuard positive]) term >>= (`shouldBe` No)
+
+        it "uses sibling refinements in one proposition even when its conclusion omits a sibling" $
+            withZ3 [] $ \solver -> do
+                let index = path [0]
+                    limit = path [1]
+                    n = variable "n"
+                    whole = proposition [("i", index), ("limit", limit)] (variable "i" .> 0)
+                    separate = contract $ \i bound -> i .> 0 .&& bound .> 0
+                    node name refinement = Term.Node (RefinedSymbol name refinement) []
+                    indexNode = node "index" (refinementFormula (.== n))
+                    term =
+                        Term.Node
+                            (RefinedSymbol "root" true)
+                            [ indexNode
+                            , node "limit" (refinementFormula $ \v -> v .== n .&& v .> 0)
+                            ]
+                    termWithActual =
+                        Term.Node
+                            (RefinedSymbol "root" true)
+                            [ indexNode
+                            , node "limit" true
+                            , node "actual" (refinementFormula (.> 0))
+                            , node "n" true
+                            ]
+                evaluateConstraint solver whole term >>= (`shouldBe` Yes)
+                evaluateConstraint solver separate term >>= (`shouldBe` No)
+                evaluateConstraint solver whole termWithActual >>= (`shouldBe` No)
+                evaluateConstraint solver (withActualFor (path [2]) (path [3]) whole) termWithActual >>= (`shouldBe` Yes)
+
+        it "proves equality of two names of the same bound term" $
+            withZ3 [] $ \solver -> do
+                let child = path [0]
+                    aliases second = proposition [("first", child), ("second", second)] (variable "first" .== variable "second")
+                    term = Term.Node (RefinedSymbol "root" true) [Term.Node (RefinedSymbol "a" true) [], Term.Node (RefinedSymbol "b" true) []]
+                evaluateConstraint solver (aliases child) term >>= (`shouldBe` Yes)
+                evaluateConstraint solver (aliases $ path [1]) term >>= (`shouldBe` No)
 
         it "keeps syntactic equality inside the full Boolean constraint language" $ do
             let same = buildGuard $ \left right -> left `isSameTermAs` right

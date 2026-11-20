@@ -26,6 +26,12 @@ The benchmark executables take the term size and the search phase as arguments.
 The golden test suite compares the discovered laws with `test/golden/`.
 `GOLDEN_ACCEPT=1` updates these files.
 
+Run `cabal run example-conditional-zip` to discover a conditional law.
+A liquid tree automaton generates pairs of Boolean lists of equal length,
+up to length two. Specftacular discovers the zip/unzip equation over that
+witness type. The example checks it on all 21 witnesses and tests the
+guard on all 28 unequal-length pairs.
+
 The package was imported from
 [`TharkunAB/specftacular` at `948a246`](https://github.com/TharkunAB/specftacular/tree/948a24694256758e53925d3bd498efe05f668f51).
 
@@ -75,6 +81,16 @@ and list counterexamples. Testing does not prove a law. A false law can still
 affect the rules that prune later terms. `--recheck N` tests each new law
 again on N random cases of sizes 1 to 8 and drops a law that one of them
 refutes (0 by default).
+
+`Specftacular.FiniteLaw` can check a candidate equation exhaustively in a
+declared finite signature. Supply each sort's observation classes and a
+total table for each first-order operation. `proveOn` checks the equation
+at each assignment admitted by its guard. `applyAt` returns its right-hand
+value only at those assignments. `promote` admits an equation for use in
+contexts when it covers every assignment and every operation preserves
+the observation classes. `derives` uses the resulting theory on ground
+terms from that signature. The `example-guarded-law` executable checks
+the candidate `abs x = id x` found on an LTA-generated interval.
 
 Use `A`, `B`, `C`, `D`, and `Acc` as abstract type parameters in a signature.
 Each constant must be parametric in these types. It must not inspect their

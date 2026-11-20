@@ -17,6 +17,8 @@ candidate and checks each complete witness.
 -}
 module Data.CFTA.Gen.Refinement.Internal.Compile (
     compile,
+    compileFamilyWith,
+    CompiledFamily (..),
     validOutcomes,
     reportTimeLimit,
     spineArity,
@@ -29,6 +31,7 @@ module Data.CFTA.Gen.Refinement.Internal.Compile (
 
 import Control.Applicative ((<|>))
 import Control.Exception (handle)
+import Control.Monad.Except (ExceptT (..), runExceptT)
 import Data.Bifunctor (first)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromLeft)
@@ -122,11 +125,18 @@ type LTAGen = Gen Symbol
 -- | A grouped generator over liquid tree automata.
 type LTAGrouped key = Grouped Symbol key
 
-{- | The observations that identify one group: the label at each observed
-path, and whether that node is a leaf. A path that a member does not have is
-absent. The position orders the groups of one language by the first member
-that has their observations, so ranks follow source order.
+{- Note [Ordering refinement groups]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A guard reads the label and leafness of each observed path. A missing path
+has no observation. The compiler groups members that have the same observations
+so it can decide the guard for the group.
+
+Order these groups by the first member with those observations in the source
+language. When groups merge, use the position of the first group. This keeps
+the source group order when a later operation observes fewer paths.
 -}
+
+-- | The observations of one group and its position in the source order.
 data ObservationKey = ObservationKey
     { keyPosition :: !Int
     , keyObservations :: !Observations
@@ -137,10 +147,8 @@ data ObservationKey = ObservationKey
 noObservations :: ObservationKey
 noObservations = ObservationKey 0 Map.empty
 
-{- | Regroup by observations, positioned by first appearance.
-
-The keys of the given groups are in source order. Groups with the same
-observations merge, and the merged group takes the position of the first.
+{- | Regroup by observations in order of first appearance.
+See Note [Ordering refinement groups].
 -}
 reposition :: (key -> Observations) -> LTAGrouped key a -> LTAGrouped ObservationKey a
 reposition observationsOf grouped = regroupOn rekey grouped
@@ -226,6 +234,23 @@ data Compiler = Compiler
     , compilerClosed :: !(Memo ClosedGroups)
     , compilerOpen :: !(Memo OpenGroups)
     , compilerIntegers :: !(Memo Contains)
+    , compilerTransitions :: !(Maybe TransitionTables)
+    }
+
+-- | The closed transition decisions for one solver and one family of generators.
+data TransitionTables = TransitionTables
+    { tablesByGuard :: !(IORef (Map.Map Guard (IORef (Map.Map [Maybe Observed] Bool))))
+    , tableReuses :: !(IORef Int)
+    }
+
+-- | A family compiled in input order, with counts for its finite transition tables.
+data CompiledFamily a = CompiledFamily
+    { familyGenerators :: [LTAGen a]
+    -- ^ Compiled generators in the order supplied by the caller.
+    , transitionDecisions :: !Int
+    -- ^ Number of different observation tuples decided, summed over the guards.
+    , transitionReuses :: !Int
+    -- ^ Number of tuples that used a previous decision.
     }
 
 -- | The groups of a generator that leaves no variable open.
@@ -280,11 +305,38 @@ compile :: Entailment -> LTAGen a -> IO (Either GenError (LTAGen a))
 compile uncachedEntailment generator
     | not (deferred generator) = pure $ Right generator
     | otherwise = reportTimeLimit $ do
-        entailment <- cacheEntailment uncachedEntailment
-        closedMemo <- newIORef IntMap.empty
-        openMemo <- newIORef IntMap.empty
-        integersMemo <- newIORef IntMap.empty
-        fmap ungroup <$> compileGen (Compiler entailment closedMemo openMemo integersMemo) (Set.singleton $ path []) generator
+        compiler <- newCompiler uncachedEntailment Nothing
+        compileRoot compiler generator
+
+{- | Compile a finite family with one solver and shared transition tables.
+Each generator retains the rank order of 'compile'. Supply only the requested
+roots. A single recursive root can reuse decisions across its own layers.
+-}
+compileFamilyWith :: Entailment -> [LTAGen a] -> IO (Either GenError (CompiledFamily a))
+compileFamilyWith solver generators = reportTimeLimit $ do
+    tables <- TransitionTables <$> newIORef Map.empty <*> newIORef 0
+    compiler <- newCompiler solver (Just tables)
+    compiled <- runExceptT $ traverse (ExceptT . compileRoot compiler) generators
+    tableRefs <- readIORef $ tablesByGuard tables
+    !decisions <- sum <$> traverse (fmap Map.size . readIORef) tableRefs
+    reuses <- readIORef $ tableReuses tables
+    pure $ (\roots -> CompiledFamily roots decisions reuses) <$> compiled
+
+-- | Create caches scoped to the supplied solver.
+newCompiler :: Entailment -> Maybe TransitionTables -> IO Compiler
+newCompiler solver tables =
+    Compiler
+        <$> cacheEntailment solver
+        <*> newIORef IntMap.empty
+        <*> newIORef IntMap.empty
+        <*> newIORef IntMap.empty
+        <*> pure tables
+
+-- | Compile the root when its language still contains unresolved constraints.
+compileRoot :: Compiler -> LTAGen a -> IO (Either GenError (LTAGen a))
+compileRoot compiler generator
+    | deferred generator = fmap ungroup <$> compileGen compiler (Set.singleton $ path []) generator
+    | otherwise = pure $ Right generator
 
 -- | Compile one generator, grouped by the observations its parent needs.
 compileGen :: Compiler -> Set Path -> LTAGen a -> IO (Either GenError (LTAGrouped ObservationKey a))
@@ -545,7 +597,11 @@ compileNode compiler requested labelling constraint child
         case compiledChild of
             Left err -> pure $ Left err
             Right childGroups -> do
-                retained <- filterGroupsM decide childGroups
+                decide <- closedDecision compiler leafness constraint
+                let accept keys = case labelOf keys of
+                        Left err -> pure $ Left err
+                        Right label -> decide label keys
+                retained <- filterGroupsM accept childGroups
                 pure $ reposition closeObservations . nodeWithKey closeLabel <$> retained
   where
     (_, leafness, _, childRequirements) = nodeShape requested labelling constraint child
@@ -556,9 +612,6 @@ compileNode compiler requested labelling constraint child
     rootOf :: ObservationKey -> Either GenError Symbol
     rootOf key =
         maybe (Left MissingRootObservation) (\(Observed label _) -> Right label) $ Map.lookup (path []) $ keyObservations key
-    decide childKeys = case labelOf childKeys of
-        Left err -> pure $ Left err
-        Right label -> constraintDecision (compilerEntailment compiler) label leafness constraint childKeys
     -- Only accepted tuples are closed, and their labels were computed to accept them.
     closeLabel childKeys = case labelOf childKeys of
         Right label -> label
@@ -567,6 +620,57 @@ compileNode compiler requested labelling constraint child
                 "cfta-generator bug in Data.CFTA.Gen.Refinement.Internal.Compile.compileNode: \
                 \an accepted group lost its root observation"
     closeObservations childKeys = parentObservations requested (closeLabel childKeys) leafness childKeys
+
+{- Note [Finite transition tables]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A closed guard reads the symbol and leafness at each path in 'guardPaths'.
+This includes actual and formal paths under substitution. A missing path has
+its own entry. Two tuples with the same observations therefore give the same
+decision for this guard and solver. The table contains only decided results.
+Open integer groups and structural equality use their existing compiler.
+
+Group positions, weights and rank plans belong to the current language. The
+table supplies only the Boolean decision to 'filterGroupsM'. Each layer still
+builds its joins from its own groups in their original order.
+-}
+
+-- | Select the decision procedure for one closed constructor guard.
+closedDecision :: Compiler -> Leafness -> Constraint -> IO (Symbol -> [ObservationKey] -> IO (Either GenError Bool))
+closedDecision compiler leafness constraint
+    | Just tables <- compilerTransitions compiler
+    , constraintEqualities constraint == EmptyConstraints
+    , not (containsSame guard)
+    , not (Set.null paths) = do
+        known <- readIORef $ tablesByGuard tables
+        table <- case Map.lookup guard known of
+            Just existing -> pure existing
+            Nothing -> do
+                fresh <- newIORef Map.empty
+                modifyIORef' (tablesByGuard tables) $ Map.insert guard fresh
+                pure fresh
+        pure $ \label keys -> do
+            let index = map (observe label keys) positions
+            entries <- readIORef table
+            case Map.lookup index entries of
+                Just accepted -> do
+                    modifyIORef' (tableReuses tables) (+ 1)
+                    pure $ Right accepted
+                Nothing -> do
+                    result <- decide label keys
+                    case result of
+                        Right accepted -> modifyIORef' table $ Map.insert index accepted
+                        Left _ -> pure ()
+                    pure result
+    | otherwise = pure decide
+  where
+    guard = constraintGuard constraint
+    paths = guardPaths guard
+    positions = map unPath $ Set.toAscList paths
+    observe label _ [] = Just $ Observed label leafness
+    observe _ keys (ChildIndex index : rest) = do
+        key <- keys !? index
+        Map.lookup (path rest) $ keyObservations key
+    decide label = constraintDecision (compilerEntailment compiler) label leafness constraint
 
 {- | Whether a generator contains an integer leaf outside an imported
 automaton. Only such a generator compiles through open groups.

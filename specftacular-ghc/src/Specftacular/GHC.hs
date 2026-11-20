@@ -4,13 +4,11 @@
 {- | A signature from a GHC session: each function by its expression, with
 distinct unconstrained type variables at A, B, C, D, and Acc. Each function
 uses these carriers in the order of its type binders. GHC gives the type of
-a function, and 'erase' of cfta-ghc makes it a type of the automaton. The
-session compiles the function once with Int in place of each carrier.
-Variables that occur in constraints stay concrete. Container class variables
-use lists, and other constrained variables use Int. The session compiles the
-generator and the equality of each required type, when QuickCheck and Eq
-supply the required instances in the session. This includes function
-generators whose domains have CoArbitrary instances.
+a function, and 'erase' of cfta-ghc makes it a type of the automaton.
+See Note [Search types and session types]. The session compiles the generator
+and the equality of each required type when QuickCheck and Eq supply the
+instances. This includes function generators whose domains have CoArbitrary
+instances.
 
 The session is a session of cfta-ghc. It has the unit of QuickCheck of the
 program ('quickCheckUnit') and the package database of the store of cabal
@@ -233,9 +231,20 @@ skeletonOf typ = convert <$> erase (const Nothing) typ
     convert (Hectare.TCons "Pair" [a, b]) = TCons "(,)" [convert a, convert b]
     convert (Hectare.TCons name args) = TCons (Map.findWithDefault name (T.unpack name) names) (map convert args)
 
-{- | The physical type used by the session. This uses the carrier test of
-'sourceType' and keeps all other type constructors. Equal physical types
-therefore use the same compiled generator and equality expressions.
+{- Note [Search types and session types]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Keep unconstrained variables distinct in the search type. The GHC session
+compiles functions with Int in place of each of those carriers. Variables
+that occur in constraints stay concrete. Container class variables use lists
+and the other constrained variables use Int.
+
+Use the same carrier mapping in physicalType and sourceType. This lets types
+with the same session representation use the same compiled generators and
+equalities while retaining their distinct search types.
+-}
+
+{- | The physical type used by the session. See
+Note [Search types and session types].
 -}
 physicalType :: TypeSkeleton -> TypeSkeleton
 physicalType t | t `elem` map fst carriers = typeSkeletonOf (Proxy :: Proxy Int)
@@ -245,6 +254,7 @@ physicalType t = t
 
 {- | A type as Haskell source, with each type constructor by its name
 without its module, and Int for each abstract carrier.
+See Note [Search types and session types].
 -}
 sourceType :: TypeSkeleton -> String
 sourceType t | t `elem` map fst carriers = "Int"

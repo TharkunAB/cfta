@@ -62,6 +62,7 @@ library
     Specftacular
     Specftacular.DecisionTree
     Specftacular.EGraph
+    Specftacular.FiniteLaw
     Specftacular.Rewriting
     Specftacular.Types
     Specftacular.Utils
@@ -122,6 +123,27 @@ executable example-gcd
 
   build-depends: specftacular
   main-is: Gcd.hs
+
+executable example-conditional-zip
+  import: deps
+  hs-source-dirs: examples
+  main-is: ConditionalZip.hs
+executable example-guarded-law
+  import: deps
+  hs-source-dirs: examples
+  main-is: GuardedLaw.hs
+  ghc-options: -rtsopts
+  build-depends:
+    cfta-generator,
+    specftacular,
+
+test-suite finite-laws
+  import: deps
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: FiniteLaws.hs
+  ghc-options: -rtsopts
+  build-depends: specftacular
 
 -- Runs small signatures and compares their laws with test/golden.
 -- GOLDEN_ACCEPT=1 writes the files again.

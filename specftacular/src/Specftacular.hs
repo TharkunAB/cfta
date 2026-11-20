@@ -1551,8 +1551,8 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
             ("(" ++ show (DT.size tree) ++ " representatives...)")
             lvl
             (so_far s0)
-        -- The schema goes into the decision tree of its type. It is
-        -- evaluated on the test cases of its path only.
+        -- Insert the schema in the decision tree of its type.
+        -- See Note [Test order in the decision tree] in Specftacular.DecisionTree.
         inserted <-
             diagnose env lvl (show current_ty) "schema_tests" s0 $
                 DT.insertWith parallelTests known (valuesEqual eq_inst) test_cases np_term (values np_term) tree
@@ -1658,9 +1658,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                     DT.insertWith parallelTests known (valuesEqual eq_inst) test_cases i (values i) table
             case inserted of
                 DT.Untested -> return (Knew, s)
-                DT.Distinct table' ->
-                    return
-                        (Singleton, s{instance_trees = Map.insert rep table' (instance_trees s), touched_reps = HS.insert rep (touched_reps s)})
+                DT.Distinct table' -> return (keepRepresentative table')
                 DT.EqualTo w
                     | w == i -> return (Knew, s)
                     -- The known laws prove the law.
@@ -1680,9 +1678,15 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                                         ++ show (caseTest c)
                                         ++ ")"
                                     )
-                                return (Knew, s)
+                                -- Use the refuting case to separate these representatives.
+                                split <- DT.insertWith Nothing known (valuesEqual eq_inst) [c] i (values i) table
+                                case split of
+                                    DT.Distinct table' -> return (keepRepresentative table')
+                                    _ -> return (Knew, s)
                             Nothing -> discover w
       where
+        keepRepresentative table =
+            (Singleton, s{instance_trees = Map.insert rep table (instance_trees s), touched_reps = HS.insert rep (touched_reps s)})
         lawOf w = Term "(==)" [Term (Symbol eq_txt) [], w, i]
         -- The first extra test case on which the instance and w differ. Each
         -- side is compiled once.
@@ -1697,7 +1701,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
             (lawSig, law) <-
                 generalizeLaw
                     resolveInstance
-                    (map caseTest test_cases)
+                    (map caseTest (test_cases ++ recheck_cases))
                     inst_sig
                     ((\x -> (x, inst_sig Map.! x)) <$> sample)
                     (eq_type, eq_inst)

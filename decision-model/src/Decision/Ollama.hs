@@ -158,6 +158,7 @@ replyScores question body = do
             eitherDecode body
                 >>= parseEither
                     (withObject "reply" (\o -> o .: "answers" >>= (.: Key.fromText (questionName question)) >>= (.: "probabilities")))
+    -- See Note [Scores follow option order] in Decision.
     traverse (score probabilities . optionName) (questionOptions question)
   where
     score probabilities name =

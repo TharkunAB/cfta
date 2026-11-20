@@ -83,12 +83,23 @@ insert ::
     IO Inserted
 insert equal cases t eval = insertWith Nothing (const (const False)) equal cases t (PerCase eval)
 
-{- | Insert a term, but skip the test schedule when the predicate proves
-that it equals the representative. Branch comparisons still select the
-representative. New equalities still use the complete test schedule.
-With Just n, a comparison at a leaf tests the cases after the first n in
-parallel chunks, one for each capability. The first chunk in order that does
-not agree decides, so the result is the same as in order.
+{- Note [Test order in the decision tree]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A branch stores a test case that distinguishes representatives. A leaf keeps
+an evaluator so a new candidate can run the complete schedule against that
+representative. The first distinguishing test becomes a branch. A comparison
+that cannot give a result makes the insertion untested. The supplied
+equality predicate can skip the leaf comparison after the branch tests
+select a representative.
+
+The parallel route checks the same schedule. It first runs the sequential
+prefix, then divides the rest into ordered chunks. A later chunk can stop
+when an earlier chunk has found a difference. The earliest result in schedule
+order decides the insertion, regardless of when each worker finishes.
+-}
+
+{- | Insert a term with a supplied equality predicate and an optional
+parallel test schedule. See Note [Test order in the decision tree].
 -}
 insertWith ::
     Maybe Int ->
@@ -126,8 +137,7 @@ insertWith parallelAfter known equal cases t eval = go
                 Nothing
                     | capabilities <= 1 || null rest -> maybe (EqualTo y) decide <$> firstDifference (pure False) rest
                     | otherwise -> do
-                        -- A chunk stops when a chunk before it has found a
-                        -- difference, because its result cannot decide then.
+                        -- See Note [Test order in the decision tree].
                         earliest <- newIORef (maxBound :: Int)
                         let chunk i cs = do
                                 found <- firstDifference ((< i) <$> readIORef earliest) cs

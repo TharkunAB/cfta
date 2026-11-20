@@ -88,9 +88,17 @@ import Data.CFTA.Signature (SortedFunction (..), SortedSignature (..), ValueSort
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
 import Data.CFTA.Template (Exclusion (..), Template (..))
 
+{- Note [State labels in snapshots]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A codec must decode each encoded label to its original state. Preserve the
+equality and order of the decoded states. They identify the rows and the
+targets of transitions, and they matter when a checkpoint reconstructs a
+query. The snapshot printer escapes labels. Give it unquoted text.
+-}
+
 {- | A typed codec for portable state labels. Decoding an encoded state must
-return that state and preserve equality and ordering. Labels are escaped by the
-snapshot printer; callers do not add quotes.
+return that state and preserve equality and ordering.
+See Note [State labels in snapshots].
 -}
 data StateCodec state = StateCodec
     { encodeState :: state -> Text
@@ -420,7 +428,9 @@ renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap ope
         L.Exclude name exclusion -> namedExclusionText none name exclusion
         L.Restore name -> "restore " <> nameText (L.exclusionNameText name) <> ";\n"
 
--- | Render the query and the next sized rank, then the graph in the graph format.
+{- | Render the query and the next sized rank, then the graph in the graph
+format. See Note [State labels in snapshots].
+-}
 renderCheckpoint :: (state -> Text) -> Checkpoint state -> Text
 renderCheckpoint encode checkpoint =
     built $
@@ -442,7 +452,9 @@ renderCheckpoint encode checkpoint =
     Size bound = checkpointBound checkpoint
     (Size size, ClassRank rank) = checkpointNext checkpoint
 
--- | Render the query, the weights, and the position of the run, then the graph in the graph format.
+{- | Render the query, the weights, and the position of the run, then the
+graph in the graph format. See Note [State labels in snapshots].
+-}
 renderSamplingCheckpoint :: (state -> Text) -> SamplingCheckpoint state -> Text
 renderSamplingCheckpoint encode checkpoint =
     built $
