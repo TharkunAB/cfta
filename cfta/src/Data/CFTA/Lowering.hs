@@ -4,8 +4,9 @@ version before it.
 A lowering gives each new constructor an expansion: a tree of the earlier
 language whose leaves can be the children of the lowered node. Every other
 constructor stays as it is. A lowering is a tree homomorphism, so the inverse
-image of a tree automaton under it is a tree automaton again ('lift'). This
-module handles automata without constraints.
+image of an ordinary tree automaton under it is regular. 'liftFrom' constructs
+the inverse image within a source grammar. That grammar can have constraints.
+For constrained targets, see Note [Inverse images and path equality].
 -}
 module Data.CFTA.Lowering (
     Expansion (..),
@@ -18,11 +19,12 @@ module Data.CFTA.Lowering (
     compose,
     lower,
     lift,
+    liftFrom,
     checkLowering,
     checkProductions,
 ) where
 
-import Control.Monad (forM_, replicateM, unless)
+import Control.Monad (forM_, replicateM, unless, zipWithM)
 import Data.Bifunctor (first)
 import Data.List ((!?))
 import Data.Map.Strict (Map)
@@ -31,6 +33,7 @@ import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (noConstraint)
+import Data.CFTA.Internal.Tree (explore)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -124,7 +127,9 @@ lower lowering@(Lowering expansions) (Term.Node symbol children) = do
     expand arguments (Child index) = arguments !? index
     expand arguments (Apply inner parts) = Term.Node inner <$> traverse (expand arguments) parts
 
-{- | The terms whose lowering the automaton accepts. The states stay the same.
+{- | Build an inverse image with one target state per child. The states stay
+the same. Use 'liftFrom' for an exact inverse image within a source grammar
+when a copied child can require several states or an argument is discarded.
 A transition of a new constructor goes from a state @q@ to children
 @q1 ... qk@ when the expansion, with its children at @q1 ... qk@, has a run
 from @q@. Transitions of the new constructors in the automaton itself are
@@ -156,6 +161,51 @@ lift (Lowering expansions) automaton = do
                 , state <- Set.toList $ runs known children expansion
                 ]
 
+{- | The source terms that lower to terms accepted by an ordinary target.
+Source annotations stay on their original transitions. A state holds a
+source state and the set of target states that must accept its lowering.
+The empty set still requires a well-formed lowering of that source term.
+-}
+liftFrom ::
+    (Ord source, Ord target, Ord symbol) =>
+    Lowering symbol ->
+    FTA.FTA source symbol constraint ->
+    FTA.FTA target symbol () ->
+    Either (FTA.FTAError (source, Set.Set target)) (FTA.FTA (source, Set.Set target) symbol constraint)
+liftFrom (Lowering expansions) source target =
+    FTA.trim <$> FTA.mkFTA initial (explore row FTA.transitionChildren initial)
+  where
+    initial = (FTA.initialState source, Set.singleton $ FTA.initialState target)
+    row (sourceState, required) =
+        [ FTA.Transition symbol (zipWith (withRequirements obligations) [0 ..] children) constraint
+        | FTA.Transition symbol children constraint <- FTA.transitionsFrom source sourceState
+        , let arity = length children
+        , let (expected, expansion) = Map.findWithDefault (arity, Apply symbol $ map Child [0 .. arity - 1]) symbol expansions
+        , expected == arity
+        , obligations <- Set.toList $ Set.fromList $ map merge $ traverse (demands expansion) $ Set.toList required
+        ]
+    withRequirements obligations index child = (child, Map.findWithDefault Set.empty index obligations)
+    merge = Map.unionsWith Set.union
+
+    -- See Note [Target states of a copied child].
+    demands (Child index) state = [Map.singleton index (Set.singleton state)]
+    demands (Apply symbol parts) state =
+        [ merge children
+        | FTA.Transition label states () <- FTA.transitionsFrom target state
+        , label == symbol
+        , length states == length parts
+        , children <- zipWithM demands parts states
+        ]
+
+{- Note [Target states of a copied child]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Each occurrence of a template hole can use a different target state in the
+same run. Collect all the states at each hole. A source child must satisfy
+every state collected for it. A discarded child has no target obligations,
+but it must belong to the source grammar and lower successfully. The arity
+check still applies throughout that child.
+-}
+
 {- | Check, for each production of the later grammar, that its terms lower to
 terms of the earlier grammar at the same state. A production of a new
 constructor must have its arity, and its expansion must have a run from its
@@ -171,6 +221,24 @@ checkLowering ::
     FTA.FTA state symbol constraint ->
     [LoweringError state symbol]
 checkLowering lowering earlier later = [failure | (_, _, failure) <- checkProductions lowering earlier later]
+
+{- Note [Inverse images and path equality]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Let a template rename the leaf b to a. A target can require equality of the
+children of pair. In the source, pair(c^n a, c^m b) then lowers to an accepted
+pair exactly when n = m.
+
+Choose both branches longer than every path in a proposed finite source
+automaton's root guards. A guard can name pair or c for a substitution, but
+it cannot name the hidden a or b. Cross-branch subtree equalities remain
+false. Within a branch, comparisons depend only on the fixed offsets. The
+visible refinements and path existence are also fixed. Each root transition
+therefore accepts a product of left and right lengths. Finitely many such
+products cannot express the infinite diagonal.
+
+An exact bounded query can lower each source candidate and check the target
+on its image. See Data.CFTA.Sized.Prefix.preimageCompletionsWith.
+-}
 
 -- | The failures of 'checkLowering', each with the state and the production of the later grammar.
 checkProductions ::

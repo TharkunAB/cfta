@@ -8,9 +8,11 @@ import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (noConstraint)
+import Data.CFTA.Constraint (equalityConstraint, noConstraint)
+import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Lowering (Expansion (..), ExpansionError (..), LoweringError (..))
 import qualified Data.CFTA.Lowering as Lowering
+import Data.CFTA.Path (path)
 import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Term (Term (Node))
 
@@ -32,6 +34,39 @@ spec = describe "template lowerings" $ do
             expected = Set.filter (maybe False (FTA.accepts evenValue) . Lowering.lower lowering) bounded
         Set.fromList (FTA.terms $ FTA.boundDepth 3 within) `shouldBe` expected
         Set.size expected `shouldSatisfy` (> 10)
+
+    it "lifts an ordinary target into a source grammar when a copied child needs two states" $ do
+        let target =
+                either (error . show) id $
+                    FTA.mkFTA
+                        (0 :: Int)
+                        [(0, [FTA.Transition "add" [1, 2] ()]), (1, [FTA.Transition "zero" [] ()]), (2, [FTA.Transition "zero" [] ()])]
+            both = double zero
+        lifted <- either (fail . show) pure $ Lowering.liftFrom lowering (FTA.fromTerms [both, double one]) target
+        FTA.terms lifted `shouldBe` [both]
+
+    it "retains well-formed discarded children from the source grammar" $ do
+        let projection = either (error . show) id $ Lowering.mkLowering [("fst", 2, Child 0)]
+            pair right = Node "fst" [zero, right]
+            good = pair (Node "source-only" [one])
+            malformed = pair (Node "fst" [])
+            target = FTA.mapConstraints (const ()) $ FTA.fromTerms [zero]
+        lifted <- either (fail . show) pure $ Lowering.liftFrom projection (FTA.fromTerms [malformed, good]) target
+        FTA.terms lifted `shouldBe` [good]
+
+    it "checks retained source equalities even for children the target discards" $ do
+        let equalChildren = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
+            source =
+                either (error . show) id $
+                    FTA.mkFTA
+                        (0 :: Int)
+                        [ (0, [FTA.Transition "keep" [1, 1] equalChildren])
+                        , (1, [FTA.Transition "zero" [] noConstraint, FTA.Transition "one" [] noConstraint])
+                        ]
+            constant = either (error . show) id $ Lowering.mkLowering [("keep", 2, Apply "zero" [])]
+            target = FTA.mapConstraints (const ()) $ FTA.fromTerms [zero]
+        lifted <- either (fail . show) pure $ Lowering.liftFrom constant source target
+        map (FTA.accepts lifted) [Node "keep" [zero, zero], Node "keep" [zero, one]] `shouldBe` [True, False]
 
     it "compose: lowering with a composite is lowering twice" $ do
         -- quad(x) lowers to double(double(x)), which lowers to sums.
