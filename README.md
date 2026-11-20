@@ -112,6 +112,10 @@ and parses complete graphs, source documents, and languages as readable text.
 A parsed value is equal to the saved value, so a query built on it gives the
 same ranks.
 
+The [cfta-store](cfta-store/README.md) package keeps content-addressed
+revisions of editable languages in memory or on disk. It records parents
+and supports updates and three-way merges.
+
 ## Three flagship languages
 
 The three generator APIs close a qualified-do child block in the same way, with
