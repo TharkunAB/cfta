@@ -60,6 +60,8 @@ module Data.CFTA.Refinement (
     transitionSymbol,
     transitionRefinement,
     AutomatonError (..),
+    StratificationError (..),
+    fromStratified,
     validate,
     explicitView,
     automatonAlphabet,

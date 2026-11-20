@@ -102,6 +102,10 @@ FTA, ECTA, and LTA construction forms and the rationale for the guard-lambda
 syntax.
 See [the representation levels](docs/language-levels.md) for persistence,
 editing, inspection, and resumption, including the current API boundaries.
+The [indexed trace proof](docs/proofs/IndexedTrace.lean) checks the closed
+abstract stack contracts against an independent interpreter and proves
+that reusing transition decisions preserves enumeration order. Run it with
+`lean +leanprover/lean4:v4.26.0 docs/proofs/IndexedTrace.lean`.
 
 The optional [cfta-serialization](cfta-serialization/README.md) package prints
 and parses complete graphs, source documents, and languages as readable text.

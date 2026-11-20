@@ -276,6 +276,13 @@ key: the initial state, the state rows, the production names, the fact names,
 and the exclusion names. A key that the two sides change in different ways is
 a `Conflict` with its key and its three versions.
 
+For a finite family indexed by terms, `Data.CFTA.Refinement.fromStratified`
+takes a row function and a natural-number measure on the indices. It checks
+that every reachable child index has a smaller measure than its parent.
+It builds each reached index once and retains the symbols and guards of
+its transitions. The [indexed program example](../cfta-generator/examples/CirtIndexed.hs)
+uses the size of a simple type as the measure.
+
 ## Visualize a grammar
 
 `FTA.toTree` returns a finite tree with typed labels:

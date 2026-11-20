@@ -5,6 +5,7 @@ module Data.CFTA.Gen.Refinement.BoundedGeneratorSpec (spec) where
 import Control.Exception (throwIO)
 import Control.Monad (forM_, void)
 import Data.CFTA.Formula (Sort (..))
+import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Index (Cardinality (..), Depth (..), Rank (..), Size (..))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -218,6 +219,17 @@ spec = do
                            , symbol <- ["draw", "draw", "other"]
                            ]
             length (nub $ termsOf compiled) `shouldBe` 6
+
+        it "checks literal pool claims and keeps the probability of each annotated rank" $
+            withZ3 [] $ \solver -> do
+                let zero = (0 :: Integer, (.== 0))
+                    invalid = [zero, (1, (.== 2)), (2, const Formula.Bottom)]
+                    repeated = [zero, (0, const true), (1, (.== 1))]
+                rejected <- LTAGen.checkedPool solver invalid
+                either Just (const Nothing) rejected `shouldBe` Just [1, 2]
+                checked <- LTAGen.checkedPool solver repeated >>= either (fail . show) pure
+                values checked `shouldBe` [0, 0, 1]
+                map snd (massesByRank checked) `shouldBe` replicate 3 (1 % 3)
 
         it "retains an ordinary alternative when an imported bound is empty" $
             forM_ [LTAGen.fromAutomatonUpToDepth 0 EmptyNode, LTAGen.fromAutomatonUpToDepth (-1) recursiveLists] $ \source -> do

@@ -38,10 +38,12 @@ import Data.CFTA.Gen.Refinement.Derive.Internal (
     measureNamed,
  )
 import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
+import Data.CFTA.Gen.Refinement.TestSupport (rightOrFail, values)
 import Data.CFTA.Generic (Constructor (..), HasFTA (..))
 import Data.CFTA.Index (Arity (..), Cardinality (..), Depth, Rank (..))
 import Data.CFTA.Refinement.Expression (Enumerated (..), Expr, Formula, Literal (..), Refinement, uninterpreted)
 import Data.CFTA.Refinement.Lattice (latticeEntailment)
+import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import qualified Data.CFTA.Term as Term
 
 -- | A list that its invariant keeps sorted.
@@ -215,7 +217,7 @@ pairs = LTAGen.guarded "pair" (\left right -> left .< right) $ LTAGen.do
 
 -- | The shape of a red-black tree.
 data Tree = Leaf | Black Tree Tree | Red Tree Tree
-    deriving stock (Eq, Show, Generic)
+    deriving stock (Eq, Ord, Show, Generic)
     deriving anyclass (HasFTA)
 
 -- | The measures of a tree: its black height and the color of its root.
@@ -654,6 +656,21 @@ spec = describe "Data.CFTA.Gen.Refinement.Derive" $ do
         map (measureOf atoms rules) [Cons 4 (Cons 5 Nil), Nil] `shouldBe` [4, 1000001]
     it "derives RedBlackTrees with named measures with the ranks of the two-state generator" $
         sameRanks redBlackTrees derivedTrees
+    it "compiles measured red-black trees with the support of exact black-height indices" $
+        withZ3 [] $ \solver -> do
+            let blackRooted root = col root .== 0 .&& bh root .<= 2
+                -- Both children of a black node have the same black height.
+                -- A red node can only take black-rooted children at that height.
+                nextHeight black =
+                    let children = black <> [Red l r | l <- black, r <- black]
+                     in [Black l r | l <- children, r <- children]
+                expected = concat $ take 3 $ iterate nextHeight [Leaf]
+            source <- rightOrFail $ deriveLTARooted @Tree 4 mempty blackRooted
+            ordinary <- LTAGen.compileWith solver source >>= rightOrFail
+            family <- LTAGen.compileFamilyWith solver [source] >>= rightOrFail
+            let ordered = map values $ LTAGen.familyGenerators family
+            ordered `shouldBe` [values ordinary]
+            map sort ordered `shouldBe` [sort expected]
     it "checks red-black trees with the named measures of the invariant" $ do
         let rules = invariant @Tree
         compiled <- either (fail . show) LTAGen.compile derivedTrees

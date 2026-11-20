@@ -1,5 +1,8 @@
 module Data.CFTA.Gen.Refinement.StateMachineTraceSpec (spec) where
 
+import Control.Monad (replicateM, (>=>))
+import Data.List (sort)
+import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
@@ -9,7 +12,7 @@ import qualified Data.CFTA.Gen.Refinement.QuickCheck as LTAGen
 import Data.CFTA.Gen.Refinement.StateMachineTraceLanguage
 import Data.CFTA.Gen.Refinement.TestSupport (ranks, termsOf, values)
 import qualified Data.CFTA.Gen.Refinement.TestSupport as Support
-import Data.CFTA.Index (Cardinality (..))
+import Data.CFTA.Index (Cardinality (..), Rank (..))
 import Data.CFTA.Refinement (Symbol (RefinedSymbol))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3Assuming)
 import qualified Data.CFTA.Term as Term
@@ -29,6 +32,47 @@ compileTraceOrFail traceLength =
 spec :: Spec
 spec =
     describe "liquid typed stack-machine traces" $ do
+        it "prelinks the liquid transition relation and preserves the automaton's annotated ranks" $
+            withZ3Assuming [] solverAssumptions $ \solver -> do
+                table <- deriveTraceTransitions solver >>= Support.rightOrFail
+                let states = [StackState types | n <- [0 .. maximumStackDepth], types <- replicateM n [TInt, TBool]]
+                    commands = map Push [IntValue 0, IntValue 1, BoolValue False, BoolValue True] <> [Add, And, Equal, Not, Pop]
+                    expected =
+                        [ (input, command, after)
+                        | input <- Nothing : map Just states
+                        , command <- commands
+                        , Just (_, after) <- [modelStep (fromMaybe (StackState []) input) command]
+                        ]
+                sort (traceTransitionRows table) `shouldBe` sort expected
+                let checkRanks n = do
+                        old <- compileTraceAutomaton solver n >>= Support.rightOrFail
+                        linked <- Support.rightOrFail $ prelinkedTraces table n
+                        LTAGen.cardinality old `shouldBe` Right (Cardinality $ traceCount n (StackState []))
+                        LTAGen.cardinality linked `shouldBe` LTAGen.cardinality old
+                        expectedValues <- Support.rightOrFail $ traverse (LTAGen.unrank old) (ranks old)
+                        expectedTerms <- Support.rightOrFail $ traverse (Support.termOf old) (ranks old)
+                        traverse (LTAGen.unrank linked) (ranks old) `shouldBe` Right expectedValues
+                        traverse (Support.termOf linked) (ranks old) `shouldBe` Right expectedTerms
+                mapM_ checkRanks [0 .. 3]
+                old <- compileTraceAutomaton solver 6 >>= Support.rightOrFail
+                linked <- Support.rightOrFail $ prelinkedTraces table 6
+                let count = traceCount 6 (StackState [])
+                    probes = map Rank [0, count `div` 3, count `div` 2, count - 1]
+                LTAGen.cardinality linked `shouldBe` Right (Cardinality count)
+                expectedTerms <- Support.rightOrFail $ traverse (Support.termOf old) probes
+                traverse (Support.termOf linked) probes `shouldBe` Right expectedTerms
+        it "reuses finite transition decisions across lengths and preserves every small rank" $
+            withZ3Assuming [] solverAssumptions $ \solver -> do
+                family <- compileTracesThrough solver 4 >>= Support.rightOrFail
+                separate <- traverse (compileTracesOfLength solver >=> Support.rightOrFail) [0 .. 4]
+                let compiled = LTAGen.familyGenerators family
+                map values compiled `shouldBe` map values separate
+                map termsOf compiled `shouldBe` map termsOf separate
+                map LTAGen.cardinality compiled
+                    `shouldBe` [Right $ Cardinality $ traceCount n (StackState []) | n <- [0 .. 4]]
+                LTAGen.transitionDecisions family `shouldSatisfy` (> 0)
+                LTAGen.transitionReuses family `shouldSatisfy` (> 0)
+
         it "matches the independent trace counts through length four" $ do
             compiled <- traverse compileTraceOrFail [1 .. 4]
             map LTAGen.cardinality compiled

@@ -81,9 +81,10 @@ spec = do
                     inner =
                         Substitute [Substitution (path [0]) (path [3]), Substitution (path [1]) (path [4])] $
                             Satisfies (path [5]) (variable "x" .== 0)
-                    generator guard =
+                    withActual actualRoot guard =
                         LTAGen.refinedNode "root" (const true) guard $
-                            (,,,,,) <$> actual <*> actual <*> atom "b" <*> atom "x" <*> atom "y" <*> atom "target"
+                            (,,,,,) <$> actualRoot <*> actualRoot <*> atom "b" <*> atom "x" <*> atom "y" <*> atom "target"
+                    generator = withActual actual
                     compiled guard = do
                         result <- LTAGen.compileWith solver (generator guard)
                         pure $ result >>= \g -> LTAGen.cardinality g >>= traverse (LTAGen.unrank g) . everyRank
@@ -95,6 +96,12 @@ spec = do
                 let nested = Substitute [Substitution (path [2]) (path [0])] inner
                 LTAGen.validOutcomes solver (generator nested) >>= (`shouldBe` Right [])
                 compiled nested >>= (`shouldBe` Left LTAGen.SolverUnknown)
+                -- Two identical leaves have known identity. The same guard on
+                -- compound actuals with those root labels must still fail.
+                let known = withActual (LTAGen.leaf 0 "a" (.== 0)) nested
+                _ <- compileOrFail solver known
+                family <- LTAGen.compileFamilyWith solver [known, generator nested]
+                void family `shouldBe` Left LTAGen.SolverUnknown
                 let identityScope rest =
                         Substitute ([Substitution (path [0]) (path [0]), Substitution (path [1]) (path [4])] <> rest) $
                             Satisfies (path [5]) (variable "a" .== 0)
@@ -353,7 +360,10 @@ spec = do
                                 (,) <$> LTAGen.leaf 5 "x" (const true) <*> digit
                             ]
                     sampled generator = Map.toAscList $ Map.fromListWith (+) [(value, mass) | (mass, Right value) <- runExact $ LTAGen.lowerVia generator]
-                open <- compileOrFail solver $ choice $ LTAGen.every `LTAGen.satisfying` (\v -> 8 .<= v .&& v .<= 9)
+                let openSource = choice $ LTAGen.every `LTAGen.satisfying` (\v -> 8 .<= v .&& v .<= 9)
+                open <- compileOrFail solver openSource
+                family <- LTAGen.compileFamilyWith solver [openSource] >>= rightOrFail
+                map massesByRank (LTAGen.familyGenerators family) `shouldBe` [massesByRank open]
                 closed <- compileOrFail solver $ choice $ LTAGen.elements [8, 9]
                 let expected = LTAGen.pmf $ LTAGen.upToSize 4 closed
                 LTAGen.pmf (LTAGen.upToSize 4 open) `shouldBe` expected
@@ -400,6 +410,8 @@ spec = do
             checked `shouldBe` Right [(1, 3)]
             compiled <- LTAGen.compileWith latticeEntailment mixed
             (compiled >>= LTAGen.cardinality) `shouldBe` Left LTAGen.ChildNotOneTerm
+            family <- LTAGen.compileFamilyWith latticeEntailment [mixed]
+            void family `shouldBe` Left LTAGen.ChildNotOneTerm
 
         it "refuses a guard that reads a position after a source without symbols" $
             -- The source gives its constructor no term, so the term of "p" has
