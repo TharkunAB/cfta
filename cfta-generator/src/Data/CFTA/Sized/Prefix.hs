@@ -121,6 +121,7 @@ module Data.CFTA.Sized.Prefix (
     Completions,
     prefixCompletions,
     prefixCompletionsWith,
+    preimageCompletionsWith,
     afterToken,
     afterPrefix,
     completionPrefix,
@@ -159,6 +160,7 @@ module Data.CFTA.Sized.Prefix (
     decided,
 ) where
 
+import Control.Exception (handle)
 import Control.Monad (foldM)
 import Data.Either (fromRight)
 import Data.IORef (modifyIORef', newIORef, readIORef)
@@ -178,6 +180,7 @@ import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints), unPathEClas
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
 import Data.CFTA.Interned (Node (Node), edgeChildren, fromFTA, nodeEdges, nodeIdentity, setChildren)
+import Data.CFTA.Lowering (Lowering, liftFrom, lower)
 import Data.CFTA.Path (ChildIndex (..), Path, getPath, path, unPath)
 import Data.CFTA.Ranked (Ranked, WeightedIndexed (..), fromWeightedIndexedOnDemand)
 import Data.CFTA.Ranked.Internal (fromSizeClasses)
@@ -185,7 +188,15 @@ import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..), SizeClass (..))
 import Data.CFTA.Ranked.Internal.Sampler (GenBackend (..), SampleIndex, Sampler (..), boundedMassSampler, integerMasses)
 import Data.CFTA.Ranked.Internal.Size (SizeIndex, SizedRank (..), countAtSize, sizeClassSelect, sizeClasses)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
-import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..), andVerdicts, orVerdicts)
+import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..))
+import Data.CFTA.Refinement.Verdict (
+    Entailment,
+    Verdict (..),
+    andVerdicts,
+    entailmentWithBindings,
+    entailsWithBindings,
+    orVerdicts,
+ )
 import Data.CFTA.Sized (Sized, SizedError (..), sized, sizedStates, termsOfSize)
 import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Template (Template (..), preorderPrefix, restrict)
@@ -296,6 +307,64 @@ prefixCompletionsWith entailment size automaton = case prefixCompletions size au
     Right completions -> pure completions
     Left _ -> decided =<< deciding entailment size automaton
 
+{- | The bounded source terms whose lowering the target accepts.
+
+The bound is on source nodes. The query skips source transitions whose
+minimum size exceeds the bound, then compiles the inverse of the target's
+structure. Ranks belong to this query and can differ from the ranks in the
+original source grammar.
+
+For an ordinary target, the compiled grammar gives the result directly.
+For a constrained target, the query checks the bounded candidates of that
+grammar against the source guards and the full target. It combines the two
+verdicts, preserving 'Unknown', and shares target checks over equal lowered
+subterms. A solver query that reaches its time limit gives 'Unknown'. There
+is no size bound on a lowered term.
+-}
+preimageCompletionsWith ::
+    (Ord source, Ord target) =>
+    Entailment ->
+    Size ->
+    Lowering Symbol ->
+    FTA.PlainFTA source Symbol ->
+    FTA.PlainFTA target Symbol ->
+    IO (Completions Symbol)
+preimageCompletionsWith entailment size@(Size bound) lowering source target
+    | bound < 1 = pure $ emptyPrefix $ Listed bound []
+    | otherwise = case liftFrom lowering fittingSource (FTA.mapConstraints (const ()) reachedTarget) of
+        Right preimage
+            | ordinaryTarget -> prefixCompletionsWith solver size preimage
+            | otherwise -> checkedPreimage preimage
+        Left _ -> checkedPreimage fittingSource
+  where
+    sourceRows = FTA.transitionTable source
+    minimums = Ordinary.minimumSizes sourceRows
+    fits transition = maybe False ((<= size) . (1 +) . sum) $ traverse (`Map.lookup` minimums) (FTA.transitionChildren transition)
+    fittingSource = fromRight source $ FTA.replaceRows (Map.mapMaybe fitRow sourceRows) source
+    fitRow row
+        | all fits row = Nothing
+        | otherwise = Just $ Just $ filter fits row
+    reachedTarget = FTA.trim target
+    rows = Map.map (zip [0 ..]) $ FTA.transitionTable reachedTarget
+    ordinaryTarget = all (all ((== noConstraint) . FTA.transitionConstraint . snd)) rows
+    solver = entailmentWithBindings $ \bindings given needed ->
+        handle (\(TimeLimitReached _) -> pure Unknown) $ entailsWithBindings entailment bindings given needed
+
+    checkedPreimage :: (Ord state) => FTA.PlainFTA state Symbol -> IO (Completions Symbol)
+    checkedPreimage grammar = do
+        completions <- prefixCompletionsWith solver size grammar
+        (targetVerdict, _) <- memoryOfVerdicts solver (\state -> Map.findWithDefault [] state rows)
+        let candidates = case completionsRoute completions of
+                Indexed{} -> [(term, preorder term, Yes) | term <- completionTerms completions]
+                Listed _ listed -> listed
+        checked <- traverse (check targetVerdict) candidates
+        pure $ emptyPrefix $ Listed bound [entry | entry@(_, _, verdict) <- checked, verdict /= No]
+
+    check targetVerdict (term, tokens, sourceVerdict) = do
+        verdict <-
+            andVerdicts [pure sourceVerdict, maybe (pure No) (targetVerdict $ FTA.initialState target) $ lower lowering term]
+        pure (term, tokens, verdict)
+
 {- | The completions of a prefix of an automaton with guards, whose verdicts the
 solver decides when a query needs them. The candidates and their verdicts are
 those of 'prefixCompletionsWith'. Each value of a walk shares the memories of
@@ -375,7 +444,8 @@ verdicts, so the number changes only the time of a query.
 -}
 decidingWithCap :: (Ord state) => Int -> Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO Deciding
 decidingWithCap cap entailment (Size bound) automaton = do
-    (stateVerdict, constraintVerdict) <- memoryOfVerdicts entailment numberedRows
+    (stateVerdict, constraintVerdict) <-
+        memoryOfVerdicts entailment (\state -> IntMap.findWithDefault [] state numberedRows)
     let machine =
             Machine
                 { machineTokens =
@@ -1434,10 +1504,11 @@ before its children, so a constraint that fails rejects the term without the
 verdicts of the children.
 -}
 memoryOfVerdicts ::
+    (Ord state) =>
     Entailment ->
-    IntMap.IntMap [(Int, FTA.Transition Int Symbol Constraint)] ->
-    IO (Int -> Term Symbol -> IO Verdict, Int -> Int -> Term Symbol -> IO Verdict)
-memoryOfVerdicts entailment rows = do
+    (state -> [(Int, FTA.Transition state Symbol Constraint)]) ->
+    IO (state -> Term Symbol -> IO Verdict, state -> Int -> Term Symbol -> IO Verdict)
+memoryOfVerdicts entailment row = do
     states <- newIORef Map.empty
     constraints <- newIORef Map.empty
     let remembered memory key decide = do
@@ -1448,7 +1519,6 @@ memoryOfVerdicts entailment rows = do
                     verdict <- decide
                     modifyIORef' memory $ Map.insert key verdict
                     pure verdict
-        row state = IntMap.findWithDefault [] state rows
         constraintOf state index term =
             let constraint = maybe noConstraint FTA.transitionConstraint $ lookup index $ row state
              in remembered

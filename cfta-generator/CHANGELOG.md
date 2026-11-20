@@ -13,6 +13,9 @@
 - Add `Data.CFTA.Tower` for checked definitional and abstraction extensions
   of editable languages. Preview a change before committing it, translate
   terms to the base language, and compare their meanings up to a size bound.
+- `Data.CFTA.Sized.Prefix.preimageCompletionsWith` indexes bounded source
+  terms whose lowering the target accepts. It prunes by target structure
+  before checking guards and retains undecided terms separately.
 
 Before release, the package was called `microcfta-generator`.
 

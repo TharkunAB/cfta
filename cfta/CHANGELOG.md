@@ -10,6 +10,10 @@
 - `Data.CFTA.Lowering`: `newConstructors` gives the constructors with an
   expansion, and `checkProductions` gives each failure of `checkLowering`
   with its state and production.
+- `Data.CFTA.Lowering.liftFrom` compiles the exact inverse of an ordinary
+  target within a source grammar. It retains source constraints and handles
+  templates that copy or discard children.
+
 Before release, the package was called `microcfta`.
 
 - An `FTA` allows a symbol at several arities, as an interned `Node` does.
