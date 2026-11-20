@@ -555,6 +555,20 @@ example a digit into the digits above four and the digits up to four.
 `checkAbstraction` and `checkOverlaps` of `Data.CFTA.Abstraction`, in `cfta`,
 check it with a solver.
 
+### Build a language tower
+
+`Data.CFTA.Tower` starts with an editable language and adds checked
+definitional and abstraction extensions. `previewExpand` returns the next
+language and its edit. `commit` applies the preview to the tower it was
+checked against. `meaning` translates a term down the chain to the base
+language. `keptMeaning` compares translations at adjacent versions up to
+the tower's size bound.
+
+Run `cabal run cfta-towers` for an example. It adds `double(x)` as
+`add(x, x)`, compares the meanings of the 22 original terms of size up to
+five, and rejects an extension that changes the meaning of `add`. It also
+checks that the original facts and exclusions carry forward.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
