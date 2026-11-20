@@ -555,6 +555,27 @@ example a digit into the digits above four and the digits up to four.
 `checkAbstraction` and `checkOverlaps` of `Data.CFTA.Abstraction`, in `cfta`,
 check it with a solver.
 
+### Query the inverse of a lowering
+
+`Data.CFTA.Lowering.liftFrom lowering source ordinaryTarget` builds an
+automaton for the source terms that lower into the ordinary target. The
+target has `()` annotations. The source keeps its constraints. If a
+template copies a child, each occurrence can require a different target
+state. A discarded child must still satisfy the source and lower successfully.
+
+`Data.CFTA.Sized.Prefix.preimageCompletionsWith solver bound lowering source
+target` also accepts a target with constraints. It removes source transitions
+that cannot fit the node bound or the target's structure. For a constrained
+target, it checks the complete lowered tree for each surviving candidate.
+Counts, ranks, and samples refer to terms in the compiled preimage.
+`undecidedTerms` lists candidates whose membership is unknown or whose solver
+query reached its time limit.
+
+An ordinary target lets the query use the compiled grammar without
+constructing lowered trees. Ordinary source rows can use the count index.
+The guarded route can still enumerate many terms. General inverse images of
+constrained targets can require relationships that a finite CFTA cannot express.
+
 ### Build a language tower
 
 `Data.CFTA.Tower` starts with an editable language and adds checked
