@@ -120,6 +120,10 @@ Wilf, and Feat (ranking).
 - **Conflict**: a key that the two sides of a three-way merge change in
   different ways, or that one side deletes and the other side changes. A
   conflict holds its key and its three versions.
+- **Revision** (`Revision`): a language with its parents, its origin, and its
+  metadata, in the store of `cfta-store`. Its **revision id** is the SHA-256 hash
+  of the canonical text of the language, so equal languages have one revision
+  id.
 
 ## Transformations
 
