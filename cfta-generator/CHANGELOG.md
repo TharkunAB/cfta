@@ -7,6 +7,9 @@ Before release, the package was called `microcfta-generator`.
 Initial release. `cfta-generator` is one generator over the constrained
 tree automata of `cfta`, with QuickCheck integration.
 
+- Add `Data.CFTA.Gen.Tower` to learn predicates that distinguish model
+  responses in a finite test log.
+
 - Add `fitWithReport`, `distillWithReport`, and `Model.trainWithReport`.
   Reports expose the final step, the optimizer's stopping reason, and the
   step count. Corpus fits also report retained and dropped terms. Reporting

@@ -2022,6 +2022,20 @@ With the keys from `elements [0 .. 3]` and the bound 3, `deriveLTA @AVL 3`
 gives the 25 AVL trees. A named measure reads children with one integer each,
 so draw the keys from `elements` or a pool, not `every`.
 
+### Learning predicates from observations
+
+`Data.CFTA.Gen.Tower.refine` learns a table of responses to terms with
+integer-valued leaves. Give it concrete terms, their observed responses,
+and predicate templates such as `v > k`. When two terms have the same
+abstraction but different responses, it tries one or two predicates with
+constants from the log. It reports the unresolved conflict if no candidate
+reduces the number of observations outside their class's majority response.
+
+`explore` collects observations from a plain finite tree automaton up
+to a node-count bound. It calls the model only for sampled terms accepted
+by the original automaton. `Agreed` means agreement with the recorded
+observations. The sample need not cover every accepted term.
+
 ## Component synthesis
 
 Two modules use the automata and the generators to synthesize programs from
