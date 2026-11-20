@@ -20,6 +20,7 @@ import qualified Data.CFTA.Sized.Prefix.TrainSpec
 import qualified Data.CFTA.Sized.PrefixGuardSpec
 import qualified Data.CFTA.Sized.PrefixSpec
 import qualified Data.CFTA.SizedSpec
+import qualified Data.CFTA.TowerSpec
 
 main :: IO ()
 main =
@@ -42,3 +43,4 @@ main =
         Data.CFTA.Sized.Prefix.TrainSpec.spec
         Data.CFTA.Sized.PrefixGuardSpec.spec
         Data.CFTA.ExtensionSpec.spec
+        Data.CFTA.TowerSpec.spec

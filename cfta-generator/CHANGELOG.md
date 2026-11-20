@@ -9,6 +9,11 @@
   and a production with another number of children than its expansion. Each
   report has a counterexample term, built with the smallest terms of
   `Data.CFTA.Sized`, and its lowering. Automata with constraints are rejected.
+
+- Add `Data.CFTA.Tower` for checked definitional and abstraction extensions
+  of editable languages. Preview a change before committing it, translate
+  terms to the base language, and compare their meanings up to a size bound.
+
 Before release, the package was called `microcfta-generator`.
 
 Initial release. `cfta-generator` is one generator over the constrained
