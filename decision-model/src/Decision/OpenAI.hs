@@ -128,6 +128,7 @@ replyScores :: Question -> LazyByteString.ByteString -> Either String [Double]
 replyScores question body = do
     tokens <- either (Left . ("bad reply: " <>)) Right (eitherDecode body >>= parseEither firstTokens)
     let probability label = sum [exp logprob | (token, logprob) <- tokens, Text.strip token == label]
+        -- See Note [Scores follow option order] in Decision.
         probabilities = map probability (take (length (questionOptions question)) labels)
         total = sum probabilities
     if total > 0

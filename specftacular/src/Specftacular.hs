@@ -1551,8 +1551,8 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
             ("(" ++ show (DT.size tree) ++ " representatives...)")
             lvl
             (so_far s0)
-        -- The schema goes into the decision tree of its type. It is
-        -- evaluated on the test cases of its path only.
+        -- Insert the schema in the decision tree of its type.
+        -- See Note [Test order in the decision tree] in Specftacular.DecisionTree.
         inserted <-
             diagnose env lvl (show current_ty) "schema_tests" s0 $
                 DT.insertWith parallelTests known (valuesEqual eq_inst) test_cases np_term (values np_term) tree
