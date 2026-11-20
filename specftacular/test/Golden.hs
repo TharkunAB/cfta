@@ -146,8 +146,9 @@ main :: IO ()
 main = do
     accept <- (== Just "1") <$> lookupEnv "GOLDEN_ACCEPT"
     results <- mapM (check accept) cases
+    rechecks <- retainsRecheck
     unless contextClosed $ putStrLn "FAIL the Knuth-Bendix order is not closed under contexts"
-    unless (and results && contextClosed) exitFailure
+    unless (and results && contextClosed && rechecks) exitFailure
 
 {- | Whether the Knuth-Bendix order keeps the order of two leaves in a
 context when a weight of definition is beyond the range of Int: a is greater
@@ -171,3 +172,50 @@ monomorphic = withOrder (KnuthBendix mempty)
 withOrder :: TermOrder -> Bool -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
 withOrder order checked size =
     experimentalPhases ((defaultOptions size 1){searchChecked = checked, searchTermOrder = order, searchDefinitions = True})
+
+-- | An input that first varies in the held-out schedule.
+newtype Rare = Rare Int deriving (Eq)
+
+{- | Find the equation between two terms separated from the first
+representative by a held-out case.
+-}
+retainsRecheck :: IO Bool
+retainsRecheck = do
+    laws <- mapM run [False, True]
+    let expected = "g x0_<Rare> == h x0_<Rare>"
+        found = all (elem expected . map (unwords . drop 1 . words)) laws
+    unless found $ putStrLn "FAIL: the held-out split lost the equation between g and h"
+    pure found
+  where
+    run checked =
+        searchPhases
+            ( (defaultOptions 2 1)
+                { searchRecheck = 1
+                , searchTests = 0
+                , searchChecked = checked
+                , searchProgress = False
+                , searchParallelTests = Just 0
+                }
+            )
+            recheckInstances
+            ( mconcat
+                [ con "f" (const 0 :: Rare -> Int)
+                , con "g" (\(Rare x) -> x)
+                , con "h" (\(Rare x) -> 0 + x)
+                ]
+            )
+
+{- | At size one the generator uses the seed. With no primary random
+tests, only the held-out case uses that size.
+-}
+recheckInstances :: TypeSkeleton -> Maybe Instance
+recheckInstances t
+    | t == typeSkeletonOf (Proxy :: Proxy Rare) =
+        Just
+            Instance
+                { inst_text = "Rare"
+                , inst_prefix = "x"
+                , inst_gen = Generator (\seed size -> toValue (Rare (if size == 1 then seed else 0)))
+                , inst_eq = Just (toValue ((==) :: Rare -> Rare -> Bool))
+                }
+    | otherwise = frontInstances (const Nothing) t
