@@ -11,6 +11,9 @@ module Specftacular.FiniteLaw (
     Operation (..),
     Theory,
     finiteTheory,
+    ContextFrame (..),
+    refineObservations,
+    distinguishingContext,
     ScopedLaw,
     proveOn,
     applyAt,
@@ -19,8 +22,10 @@ module Specftacular.FiniteLaw (
 ) where
 
 import Control.Monad (foldM, unless, when, zipWithM)
+import qualified Data.List.NonEmpty as NonEmpty
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (listToMaybe)
 
 import qualified Data.CFTA.EGraph as EG
 import Data.CFTA.Symbol (Symbol)
@@ -57,6 +62,103 @@ finiteTheory carriers operations = do
 -- | Find a declared finite carrier.
 carrier :: Carriers -> Term -> Either String (Map Integer Integer)
 carrier carriers sort = maybe (Left ("Unknown sort " ++ show sort)) Right (Map.lookup sort carriers)
+
+-- | An operation around the hole, with the argument values before and after it.
+data ContextFrame = ContextFrame !Symbol ![Integer] ![Integer]
+    deriving (Eq, Ord, Show)
+
+{- | Give each sort the coarsest congruence contained in its observation classes.
+See Note [Contextual observation classes].
+-}
+refineObservations :: Theory -> Theory
+refineObservations (Theory carriers ops laws) =
+    Theory (NonEmpty.last $ observationRounds (contextsOf ops) carriers) ops laws
+
+{- | Explain why two values lie in separate refined observation classes.
+
+Pass the theory with the original observations. Frames run from the hole
+outward. An empty context distinguishes values that already have different
+observations. A nonempty result uses the fewest enclosing operations.
+-}
+distinguishingContext :: Theory -> Term -> Integer -> Integer -> Either String (Maybe [ContextFrame])
+distinguishingContext (Theory carriers ops _) sort first second = do
+    values <- carrier carriers sort
+    unless (Map.member first values && Map.member second values) (Left "Value outside the observation carrier")
+    pure $ explain (reverse $ NonEmpty.toList $ observationRounds contexts carriers) sort first second
+  where
+    contexts = contextsOf ops
+    explain [] _ _ _ = Nothing
+    explain (current : earlier) input a b
+        | sameClass current input a b = Nothing
+        | null earlier = Just []
+        | Just shorter <- explain earlier input a b = Just shorter
+        | otherwise =
+            listToMaybe
+                [ frame : rest
+                | ((frame, output), table) <- contextsAt contexts input
+                , Just rest <- [explain earlier output (table Map.! a) (table Map.! b)]
+                ]
+
+-- | Unary operations obtained by fixing every argument other than the hole.
+type Contexts = Map Term (Map (ContextFrame, Term) (Map Integer Integer))
+
+-- | Collect the unary operations directly from the validated operation tables.
+contextsOf :: Map Symbol Operation -> Contexts
+contextsOf ops =
+    Map.fromListWith
+        (Map.unionWith Map.union)
+        [ (input, Map.singleton (ContextFrame name before after, output) (Map.singleton hole result))
+        | (name, Operation inputs output table) <- Map.toList ops
+        , (index, input) <- zip [0 ..] inputs
+        , (arguments, result) <- Map.toList table
+        , (before, hole : after) <- [splitAt index arguments]
+        ]
+
+-- | Read the typed contexts with the given input sort.
+contextsAt :: Contexts -> Term -> [((ContextFrame, Term), Map Integer Integer)]
+contextsAt contexts sort = Map.toList $ Map.findWithDefault Map.empty sort contexts
+
+{- Note [Contextual observation classes]
+---------------------------------------
+Round zero records the supplied classes. Each new round compares the old
+classes and the old classes of every one-hole application. By induction,
+round n distinguishes exactly the pairs that some context of depth at most
+n can distinguish. At a fixed point the classes agree under every context.
+Replacing one argument at a time then gives congruence for whole operations.
+
+Every strict round splits a finite block. Canonical labels let us compare
+partitions directly. Already-promoted laws used a congruent original
+partition, so refining it preserves their proofs of observational equality.
+-}
+
+-- | Partitions after observing contexts of increasing depth.
+observationRounds :: Contexts -> Carriers -> NonEmpty.NonEmpty Carriers
+observationRounds contexts carriers = initial NonEmpty.:| refine initial
+  where
+    initial = Map.map canonicalClasses carriers
+    refine current
+        | next == current = []
+        | otherwise = next : refine next
+      where
+        next = Map.mapWithKey (\sort -> canonicalClasses . Map.mapWithKey (observe sort)) current
+        observe sort value old =
+            ( old
+            , [ current Map.! output Map.! (table Map.! value)
+              | ((_, output), table) <- contextsAt contexts sort
+              ]
+            )
+
+-- | Use the lowest member of each class as its stable label.
+canonicalClasses :: (Ord label) => Map Integer label -> Map Integer Integer
+canonicalClasses labels = Map.map (representatives Map.!) labels
+  where
+    representatives = Map.fromListWith min [(label, value) | (value, label) <- Map.toList labels]
+
+-- | Compare two values in a given observation partition.
+sameClass :: Carriers -> Term -> Integer -> Integer -> Bool
+sameClass carriers sort a b = values Map.! a == values Map.! b
+  where
+    values = carriers Map.! sort
 
 {- Note [Promoting an observational equation]
 --------------------------------------------
