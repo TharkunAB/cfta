@@ -694,6 +694,20 @@ example a digit into the digits above four and the digits up to four.
 `checkAbstraction` and `checkOverlaps` of `Data.CFTA.Abstraction`, in `cfta`,
 check it with a solver.
 
+### Build a language tower
+
+`Data.CFTA.Tower` starts with an editable language and adds checked
+definitional and abstraction extensions. `previewExpand` returns the next
+language and its edit. `commit` applies the preview to the tower it was
+checked against. `meaning` translates a term down the chain to the base
+language. `keptMeaning` compares translations at adjacent versions up to
+the tower's size bound.
+
+Run `cabal run cfta-towers` for an example. It adds `double(x)` as
+`add(x, x)`, compares the meanings of the 22 original terms of size up to
+five, and rejects an extension that changes the meaning of `add`. It also
+checks that the original facts and exclusions carry forward.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
@@ -2237,6 +2251,20 @@ instance HasLTA AVL where
 With the keys from `elements [0 .. 3]` and the bound 3, `deriveLTA @AVL 3`
 gives the 25 AVL trees. A named measure reads children with one integer each,
 so draw the keys from `elements` or a pool, not `every`.
+
+### Learning predicates from observations
+
+`Data.CFTA.Gen.Tower.refine` learns a table of responses to terms with
+integer-valued leaves. Give it concrete terms, their observed responses,
+and predicate templates such as `v > k`. When two terms have the same
+abstraction but different responses, it tries one or two predicates with
+constants from the log. It reports the unresolved conflict if no candidate
+reduces the number of observations outside their class's majority response.
+
+`explore` collects observations from a plain finite tree automaton up
+to a node-count bound. It calls the model only for sampled terms accepted
+by the original automaton. `Agreed` means agreement with the recorded
+observations. The sample need not cover every accepted term.
 
 ## Component synthesis
 
