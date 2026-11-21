@@ -498,3 +498,46 @@ combined constraints are satisfiable.
 unsafeSubsumptionOrderedEclasses :: EqConstraints -> [PathEClass]
 unsafeSubsumptionOrderedEclasses (EqConstraints pecs) = sortBy completedSubsumptionOrdering pecs
 unsafeSubsumptionOrderedEclasses EqContradiction = error "unsafeSubsumptionOrderedEclasses: unexpected EqContradiction"
+
+-- The matches on the pattern synonyms EmptyPath and ConsPath, and on the
+-- pattern synonym EqConstraints with the constructor EqContradiction, are
+-- complete because of COMPLETE pragmas. LiquidHaskell does not read COMPLETE
+-- pragmas, so it finds the matches incomplete.
+{-@ LIQUID "--no-totality" @-}
+
+-- The recursive functions terminate:
+-- fromPathTrie and the local functions of pathTrieHasAtLeastTwoPaths and
+-- hasSubsumingMember go to a child trie or to the tails of the paths.
+-- find in normalize follows parent links in a forest without cycles: union
+-- links a root only to a different root.
+-- fixMaybe in normalize repeats a congruence step until the classes do not
+-- change, or until a class makes a path equal to one of its strict subpaths.
+-- A step can add longer paths, and no bound on the number of steps is shown
+-- here.
+-- LiquidHaskell cannot prove this with its default metric. The lazy
+-- annotation turns off the termination check of each function below and of
+-- its local functions.
+{-@ lazy pathTrieHasAtLeastTwoPaths @-}
+{-@ lazy fromPathTrie @-}
+{-@ lazy hasSubsumingMember @-}
+{-@ lazy normalize @-}
+
+-- isEqContradiction is true only for EqContradiction.
+{-@ measure isEqContradiction :: EqConstraints -> Bool
+      isEqContradiction (InternedEqConstraints n eclasses) = false
+      isEqContradiction EqContradiction = true
+@-}
+
+{-@ unsafeGetEclasses :: {c:EqConstraints | not (isEqContradiction c)} -> [PathEClass] @-}
+
+{-@ unsafeSubsumptionOrderedEclasses :: {c:EqConstraints | not (isEqContradiction c)} -> [PathEClass] @-}
+
+-- toPathTrie calls error when a path is a prefix of another path. This
+-- precondition is a relation between the paths of the list. A refinement
+-- type in this module cannot state it.
+{-@ ignore toPathTrie @-}
+
+-- combineEqConstraints calls combineEqConstraintsMemo only with two sets that
+-- are not EqContradiction. memo2 hides this from LiquidHaskell, so the local
+-- function go cannot prove the precondition of unsafeGetEclasses.
+{-@ ignore combineEqConstraintsMemo @-}

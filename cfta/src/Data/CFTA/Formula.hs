@@ -395,3 +395,19 @@ renderSort sort = case sort of
 parenthesize :: Bool -> String -> String
 parenthesize True text = "(" <> text <> ")"
 parenthesize False text = text
+
+-- These seven functions recurse into the parts of a formula, a term, or a
+-- sort, often through map, foldMap, or traverse. The plugin cannot see that
+-- each part is smaller. On simplify, the termination check stops with a panic
+-- (Prelude.!!: index too large). In each of the other six functions, the
+-- plugin finds no decreasing parameter, or it takes a parameter that does not
+-- get smaller: the list of replacements in substituteWith, and the context in
+-- renderFormula and renderTerm. These pragmas turn off the termination check
+-- for the seven functions and their locals.
+{-@ lazy simplify @-}
+{-@ lazy namesIn @-}
+{-@ lazy termNames @-}
+{-@ lazy substituteWith @-}
+{-@ lazy renderFormula @-}
+{-@ lazy renderTerm @-}
+{-@ lazy renderSort @-}

@@ -180,3 +180,12 @@ explainUpdateError :: (Show state) => UpdateError state -> String
 explainUpdateError failure = case failure of
     InvalidSource error' -> Source.explainDocumentError error'
     MissingExclusion name -> "exclusion " <> show (exclusionNameText name) <> " does not exist"
+
+-- The match on the pattern synonym Term.Node is complete because of its
+-- COMPLETE pragma. LiquidHaskell does not read COMPLETE pragmas, so it finds
+-- the match incomplete.
+{-@ LIQUID "--no-totality" @-}
+
+-- exact terminates on a finite term: each recursive call gets a child of the
+-- term. LiquidHaskell cannot see this through the pattern synonym Term.Node.
+{-@ lazy exact @-}

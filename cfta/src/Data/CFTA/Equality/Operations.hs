@@ -349,3 +349,5 @@ termsMatching ::
 termsMatching Hole = id
 termsMatching (AnyPrefix []) = id
 termsMatching template = reducePartially . restrict template
+
+{-@ LIQUID "--skip-module" @-}

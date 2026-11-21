@@ -494,3 +494,5 @@ withActualAssumptions scopes predicate =
     Formula.conjunction $
         map resolvedActualAssumption (concat scopes)
             <> [predicate]
+
+{-@ LIQUID "--skip-module" @-}

@@ -424,3 +424,40 @@ reduce entailment subtyping automaton = do
             pure $ do
                 related <- first ReductionSimilarity inferred
                 first ReductionMinimize $ minimize reduced related
+
+-- observe matches on the pattern synonym RefinedSymbol, and insertPlan
+-- matches on the pattern synonyms EmptyPath and ConsPath. These matches are
+-- complete because of COMPLETE pragmas. LiquidHaskell does not read COMPLETE
+-- pragmas, so it finds the matches incomplete.
+{-@ LIQUID "--no-totality" @-}
+
+-- The recursive functions terminate:
+-- pruneNode, pruneNodeWithin, pruneMu, and pruneEdge go down a finite
+-- interned graph. They stop at a Rec reference and at a node in the memo,
+-- and pruneMu prunes a recursive node at most pruneRounds times.
+-- specializeNode, specializeEdge, specializeChildren, readsThroughRecursion,
+-- and the local function reaches go to a child plan, a member, or a body.
+-- insertPlan gets the tail of the path.
+-- LiquidHaskell cannot prove this with its default metric. The lazy
+-- annotation turns off the termination check of each function below and of
+-- its local functions.
+{-@ lazy pruneNode @-}
+{-@ lazy pruneNodeWithin @-}
+{-@ lazy pruneMu @-}
+{-@ lazy pruneEdge @-}
+{-@ lazy specializeEdge @-}
+{-@ lazy specializeChildren @-}
+{-@ lazy readsThroughRecursion @-}
+{-@ lazy insertPlan @-}
+
+-- Open obligation: the precondition hasIdentity of nodeIdentity needs the rule
+-- that a built automaton has no EmptyNode child and no Rec other than RecInt.
+-- LiquidHaskell cannot prove this rule. LiquidHaskell does not check the body
+-- of an ignored function, so it does not check the calls of nodeIdentity in the
+-- ignored functions below.
+
+-- specializeNode calls nodeIdentity on a child of an edge. The ignore
+-- annotation also turns off the termination check of specializeNode.
+-- LiquidHaskell checks the call in pruneNodeWithin, because the clauses before
+-- it match EmptyNode and Rec.
+{-@ ignore specializeNode @-}

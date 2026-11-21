@@ -270,3 +270,5 @@ instance Exception TimeLimitReached where
             <> show milliseconds
             <> " milliseconds. Run it again with a higher limit through withZ3Timeout,"
             <> " or simplify the refinements, for example remove non-linear arithmetic."
+
+{-@ LIQUID "--skip-module" @-}

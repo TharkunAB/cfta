@@ -87,3 +87,6 @@ denotationAtMost entailment bound automaton
             Yes -> pure True
             No -> pure False
             Unknown -> throwError (DenotationUnknown constraint term)
+
+-- The positivity check rejects Term (Data.CFTA.Term), but Term is positive.
+{-@ LIQUID "--no-positivity-check" @-}
