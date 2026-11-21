@@ -21,19 +21,34 @@ import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
+import System.Directory (getTemporaryDirectory, removeFile)
+import System.IO (hClose, hPutStr, openTempFile)
 import System.Timeout (timeout)
 import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
 
+import Data.CFTA.GHC.Corpus (holeContext, newParser)
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.HoleFits (PluginOptions (..), readOptions)
 import Data.CFTA.GHC.Internal.Check (Leaf (..), complete, newEnvironment, startWalker, step)
+import Data.CFTA.GHC.Model (
+    FitModel (..),
+    fromTerms,
+    merge,
+    parseFitModel,
+    printFitModel,
+    symbolOf,
+    tokenScore,
+    tokenScoreShared,
+ )
 import Data.CFTA.GHC.NormalForm (Term (TApp, TLam, TVar), normalForm)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, rankFits, rankedFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), parseProgram, renderProgram)
 import Data.CFTA.Gen.Synthesis.Walk (preorder)
+import qualified Data.CFTA.Term as CFTA
 import Decision (DecisionModel (..), Option (..), fixedModel)
 import GHC.Builtin.Types (mkListTy)
 import GHC.Core.Type (liftedTypeKind, mkTyVarTy)
@@ -242,6 +257,70 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 fmap (fmap rankingPool . pluginRanking) (readOptions []) `shouldBe` Right Nothing
                 fmap (fmap rankingPool . pluginRanking) (readOptions ["rank-pool=10"])
                     `shouldBe` Left "rank-pool needs the option rank: the ranking is on only with rank"
+        describe "fit models" $ do
+            let leaf symbol = CFTA.Node symbol []
+                model =
+                    fromTerms
+                        ["Prelude"]
+                        (Map.fromList [("map", 2), ("length", 1)])
+                        [ ("top", CFTA.Node "length/1" [CFTA.Node "map/2" [leaf "var/0", leaf "var/0"]])
+                        , ("expr", CFTA.Node "map/2" [leaf "var/0", leaf "var/0"])
+                        ]
+            it "prints a model and reads it back, and merges two models by adding their counts" $ do
+                parseFitModel (printFitModel model) `shouldBe` Right model
+                fmap (Map.lookup ("map/2", 0, "var/0") . modelContexts) (parseFitModel (printFitModel (merge model model)))
+                    `shouldBe` Right (Just 4)
+            it "rejects a text that is not a model, with the number of the line" $ do
+                parseFitModel "fit-model 2;" `shouldSatisfy` either (const True) (const False)
+                parseFitModel "fit-model 1;\ncandidate map;" `shouldBe` Left "fit-model: line 2 is not a record: candidate map;"
+            it "scores a token in its context, mixed with the symbol alone, and names a non-candidate var" $ do
+                -- The context top 0 has one symbol seen once (mix 1/2); length/1 has
+                -- the count 1 among 7 nodes and an alphabet of 20 symbols.
+                let score = tokenScore model Set.empty
+                score Nothing 0 ("length", 1) `shouldSatisfy` (\value -> abs (value - log (1 / 2 + 1 / 2 * 2 / 27)) < 1e-12)
+                score (Just ("length", 1)) 0 ("map 2", 2) `shouldBe` score (Just ("length", 1)) 0 ("map", 2)
+                symbolOf model Set.empty ("xs", 0) `shouldBe` "var/0"
+                symbolOf model (Set.fromList ["xs"]) ("xs", 0) `shouldBe` "arg/0"
+            it "shares the probability of var among the module's names in proportion to their uses" $ do
+                let uses = Map.fromList [("helper", 3), ("other", 0)]
+                    shared = tokenScoreShared model uses ("top", 0) Set.empty Nothing 0
+                    plain = tokenScore model Set.empty Nothing 0
+                -- (3 + 1) / (3 + 2 + 1) for helper, (0 + 1) / 6 for other and for an unknown name.
+                shared ("helper", 1) - plain ("helper", 1) `shouldSatisfy` (\value -> abs (value - log (4 / 6)) < 1e-12)
+                shared ("unknown", 1) - plain ("unknown", 1) `shouldSatisfy` (\value -> abs (value - log (1 / 6)) < 1e-12)
+                shared ("length", 1) `shouldBe` plain ("length", 1)
+            it "finds the application around a hole, in the parsed module" $ do
+                parser <- newParser session
+                temporary <- getTemporaryDirectory
+                (path, handle) <- openTempFile temporary "Holes.hs"
+                let source =
+                        [ "module Holes where"
+                        , "import Data.Maybe (fromMaybe)"
+                        , "firstOr d xs = fromMaybe d _"
+                        , "pairs xs ys = zip xs (_)"
+                        , "total xs = foldr (+) _ xs"
+                        , "whole = _"
+                        , "choose b x y = if _ then x else y"
+                        , "twice f = map (\\x -> _) f"
+                        ]
+                hPutStr handle (unlines source) >> hClose handle
+                let names = Set.fromList ["fromMaybe", "zip", "foldr", "(+)"]
+                    at line = (line, 1 + length (takeWhile (/= '_') (source !! (line - 1))))
+                    context line = holeContext parser ["Prelude", "Data.Maybe"] names path (at line)
+                mapM context [3, 4, 5, 6, 7, 8]
+                    `shouldReturn` [ Just ("fromMaybe/2", 1)
+                                   , Just ("zip/2", 1)
+                                   , Just ("foldr/3", 1)
+                                   , Just ("top", 0)
+                                   , Just ("if/3", 0)
+                                   , Just ("lambda/1", 0)
+                                   ]
+                removeFile path
+            it "reads the options model, model-search, and hole-context of the plugin" $ do
+                fmap pluginModel (readOptions ["model=base.cfta"]) `shouldBe` Right (Just "base.cfta")
+                fmap pluginRerank (readOptions ["model=base.cfta"]) `shouldBe` Right True
+                fmap pluginRerank (readOptions ["model=base.cfta", "model-search=best-first"]) `shouldBe` Right False
+                fmap pluginHoleContext (readOptions ["model=base.cfta", "hole-context=off"]) `shouldBe` Right False
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->
                 it ("keep the fit of " <> name) $
