@@ -4,10 +4,12 @@
 is known at compile time. This module takes a first-order many-sorted
 signature as a plain value instead: the sorts, the function symbols with
 their argument sorts and result sort, and the root sorts. A constant is a
-function symbol with no argument sorts.
+function symbol with no argument sorts. A symbol can have several functions.
+Each of these functions is an instance of the symbol. See
+Note [Instances of a symbol] for the rule on instances.
 
 'signatureAutomaton' reads the signature as a tree automaton. Its states are
-the sorts and its transitions are the function symbols. So the operations of
+the sorts and its transitions are the functions. So the operations of
 "Data.CFTA" and "Data.CFTA.Template" apply to it. 'signatureGen' reads the
 same automaton as a generator of terms, as 'Data.CFTA.Gen.fromAutomaton'
 does. Apply 'Data.CFTA.Gen.upToSize' to the generator to get size-major
@@ -105,7 +107,10 @@ data ValueCodec sort symbol = ValueCodec
 data SignatureError sort symbol
     = -- | A function or a root names a sort that is not in the signature.
       UnknownSort !sort
-    | -- | Two functions, two values, or a function and a value have this symbol.
+    | {- | Two functions of this symbol have the same argument sorts or a
+      different number of arguments, or two values have this symbol, or a
+      function and a value have this symbol. See Note [Instances of a symbol].
+      -}
       DuplicateSymbol !symbol
     | -- | A sort is in two value sorts.
       DuplicateValueSort !sort
@@ -122,9 +127,9 @@ data SignatureError sort symbol
 {- | The automaton of a signature, for the operations of "Data.CFTA".
 
 A state is a sort, as 'Just' of the sort. The initial state is 'Nothing'. It
-has the transitions of all root sorts. Each function symbol is one transition,
-from its result sort. A signature has one transition for each symbol, so a
-term has at most one run.
+has the transitions of all root sorts. Each function is one transition, from
+its result sort. A term has at most one sort, so it has at most one run. See
+Note [Instances of a symbol].
 
 The signature must have no value sort. Use 'signatureAutomatonWith' for a
 signature with value sorts.
@@ -259,7 +264,41 @@ holds :: (Ord symbol) => ValueCodec sort symbol -> ValueSource symbol -> symbol 
 holds codec (Interval low high) symbol = maybe False (\n -> low <= n && n <= high) (projectInteger codec symbol)
 holds _ (Pool symbols) symbol = symbol `elem` symbols
 
--- | Find the first unknown sort, the first duplicate symbol, or the first value problem.
+{- Note [Instances of a symbol]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A symbol can have several functions in a signature. Each of these functions
+is an instance of the symbol. For example, @eq : Int, Int -> Bool@ and
+@eq : Bool, Bool -> Bool@ are two instances of @eq@.
+
+The rule: the functions of a symbol have the same number of arguments, and no
+two of them have the same argument sorts. 'checkSignatureWith' refuses a
+signature that breaks the rule with 'DuplicateSymbol'.
+
+With the rule, a term has at most one sort. The proof is by induction on the
+term. A value has one sort, because two value sorts share no value and a value
+is not a function symbol. At a node, suppose that each child has at most one
+sort. Then the sorts of the children decide the instance: at most one function
+of the symbol has these sorts as its argument sorts. So the node has at most
+one sort.
+
+Then 'signatureAutomaton' has at most one run for each term. The states of
+two sorts accept no common term, because a term has at most one sort. So
+'Data.CFTA.Gen.fromAutomaton' does not find the automaton ambiguous. The
+generator then gives each term one rank, and its counts are the numbers of
+distinct terms.
+
+The rule refuses a constant at two sorts, for example @nil : List Int@ and
+@nil : List Bool@. The two constants have the same argument sorts: none. So
+the term @nil@ would have two sorts and two runs, and a count would count it
+two times.
+
+All the functions of a symbol have one number of arguments. So 'WrongArity'
+gives one number of arguments for the symbol.
+-}
+
+{- | Find the first unknown sort, the first symbol that breaks the rule of
+Note [Instances of a symbol], or the first value problem.
+-}
 checkSignatureWith ::
     (Ord sort, Ord symbol) =>
     Maybe (ValueCodec sort symbol) -> SortedSignature sort symbol -> Either (SignatureError sort symbol) ()
@@ -267,7 +306,7 @@ checkSignatureWith codec signature = do
     case find (`notElem` sortedSorts signature) used of
         Just sort -> Left $ UnknownSort sort
         Nothing -> Right ()
-    case duplicates (map functionSymbol (sortedFunctions signature)) of
+    case [symbol | (symbol, functions) <- Map.toList (instancesOf signature), clash (map functionArguments functions)] of
         symbol : _ -> Left $ DuplicateSymbol symbol
         [] -> Right ()
     case codec of
@@ -278,6 +317,12 @@ checkSignatureWith codec signature = do
         concat [functionResult function : functionArguments function | function <- sortedFunctions signature]
             <> sortedRoots signature
             <> map valueSort (sortedValues signature)
+    -- The same argument sorts two times, or two numbers of arguments.
+    clash arguments = length (nubOrd arguments) /= length arguments || length (nubOrd (map length arguments)) /= 1
+
+-- | The functions of each symbol, in the order of the signature.
+instancesOf :: (Ord symbol) => SortedSignature sort symbol -> Map.Map symbol [SortedFunction sort symbol]
+instancesOf signature = Map.fromListWith (flip (<>)) [(functionSymbol function, [function]) | function <- sortedFunctions signature]
 
 duplicates :: (Ord a) => [a] -> [a]
 duplicates symbols = Map.keys $ Map.filter (> (1 :: Int)) $ Map.fromListWith (+) [(symbol, 1) | symbol <- symbols]
@@ -306,7 +351,8 @@ checkValues codec signature = do
         [] -> Right ()
   where
     values = sortedValues signature
-    functionSymbols = map functionSymbol (sortedFunctions signature)
+    -- The instances of a symbol share the symbol, so each symbol occurs once here.
+    functionSymbols = nubOrd (map functionSymbol (sortedFunctions signature))
     placeholders = [valueSymbol codec (valueSort value) | value <- values]
     pairs xs = [(x, y) | x : rest <- tails xs, y <- rest]
     emptySource (Interval low high) = high < low
@@ -332,14 +378,26 @@ data TypeError sort symbol
         !Int
         -- | The number of children of the node.
         !Int
-    | {- | A child has a sort that differs from the argument sort of the
-      function.
+    | {- | The symbol has one function, and a child has a sort that differs
+      from the argument sort of the function.
       -}
       WrongChildSort
         !Path
         !symbol
         -- | The argument sorts of the function.
         [sort]
+        -- | The sorts of the children, from left to right. A child that is not well-typed has no sort.
+        [Maybe sort]
+    | {- | The symbol has several instances, and the sorts of the children fit
+      no instance. An instance fits when each child with a sort has the
+      argument sort of the instance at its position. See
+      Note [Instances of a symbol].
+      -}
+      NoInstance
+        !Path
+        !symbol
+        -- | The argument sorts of each instance, in the order of the signature.
+        [[sort]]
         -- | The sorts of the children, from left to right. A child that is not well-typed has no sort.
         [Maybe sort]
     | -- | The term is well-typed at the root, but its sort is not a root sort.
@@ -357,10 +415,15 @@ data TypeError sort symbol
 {- | Check that a term is a term of the signature, and find its sort.
 
 A node is not well-typed if its symbol is unknown, if it has the wrong number
-of children, or if a well-typed child has a sort that the function does not
-accept at that argument. The error names the first such node in preorder. A
+of children, or if the sorts of its well-typed children fit no function of the
+symbol. A function fits when each well-typed child has the argument sort of the
+function at its position. The error names the first such node in preorder. A
 child that is not well-typed has no sort, so its parent is not in error for
 that child. The error then names the node in that child.
+
+For a symbol with one function, the error at the node is 'WrongChildSort'.
+For a symbol with several instances, it is 'NoInstance'. The sorts of the
+children decide the instance. See Note [Instances of a symbol].
 
 The sort of the term must be a root sort. Then 'typeCheck' accepts exactly the
 terms that 'signatureAutomaton' accepts.
@@ -404,23 +467,28 @@ checkWith valueOf signature term0 = check [] term0 >>= rootSort
         | sort' `elem` sortedRoots signature = Right sort'
         | otherwise = Left $ NotRootSort sort'
 
-    functions = Map.fromList [(functionSymbol function, function) | function <- sortedFunctions signature]
+    functions = instancesOf signature
 
-    check reversed term = case Map.lookup symbol functions of
-        Nothing -> case valueOf symbol of
+    -- The instances of a symbol have one number of arguments, so the first
+    -- instance gives it. See Note [Instances of a symbol].
+    check reversed term = case Map.findWithDefault [] symbol functions of
+        [] -> case valueOf symbol of
             Just sort'
                 | null children -> Right sort'
                 | otherwise -> Left $ WrongArity here symbol 0 (length children)
             Nothing -> Left $ UnknownFunction here symbol
-        Just function
-            | length expected /= length children -> Left $ WrongArity here symbol (length expected) (length children)
-            | any mismatch (zip expected found) ->
-                Left $ WrongChildSort here symbol expected (map (either (const Nothing) Just) results)
-            | otherwise -> (functionResult function <$ sequence results)
+        instances@(function : _)
+            | arity /= length children -> Left $ WrongArity here symbol arity (length children)
+            | otherwise -> case filter fits instances of
+                fitting : _ -> functionResult fitting <$ sequence results
+                [] -> Left $ case instances of
+                    [_] -> WrongChildSort here symbol (functionArguments function) found
+                    _ -> NoInstance here symbol (map functionArguments instances) found
           where
-            expected = functionArguments function
+            arity = length (functionArguments function)
             results = [check (index : reversed) subterm | (index, subterm) <- zip [0 ..] children]
             found = map (either (const Nothing) Just) results
+            fits candidate = not (any mismatch (zip (functionArguments candidate) found))
       where
         symbol = Term.rootLabel term
         children = Term.subForest term
@@ -433,8 +501,9 @@ checkWith valueOf signature term0 = check [] term0 >>= rootSort
 data SortingError state sort symbol
     = -- | A state with transitions has no sort.
       UnsortedState !state
-    | {- | A transition of a state is neither a function from the sorts of its
-      children to the sort of the state, nor a value of the sort of the state.
+    | {- | A transition of a state fits no function of its symbol, from the
+      sorts of its children to the sort of the state, and it is not a value of
+      the sort of the state.
       -}
       IllSortedTransition
         !state
@@ -444,11 +513,13 @@ data SortingError state sort symbol
     deriving (Eq, Show)
 
 {- | Check that a map from the states of an automaton to sorts fits a
-signature. Each transition @f(q1, ..., qn)@ of a state @q@ must be a function
-@f@ with the sorts of @q1, ..., qn@ as its argument sorts and the sort of @q@
-as its result sort. The map is then a homomorphism from the automaton to
-'signatureAutomaton' of the signature, so each term of a state is a term of
-its sort. A state without transitions needs no sort.
+signature. Each transition @f(q1, ..., qn)@ of a state @q@ must fit a function
+of the symbol @f@: the function has the sorts of @q1, ..., qn@ as its argument
+sorts and the sort of @q@ as its result sort. For a symbol with several
+instances, one instance must fit. See Note [Instances of a symbol]. The map is
+then a homomorphism from the automaton to 'signatureAutomaton' of the
+signature, so each term of a state is a term of its sort. A state without
+transitions needs no sort.
 
 The symbols of the automaton must be the symbols of the signature. For an
 automaton with refined symbols, check @'FTA.mapSymbols' unrefined@ of it.
@@ -484,17 +555,18 @@ checkSortsOf ::
     Either (SortingError state sort symbol) ()
 checkSortsOf valueOf signature sorts automaton = mapM_ row $ Map.toList $ FTA.transitionTable automaton
   where
-    functions = Map.fromList [(functionSymbol f, (functionArguments f, functionResult f)) | f <- sortedFunctions signature]
+    functions = instancesOf signature
     row (_, []) = Right ()
     row (state, edges) = case Map.lookup state sorts of
         Nothing -> Left $ UnsortedState state
         Just sort -> mapM_ (edge state sort) edges
+    -- See Note [Instances of a symbol].
     edge state sort transition
-        | fmap expected (Map.lookup symbol functions) == Just (childSorts, sort) = Right ()
+        | any fits (Map.findWithDefault [] symbol functions) = Right ()
         | null children, valueOf symbol == Just sort = Right ()
         | otherwise = Left $ IllSortedTransition state symbol childSorts
       where
         symbol = FTA.transitionSymbol transition
         children = FTA.transitionChildren transition
         childSorts = map (`Map.lookup` sorts) children
-        expected (inputs, result) = (map Just inputs, result)
+        fits function = map Just (functionArguments function) == childSorts && functionResult function == sort

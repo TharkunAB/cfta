@@ -15,11 +15,12 @@ import Data.CFTA.Constraint (Constraint, noConstraint)
 import Data.CFTA.Gen (Gen)
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.ManySorted
-import Data.CFTA.Index (Cardinality (..), everyRank)
+import Data.CFTA.Index (Cardinality (..), Size (..), everyRank)
 import Data.CFTA.Path (ChildIndex (..), path)
+import Data.CFTA.Sized (countOfSize, sized, termsOfSize)
 import Data.CFTA.Term (Term (Node))
 
-data Sort = Int | Bool
+data Sort = Int | Bool | List Sort
     deriving (Eq, Ord, Show)
 
 type Signature = SortedSignature Sort String
@@ -37,6 +38,25 @@ arithmetic =
             , SortedFunction "ite" [Bool, Int, Int] Int
             ]
         , sortedRoots = [Int, Bool]
+        , sortedValues = []
+        }
+
+-- | Sorts Int, Bool, List Int, and List Bool. The symbols ite, eq, cons, and length have instances.
+instanced :: Signature
+instanced =
+    SortedSignature
+        { sortedSorts = [Int, Bool, List Int, List Bool]
+        , sortedFunctions =
+            [ SortedFunction "zero" [] Int
+            , SortedFunction "true" [] Bool
+            , SortedFunction "nil@Int" [] (List Int)
+            , SortedFunction "nil@Bool" [] (List Bool)
+            ]
+                <> [SortedFunction "ite" [Bool, s, s] s | s <- [Int, Bool, List Int, List Bool]]
+                <> [SortedFunction "eq" [s, s] Bool | s <- [Int, Bool]]
+                <> [SortedFunction "cons" [s, List s] (List s) | s <- [Int, Bool]]
+                <> [SortedFunction "length" [List s] Int | s <- [Int, Bool]]
+        , sortedRoots = [Int, Bool, List Int, List Bool]
         , sortedValues = []
         }
 
@@ -92,6 +112,10 @@ bruteForce signature = terms
         , others <- arguments rest (budget - firstSize)
         ]
 
+-- | The distinct terms of the root sorts with exactly the given number of nodes, in order.
+distinctTerms :: Signature -> Int -> [Term String]
+distinctTerms signature size = Set.toList $ Set.fromList $ concat [bruteForce signature root size | root <- sortedRoots signature]
+
 bounded :: Signature -> Gen String (Term String)
 bounded signature = case signatureGen signature of
     Right generator -> Gen.upToSize (fromIntegral maxSize) generator
@@ -100,11 +124,11 @@ bounded signature = case signatureGen signature of
 members :: Gen String (Term String) -> [Term String]
 members generator = either (error . show) id (Gen.values generator)
 
--- | Every term with the given number of nodes, over the symbols of the signature and one more, with any arity from zero to three.
-untypedTerms :: Int -> [Term String]
-untypedTerms size =
+-- | Every term with the given number of nodes, over some symbols, with any arity from zero to three.
+untypedTerms :: [String] -> Int -> [Term String]
+untypedTerms symbols size =
     [ Node symbol children
-    | symbol <- ["zero", "one", "add", "lt", "ite", "foo"]
+    | symbol <- symbols
     , arity <- [0 .. 3]
     , children <- split arity (size - 1)
     ]
@@ -114,7 +138,7 @@ untypedTerms size =
     split n budget =
         [ first : rest
         | firstSize <- [1 .. budget]
-        , first <- untypedTerms firstSize
+        , first <- untypedTerms symbols firstSize
         , rest <- split (n - 1 :: Int) (budget - firstSize)
         ]
 
@@ -181,7 +205,7 @@ spec = describe "Data.CFTA.Gen.ManySorted" $ do
 
     it "accepts exactly the terms that the automaton accepts, among untyped terms" $ do
         automaton <- either (fail . show) pure $ signatureAutomaton arithmetic{sortedRoots = [Bool]}
-        let untyped = concatMap untypedTerms [1 .. 5]
+        let untyped = concatMap (untypedTerms ["zero", "one", "add", "lt", "ite", "foo"]) [1 .. 5]
         length untyped `shouldSatisfy` (> 1000)
         mapM_
             (\term -> (isRight (typeCheck arithmetic{sortedRoots = [Bool]} term), term) `shouldBe` (FTA.accepts automaton term, term))
@@ -219,6 +243,94 @@ spec = describe "Data.CFTA.Gen.ManySorted" $ do
         checkSorts digits sorts graph `shouldBe` Left (IllSortedTransition "Digit" "#7" [])
         checkSortsWith codec digits sorts (graphOf "Digit" [("Digit", [edge "#12" []])])
             `shouldBe` Left (IllSortedTransition "Digit" "#12" [])
+
+    describe "instances of a symbol" $ do
+        let instanceGenerator = bounded instanced
+            instanceTerms = members instanceGenerator
+
+        it "accepts instances with different argument sorts, and rejects instances that clash" $ do
+            failure (signatureGen instanced) `shouldBe` Nothing
+            let with extra = instanced{sortedFunctions = sortedFunctions instanced <> extra}
+            failure (signatureGen (with [SortedFunction "eq" [Int, Int] Bool])) `shouldBe` Just (DuplicateSymbol "eq")
+            failure (signatureGen (with [SortedFunction "eq" [Int, Int] Int])) `shouldBe` Just (DuplicateSymbol "eq")
+            failure (signatureGen (with [SortedFunction "eq" [Int] Bool])) `shouldBe` Just (DuplicateSymbol "eq")
+            failure (signatureGen (with [SortedFunction "nil" [] (List Int), SortedFunction "nil" [] (List Bool)]))
+                `shouldBe` Just (DuplicateSymbol "nil")
+
+        it "gives each term at most one sort" $
+            mapM_
+                ( \size -> do
+                    let bySort = concat [bruteForce instanced sort' size | sort' <- sortedSorts instanced]
+                    Set.size (Set.fromList bySort) `shouldBe` length bySort
+                )
+                [1 .. maxSize]
+
+        it "counts the distinct terms in the automaton and in the generator" $ do
+            automaton <- either (fail . show) pure $ signatureAutomaton instanced
+            classes <- either (fail . show) pure $ sized automaton
+            mapM_
+                ( \size -> do
+                    let distinct = distinctTerms instanced size
+                    countOfSize classes (Size (fromIntegral size)) `shouldBe` Cardinality (fromIntegral (length distinct))
+                    sort (termsOfSize classes (Size (fromIntegral size))) `shouldBe` distinct
+                    Gen.countAtSize instanceGenerator (fromIntegral size) `shouldBe` Right (Cardinality (fromIntegral (length distinct)))
+                )
+                [1 .. maxSize]
+            let everyTerm = concatMap (distinctTerms instanced) [1 .. maxSize]
+            length everyTerm `shouldSatisfy` (> 500)
+            Gen.cardinality instanceGenerator `shouldBe` Right (Cardinality (fromIntegral (length everyTerm)))
+            sort instanceTerms `shouldBe` sort everyTerm
+            Set.size (Set.fromList instanceTerms) `shouldBe` length instanceTerms
+
+        it "gives rank back for every term" $
+            mapM_
+                (\rank -> (Gen.unrank instanceGenerator rank >>= Gen.rankOfTerm instanceGenerator) `shouldBe` Right rank)
+                (everyRank (Cardinality (fromIntegral (length instanceTerms))))
+
+        it "accepts exactly the terms that the automaton accepts, among untyped terms" $ do
+            let roots = instanced{sortedRoots = [Int, Bool]}
+                untyped = concatMap (untypedTerms ["zero", "true", "nil@Int", "nil@Bool", "ite", "eq", "cons", "length", "foo"]) [1 .. 4]
+            automaton <- either (fail . show) pure $ signatureAutomaton roots
+            length untyped `shouldSatisfy` (> 10000)
+            mapM_ (\term -> (isRight (typeCheck roots term), term) `shouldBe` (FTA.accepts automaton term, term)) untyped
+            sort (filter (isRight . typeCheck roots) untyped) `shouldBe` sort (concatMap (distinctTerms roots) [1 .. 4])
+
+        it "chooses the instance by the sorts of the children" $ do
+            typeCheck instanced (Node "eq" [Node "true" [], Node "true" []]) `shouldBe` Right Bool
+            typeCheck instanced (Node "length" [Node "cons" [Node "true" [], Node "nil@Bool" []]]) `shouldBe` Right Int
+            typeCheck instanced (Node "ite" [Node "true" [], Node "nil@Int" [], Node "nil@Int" []]) `shouldBe` Right (List Int)
+
+        it "rejects children that fit no instance" $
+            typeCheck instanced (Node "eq" [Node "zero" [], Node "true" []])
+                `shouldBe` Left (NoInstance (path []) "eq" [[Int, Int], [Bool, Bool]] [Just Int, Just Bool])
+
+        it "names the parent when the children with a sort fit no instance" $
+            typeCheck instanced (Node "ite" [Node "zero" [], Node "foo" [], Node "zero" []])
+                `shouldBe` Left
+                    ( NoInstance
+                        (path [])
+                        "ite"
+                        [[Bool, Int, Int], [Bool, Bool, Bool], [Bool, List Int, List Int], [Bool, List Bool, List Bool]]
+                        [Just Int, Nothing, Just Int]
+                    )
+
+        it "names the child when the children with a sort fit an instance" $
+            typeCheck instanced (Node "eq" [Node "zero" [], Node "eq" [Node "zero" [], Node "true" []]])
+                `shouldBe` Left (NoInstance (path [ChildIndex 1]) "eq" [[Int, Int], [Bool, Bool]] [Just Int, Just Bool])
+
+        it "rejects a wrong number of children for a symbol with instances" $
+            typeCheck instanced (Node "eq" [Node "zero" []]) `shouldBe` Left (WrongArity (path []) "eq" 2 1)
+
+        it "checks a map from states to sorts against the instances of a symbol" $ do
+            automaton <- either (fail . show) pure $ signatureAutomaton instanced{sortedRoots = [Bool]}
+            checkSorts instanced (Map.fromList ((Nothing, Bool) : [(Just s, s) | s <- sortedSorts instanced])) automaton
+                `shouldBe` Right ()
+            let graph children = graphOf "Test" [("Test", [edge "eq" children]), ("Small", [edge "zero" []]), ("Truth", [edge "true" []])]
+                sorts = Map.fromList [("Test", Bool), ("Small", Int), ("Truth", Bool)]
+            checkSorts instanced sorts (graph ["Small", "Small"]) `shouldBe` Right ()
+            checkSorts instanced sorts (graph ["Truth", "Truth"]) `shouldBe` Right ()
+            checkSorts instanced sorts (graph ["Small", "Truth"])
+                `shouldBe` Left (IllSortedTransition "Test" "eq" [Just Int, Just Bool])
   where
     failure = either Just (const Nothing)
     stateTerms state = FTA.terms sortedGraph{FTA.initialState = state}

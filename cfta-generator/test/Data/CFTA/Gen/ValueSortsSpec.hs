@@ -5,6 +5,7 @@ against the type checker.
 module Data.CFTA.Gen.ValueSortsSpec (spec) where
 
 import Data.List (sort)
+import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import Data.CFTA.Gen (Gen)
@@ -149,6 +150,28 @@ spec = describe "Data.CFTA.Gen.ManySorted value sorts" $ do
             untyped = concatMap (untypedTerms symbols) [1 .. 4]
         length untyped `shouldSatisfy` (> 1000)
         mapM_ (\term -> (term, typeCheckWith codec signature term) `shouldBe` (term, typeCheck oracle term)) untyped
+
+    it "counts, ranks, and type checks a symbol with instances over a value sort" $ do
+        let instanced = signature{sortedFunctions = sortedFunctions signature <> [SortedFunction "eq" [s, s] Bool | s <- [Int, Bool, Color]]}
+            reference =
+                Set.fromList
+                    [term | size <- [1 .. maxSize], root <- sortedRoots instanced, term <- bruteForce (expanded instanced) root size]
+            instanceGenerator = bounded instanced
+            instanceTerms = members instanceGenerator
+        mapM_
+            ( \size ->
+                Gen.countAtSize instanceGenerator (fromIntegral size)
+                    `shouldBe` Right (Cardinality (fromIntegral (Set.size (Set.filter ((== size) . length) reference))))
+            )
+            [1 .. maxSize]
+        length instanceTerms `shouldSatisfy` (> 1000)
+        sort instanceTerms `shouldBe` Set.toList reference
+        mapM_
+            (\term -> typeCheckWith codec instanced term `shouldSatisfy` either (const False) (`elem` sortedRoots instanced))
+            instanceTerms
+        mapM_
+            (\rank -> (Gen.unrank instanceGenerator rank >>= Gen.rankOfTerm instanceGenerator) `shouldBe` Right rank)
+            (everyRank (Cardinality (fromIntegral (length instanceTerms))))
 
     it "rejects a value outside its source and a value with a child" $ do
         typeCheckWith codec signature (Node "add" [Node "#0" [], Node "#3" []])
