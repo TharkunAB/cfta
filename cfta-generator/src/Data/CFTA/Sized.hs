@@ -187,7 +187,7 @@ fromTable rows key = \state ->
             | rank >= 0 && Cardinality rank < count size =
                 Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
             | otherwise = Nothing
-        position = Ordinary.tablePosition (key state) rows
+        position = Ordinary.tablePosition (const Nothing) (key state) rows
      in Sized
             { sizedTermsFrom = \size (ClassRank from) ->
                 let Cardinality total = count size
@@ -197,7 +197,7 @@ fromTable rows key = \state ->
             , sizedRank = fmap (\(SizedRank size rank) -> (size, rank)) . position
             }
   where
-    indexOf = Ordinary.tableIndexes rows
+    indexOf = Ordinary.tableIndexes (const Nothing) rows
 
 {- | The size classes of an automaton, each built from its definition.
 
