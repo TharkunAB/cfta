@@ -2,10 +2,40 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add `Data.CFTA.Refinement.Sequent`: `sequent` reads a formula as a
+  geometric sequent, with its universally bound names, the atoms of its body,
+  and the existentially quantified conjunctions of its head, or gives the
+  part where it leaves that form. It normalizes implications, double
+  negations, nested quantifiers, and quantifiers that move to the top.
+  `shape` tells a Horn clause from another geometric sequent, and
+  `sequentFormula` writes a sequent as a formula.
 - Add `Data.CFTA.Signature`: the data of a first-order many-sorted
   signature, `SortedSignature`, `SortedFunction`, `ValueSort`, and
   `ValueSource`. `Data.CFTA.Gen.ManySorted` of `cfta-generator` re-exports
   them, so a package can print and read a signature without `cfta-generator`.
+- Generalize refinement formulas with global predicate applications and named
+  data sorts. Unsupported Z3 interpretations return `Unknown`.
+- Add `Data.CFTA.Refinement.Definition`: predicate definitions in the formula
+  language. `unfold` checks the sorts and replaces each defined predicate by
+  its body without variable capture. `withZ3Definitions` gives Z3 the
+  unfolded queries.
+- Add `Data.CFTA.Refinement.Ground`: an entailment that evaluates ground
+  queries with Haskell interpretations of named functions and predicates. A
+  query that is not ground gives `Unknown`. `fallback` asks a second
+  entailment when the first gives `Unknown`. `unfoldKeeping` keeps the
+  interpreted predicates in place during unfolding.
+- Add `Data.CFTA.Refinement.Theory`: datatypes and structurally recursive
+  definitions of functions and predicates in the formula language. `theory`
+  checks them. `theoryInterpretations` gives ground evaluation their
+  meanings, and `predicateDefinitions` gives the predicates that unfold
+  exactly. Add `Data.CFTA.Refinement.SmtLib`: SMT-LIB text for a theory and
+  for an entailment. `Data.CFTA.Refinement.Definition` exports its sort
+  check, `checkFormula` and `termSort`.
+- Add `Data.CFTA.Refinement.Z3Process`: `withZ3Theory` decides the
+  entailments of a theory with one Z3 process, and `withZ3TheoryTimeout`
+  sets the time limit of each query. `cfta` depends on `process`
+  (ADR 0015). `entailmentCommands` gives the commands of one query without
+  the theory.
 - Add `Data.CFTA.Abstraction`: `checkAbstraction` checks with a solver that
   the refined variants of each production cover its refinement and add no
   value, and `checkOverlaps` reports two variants with a common value as a

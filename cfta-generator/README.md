@@ -2326,6 +2326,55 @@ to a node-count bound. It calls the model only for sampled terms accepted
 by the original automaton. `Agreed` means agreement with the recorded
 observations. The sample need not cover every accepted term.
 
+### The geometric sequents of a theory
+
+`Data.CFTA.Gen.Refinement.Sequent` lists the geometric sequents over the
+symbols of a `Theory` of `cfta`. A geometric sequent has the form
+`forall xs. a1 && ... && ak ==> (exists ys. b1 && ...) || ...`, where each
+`ai` and each `bi` is an atom (`Data.CFTA.Refinement.Sequent`). The
+quantifiers are the binders of a scoped signature, so the well-sorted
+sequents are the language of one automaton. `sequentSignature` gives the
+signature from a theory and `SequentSettings`: the comparisons at each sort,
+the integer literals, the sorts that a binder can have, and the bound on the
+nested binders. The sorts are `Int` and the datatypes of the theory that have
+a value. A binder sort must be one of these sorts, and an empty list of binder
+sorts gives only the sequents without variables.
+`scopedAutomaton sequentCodec` gives the automaton, and `Data.CFTA.Sized`
+counts, lists, ranks, and unranks its terms by size. The ranks are the same
+in each process. `readSequent` gives the `Sequent` of a term, and it names
+the binders `x0`, `x1`, and so on, from the outside in. `writeSequent` gives
+the term of a `Sequent`, or a `WriteError` for an unknown name, a wrong sort,
+or more binders than the bound.
+
+```haskell
+let signature =
+        sequentSignature lists $
+            SequentSettings
+                { sequentRelations = [(IntSort, [Eq]), (list, [Eq])]
+                , sequentLiterals = [0]
+                , sequentBinderSorts = [IntSort, list]
+                , sequentBinders = 3
+                }
+automaton <- either (fail . show) pure (scopedAutomaton sequentCodec signature)
+classes <- either (fail . show) pure (sized automaton)
+term <- either (fail . show) pure (writeSequent signature cases)
+print (rankOfSize classes term)
+print (readSequent =<< unrankOfSize classes 20 134284394)
+```
+
+Here `lists` is a theory of integer lists with `append` and `reverse`, and
+`cases` is the sequent
+`forall xs. xs == nil || exists h t. xs == cons(h, t)`. The rank is
+`Just (20,134284394)`, and the sequent at that rank is `cases` with the
+binders `x0`, `x1`, and `x2`. The language holds each order of the atoms as a
+different term, and it holds sequents with a binder that no atom uses.
+`Note [Sequents as terms]` in the module gives the other limits. Run the
+complete example:
+
+```sh
+cabal run cfta-sequents
+```
+
 ## Component synthesis
 
 Two modules use the automata and the generators to synthesize programs from
