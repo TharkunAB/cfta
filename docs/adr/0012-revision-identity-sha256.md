@@ -25,10 +25,25 @@ the parents, the origin, or the metadata. `cfta-store` depends on
 - The identity is a function of the language. Two processes, or two branches
   of one history, give the same identity to the same language without
   coordination.
-- A cryptographic hash makes a collision of two different languages
-  negligible. Thus the store can treat equal identities as equal languages,
-  and it can check the language of a revision file against the name of the
-  file.
+- The store needs two properties of the hash. The function must have one
+  definition, the same on each machine and in each release, because an
+  identity is kept on disk. And it must have enough bits that two different
+  languages do not get one identity by accident, because `putRevision`
+  returns an identity that exists without a comparison of the texts. SHA-256
+  is a standard with 256 bits, so it has both.
+- The store does not need the cryptographic strength of SHA-256. It trusts
+  its own directory, so nobody makes a collision on purpose. The strength
+  costs little: the hash is 4 to 5% of the time to make an identity, and the
+  rest is the time to print the canonical text.
+
+  | Canonical text | Print the text | SHA-256 |
+  |---|---|---|
+  | 0.6 MiB | 30 ms | 1.3 ms |
+  | 6.3 MiB | 332 ms | 13 ms |
+  | 21.5 MiB | 1,100 ms | 56 ms |
+
+  One evaluation each, CPU time, GHC 9.14.1 with `-O1`, on a Ryzen 9 7950X
+  under WSL2.
 - The dependency is in the one package that needs it.
 
 ## Consequences
@@ -55,5 +70,11 @@ the parents, the origin, or the metadata. `cfta-store` depends on
   Each history then has its own identity, so one language on two branches is
   two revisions, and the question "is this language in the store" needs a
   second index.
-- A shorter hash that is not cryptographic. A collision would then join two
-  different languages, and the store would not see it.
+- A fast hash with 128 bits that is not cryptographic. It has the two
+  properties that the store needs. It saves about half of the 4 to 5%, and it
+  needs a dependency as SHA-256 does.
+- FNV-1a with 64 bits, written in the package, with no dependency. For a
+  million revisions, two languages get one identity by accident with a
+  probability of about 3 in 100 million. `putRevision` would then have to
+  compare the texts when an identity exists, so that a collision is an error
+  and not a silent join of two languages.
