@@ -46,6 +46,16 @@ Wilf, and Feat (ranking).
 - **Overlap**: a term of the whole that two parts accept, with the indexes of
   the two parts. A term of two parts that the whole rejects is not an
   overlap.
+- **Linearization**: the texts around the children of each symbol, which give
+  the text of a term: the first text, the text of the first child, the second
+  text, and so on. A lowering gives a term; a linearization gives a text. Do
+  not call the texts of a symbol a template: a template belongs to a template
+  lowering. A *linearization by state* gives the texts by the state and the
+  symbol of a transition, so the text of a term depends on its run.
+- **Brackets**: an opening and a closing text around the text of a state: the
+  state itself, or another state whose terms then count as terms of the
+  state. The text in brackets has the term of the text inside, so a term with
+  brackets has more than one text.
 - **Graph snapshot**: a stored explicit graph with its symbols, refinements,
   constraints, states, and transitions. It need not retain the source facts
   from which its compiled constraints were made.
