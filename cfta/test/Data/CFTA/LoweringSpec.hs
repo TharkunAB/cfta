@@ -4,11 +4,25 @@
 module Data.CFTA.LoweringSpec (spec) where
 
 import Control.Monad ((>=>))
+import Data.List (nub)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
+import Test.QuickCheck (
+    Gen,
+    Property,
+    checkCoverage,
+    choose,
+    counterexample,
+    cover,
+    elements,
+    forAll,
+    frequency,
+    property,
+    vectorOf,
+ )
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (equalityConstraint, noConstraint)
+import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Lowering (Expansion (..), ExpansionError (..), LoweringError (..))
 import qualified Data.CFTA.Lowering as Lowering
@@ -105,6 +119,10 @@ spec = describe "template lowerings" $ do
     it "reject an expansion with a child out of range" $
         Lowering.mkLowering [("double", 1, Apply "add" [Child 0, Child 1 :: Expansion Symbol])]
             `shouldBe` Left (ChildOutOfRange "double" 1)
+
+    it "lift a source grammar to the terms that it accepts and whose lowering a target accepts"
+        $ checkCoverage
+        $ forAll genLiftCase liftFromAgrees
   where
     zero = Node "zero" []
     one = Node "one" []
@@ -155,3 +173,102 @@ evenValue =
   where
     leaf symbol = FTA.Transition symbol [] noConstraint
     sum' left right = FTA.Transition "add" [left, right] noConstraint
+
+-- | A lowering, the rows of a source table, and the rows of a target table.
+type LiftCase = ([(Symbol, Int, Expansion Symbol)], Rows, Rows)
+
+-- | The transitions of each state of a table with states 0, 1, and so on.
+type Rows = [(Int, [FTA.Transition Int Symbol Constraint])]
+
+-- | The symbols that an expansion can use, with their arities.
+baseSymbols :: [(Symbol, Int)]
+baseSymbols = [("a", 0), ("b", 0), ("g", 1), ("f", 2)]
+
+-- | The new constructors, with their arities.
+newSymbols :: [(Symbol, Int)]
+newSymbols = [("n", 2), ("m", 1), ("k", 2)]
+
+-- | An expansion of the given depth at most, with the children of a constructor with the given arity as leaves.
+genExpansion :: Int -> Int -> Gen (Expansion Symbol)
+genExpansion arity depth
+    | depth == 0 = child
+    | otherwise = frequency [(1, child), (3, apply)]
+  where
+    child = Child <$> choose (0, arity - 1)
+    -- A symbol with more children is more frequent, so that an expansion has several leaves.
+    apply = do
+        (symbol, n) <- frequency [(n + 1, pure (symbol, n)) | (symbol, n) <- baseSymbols]
+        Apply symbol <$> vectorOf n (genExpansion arity (depth - 1))
+
+-- | A table with the given number of states and of transitions for each state. Pairs of children can have an equality.
+genRows :: Int -> Int -> [(Symbol, Int)] -> Bool -> Gen Rows
+genRows states perState symbols withEquality = mapM row [0 .. states - 1]
+  where
+    row state = (,) state . nub <$> vectorOf perState transition
+    transition = do
+        (symbol, n) <- elements symbols
+        children <- vectorOf n $ choose (0, states - 1)
+        constraint <- frequency [(if withEquality && n == 2 then 1 else 0, pure equal), (2, pure noConstraint)]
+        pure $ FTA.Transition symbol children constraint
+    equal = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
+
+-- | A lowering of the new constructors, a source table over all symbols, and a target table over the base symbols.
+genLiftCase :: Gen LiftCase
+genLiftCase =
+    (,,)
+        <$> mapM (\(symbol, arity) -> (,,) symbol arity <$> genExpansion arity 3) newSymbols
+        <*> genRows 2 5 (baseSymbols <> newSymbols) True
+        <*> genRows 3 4 baseSymbols False
+
+-- | The terms over the symbols with at most the given number of nodes.
+termsUpTo :: Int -> [(Symbol, Int)] -> [Term Symbol]
+termsUpTo bound symbols = concatMap sized [1 .. bound]
+  where
+    sized n = [Node symbol kids | (symbol, arity) <- symbols, kids <- forest arity (n - 1)]
+    forest 0 0 = [[]]
+    forest 0 _ = []
+    forest k n = [t : rest | m <- [1 .. n - (k - 1)], t <- sized m, rest <- forest (k - 1) (n - m)]
+
+-- | The terms that the lifted automaton and the specification are compared on.
+comparedTerms :: [Term Symbol]
+comparedTerms = termsUpTo 5 (baseSymbols <> newSymbols)
+
+{- | The lifted automaton accepts a term exactly when the source accepts it and the target accepts its lowering.
+The counterexample shows the first term with two different verdicts.
+-}
+liftFromAgrees :: LiftCase -> Property
+liftFromAgrees (entries, sourceRows, targetRows) =
+    case built of
+        Left failure -> counterexample ("invalid case: " <> failure) False
+        Right (lowering', source, target) -> case Lowering.liftFrom lowering' source (FTA.mapConstraints (const ()) target) of
+            Left failure -> counterexample ("liftFrom failed: " <> show failure) False
+            Right lifted ->
+                let verdict term =
+                        ( FTA.accepts lifted term
+                        , FTA.accepts source term && maybe False (FTA.accepts target) (Lowering.lower lowering' term)
+                        )
+                    differing = [(term, got, want) | term <- comparedTerms, let (got, want) = verdict term, got /= want]
+                    accepted = [got | term <- comparedTerms, FTA.accepts source term, let (got, _) = verdict term]
+                 in cover 50 (or accepted && not (and accepted)) "the lifted automaton accepts some and rejects some terms of the source" $
+                        cover 30 (any copies entries) "an expansion uses a child two times" $
+                            cover 30 (any drops entries) "an expansion drops a child" $
+                                cover 30 (any single entries) "an expansion is one child" $
+                                    case differing of
+                                        [] -> property True
+                                        (term, got, want) : _ ->
+                                            counterexample ("first difference: " <> show term <> ", lifted " <> show got <> ", specification " <> show want) False
+  where
+    built =
+        (,,)
+            <$> fromError (Lowering.mkLowering entries)
+            <*> fromError (FTA.mkFTA 0 sourceRows)
+            <*> fromError (FTA.mkFTA 0 targetRows)
+    fromError :: (Show e) => Either e a -> Either String a
+    fromError = either (Left . show) Right
+    copies (_, _, expansion) = let used = indices expansion in length used /= length (nub used)
+    drops (_, arity, expansion) = length (nub $ indices expansion) < arity
+    single (_, _, expansion) = case expansion of
+        Child _ -> True
+        Apply _ _ -> False
+    indices (Child index) = [index]
+    indices (Apply _ parts) = concatMap indices parts
