@@ -261,7 +261,9 @@ A language stores its named exclusions as `exclude NAME = root TEMPLATE;` or
 without names, as `exclude root TEMPLATE;` or `exclude anywhere TEMPLATE;`.
 Both use one grammar rule, `exclusion-body`. Templates use `_` for a hole, `f(a, b)` for
 an exact node, `_(a, b)` for any symbol with those children, and a final `...`
-for a prefix. Thus `f(...)` and `_(...)` differ from exact leaves. Templates keep
+for a prefix. `_x` is a named hole: it matches any subterm, as `_` does, and
+gives it the name `x`. No space comes between `_` and the name. A template
+quotes a symbol whose name starts with `_`, such as `"_f"(a)`. Thus `f(...)` and `_(...)` differ from exact leaves. Templates keep
 complete symbol refinements, so a term printed after `eraseRefinements` does not
 select the same terms. See [editable languages](../docs/editable-languages.md)
 for the updates that change a language before you save it.
@@ -440,7 +442,7 @@ exclusion       = "exclude" exclusion-body ;
 exclusion-body  = ( "root" | "anywhere" ) template ";" ;
 plain-graph     = "graph" "1" ";" "start" name ";" plain-row* ;
 plain-row       = "state" name "{" graph-edge* "}" ";"? ;
-template        = ( "_" | symbol ) template-args? ;
+template        = "_" name | ( "_" | symbol ) template-args? ;
 template-args   = "(" ( "..." | template ( "," template )* ( "," "..." )? )? ")" ;
 
 constraint      = "equal" "(" ( path ( "," path )* )? ")"
