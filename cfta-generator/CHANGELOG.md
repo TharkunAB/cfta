@@ -2,6 +2,8 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Carry named predicates through child substitution and measured constructors.
+  The logical result value can have a solver-defined data type.
 - `Data.CFTA.Sized.Prefix`: `stepToken` and `stepPrefix` add tokens only when
   the tokens are offered, and otherwise give a `Refusal`: the token is
   rejected, the token is undecided, or the prefix is a whole term.
