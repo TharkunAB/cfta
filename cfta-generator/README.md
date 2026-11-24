@@ -384,6 +384,70 @@ stale (`StaleRow`, `StaleExclusions`, `StaleWeights`). It also rejects another v
 come from the checkpoint. `printSamplingCheckpoint` of cfta-serialization
 saves it with its graph.
 
+### Language inclusion
+
+`Data.CFTA.Inclusion` checks whether one explicit `FTA` accepts every term
+of another. `inclusionUpTo n left right` gives `IncludedUpTo n`
+when the right automaton accepts each term of the left automaton with at
+most `n` nodes. Otherwise it gives `NotIncluded` with a smallest
+counterexample: a term that the left automaton accepts and the right
+automaton rejects. Of the counterexamples of that size, it gives the one with
+the smallest class rank in the left automaton. For automata without
+constraints, the order of the rows does not change the result. For each
+size, the check compares the count of the left automaton with the count of
+the intersection of the two automata, with `Data.CFTA.Sized`.
+`inclusion left right` checks without a bound, with the bottom-up antichain
+algorithm of Bouajjani, Habermehl, Holík, Touili, and Vojnar (CIAA 2008). It
+gives `Included`, or the counterexample that `inclusionUpTo` gives.
+
+The checks take different constraints. `inclusion` takes only automata
+without constraints, and `inclusionUpTo` also takes equality constraints.
+`inclusionUpToWith entailment n left right` takes any guard, and the solver
+decides it on each term, as in `sizedUpTo`. When the solver answers `Unknown`
+for a guard on a term, the check stops at the size of that term. The result
+is then a counterexample below that size, or `UnknownAt` with that size. A
+constraint that a check does not take gives `ConstrainedLeft` or
+`ConstrainedRight`.
+
+`partitionUpTo n whole parts` checks a list of automata, the parts, against
+one automaton, the whole. The cover is `CoveredUpTo n`, or `Gap` with a
+smallest term of the whole that no part accepts. The disjointness is
+`DisjointUpTo n`, or `Overlap` with a smallest term of the whole that two
+parts accept and the indexes of the first two such parts. A term of two parts
+that the whole rejects is not an overlap. `partition whole parts` checks
+without a bound, for automata without constraints, and gives `Covered` and
+`Disjoint` in place of the bounded results.
+
+```haskell
+module Main (main) where
+
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (noConstraint)
+import Data.CFTA.Inclusion (inclusion, inclusionUpTo)
+
+-- | Binary trees, and the binary trees whose left children are leaves.
+main :: IO ()
+main = do
+    trees <- either (fail . show) pure $ FTA.mkFTA "tree" [("tree", [leaf, node "tree" "tree"])]
+    combs <- either (fail . show) pure $ FTA.mkFTA "comb" [("comb", [leaf, node "leaf" "comb"]), ("leaf", [leaf])]
+    print (inclusionUpTo 9 combs trees)
+    print (inclusionUpTo 9 trees combs)
+    print (inclusion combs trees)
+    print (inclusion trees combs)
+  where
+    leaf = FTA.Transition "leaf" [] noConstraint
+    node left right = FTA.Transition "node" [left, right] noConstraint
+```
+
+The output is:
+
+```text
+Right (IncludedUpTo 9)
+Right (NotIncluded (Node "node" [Node "node" [Node "leaf" [],Node "leaf" []],Node "leaf" []]))
+Right Included
+Right (NotIncluded (Node "node" [Node "node" [Node "leaf" [],Node "leaf" []],Node "leaf" []]))
+```
+
 ### The completions of a prefix
 
 `Data.CFTA.Sized.Prefix` reads the terms of an automaton one node at a time,
@@ -712,6 +776,39 @@ Run `cabal run cfta-towers` for an example. It adds `double(x)` as
 `add(x, x)`, compares the meanings of the 22 original terms of size up to
 five, and rejects an extension that changes the meaning of `add`. It also
 checks that the original facts and exclusions carry forward.
+
+### Review an update of a language
+
+A `Language` of `Data.CFTA.Language` is a value with named exclusions, so a
+caller can ask what each exclusion does before the caller keeps an update.
+Three questions have an exact answer:
+
+1. What does this exclusion alone remove? Apply `Language.restore` to the
+   name. Compile both languages with `Language.compileGraph`. Count both with
+   `Data.CFTA.Sized.sized` up to a size bound. The difference is the number of
+   terms that only this exclusion removes.
+2. Which term shows it? `Data.CFTA.Inclusion.inclusion` of the language
+   without the exclusion in the full language gives the smallest term that
+   only this exclusion removes. When it gives `Included`, the exclusion is
+   redundant: the other exclusions remove every term that it removes, at every
+   size.
+3. Does the update keep my examples? Keep a list of terms that must be
+   members and a list of terms that must not be. `Data.CFTA.accepts` on the
+   compiled language gives the verdict of each term. Refuse an update that
+   changes a verdict, and report the term.
+
+The same recipe works for a named fact that is an equality of two children.
+Use `Language.relax` in place of `Language.restore`, and `inclusionUpTo` in
+place of `inclusion`, because `inclusion` refuses an automaton with a
+constraint (`ConstrainedLeft` or `ConstrainedRight`). Thus a fact has a count
+and a smallest term, but no proof of redundancy for all sizes.
+
+Run `cabal run cfta-language-review` for an example. It has arithmetic
+expressions with four named exclusions. For each exclusion, it prints the
+count of the terms of up to nine nodes that only it removes and the smallest
+such term, or that the exclusion is redundant. It then refuses an update that
+changes the verdict of an example term, and it does the same questions for a
+fact. The program checks each printed value.
 
 ## Equality-constrained generators
 

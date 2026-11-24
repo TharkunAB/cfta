@@ -4,6 +4,7 @@
 Each revision records its parents, how it was made, and its metadata. Its
 `RevisionId` is the SHA-256 hash of the canonical language text produced by
 `printLanguageWith` and the store's state codec.
+[ADR 12](../docs/adr/0012-revision-identity-sha256.md) records the decision.
 
 Open a store with `newMemoryStore codec` or
 `openDirectory codec "language-history"`. Use `genesis store language mempty`

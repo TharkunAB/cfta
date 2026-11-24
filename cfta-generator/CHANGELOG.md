@@ -67,6 +67,33 @@
   where the mask refuses a sum with two different children.
   `cfta-guided-search` runs a guided search with the scorer of a model that
   prefers `a+b`, and the mask keeps the equality in each found term.
+- Add the example `cfta-language-review`. It shows how to review an update
+  of a `Language` before keeping it: the terms that each named exclusion alone
+  removes, the smallest term that shows it or that it is redundant, and the
+  examples that an update changes. It uses `restore`, `compileGraph`, `sized`,
+  `inclusion`, and `accepts`. A named fact has the same answers with `relax`
+  and `inclusionUpTo`, but `inclusion` refuses its constraint.
+- `Data.CFTA.Inclusion`: `inclusion` decides whether one explicit automaton
+  accepts every term of another, and `inclusionUpTo` decides it up to a size
+  bound. The result is `Included`, `IncludedUpTo` with the bound, or
+  `NotIncluded` with a smallest counterexample: a term that the first
+  automaton accepts and the second rejects. For each size, `inclusionUpTo`
+  compares the count of the first automaton with the count of the
+  intersection, with `Data.CFTA.Sized`. `inclusion` uses the bottom-up
+  antichain algorithm, and then `inclusionUpTo` to find the smallest
+  counterexample. `inclusion` accepts only automata without constraints, and
+  `inclusionUpTo` also accepts equality constraints. `inclusionUpToWith`
+  accepts any guard and decides it with a solver, through `sizedUpTo`. When
+  the solver does not decide a guard on a term, it stops at the size of that
+  term, with `UnknownAt` or a counterexample below that size. A constraint
+  that a check does not accept is `ConstrainedLeft` or `ConstrainedRight`.
+  `partitionUpTo` and `partition` check a list of parts against a whole:
+  whether the parts cover the whole, with a smallest `Gap` otherwise, and
+  whether they are disjoint within it, with a smallest `Overlap` and the
+  indexes of its two parts otherwise. `partitionUpTo` takes equality
+  constraints; `partition` decides without a bound for automata without
+  constraints.
+
 - Add `Data.CFTA.Extension`: `checkExtension` checks that a later automaton
   is a definitional extension of an earlier automaton by a template lowering.
   It reports another initial state, a lost or changed old production, an old

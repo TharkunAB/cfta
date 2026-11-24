@@ -18,6 +18,7 @@ import qualified Data.CFTA.Gen.TowerSpec
 import qualified Data.CFTA.Gen.TypingSpec
 import qualified Data.CFTA.GenSpec
 import qualified Data.CFTA.GuidedSpec
+import qualified Data.CFTA.InclusionSpec
 import qualified Data.CFTA.Mask.TextSpec
 import qualified Data.CFTA.Mask.VocabularySpec
 import qualified Data.CFTA.MaskSpec
@@ -56,3 +57,4 @@ main =
         Data.CFTA.Sized.PrefixGuardSpec.spec
         Data.CFTA.ExtensionSpec.spec
         Data.CFTA.TowerSpec.spec
+        Data.CFTA.InclusionSpec.spec
