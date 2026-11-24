@@ -2,6 +2,12 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add the example `cfta-language-review`. It shows how to review an update
+  of a `Language` before keeping it: the terms that each named exclusion alone
+  removes, the smallest term that shows it or that it is redundant, and the
+  examples that an update changes. It uses `restore`, `compileGraph`, `sized`,
+  `inclusion`, and `accepts`. A named fact has the same answers with `relax`
+  and `inclusionUpTo`, but `inclusion` refuses its constraint.
 - `Data.CFTA.Inclusion`: `inclusion` decides whether one explicit automaton
   accepts every term of another, and `inclusionUpTo` decides it up to a size
   bound. The result is `Included`, `IncludedUpTo` with the bound, or
