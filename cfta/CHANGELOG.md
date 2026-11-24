@@ -2,6 +2,10 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add `Data.CFTA.Signature`: the data of a first-order many-sorted
+  signature, `SortedSignature`, `SortedFunction`, `ValueSort`, and
+  `ValueSource`. `Data.CFTA.Gen.ManySorted` of `cfta-generator` re-exports
+  them, so a package can print and read a signature without `cfta-generator`.
 - Add `Data.CFTA.Abstraction`: `checkAbstraction` checks with a solver that
   the refined variants of each production cover its refinement and add no
   value, and `checkOverlaps` reports two variants with a common value as a

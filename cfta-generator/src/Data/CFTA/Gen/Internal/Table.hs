@@ -1,6 +1,7 @@
 -- | Shared size indexing for ordinary, possibly recursive automata.
 module Data.CFTA.Gen.Internal.Table (
     EqualChildren,
+    LeafSource (..),
     tableIndex,
     tableIndexes,
     tablePosition,
@@ -36,9 +37,10 @@ import qualified Data.Set as Set
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalities, residual)
 import Data.CFTA.Equality.Constraint (EqConstraints, subsumptionOrderedEclasses, unPathEClass)
-import Data.CFTA.Index (Arity (..), Size, TransitionIndex (..), childIndexes)
+import Data.CFTA.Index (Arity (..), Cardinality, ClassRank (..), Rank (..), Size, TransitionIndex (..), childIndexes)
 import Data.CFTA.Interned (NodeId (..), canonicalClasses)
 import Data.CFTA.Path (ChildIndex (..), unPath)
+import Data.CFTA.Ranked.Internal.Decoder (Plan (PlanSelect))
 import Data.CFTA.Ranked.Internal.Sampler (
     SampleIndex,
     choiceMassSampleIndex,
@@ -61,10 +63,24 @@ import Data.CFTA.Ranked.Internal.Size (
     productIndex,
     productPosition,
     scaleIndex,
+    sizeIndex,
     withKnotMetadata,
  )
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
+
+{- | A nullary symbol that stands for many leaves.
+
+The symbol is one transition of the rows. Its leaves are the terms of 'leafTerm'
+for the ranks below 'leafCount'. Each leaf has size one. 'leafRank' is the
+inverse of 'leafTerm': it gives 'Nothing' for a term that the source does not
+hold. The source does not list its leaves.
+-}
+data LeafSource symbol = LeafSource
+    { leafCount :: !Cardinality
+    , leafTerm :: Rank -> Term symbol
+    , leafRank :: Term symbol -> Maybe Rank
+    }
 
 {- | The classes of equal children of a transition: in each class, the child
 positions whose subterms are equal. A class has two positions or more, its
@@ -82,15 +98,23 @@ before supplying ordinary rows. This worker does not interpret constraints;
 it reads only the classes of equal children.
 -}
 tableIndex ::
-    (Ord state) => state -> Map.Map state [FTA.Transition state symbol EqualChildren] -> SizeIndex (Term symbol)
-tableIndex initial rows = fst (stateTable rows) initial
+    (Ord state) =>
+    (symbol -> Maybe (LeafSource symbol)) ->
+    state ->
+    Map.Map state [FTA.Transition state symbol EqualChildren] ->
+    SizeIndex (Term symbol)
+tableIndex leafOf initial rows = fst (stateTable leafOf rows) initial
 
 {- | The size index of each state of the rows, as 'tableIndex' gives it.
 Apply the function to the rows once: the states then share one table.
 -}
 tableIndexes ::
-    (Ord state) => Map.Map state [FTA.Transition state symbol EqualChildren] -> state -> SizeIndex (Term symbol)
-tableIndexes rows = fst (stateTable rows)
+    (Ord state) =>
+    (symbol -> Maybe (LeafSource symbol)) ->
+    Map.Map state [FTA.Transition state symbol EqualChildren] ->
+    state ->
+    SizeIndex (Term symbol)
+tableIndexes leafOf rows = fst (stateTable leafOf rows)
 
 {- | Find the size class and the position in it of a term that the initial
 state accepts, as 'tableIndex' selects the term.
@@ -103,20 +127,34 @@ function to the rows once: each term then uses the same counts.
 -}
 tablePosition ::
     (Ord state, Ord symbol) =>
-    state -> Map.Map state [FTA.Transition state symbol EqualChildren] -> Term symbol -> Maybe SizedRank
-tablePosition initial rows = Map.lookup initial . termPositions rows (stateTable rows)
+    (symbol -> Maybe (LeafSource symbol)) ->
+    state ->
+    Map.Map state [FTA.Transition state symbol EqualChildren] ->
+    Term symbol ->
+    Maybe SizedRank
+tablePosition leafOf initial rows = Map.lookup initial . termPositions leafOf rows (stateTable leafOf rows)
 
 -- | The size and position of a term in each state that accepts it, from the table of the rows.
 termPositions ::
     (Ord state, Ord symbol) =>
+    (symbol -> Maybe (LeafSource symbol)) ->
     Map.Map state [FTA.Transition state symbol EqualChildren] ->
     ( state -> SizeIndex (Term symbol)
     , state -> [(FTA.Transition state symbol EqualChildren, NonEmpty (SizeIndex ([Term symbol] -> Term symbol)))]
     ) ->
     Term symbol ->
     Map.Map state SizedRank
-termPositions rows (indexOf, prefixesOf) = positionsOf
+termPositions leafOf rows (indexOf, prefixesOf) = positionsOf
   where
+    -- The transitions of leaf sources, to find the source that holds a leaf.
+    leafCandidates =
+        [ (state, branch, source, indexes)
+        | state <- Map.keys rows
+        , let indexes = map (NonEmpty.last . snd) $ prefixesOf state
+        , (branch, (transition, _)) <- zip [0 :: TransitionIndex ..] $ prefixesOf state
+        , null (FTA.transitionChildren transition)
+        , Just source <- [leafOf (FTA.transitionSymbol transition)]
+        ]
     -- The candidates by symbol and arity. The candidates of a state share
     -- its transition indexes, so they are built once for each state.
     -- TODO: The candidates of a key are a Seq that grows in order; lists that
@@ -138,14 +176,9 @@ termPositions rows (indexOf, prefixesOf) = positionsOf
     -- The size and position of a term in each state that accepts it. The
     -- index of a state is a choice over its transitions, so the index of a
     -- transition is its choice index.
-    positionsOf (Term.Node symbol children) =
-        Map.fromList
-            [ (state, SizedRank size (choicePosition indexes (ChoiceIndex branch) size position))
-            | (state, TransitionIndex branch, transition, prefixes, indexes) <-
-                toList $ Map.findWithDefault Empty (symbol, length children) candidates
-            , Just childPositions <- [zipWithM Map.lookup (FTA.transitionChildren transition) childMaps]
-            , Just (SizedRank size position) <- [transitionPosition transition prefixes childPositions]
-            ]
+    positionsOf term@(Term.Node symbol children)
+        | null children && not (null leafCandidates) = ordinary <> leaves
+        | otherwise = ordinary
       where
         childMaps = map positionsOf children
 
@@ -173,6 +206,22 @@ termPositions rows (indexOf, prefixesOf) = positionsOf
             productPosition prefix index built childPosition
         scaledRank factor (SizedRank size rank) = SizedRank (fromIntegral factor * size) rank
 
+        leaves =
+            Map.fromList
+                [ (state, SizedRank 1 (choicePosition indexes (ChoiceIndex branch) 1 (ClassRank position)))
+                | (state, TransitionIndex branch, source, indexes) <- leafCandidates
+                , Just (Rank position) <- [leafRank source term]
+                ]
+
+        ordinary =
+            Map.fromList
+                [ (state, SizedRank size (choicePosition indexes (ChoiceIndex branch) size position))
+                | (state, TransitionIndex branch, transition, prefixes, indexes) <-
+                    toList $ Map.findWithDefault Empty (symbol, length children) candidates
+                , Just childPositions <- [zipWithM Map.lookup (FTA.transitionChildren transition) childMaps]
+                , Just (SizedRank size position) <- [transitionPosition transition prefixes childPositions]
+                ]
+
 {- | The size index of each state, and the transitions of each state with the
 indexes of their child prefixes.
 
@@ -182,17 +231,18 @@ index, which recursive references to the state share.
 -}
 stateTable ::
     (Ord state) =>
+    (symbol -> Maybe (LeafSource symbol)) ->
     Map.Map state [FTA.Transition state symbol EqualChildren] ->
     ( state -> SizeIndex (Term symbol)
     , state -> [(FTA.Transition state symbol EqualChildren, NonEmpty (SizeIndex ([Term symbol] -> Term symbol)))]
     )
-stateTable rows = (indexOf, prefixesOf)
+stateTable leafOf rows = (indexOf, prefixesOf)
   where
     minima = minimumSizes rows
     prefixTable = LazyMap.map (map $ \transition -> (transition, childPrefixes transition)) rows
       where
         childPrefixes transition =
-            NonEmpty.scanl consumeChild (seed transition) (childIndexesOf transition)
+            NonEmpty.scanl consumeChild (seed leafOf transition) (childIndexesOf transition)
     -- Sampling reads this index. It is built directly, not as the last child
     -- prefix, because an index from the prefix list made each sample slower
     -- (about 1% more instructions in the sampling benchmarks).
@@ -207,7 +257,7 @@ stateTable rows = (indexOf, prefixesOf)
 
         transitionIndex transition =
             mapIndex ($ []) $
-                foldl' consumeChild (seed transition) (childIndexesOf transition)
+                foldl' consumeChild (seed leafOf transition) (childIndexesOf transition)
     -- The indexes of the children that the table reads. The first child of a
     -- class of equal children fills each position of the class.
     childIndexesOf transition = case FTA.transitionConstraint transition of
@@ -227,17 +277,25 @@ stateTable rows = (indexOf, prefixesOf)
     emptyIndex = choiceIndex []
 
 {- | The index of a transition before its children: the symbol, with its pay.
-The term of a class of equal children fills each position of the class.
+A leaf source gives its leaves, each of size one. The term of a class of equal
+children fills each position of the class.
 -}
-seed :: FTA.Transition state symbol EqualChildren -> SizeIndex ([Term symbol] -> Term symbol)
-seed transition = payIndex $ constantIndex $ case FTA.transitionConstraint transition of
-    [] -> Term.Node symbol
-    classes ->
-        let groups = childGroupsOf (length $ FTA.transitionChildren transition) classes
-         in \terms ->
-                Term.Node symbol
-                    $ IntMap.elems
-                    $ IntMap.fromList [(position, term) | (group, term) <- zip groups terms, ChildIndex position <- group]
+seed ::
+    (symbol -> Maybe (LeafSource symbol)) ->
+    FTA.Transition state symbol EqualChildren ->
+    SizeIndex ([Term symbol] -> Term symbol)
+seed leafOf transition = case leafOf symbol of
+    Just source
+        | null (FTA.transitionChildren transition) ->
+            mapIndex const $ sizeIndex $ PlanSelect (leafCount source) (leafTerm source)
+    _ -> payIndex $ constantIndex $ case FTA.transitionConstraint transition of
+        [] -> Term.Node symbol
+        classes ->
+            let groups = childGroupsOf (length $ FTA.transitionChildren transition) classes
+             in \terms ->
+                    Term.Node symbol
+                        $ IntMap.elems
+                        $ IntMap.fromList [(position, term) | (group, term) <- zip groups terms, ChildIndex position <- group]
   where
     symbol = FTA.transitionSymbol transition
 
@@ -291,9 +349,10 @@ prefixedTable ::
     )
 prefixedTable plainRows = table
   where
+    -- The completions use no leaf source.
     rows = Map.map (map ([] <$)) plainRows
-    stateIndexes@(indexOf, prefixesOf) = stateTable rows
-    positionsOf = termPositions rows stateIndexes
+    stateIndexes@(indexOf, prefixesOf) = stateTable (const Nothing) rows
+    positionsOf = termPositions (const Nothing) rows stateIndexes
     table initial prefix
         | maybe False (/= size) end = (choiceIndex [], const Nothing, \_ _ -> (const 0, emptySampleIndex))
         | otherwise =
@@ -311,7 +370,10 @@ prefixedTable plainRows = table
             LazyMap.fromList
                 [ ( (state, position)
                   , [ ( transition
-                      , NonEmpty.scanl consumeChild (seed transition) (zipWith indexAt (FTA.transitionChildren transition) (starts position))
+                      , NonEmpty.scanl
+                            consumeChild
+                            (seed (const Nothing) transition)
+                            (zipWith indexAt (FTA.transitionChildren transition) (starts position))
                       )
                     | transition <- Map.findWithDefault [] state rows
                     , (FTA.transitionSymbol transition, length $ FTA.transitionChildren transition) == tokens ! position

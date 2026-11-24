@@ -2,6 +2,11 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Gen.ManySorted.checkSorts` and `checkSortsWith` check that a
+  map from the states of an automaton to sorts fits a run-time signature:
+  each transition is a function from the sorts of its children to the sort of
+  its state, or a value of that sort. The map is then a homomorphism to the
+  automaton of the signature.
 - `Data.CFTA.Sized.Prefix`: `stepToken` and `stepPrefix` add tokens only when
   the tokens are offered, and otherwise give a `Refusal`: the token is
   rejected, the token is undecided, or the prefix is a whole term.

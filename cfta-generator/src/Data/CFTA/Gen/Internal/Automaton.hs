@@ -103,8 +103,11 @@ one, whose runs outnumber its terms.
 -}
 automatonIndex ::
     (Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Node symbol -> Either GenError (SizeIndex (Term symbol))
-automatonIndex order root = uncurry Ordinary.tableIndex <$> automatonRows order root
+    (symbol -> Maybe (Ordinary.LeafSource symbol)) ->
+    (symbol -> key) ->
+    Node symbol ->
+    Either GenError (SizeIndex (Term symbol))
+automatonIndex leafOf order root = uncurry (Ordinary.tableIndex leafOf) <$> automatonRows order root
 
 {- | Find the size class and the position in it of a term that an automaton
 accepts.
@@ -117,10 +120,14 @@ and the automaton once: each term then uses the same counts.
 -}
 automatonTermPosition ::
     (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
-    (symbol -> key) -> Node symbol -> Term symbol -> Either GenError SizedRank
-automatonTermPosition order root = case automatonRows order root of
+    (symbol -> Maybe (Ordinary.LeafSource symbol)) ->
+    (symbol -> key) ->
+    Node symbol ->
+    Term symbol ->
+    Either GenError SizedRank
+automatonTermPosition leafOf order root = case automatonRows order root of
     Left err -> const $ Left err
-    Right (initial, rows) -> maybe (Left TermNotInLanguage) Right . Ordinary.tablePosition initial rows
+    Right (initial, rows) -> maybe (Left TermNotInLanguage) Right . Ordinary.tablePosition leafOf initial rows
 
 {- | The state of the root and the rows of an automaton, with the edges of each
 row in rank order. The rows are those of 'toRows', the adapter that 'toFTA'
