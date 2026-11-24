@@ -2,6 +2,13 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Template` has named holes: `NamedHole name`. The named holes with one
+  name match equal subterms, and `matchesTemplate` checks this. The
+  operations on plain automata read a name that occurs once as a hole and
+  reject a repeated name. `Data.CFTA.Template.Named` restricts with
+  equality constraints (`restrictNamedFTA`) and excludes with the guard
+  `Not (And [Same p q, ...])` (`excludeNamedFTA`,
+  `excludeNamedAnywhereFTA`).
 - Add `Data.CFTA.Abstraction`: `checkAbstraction` checks with a solver that
   the refined variants of each production cover its refinement and add no
   value, and `checkOverlaps` reports two variants with a common value as a

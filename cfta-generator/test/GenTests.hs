@@ -27,6 +27,8 @@ import qualified Data.CFTA.Sized.Prefix.TrainSpec
 import qualified Data.CFTA.Sized.PrefixGuardSpec
 import qualified Data.CFTA.Sized.PrefixSpec
 import qualified Data.CFTA.SizedSpec
+import qualified Data.CFTA.Template.LearnSpec
+import qualified Data.CFTA.Template.NamedSpec
 import qualified Data.CFTA.TowerSpec
 
 main :: IO ()
@@ -58,3 +60,5 @@ main =
         Data.CFTA.ExtensionSpec.spec
         Data.CFTA.TowerSpec.spec
         Data.CFTA.InclusionSpec.spec
+        Data.CFTA.Template.LearnSpec.spec
+        Data.CFTA.Template.NamedSpec.spec

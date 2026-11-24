@@ -28,3 +28,5 @@
   their parsers keep them in `Notes`.
 - Add `printUpdate` and `parseUpdate`: the text form `update 1;` of a
   `Language.Update`, one statement for each operation.
+- Add named holes to templates: `_x` is the hole with the name `x`. A template
+  quotes a symbol whose name starts with `_`.

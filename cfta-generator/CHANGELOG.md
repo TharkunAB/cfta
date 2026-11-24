@@ -2,6 +2,14 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Template.Learn`: `generalize` gives the least general
+  generalization of terms as a `Template`. `learnExclusions` clusters
+  rejected terms into templates that remove no accepted term, at the root or
+  anywhere, and reports conflicts. `exclusionPrice` counts the terms that
+  templates remove from a language within a size bound. `generalize` gives
+  one named hole to a difference at two or more positions, so `x - x` and
+  `1 - 1` give `v0 - v0`. `exclusionPriceUpTo` prices templates with
+  repeated names with `sizedUpTo`.
 - `Data.CFTA.Sized.Prefix`: `stepToken` and `stepPrefix` add tokens only when
   the tokens are offered, and otherwise give a `Refusal`: the token is
   rejected, the token is undecided, or the prefix is a whole term.
