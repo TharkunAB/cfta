@@ -13,6 +13,7 @@ import qualified Data.CFTA.Internal.UnionFindSpec
 import qualified Data.CFTA.Language.MergeSpec
 import qualified Data.CFTA.Language.SourceSpec
 import qualified Data.CFTA.LanguageSpec
+import qualified Data.CFTA.LarkSpec
 import qualified Data.CFTA.LoweringSpec
 import qualified Data.CFTA.Refinement.GuardSpec
 import qualified Data.CFTA.Refinement.MinimizeSpec
@@ -60,3 +61,4 @@ main = do
         Data.CFTA.Language.MergeSpec.spec
         Data.CFTA.LoweringSpec.spec
         Data.CFTA.AbstractionSpec.spec
+        Data.CFTA.LarkSpec.spec
