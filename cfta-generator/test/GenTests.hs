@@ -16,6 +16,7 @@ import qualified Data.CFTA.Gen.SynthesisSpec
 import qualified Data.CFTA.Gen.TowerSpec
 import qualified Data.CFTA.Gen.TypingSpec
 import qualified Data.CFTA.GenSpec
+import qualified Data.CFTA.InclusionSpec
 import qualified Data.CFTA.RankedSpec
 import qualified Data.CFTA.Sized.Prefix.TrainSpec
 import qualified Data.CFTA.Sized.PrefixGuardSpec
@@ -46,3 +47,4 @@ main =
         Data.CFTA.Sized.PrefixGuardSpec.spec
         Data.CFTA.ExtensionSpec.spec
         Data.CFTA.TowerSpec.spec
+        Data.CFTA.InclusionSpec.spec
