@@ -32,11 +32,18 @@ smallest one. Thus the two functions give the same counterexample.
 'inclusionUpTo' stops at the first size where the counts differ, so this
 step reads only the sizes up to the smallest counterexample.
 
-An ambiguous automaton has several runs for some terms. 'sized' uses the
-count table only when no state has two transitions that accept one term.
-Otherwise it builds each size class term by term. An ambiguous automaton can
-make the intersection ambiguous. Then the result is the same, but the time
-grows with the number of terms.
+An ambiguous automaton has several runs for some terms. 'sized' counts each
+distinct term once on each of its routes, so an ambiguous automaton does not
+change the result. For rows without constraints, 'sized' uses a count table.
+When no state has two transitions that accept one term, the table reads the
+rows. Otherwise, the table reads the bottom-up deterministic rows, where each
+term has one run. For these rows, the order of a size class can be different
+from the order of 'Data.CFTA.Sized.sizedReference'. The counterexample is the
+first term in the order of 'sized'. When the deterministic rows have more
+than 1024 states, or when ambiguous rows have constraints, 'sized' builds each
+size class term by term. Then the time grows with the number of terms. An
+ambiguous automaton can make the intersection ambiguous, and the same routes
+apply to it.
 
 'FTA.intersect' gives each transition the pair of the two constraints.
 'conjoinConstraints' joins each pair into one 'Data.CFTA.Constraint.Constraint',
@@ -425,11 +432,12 @@ partition whole parts
     smallestSize automaton = Map.lookup (FTA.initialState automaton) $ Ordinary.minimumSizes $ FTA.transitionTable automaton
 
 {- | The union of automata. A new initial state has the transitions of the
-initial states of all of them. The automata must give each symbol one arity.
+initial states of all of them. The automata can give a symbol different
+arities, because an FTA allows a symbol at several arities.
 -}
 union :: (Ord state) => [FTA.PlainFTA state symbol] -> FTA.PlainFTA (Maybe (Int, state)) symbol
 union automata =
-    fromRight (bug "the union of the intersections with one whole is not ranked")
+    fromRight (bug "the union of the intersections with one whole has a state without a row")
         $ FTA.mkFTA Nothing
         $ ( Nothing
           , concat [map (tagged index) $ FTA.transitionsFrom automaton $ FTA.initialState automaton | (index, automaton) <- indexed]
