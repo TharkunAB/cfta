@@ -22,6 +22,7 @@ import qualified Data.CFTA.Refinement.PruneSpec
 import qualified Data.CFTA.Refinement.RecognitionSpec
 import qualified Data.CFTA.Refinement.RecursiveSpec
 import qualified Data.CFTA.Refinement.RefinementRelationSpec
+import qualified Data.CFTA.Refinement.SequentSpec
 import qualified Data.CFTA.Refinement.SimpleSpec
 import qualified Data.CFTA.Refinement.SubstitutionSpec
 import qualified Data.CFTA.Refinement.SyntaxSpec
@@ -51,6 +52,7 @@ main = do
         Data.CFTA.Refinement.DefinitionSpec.spec
         Data.CFTA.Refinement.GroundSpec.spec
         Data.CFTA.Refinement.TheorySpec.spec
+        Data.CFTA.Refinement.SequentSpec.spec
         Data.CFTA.Refinement.RecognitionSpec.spec
         Data.CFTA.Refinement.SubstitutionSpec.spec
         Data.CFTA.Refinement.RecursiveSpec.spec

@@ -2,6 +2,13 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add `Data.CFTA.Refinement.Sequent`: `sequent` reads a formula as a
+  geometric sequent, with its universally bound names, the atoms of its body,
+  and the existentially quantified conjunctions of its head, or gives the
+  part where it leaves that form. It normalizes implications, double
+  negations, nested quantifiers, and quantifiers that move to the top.
+  `shape` tells a Horn clause from another geometric sequent, and
+  `sequentFormula` writes a sequent as a formula.
 - Add `Data.CFTA.Signature`: the data of a first-order many-sorted
   signature, `SortedSignature`, `SortedFunction`, `ValueSort`, and
   `ValueSource`. `Data.CFTA.Gen.ManySorted` of `cfta-generator` re-exports

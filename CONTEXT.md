@@ -167,6 +167,15 @@ Wilf, and Feat (ranking).
   a case split of one fixed parameter binds, directly or through case splits
   of its fields. Each call gets a smaller value, so the evaluation stops.
 
+- **Geometric sequent**: a formula of the form: for all values, a
+  conjunction of atoms implies a disjunction of existentially quantified
+  conjunctions of atoms. An atom is a comparison of two terms or the
+  application of a predicate (`Data.CFTA.Refinement.Sequent`).
+
+- **Horn clause**: a geometric sequent with at most one atom in its head and
+  no existential quantifier. With no atom in its head it is a goal: its body
+  cannot hold.
+
 - **Exact transformation**: an operation on an automaton that keeps its
   language, the set of terms it accepts. Equality reduction
   (`reducePartially`), `prune`, `withoutRedundantEdges`, `refold`, and `trim`
