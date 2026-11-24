@@ -83,6 +83,19 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
         let completions = start sizeBound equalPairs
         fmap nextTokens (afterPrefix completions [(sym "g", 2), (sym "b", 0)]) `shouldBe` Just [((sym "b", 0), 1)]
         isJust (afterPrefix completions [(sym "g", 2), (sym "b", 0), (sym "a", 0)]) `shouldBe` False
+    it "steps with a reason: an offered token, a rejected token, and the end of a term" $ do
+        let completions = start sizeBound expressionAutomaton
+        fmap completionPrefix (stepToken completions ("add", 2)) `shouldBe` Right [("add", 2)]
+        fmap completionPrefix (stepToken completions ("add", 1)) `shouldBe` Left TokenRejected
+        fmap completionPrefix (stepPrefix completions [("add", 2), ("one", 0), ("one", 0)])
+            `shouldBe` Right [("add", 2), ("one", 0), ("one", 0)]
+        void (stepPrefix completions [("add", 2), ("one", 0), ("add", 1)]) `shouldBe` Left (2, TokenRejected)
+        void (stepPrefix completions [("one", 0), ("one", 0)]) `shouldBe` Left (1, PrefixEnded)
+        void (stepPrefix completions [("add", 1)]) `shouldBe` Left (0, TokenRejected)
+        let equal = start sizeBound equalPairs
+        void (stepPrefix equal [(sym "g", 2), (sym "b", 0), (sym "a", 0)]) `shouldBe` Left (2, TokenRejected)
+        void (stepPrefix equal [(sym "g", 2), (sym "b", 0), (sym "b", 0), (sym "b", 0)])
+            `shouldBe` Left (3, PrefixEnded)
     it "rejects a guard beyond equality constraints" $ do
         let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
             guarded = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
@@ -149,6 +162,17 @@ fixtureUpTo bound name graph = describe name $ do
                 , [(token, isJust $ afterToken completions token, brute $ prefix <> [token]) | token <- alphabet, token `notElem` offered]
                 )
                 `shouldBe` (prefix, [(token, False, 0) | token <- alphabet, token `notElem` offered])
+    it "steps through each offered token, and refuses each other token with its reason" $
+        forM_ prefixes $ \prefix -> do
+            let completions = after prefix
+                offered = map fst $ nextTokens completions
+                refusal = if completeVerdict completions /= No then PrefixEnded else TokenRejected
+                stepped = fmap summary . stepToken completions
+                summary next = (completionPrefix next, completionTerms next)
+                expected token = case afterToken completions token of
+                    Just next | token `elem` offered -> Right $ summary next
+                    _ -> Left refusal
+            [(token, stepped token) | token <- alphabet] `shouldBe` [(token, expected token) | token <- alphabet]
     it "counts the completions as the offered counts, and one more for a complete prefix" $
         forM_ prefixes $ \prefix -> do
             let completions = after prefix

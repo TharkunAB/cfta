@@ -227,8 +227,50 @@ Wilf, and Feat (ranking).
   undecided when the solver neither accepts nor rejects it. A token is
   undecided when the solver accepts none of its completions and some of them
   are undecided. An undecided token is neither offered nor rejected.
+- **Refusal**: the reason that a token is not offered after a prefix. The
+  token is rejected, the token is undecided, or the prefix is a whole term.
 - **Walk**: a path of tokens with the verdicts of the solver kept for each
   step (`Deciding`). It asks the solver only when a query needs a verdict.
+- **Mask**: the tokens that can come next after a prefix: the tokens of
+  `nextTokens`. The record `Mask` (`Data.CFTA.Mask`) holds the mask of a
+  prefix and the step after each token. `completionsMask` gives this record
+  for each prefix of a `Completions` value.
+- **Linearization**: the texts around the children of each symbol: the text
+  before the first child, the text between each two children, and the text
+  after the last child (`Data.CFTA.Mask.Text`). It gives the text of a term.
+- **Reading**: a prefix of term tokens with a place in its text. The mask of
+  a text prefix holds the readings of the prefix, and each reading has the
+  items that are still to come: rests of texts and children.
+- **Vocabulary, entry**: a list of entries, each a name with a list of tokens
+  of a mask (`Data.CFTA.Mask.Vocabulary`). For a tokenizer, an entry is a
+  short sequence of characters. The mask of the entries offers an entry when
+  the mask below steps through each token of the entry. Not a token of the
+  mask below, although machine learning calls an entry of a tokenizer a
+  token.
+- **Scorer**: a function from a prefix to the log-scores of the next tokens
+  (`Data.CFTA.Guided`). Not a trained model of weights
+  (`Data.CFTA.Sized.Prefix.Model`).
+- **Guided search**: a search over the terms of a language whose steps a
+  scorer scores, under the mask (`Data.CFTA.Guided`). Machine learning calls it
+  constrained decoding; here, to decode is to unrank.
+- **Weighing**: how a step of a guided search weighs the offered tokens before
+  the normalization. It adds to the score of each offered token zero
+  (`MaskOnly`), or the log of the probability of the token under the weights
+  of the completions (`WeighCompletions`).
+- **Visit**: one step of a guided search at a prefix that is not complete. The
+  search reads the mask and the scores of the prefix, and keeps them with its
+  choice (`Visit`). The trace of a search is the list of its visits.
+- **Dead end**: a prefix of a guided search that is not complete and has no
+  token with a finite step log-probability. The search takes the best open
+  prefix.
+- **Repair**: the continuation of a token sequence that a mask refuses. It
+  keeps the longest prefix of the sequence whose tokens the masks offer, and
+  searches from that prefix (`repair`).
+- **Mask cache**: the masks of the prefixes that a guided search opened, by
+  prefix (`MaskCache`). A later search on the same language reads them.
+- **Text token**: a character of a text, or the end of the text
+  (`Data.CFTA.Mask.Text.TextToken`). It is a token of the mask of a text. Not
+  a **Token** of a term.
 - **Event**: a set of terms, as in probability: the terms that an automaton
   accepts. A model given an event (`condition`) gives each term of the event
   its probability divided by the probability of the event. Not a diagnostic

@@ -1,7 +1,13 @@
-module Data.CFTA.Sized.PrefixGuardSpec (spec) where
+module Data.CFTA.Sized.PrefixGuardSpec (
+    spec,
+    guardedPairs,
+    partialEntailment,
+    number,
+    sym,
+) where
 
 import Control.Exception (throwIO)
-import Control.Monad (forM, forM_, when, zipWithM)
+import Control.Monad (forM, forM_, void, when, zipWithM)
 import Data.Containers.ListUtils (nubOrd)
 import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
 import Data.List (genericLength, inits, isPrefixOf, sort, sortOn)
@@ -55,6 +61,18 @@ spec = describe "Data.CFTA.Sized.Prefix with a solver" $ do
         fmap nextTokens after `shouldBe` Just [((number 2, 0), 3)]
         fmap undecidedTokens after `shouldBe` Just [((number 3, 0), 3)]
         fmap (isJust . (`afterToken` (number 1, 0))) after `shouldBe` Just False
+    it "refuses an undecided token with its reason, where afterToken continues" $ do
+        completions <- prefixCompletionsWith partialEntailment 3 guardedPairs
+        let after = either (error . show) id $ stepToken completions (sym "g", 2)
+            undecided = (number 3, 0)
+        (isJust $ afterToken after undecided, void $ stepToken after undecided) `shouldBe` (True, Left TokenUndecided)
+        void (stepToken after (number 1, 0)) `shouldBe` Left TokenRejected
+        fmap completionPrefix (stepToken after (number 2, 0)) `shouldBe` Right [(sym "g", 2), (number 2, 0)]
+        void (stepPrefix completions [(sym "g", 2), undecided]) `shouldBe` Left (1, TokenUndecided)
+    it "ends a prefix that is a term that the solver does not decide" $ do
+        completions <- prefixCompletionsWith partialEntailment 3 guardedPairs
+        let whole = fromMaybe (error "a prefix of a term") $ afterPrefix completions [(sym "g", 2), (number 3, 0), (number 1, 0)]
+        (completeVerdict whole, void $ stepToken whole (number 1, 0)) `shouldBe` (Unknown, Left PrefixEnded)
     it "offers a token that also has undecided completions" $ do
         completions <- prefixCompletionsWith partialEntailment 7 guardedLists
         let after = afterPrefix completions [(sym "g", 2), (number 2, 0)]

@@ -2,6 +2,71 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Sized.Prefix`: `stepToken` and `stepPrefix` add tokens only when
+  the tokens are offered, and otherwise give a `Refusal`: the token is
+  rejected, the token is undecided, or the prefix is a whole term.
+- `Data.CFTA.Mask`: `Mask` is the mask of a prefix of one language, as a
+  record: the prefix, the offered tokens with their probabilities, the
+  undecided tokens, the step after a token (the next mask, or the `Refusal`),
+  and the accepted terms of a complete prefix. The fields are lazy.
+  `completionsMask` gives the mask of each prefix of a `Completions` value:
+  the tokens of `nextTokens` with their `tokenProbability` under the weights
+  of the completions, and the step of `stepToken`.
+- `Data.CFTA.Guided`: `guide` is a guided search. It writes the terms of a
+  language one token at a time from the log-scores of a `Scorer`. A `Strategy`
+  chooses the next prefix: `Greedy`, `BestFirst`, or `Beam`. `SearchLimits`
+  bound the visits (`searchVisits`), the found terms (`searchTerms`), and the
+  wall-clock time. `guide` reads only the `Mask` of each prefix, so it runs on
+  masks with different tokens. It normalizes the scores over the offered
+  tokens of the mask. With the `Weighing` `WeighCompletions`, it first adds
+  the log of the probability of each token in the mask to its score. With
+  `MaskOnly`, it adds nothing. The `Guided` result has the found terms
+  (`guidedTerms`) with their total log-scores, a trace with one `Visit` for
+  each visit (with the offered and the undecided tokens, the scores, the step
+  log-probabilities, and the choice), and the `Stop` reason, such as
+  `EnoughTerms` or `VisitLimit`. `guide` takes a `MaskCache` (`emptyMaskCache`
+  is the empty one) and gives it back with the masks of the prefixes, which a
+  later search on the same language reads. `maskCacheSize` gives the number of
+  these prefixes. `Beam width` keeps the best `width` prefixes of each depth.
+  `repair` continues the longest prefix of a token sequence whose tokens the
+  masks offer. Its `Repaired` result has the place and the `Refusal` of the
+  first refused token, and the search from the kept prefix. `cachedScorer`
+  gives a scorer a memory, so that it calls the given scorer once for each
+  prefix.
+- `Data.CFTA.Guided.Model`: `modelScorer` is the `Scorer` of a trained
+  `Model`: the score of a token is the log of its probability after the
+  prefix. A guided search with it needs no outside model.
+- `Data.CFTA.Mask.Text`: `textMask` gives the mask of the texts of a language.
+  A `Linearization` gives the texts around the children of each symbol, and
+  `linearize` gives the text of a term. From the mask of the terms at the
+  empty prefix, `textMask` gives the mask of each prefix of the texts. Its
+  tokens are `TextToken` values: the characters that can come next
+  (`Character`), and the end token `EndOfText`. It reads the mask of the
+  terms, so the constraints and the solver of the language stay. The
+  probabilities are exact: the probability of a character is the mass of the
+  readings after it, divided by the mass of the readings of the prefix. A text
+  that two terms have gives both terms after `EndOfText`. `readText` gives the
+  terms of a text, or a `TextError` with the place, the `Refusal`, and the
+  offered tokens of the first refused token. `guide` runs on the mask of the
+  texts as on the mask of the terms.
+- `Data.CFTA.Mask.Vocabulary`: `vocabularyMask` gives the mask of the entries
+  of a vocabulary, for example the vocabulary of a tokenizer. The host gives
+  each entry as a name with a list of tokens of a mask below, and `vocabulary`
+  puts the entries in a `Vocabulary`, a trie. The mask of the entries offers
+  an entry when the mask below steps through each token of the entry. It
+  refuses another entry with the refusal of its first refused token, and an
+  entry without tokens with `TokenRejected`. The probability of an entry is
+  the product of the probabilities of its tokens: the share of the completions
+  that stay after the entry. The offered entries are not disjoint events, so
+  the probabilities of a prefix can sum to more than one. One walk of the trie
+  along the steps of the mask below gives the offered and the undecided
+  entries, so the entries with a common start share the steps.
+- The examples `cfta-text-mask` and `cfta-guided-search` use expressions over
+  two atoms in which the two children of each sum are equal. `cfta-text-mask`
+  writes the text of an expression through the mask of the texts, and shows
+  where the mask refuses a sum with two different children.
+  `cfta-guided-search` runs a guided search with the scorer of a model that
+  prefers `a+b`, and the mask keeps the equality in each found term.
 - Add the example `cfta-language-review`. It shows how to review an update
   of a `Language` before keeping it: the terms that each named exclusion alone
   removes, the smallest term that shows it or that it is redundant, and the

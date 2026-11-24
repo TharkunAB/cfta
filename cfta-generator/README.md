@@ -464,6 +464,10 @@ bound of nodes.
 - `afterToken` adds one token, and it gives `Nothing` when no completion
   starts with the result, so a caller can reject a token at once.
   `isComplete` says whether the prefix is an accepted term.
+- `stepToken` and `stepPrefix` add tokens only when the tokens are offered.
+  Otherwise they give a `Refusal`: `TokenRejected`, `TokenUndecided`, or
+  `PrefixEnded`. `stepPrefix` also gives the place of the first token that is
+  refused.
 - `completionCount`, `completionTerms`, `unrankCompletion`, and
   `rankCompletion` count and list the completions, and map them to and from
   their ranks. `Data.CFTA.Sized.Prefix.QuickCheck` samples them.
@@ -583,6 +587,125 @@ gives one token and the prefix is not complete, the token is forced. The
 queries are pure, so the values of a batch of prefixes can be computed in
 parallel. A walk of `deciding` keeps its verdicts in memories that grow
 during the walk; use it in one thread.
+
+### Guided search
+
+`Data.CFTA.Mask` gives the mask of a prefix as a record, `Mask`: the prefix,
+the offered tokens with their probabilities, the undecided tokens, the step
+after a token (the next mask, or the `Refusal`), and the accepted terms of a
+complete prefix. `completionsMask` gives the mask of each prefix of a
+`Completions` value: the tokens of `nextTokens`, each with its
+`tokenProbability` under the weights of the completions, and the step of
+`stepToken`. Apply `withWeights` before `completionsMask` to give the weights.
+
+`Data.CFTA.Guided` is a guided search: a search over the terms of a language
+whose steps a scorer scores, under the mask. Machine learning calls this
+constrained decoding. It writes a term one token at a time, and it reads only
+the `Mask` of each prefix, so it runs on masks with different tokens. The
+scorer is a function from a prefix to the log-scores of the next tokens. At
+each prefix, `guide` keeps the offered tokens of the mask and normalizes the
+scores over them. With the `Weighing` `WeighCompletions`, it first adds the
+log of the probability of each token in the mask to its score; with
+`MaskOnly`, it adds nothing. `Greedy` continues with the best token.
+`BestFirst` takes the open prefix with the highest total log-score, so it
+finds the terms in descending order of their total log-scores. Both take the
+best open prefix after a found term or at a dead end: a prefix where no
+offered token has a finite score. In `completionsMask` of an automaton without
+constraints the mask itself has no dead end, because each offered token has a
+completion within the size bound. `SearchLimits` bounds the visits, the found
+terms, and the wall-clock time. The result has the found terms in the order
+that the search finds them, each with its total log-score, one `Visit` record
+for each visit (the prefix, the offered and the undecided tokens, the scores
+of the scorer, the step log-probabilities, and the choice), and the `Stop`
+reason. `guide` takes a `MaskCache` (`emptyMaskCache` to start) and gives it
+back with the mask of each prefix that it opened, so a later search on the
+same language and weights does not compute them again. `Beam width` goes one
+depth at a time and keeps the best `width` children of each depth. `repair`
+keeps the longest prefix of a token sequence whose tokens the masks offer,
+gives the place and the `Refusal` of the first refused token, and searches
+from the prefix.
+
+`modelScorer` of `Data.CFTA.Guided.Model` is the scorer of a trained `Model`:
+the score of a token is the log of its probability after the prefix. It needs
+no outside model. A prefix that the model does not know has no scores, so the
+search ends there at a dead end. `cachedScorer` gives a scorer a memory, so
+that it answers once for each prefix.
+
+```haskell
+scorer <- cachedScorer (modelScorer model)
+(result, cache) <-
+    guide Greedy limits MaskOnly scorer emptyMaskCache (completionsMask completions)
+```
+
+### The mask of a text
+
+A language model writes text, not the tokens of a term.
+`Data.CFTA.Mask.Text` gives the mask of a prefix of a text. A
+`Linearization` gives the texts around the children of each symbol, for
+example `["", "+", ""]` for the infix operator `+`, and `linearize` gives the
+text of a term. `textMask` takes the mask of the terms at the empty prefix and
+gives the mask of the texts: the characters that can come next, and the end
+token `EndOfText`. It reads the mask of the terms, so the constraints and the
+solver of the language stay. A text can be a whole term and can also
+continue, so the scorer decides the end. The probability of a character is
+exact under the weights of the completions: the weight of the terms whose
+text starts with the prefix and the character, divided by the weight of the
+terms whose text starts with the prefix. `readText` gives the terms of a text, or the
+place, the `Refusal`, and the offered tokens of the first refused token. The
+same `guide` searches the texts.
+
+In the expressions of the tests, the two children of a sum are equal
+(`Data.CFTA.Gen.ExpressionLanguage`):
+
+```haskell
+let texts = textMask expressionTexts (completionsMask equalCompletions)
+readText texts "a+a*b"
+-- Right [the term *(+(a, a), b)]
+readText texts "a+b"
+-- Left (TextError {textErrorPlace = 2, textErrorRefusal = TokenRejected, textErrorExpected = [Character 'a']})
+```
+
+After `a+`, the right child of the sum must be `a`, so the refusal of `b` is
+at the place 2. A context-free grammar of the texts offers `b` there, because
+it does not keep the equality.
+
+The mask of a text prefix holds its readings: prefixes of term tokens, each
+with a place in its text. A symbol whose first text is empty, such as an infix
+operator, gives one reading for each depth of the left spine and each choice
+of the operators. So
+the cost of the mask grows fast with the size bound. A call notation, a
+prefix notation, or brackets around each child do not have this cost.
+
+A model with a tokenizer writes one entry of its vocabulary at each step, and
+an entry is a short sequence of characters. `Data.CFTA.Mask.Vocabulary` gives
+the mask of the entries. The host gives each entry as a name with a list of
+tokens of a mask below, for example the number of the entry and the characters
+of its text, so the library knows no tokenizer. `vocabulary` puts the entries
+in a trie, and `vocabularyMask` gives this mask. It offers an entry when the
+mask below steps through each token of the entry. The probability of an entry
+is the product of the probabilities of its tokens: the share of the
+completions that stay after the entry. One entry can be the start of another
+entry, so the probabilities of a prefix can sum to more than one.
+
+```haskell
+let entries = vocabulary [(0, map Character "a+"), (1, [Character 'a']), (2, [Character 'b']), (3, [EndOfText])]
+    entryMask = vocabularyMask entries (textMask expressionTexts (completionsMask equalCompletions))
+map fst (maskNext entryMask)
+-- [0,1,2]
+map fst . maskNext <$> maskStep entryMask 0
+-- Right [1]
+```
+
+After the entry `a+`, the mask of the entries offers `a` and refuses `b`,
+because the two children of the sum are equal.
+
+Two runnable programs use the expressions of
+`Data.CFTA.Gen.ExpressionLanguage`. `cabal run cfta-generator:cfta-text-mask`
+writes the text of an expression through the mask one character at a time,
+and shows where the mask refuses a sum with two different children.
+`cabal run cfta-generator:cfta-guided-search` runs a guided search with the
+scorer of a model that prefers `a+b`: the mask of the expressions with the
+equality stops it, and the trace shows where.
 
 ### Check a definitional extension
 
