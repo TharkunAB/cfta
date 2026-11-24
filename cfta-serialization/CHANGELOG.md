@@ -28,3 +28,5 @@
   their parsers keep them in `Notes`.
 - Add `printUpdate` and `parseUpdate`: the text form `update 1;` of a
   `Language.Update`, one statement for each operation.
+- Add the text forms of named predicates, `predicate(NAME, [TERM, ...])`, and
+  of named sorts, `named(NAME, [SORT, ...])`.
