@@ -20,8 +20,8 @@ Both states have the atoms and the parentheses. Only @E@ has the operators.
   of 'singleParenthesesAutomaton', and @((a))@ is not.
 
 The fixture has two restricted languages because they use two routes of
-"Data.CFTA.Sized.Prefix". The equality is a constraint, and an export of the
-language to a context-free grammar drops it. With a constraint, the
+"Data.CFTA.Sized.Prefix". The equality is a constraint, and a context-free
+grammar of the language cannot express it. With a constraint, the
 completions of a prefix are a list of terms. The exclusion keeps the
 automaton ordinary: it has no constraint, so the completions read the size
 index.

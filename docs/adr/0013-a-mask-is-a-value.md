@@ -9,10 +9,11 @@ the preorder of a term. A model writes text, in the units of its tokenizer,
 and not term tokens.
 
 One way to give a model a language is to export a grammar of its texts to a
-decoding engine. An export has the productions only. It drops the equality
-constraints, the guards, and the verdicts of a solver. For expressions with
-an equality on the two children of `+`, a grammar of the texts offers `a`
-and `b` after `a+`, and the language has only `a`.
+decoding engine. A grammar has the productions only. It cannot express the
+equality constraints, the guards, or the verdicts of a solver, so an export
+must leave them out. For expressions with an equality on the two children
+of `+`, a grammar of the texts offers `a` and `b` after `a+`, and the
+language has only `a`.
 
 ## Decision
 
