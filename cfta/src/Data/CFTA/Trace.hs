@@ -25,10 +25,13 @@ gives the shortest prefix that has no run, and the states in which its last
 symbol fails.
 
 An automaton can have more than one run of a trace, for example after
-'Data.CFTA.mapSymbols' maps two steps to one. Then "Data.CFTA.Sized" lists
-each class to count it, and the generators can reject it. 'determinize' makes the
-automaton with one run for each trace. 'concatenate', 'project', and
-'projectMaybe' use it, so their results are deterministic too.
+'Data.CFTA.mapSymbols' maps two steps to one. If such an automaton has no
+constraints, "Data.CFTA.Sized" counts it with the count table of its bottom-up
+deterministic rows, when these rows have at most 1024 states. Otherwise
+"Data.CFTA.Sized" lists each class to count it. The generators can reject
+it. 'determinize' makes the automaton with one run for each trace.
+'concatenate', 'project', and 'projectMaybe' use it, so their results are
+deterministic too.
 -}
 module Data.CFTA.Trace (
     TraceSymbol (..),
@@ -90,7 +93,7 @@ keeps its row, so 'feasibility' finds the step whose precondition is false.
 -}
 traceAutomaton :: (Ord state) => StateMachine state step -> PlainFTA state (TraceSymbol step)
 traceAutomaton StateMachine{machineInitial, machineSteps, machineNext, machineFinal} =
-    -- Each child is a reached state, and each symbol has one arity, so validation cannot fail.
+    -- The initial state and each child are reached states with a row, so validation cannot fail.
     fromRight (error "traceAutomaton: the automaton of a state machine is valid")
         $ FTA.mkFTA machineInitial
         $ explore row FTA.transitionChildren machineInitial
@@ -250,7 +253,7 @@ subsets ::
     (Ord state, Ord step) =>
     (state -> [(TraceSymbol step, [state])]) -> (state -> [state]) -> state -> PlainFTA (Set state) (TraceSymbol step)
 subsets edgesOf silent initial =
-    -- Each child is an explored set, and each symbol has one arity, so validation cannot fail.
+    -- The initial set and each child are explored sets with a row, so validation cannot fail.
     fromRight (error "subsets: the subset construction of trace terms is valid")
         $ FTA.mkFTA start
         $ explore row FTA.transitionChildren start
