@@ -654,6 +654,39 @@ Run `cabal run cfta-towers` for an example. It adds `double(x)` as
 five, and rejects an extension that changes the meaning of `add`. It also
 checks that the original facts and exclusions carry forward.
 
+### Review an update of a language
+
+A `Language` of `Data.CFTA.Language` is a value with named exclusions, so a
+caller can ask what each exclusion does before the caller keeps an update.
+Three questions have an exact answer:
+
+1. What does this exclusion alone remove? Apply `Language.restore` to the
+   name. Compile both languages with `Language.compileGraph`. Count both with
+   `Data.CFTA.Sized.sized` up to a size bound. The difference is the number of
+   terms that only this exclusion removes.
+2. Which term shows it? `Data.CFTA.Inclusion.inclusion` of the language
+   without the exclusion in the full language gives the smallest term that
+   only this exclusion removes. When it gives `Included`, the exclusion is
+   redundant: the other exclusions remove every term that it removes, at every
+   size.
+3. Does the update keep my examples? Keep a list of terms that must be
+   members and a list of terms that must not be. `Data.CFTA.accepts` on the
+   compiled language gives the verdict of each term. Refuse an update that
+   changes a verdict, and report the term.
+
+The same recipe works for a named fact that is an equality of two children.
+Use `Language.relax` in place of `Language.restore`, and `inclusionUpTo` in
+place of `inclusion`, because `inclusion` refuses an automaton with a
+constraint (`ConstrainedLeft` or `ConstrainedRight`). Thus a fact has a count
+and a smallest term, but no proof of redundancy for all sizes.
+
+Run `cabal run cfta-language-review` for an example. It has arithmetic
+expressions with four named exclusions. For each exclusion, it prints the
+count of the terms of up to nine nodes that only it removes and the smallest
+such term, or that the exclusion is redundant. It then refuses an update that
+changes the verdict of an example term, and it does the same questions for a
+fact. The program checks each printed value.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
