@@ -25,7 +25,7 @@ validation_command=test
 case "$package" in
   cfta) dependencies=() ;;
   cfta-generator) dependencies=(cfta) ;;
-  specftacular) dependencies=(cfta) ;;
+  specftacular) dependencies=(cfta cfta-generator) ;;
   specftacular-ghc)
     dependencies=(cfta cfta-generator decision-model cfta-ghc specftacular)
     # This package has no test suite. Build its executables from the archive.

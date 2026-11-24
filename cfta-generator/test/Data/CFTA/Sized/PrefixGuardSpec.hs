@@ -1,5 +1,6 @@
 module Data.CFTA.Sized.PrefixGuardSpec (spec) where
 
+import Control.Exception (throwIO)
 import Control.Monad (forM, forM_, when, zipWithM)
 import Data.Containers.ListUtils (nubOrd)
 import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
@@ -20,12 +21,14 @@ import Data.CFTA.Constraint (
     semanticConstraint,
  )
 import qualified Data.CFTA.Equality as ECTA
-import Data.CFTA.Index (Cardinality (..), Size (..))
+import Data.CFTA.Index (Cardinality (..), Rank (..), Size (..))
 import Data.CFTA.Interned (fromFTA)
+import Data.CFTA.Lowering (Expansion (..), Lowering, mkLowering)
 import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Refinement.Denotation (accepts)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
 import Data.CFTA.Refinement.Expression (Formula, refinementFormula, (.==), (.>))
+import Data.CFTA.Refinement.LiquidFixpoint (TimeLimitReached (..))
 import Data.CFTA.Refinement.Verdict (Entailment (Entailment), Verdict (..), andVerdicts, orVerdicts)
 import Data.CFTA.Sized (SizedError (..), sized, sizedUpTo, termsOfSize)
 import Data.CFTA.Sized.Prefix
@@ -142,6 +145,88 @@ spec = describe "Data.CFTA.Sized.Prefix with a solver" $ do
         (isJust stepped, maskCalls <= eagerCalls, made < eagerCalls) `shouldBe` (True, True, True)
     it "rejects a constrained automaton without a solver" $
         either Just (const Nothing) (prefixCompletions 3 guardedPairs) `shouldBe` Just ResidualGuard
+    describe "bounded preimages" $ do
+        it "preserves a solver timeout as an undecided guard in the source or target" $ do
+            let timingOut = Entailment $ \_ _ -> throwIO $ TimeLimitReached 1
+                plain = pairsWith noConstraint
+            forM_ [(plain, guardedPairs), (guardedPairs, plain)] $ \(source, target) -> do
+                completions <- preimageCompletionsWith timingOut 3 (checkedLowering []) source target
+                completionCount completions `shouldBe` 0
+                length (undecidedTerms completions) `shouldBe` 9
+
+        it "indexes many distinct source terms with the same ordinary target image" $ do
+            let leaf = FTA.Transition (sym "z") [] noConstraint
+                branch label = FTA.Transition (sym label) ["root"] noConstraint
+                source = automaton "root" [("root", [leaf, branch "a", branch "b"])]
+                target = automaton "root" [("root", [leaf, branch "a"])]
+                lowering = checkedLowering [(sym "b", 1, Apply (sym "a") [Child 0])]
+                total = 2 ^ (40 :: Int) - 1
+                lastRank = Rank (total - 1)
+            completions <- preimageCompletionsWith unusedEntailment 40 lowering source target
+            completionCount completions `shouldBe` Cardinality total
+            fmap length (unrankCompletion completions lastRank) `shouldBe` Just 40
+            (unrankCompletion completions lastRank >>= rankCompletion completions) `shouldBe` Just lastRank
+
+        it "orders ranks by the compiled preimage's rows" $ do
+            let leaf label = FTA.Transition (sym label) [] noConstraint
+                branch state = FTA.Transition (sym "f") [state] noConstraint
+                source = automaton "root" [("root", map branch ["left", "right"]), ("left", map leaf ["a", "z"]), ("right", [leaf "m"])]
+                target = automaton "root" [("root", [branch "child"]), ("child", map leaf ["m", "z"])]
+                terms = [Term.Node (sym "f") [Term.Leaf (sym label)] | label <- ["m", "z"]]
+            completions <- preimageCompletionsWith unusedEntailment 2 (checkedLowering []) source target
+            completionTerms completions `shouldBe` terms
+            map (rankCompletion completions) terms `shouldBe` map (Just . Rank) [0, 1]
+            fmap (\after -> map (unrankCompletion after . Rank) [0, 1]) (afterToken completions (sym "f", 1))
+                `shouldBe` Just (map Just terms)
+
+        it "prunes structurally rejected terms before checking source guards" $ do
+            let leaf label constraint = FTA.Transition (sym label) [] constraint
+                source =
+                    automaton "root" [("root", [leaf "a" noConstraint, leaf "b" $ semanticConstraint $ Satisfies (ECTA.path []) aboveOne])]
+                target = automaton "root" [("root", [leaf "a" $ semanticConstraint $ Same (ECTA.path []) (ECTA.path [])])]
+            completions <- preimageCompletionsWith unusedEntailment 1 (checkedLowering []) source target
+            completionTerms completions `shouldBe` [Term.Leaf (sym "a")]
+            undecidedTerms completions `shouldBe` []
+
+        it "compares lowered children and keeps the original terms and their prefixes" $ do
+            let transition label children constraint = FTA.Transition (sym label) children constraint
+                spine state leaf = (state, [transition leaf [] noConstraint, transition "c" [state] noConstraint])
+                concrete = automaton "s" [("s", [transition "g" ["left", "right"] noConstraint]), spine "left" "a", spine "right" "b"]
+                target = automaton "s" [("s", [transition "g" ["left", "left"] equalChildren]), spine "left" "a"]
+                chain depth leaf = iterate (\term -> Term.Node (sym "c") [term]) (Term.Leaf (sym leaf)) !! depth
+                pair left right = Term.Node (sym "g") [chain left "a", chain right "b"]
+                lowering = checkedLowering [(sym "b", 0, Apply (sym "a") [])]
+            completions <- preimageCompletionsWith unusedEntailment 7 lowering concrete target
+            completionTerms completions `shouldBe` [pair n n | n <- [0 .. 2]]
+            fmap completeVerdict (afterPrefix completions $ preorder $ pair 1 2) `shouldBe` Nothing
+            fmap nextTokens (afterPrefix completions [(sym "g", 2), (sym "c", 1), (sym "a", 0)])
+                `shouldBe` Just [((sym "c", 1), 1)]
+
+        it "combines source and target verdicts and retains only genuinely undecided terms" $ do
+            let pair left right = Term.Node (sym "g") [Term.Leaf (number left), Term.Leaf (number right)]
+            completions <- preimageCompletionsWith partialEntailment 3 (checkedLowering []) guardedPairs (pairsWith secondAboveOne)
+            completionTerms completions `shouldBe` [pair 2 2]
+            sort (undecidedTerms completions) `shouldBe` sort [pair 2 3, pair 3 2, pair 3 3]
+
+        it "uses only the source bound and rejects malformed constructors" $ do
+            let leaf = Term.Leaf (sym "a")
+                good = Term.Node (sym "d") [leaf]
+                bad = Term.Node (sym "d") [leaf, leaf]
+                target =
+                    automaton
+                        "s"
+                        [ ("s", [FTA.Transition (sym "g") ["left", "right"] noConstraint])
+                        , ("left", [FTA.Transition (sym "a") [] noConstraint])
+                        , ("right", [FTA.Transition (sym "a") [] noConstraint])
+                        ]
+                lowering = checkedLowering [(sym "d", 1, Apply (sym "g") [Child 0, Child 0])]
+            small <- preimageCompletionsWith unusedEntailment 2 lowering (FTA.fromTerms [good, bad]) target
+            larger <- preimageCompletionsWith unusedEntailment 3 lowering (FTA.fromTerms [good, bad]) target
+            (completionTerms small, completionTerms larger) `shouldBe` ([good], [good])
+
+-- | Construct a valid lowering for a test fixture.
+checkedLowering :: [(Symbol, Int, Expansion Symbol)] -> Lowering Symbol
+checkedLowering = either (error . show) id . mkLowering
 
 {- | The completions and the undecided completions of each prefix, against a
 search of every term over the symbols of the automaton: a term is accepted
