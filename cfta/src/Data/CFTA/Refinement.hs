@@ -38,6 +38,7 @@ module Data.CFTA.Refinement (
     Entailment (Entailment, entails),
     entailmentWithBindings,
     entailsWithBindings,
+    fallback,
     RefinementRelation (..),
     refinementRelation,
     SemanticIntersection (..),

@@ -12,6 +12,7 @@ module Data.CFTA.Refinement.Verdict (
     Entailment (Entailment, entails),
     entailmentWithBindings,
     entailsWithBindings,
+    fallback,
     RefinementRelation (..),
     refinementRelation,
     SemanticIntersection (..),
@@ -62,6 +63,21 @@ entailmentWithBindings ::
     ([(Name, Name)] -> Formula -> Formula -> IO Verdict) ->
     Entailment
 entailmentWithBindings = ScopedEntailment
+
+{- | Ask the first solver. Ask the second solver, with the same bindings, only
+when the first gives 'Unknown'.
+
+An exception of either solver is not caught. For example, a solver of
+'Data.CFTA.Refinement.LiquidFixpoint.withZ3Timeout' raises
+'Data.CFTA.Refinement.LiquidFixpoint.TimeLimitReached' when a query reaches
+its time limit. Then the query stops, and the second solver does not get it.
+-}
+fallback :: Entailment -> Entailment -> Entailment
+fallback first second = ScopedEntailment $ \bindings antecedent consequent -> do
+    verdict <- entailsWithBindings first bindings antecedent consequent
+    case verdict of
+        Unknown -> entailsWithBindings second bindings antecedent consequent
+        _ -> pure verdict
 
 -- | The semantic subtype relationship between two refinements.
 data RefinementRelation

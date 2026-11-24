@@ -7,6 +7,8 @@
   each transition is a function from the sorts of its children to the sort of
   its state, or a value of that sort. The map is then a homomorphism to the
   automaton of the signature.
+- Carry named predicates through child substitution and measured constructors.
+  The logical result value can have a solver-defined data type.
 - `Data.CFTA.Sized.Prefix`: `stepToken` and `stepPrefix` add tokens only when
   the tokens are offered, and otherwise give a `Refusal`: the token is
   rejected, the token is undecided, or the prefix is a whole term.
