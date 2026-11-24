@@ -2,6 +2,16 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add `Data.CFTA.Gen.Refinement.Sequent`: the geometric sequents over the
+  symbols of a theory, as the terms of one scoped signature.
+  `sequentSignature` gives the signature from a `Theory` and
+  `SequentSettings`: the comparisons at each sort, the integer literals, the
+  sorts that a binder can have, and the bound on the nested binders. An empty
+  list of binder sorts gives only the sequents without variables. Thus
+  `Data.CFTA.Sized` counts, lists, ranks, and unranks the sequents by size.
+  `readSequent` gives the `Sequent` of a term, and `writeSequent` gives the
+  term of a `Sequent` or a `WriteError`. The example `cfta-sequents` lists
+  the sequents of a theory of integer lists.
 - `Data.CFTA.Gen.ManySorted.checkSorts` and `checkSortsWith` check that a
   map from the states of an automaton to sorts fits a run-time signature:
   each transition is a function from the sorts of its children to the sort of

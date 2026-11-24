@@ -16,6 +16,7 @@ import qualified Data.CFTA.Gen.ManySorted.RefinedSpec
 import qualified Data.CFTA.Gen.ManySorted.ScopedSpec
 import qualified Data.CFTA.Gen.ManySortedSpec
 import qualified Data.CFTA.Gen.ReferenceSpec
+import qualified Data.CFTA.Gen.Refinement.SequentSpec
 import qualified Data.CFTA.Gen.Synthesis.StatesSpec
 import qualified Data.CFTA.Gen.SynthesisSpec
 import qualified Data.CFTA.Gen.TowerSpec
@@ -56,6 +57,7 @@ main =
         Data.CFTA.Gen.ManySorted.ScopedSpec.spec
         Data.CFTA.Gen.ManySortedSpec.spec
         Data.CFTA.Gen.ReferenceSpec.spec
+        Data.CFTA.Gen.Refinement.SequentSpec.spec
         Data.CFTA.Gen.SynthesisSpec.spec
         Data.CFTA.Gen.Synthesis.StatesSpec.spec
         Data.CFTA.Gen.TowerSpec.spec
