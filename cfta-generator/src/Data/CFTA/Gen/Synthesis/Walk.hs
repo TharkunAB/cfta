@@ -161,6 +161,11 @@ data Limits = Limits
     -- ^ The number of Hectare's programs to stop after.
     , limitDeadline :: Maybe Word64
     -- ^ The time on the monotonic clock, in nanoseconds, to stop at.
+    , limitPrefix :: [Token]
+    {- ^ The tokens in preorder that each program starts with; empty for no
+    prefix. Only the enumerated walk of mode (b)
+    ("Data.CFTA.Gen.Synthesis.States") reads it.
+    -}
     }
 
 -- | Functions that a walk calls.
@@ -173,6 +178,15 @@ data Hooks m = Hooks
     {- ^ Whether a program that fits is new: the walk gives the function only
     a new fit. The caller keeps the fits so far, so that a program of two
     runs (as of a portfolio) is a fit once.
+    -}
+    , hookScore :: Maybe (Maybe Token -> Int -> Token -> Double)
+    {- ^ The score of a token given the token of its parent (none for the
+    root) and its position among the parent's children, such as a
+    log-probability. The score of a program is the sum over its tokens. The
+    enumerated walk of mode (b) ("Data.CFTA.Gen.Synthesis.States") then
+    builds the automata of every size first, and checks the programs of all
+    sizes in the order of descending score, not size by size. The other walks
+    do not use it.
     -}
     }
 

@@ -11,13 +11,20 @@ fits, all the names in scope (GHC checks only the locals when the hole's
 type is a type variable), and the hole's type, implications, and relevant
 constraints (the 'TypedHole'). A hole of a function type gets its fits as lambdas: each
 argument of the type is a variable that the fit uses once, as in a Hoogle+
-query. The plugin drops the fits that GHC finds itself (one identifier
-applied to the arguments in order), and the fits that call a definition
-that holds the hole, because such a fit can loop. Hectare's rule
-'hectareAvoid' applies: a list function is not applied to @[]@. A fit with
-the normal form of an earlier fit is skipped ('optionNormalForms'), and a fit
-that ignores part of itself or drops an argument ('comesLast') comes after
-the others.
+query. The plugin prints such a fit eta reduced, as @h b@ for
+@\\x1 -> h b x1@. The plugin drops the fits that GHC finds itself (one identifier
+applied to the arguments in order, or @id@ as @\\x1 -> x1@). A fit can call
+a definition that holds the hole, as a recursive call, with two exceptions,
+because such a call loops: no call when the hole is the whole right-hand
+side of the definition's only equation (@count = _@), and no call with the
+parameters of the equation that holds the hole (@sizeOf m@ in
+@sizeOf m = case m of Just ys -> _@). When the module does not parse with
+GHC's parser (it uses CPP), a fit does not call a top-level definition that
+holds the hole.
+Hectare's rule 'hectareAvoid' applies: a list function is not applied to
+@[]@. A fit with the normal form of an earlier fit is skipped
+('optionNormalForms'), and a fit that ignores part of itself or drops an
+argument ('comesLast') comes after the others.
 
 The plugin's fits come after GHC's. GHC keeps the first
 @-fmax-valid-hole-fits@ fits after the plugin, so the plugin's driver hook
@@ -40,6 +47,27 @@ The options apply to each hole:
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-model=NAME the model on the server
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-keep-alive=0   how long the server keeps the model loaded
 
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:model=base.cfta   order the fits with a fit model
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:hole-context=off  score the root of each fit as a right-hand side
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:model-search=best-first  search the typed space in the model's order
+
+With @model@, the plugin reads a fit model ("Data.CFTA.GHC.Model", the text
+form @fit-model 1;@ in a @.cfta@ file, which @cfta-fit-model@ builds from
+Haskell sources) once for each module, and orders the fits by the model's
+score. By default the search keeps its own mode: the plugin takes a pool of
+at least 50 fits, and the model orders them, the fits that use every part
+first. With @model-search=best-first@, the search is mode (b) ('States') and
+lists the programs of all sizes in the order of the model's score, best
+first ('optionScore'); it finds more fits, but needs a few seconds for each
+hole. The plugin also reads the module of the first hole with GHC's parser
+("Data.CFTA.GHC.Corpus"): the probability of @var@ (a name outside the
+library) goes to the module's own names in proportion to their uses in the
+module ('tokenScoreShared'), so the model knows which of the names in scope
+the module calls. A model that the plugin cannot read gives a
+warning, and the fits keep their order. The root of each fit has the context
+of its hole: in @foldr f _ xs@, the second argument of @foldr@ ('scorerFor').
+With @hole-context=off@, it has the context of a right-hand side.
+
 With @rank@, a decision model orders the plugin's fits
 ("Data.CFTA.GHC.Rank"). It needs a running Ollama
 (@http://localhost:11434@) with a model that has the capability
@@ -61,20 +89,26 @@ module Data.CFTA.GHC.HoleFits (
     readOptions,
 ) where
 
-import Control.Exception (SomeAsyncException, fromException, throwIO, try)
-import Control.Monad (filterM, foldM, void)
+import Control.Exception (IOException, SomeAsyncException, fromException, throwIO, try)
+import Control.Monad (filterM, foldM, join, void)
 import Control.Monad.IO.Class (liftIO)
-import Data.List (sortBy)
+import Data.List (sortBy, sortOn)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, listToMaybe)
+import Data.Maybe (catMaybes, fromMaybe, isJust, listToMaybe)
+import Data.Ord (Down (..))
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
+import qualified Data.Text.IO as Text
+import System.IO (hPutStrLn, stderr)
 import Text.Read (readMaybe)
 
+import Data.CFTA.GHC.Corpus (holeContext, holeEquations, moduleNames, parserOf)
 import Data.CFTA.GHC.Fits
+import Data.CFTA.GHC.Model (FitModel (..), parseFitModel, tokenScoreShared)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits, rankingModel)
 import Data.CFTA.Gen.Synthesis (Program (..))
+import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
 import Decision.Ollama (Ollama (..), unload)
 import GHC.Builtin.Names (gHC_INTERNAL_BASE, gHC_INTERNAL_ERR, gHC_INTERNAL_UNSAFE_COERCE)
 import GHC.Builtin.Types (consDataCon, nilDataCon, tupleDataCon)
@@ -82,7 +116,8 @@ import GHC.Core.ConLike (ConLike (RealDataCon))
 import GHC.Core.DataCon (dataConName, dataConNonlinearType, dataConWrapId)
 import GHC.Core.Multiplicity (scaledMult, scaledThing)
 import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
-import GHC.Core.Type (Type, isManyTy)
+import GHC.Core.Type (Type, getTyVar_maybe, isManyTy)
+import GHC.Data.FastString (unpackFS)
 import GHC.Data.IOEnv (getEnv, runIOEnv)
 import GHC.Driver.DynFlags (
     DynFlags (maxValidHoleFits),
@@ -90,16 +125,19 @@ import GHC.Driver.DynFlags (
     HasDynFlags (getDynFlags),
     gopt_unset,
  )
-import GHC.Driver.Env (HscEnv, hscUpdateFlags)
+import GHC.Driver.Env (HscEnv, hscUpdateFlags, hsc_logger)
 import GHC.Driver.Plugins (CommandLineOption, Plugin (..), defaultPlugin, purePlugin)
 import GHC.Driver.Ppr (showSDoc)
 import GHC.Tc.Errors.Hole.FitTypes (HoleFit (RawHoleFit), HoleFitCandidate (..))
 import GHC.Tc.Errors.Hole.Plugin (HoleFitPlugin (..), HoleFitPluginR (..))
-import GHC.Tc.Types.BasicTypes (TcTyThing (AGlobal, ATcId, tct_id))
+import GHC.Tc.Types (env_top)
+import GHC.Tc.Types.BasicTypes (TcBinder (..), TcTyThing (AGlobal, ATcId, tct_id))
 import GHC.Tc.Types.Constraint (Hole (..))
+import GHC.Tc.Types.CtLoc (CtLoc, ctLocEnv, ctLocSpan, ctl_bndrs)
 import GHC.Tc.Utils.Env (tcLookup)
 import GHC.Tc.Utils.Monad (
     TcM,
+    TcRef,
     getGlobalRdrEnv,
     liftZonkM,
     newTcRef,
@@ -111,7 +149,7 @@ import GHC.Tc.Utils.Monad (
 import GHC.Tc.Utils.TcMType (readMetaTyVar)
 import GHC.Tc.Utils.TcType (MetaDetails (Flexi), isFlexi, isMetaTyVar, metaTyVarRef, tcSplitFunTys, tcSplitSigmaTy)
 import GHC.Tc.Zonk.TcType (zonkTcType, zonkTcTypes)
-import GHC.Types.Basic (Boxity (Boxed))
+import GHC.Types.Basic (Boxity (Boxed), isTopLevel)
 import GHC.Types.Id (Id, idMult, idName, idType)
 import GHC.Types.Name (
     Name,
@@ -125,6 +163,7 @@ import GHC.Types.Name (
  )
 import GHC.Types.Name.Reader (GlobalRdrElt, globalRdrEnvElts, greName, gre_lcl)
 import GHC.Types.Name.Set (elemNameSet, emptyNameSet, extendNameSet)
+import GHC.Types.SrcLoc (srcSpanFile, srcSpanStartCol, srcSpanStartLine)
 import GHC.Types.TyThing (TyThing (AConLike, AnId))
 import GHC.Types.Var (isTcTyVar)
 import GHC.Utils.Outputable (SDoc, char, hcat, hsep, parens, ppr, text, (<+>))
@@ -143,6 +182,14 @@ plugin =
 data PluginOptions = PluginOptions
     { pluginSearch :: Options
     , pluginRanking :: Maybe Ranking
+    , pluginModel :: Maybe FilePath
+    -- ^ The file of a fit model.
+    , pluginHoleContext :: Bool
+    -- ^ Whether the root of a fit has the context of the hole, or always @top@.
+    , pluginRerank :: Bool
+    {- ^ Whether the model orders the fits of the search (a pool of at least
+    50, the default), or the search itself (@model-search=best-first@).
+    -}
     }
 
 {- | The options of the plugin, from its @-fplugin-opt@ arguments
@@ -156,7 +203,15 @@ readOptions arguments = do
     case settings of
         setting : _
             | not ranked -> Left (setting <> " needs the option rank: the ranking is on only with rank")
-        _ -> Right (PluginOptions options (if ranked then Just ranking else Nothing))
+        _ ->
+            Right
+                ( PluginOptions
+                    options
+                    (if ranked then Just ranking else Nothing)
+                    (lastValue "model")
+                    (lastValue "hole-context" /= Just "off")
+                    (lastValue "model-search" /= Just "best-first")
+                )
   where
     search0 = defaultOptions{optionMaximumSize = 4, optionFits = 5, optionSeconds = Just 1, optionAvoid = hectareAvoid}
     set (options, ranking, ranked, settings) argument = case break (== '=') argument of
@@ -170,6 +225,11 @@ readOptions arguments = do
         ("normal-forms", '=' : "on") -> Right (search (\o -> o{optionNormalForms = True}))
         ("normal-forms", '=' : "off") -> Right (search (\o -> o{optionNormalForms = False}))
         ("rank", "") -> Right (options, ranking, True, settings)
+        ("model", '=' : _) -> Right (options, ranking, ranked, settings)
+        ("hole-context", '=' : "on") -> Right (options, ranking, ranked, settings)
+        ("hole-context", '=' : "off") -> Right (options, ranking, ranked, settings)
+        ("model-search", '=' : "best-first") -> Right (options, ranking, ranked, settings)
+        ("model-search", '=' : "rerank") -> Right (options, ranking, ranked, settings)
         ("rank-pool", '=' : value) -> (\pool -> setting (\r -> r{rankingPool = pool})) <$> number value
         ("rank-seconds", '=' : value) -> (\seconds -> setting (\r -> r{rankingSeconds = seconds})) <$> number value
         ("rank-model", '=' : value) -> Right (setting (server (\o -> o{ollamaModel = Text.pack value})))
@@ -178,7 +238,7 @@ readOptions arguments = do
             Left
                 ( "unknown option "
                     <> argument
-                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
+                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, model, hole-context, model-search, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
                 )
       where
         search change = (change options, ranking, ranked, settings)
@@ -187,6 +247,10 @@ readOptions arguments = do
         server change current = current{rankingServer = change (rankingServer current)}
         number :: (Read a) => String -> Either String a
         number value = maybe (Left ("not a number in " <> argument)) Right (readMaybe value)
+    -- The value of the last argument NAME=VALUE with a name.
+    lastValue name = case [value | argument <- arguments, (found, '=' : value) <- [break (== '=') argument], found == name] of
+        [] -> Nothing
+        values -> Just (last values)
 
 {- | Raise @-fmax-valid-hole-fits@ by the plugin's number of fits, because
 GHC cuts the list of fits after the plugin, and read the unfoldings of the
@@ -210,16 +274,28 @@ a model that the server keeps loaded.
 holeFits :: PluginOptions -> HoleFitPluginR
 holeFits options =
     HoleFitPluginR
-        { hfPluginInit = newTcRef (Nothing, False)
-        , hfPluginRun = \reference ->
+        { hfPluginInit = do
+            model <- join <$> traverse readModel (pluginModel options)
+            modelReference <- newTcRef (model, Map.empty, False)
+            reference <- newTcRef (Nothing, False)
+            newTcRef (reference, modelReference)
+        , hfPluginRun = \references ->
             HoleFitPlugin
-                { candPlugin = \_ scope -> scope <$ updTcRef reference (\(_, ranked') -> (Just scope, ranked'))
+                { candPlugin = \_ scope -> do
+                    (reference, _) <- readTcRef references
+                    scope <$ updTcRef reference (\(_, ranked') -> (Just scope, ranked'))
                 , fitPlugin = \hole fits -> do
+                    (reference, modelReference) <- readTcRef references
                     (open, ranked') <- readTcRef reference
                     writeTcRef reference (Nothing, ranked')
                     case open of
                         Just scope -> do
-                            (ours, asked) <- fitsFor options hole scope
+                            (model, uses) <- modelFor modelReference hole
+                            scorer <-
+                                traverse
+                                    (\found -> if pluginHoleContext options then scorerFor hole uses found else pure (tokenScoreShared found uses ("top", 0)))
+                                    model
+                            (ours, asked) <- fitsFor options scorer hole scope
                             updTcRef reference (\(open', _) -> (open', ranked' || asked))
                             -- The limit without the plugin: see 'raiseLimit'.
                             limit <- maxValidHoleFits <$> getDynFlags
@@ -227,7 +303,8 @@ holeFits options =
                             pure (take kept fits <> ours <> drop kept fits)
                         Nothing -> pure fits
                 }
-        , hfPluginStop = \reference -> do
+        , hfPluginStop = \references -> do
+            (reference, _) <- readTcRef references
             (_, ranked') <- readTcRef reference
             case pluginRanking options of
                 Just ranking
@@ -236,17 +313,102 @@ holeFits options =
                 _ -> pure ()
         }
 
+{- | Read a fit model. A model that the plugin cannot read gives a warning
+and no model.
+-}
+readModel :: FilePath -> TcM (Maybe FitModel)
+readModel path = liftIO $ do
+    found <- try (Text.readFile path)
+    case either (Left . show) parseFitModel (found :: Either IOException Text) of
+        Right model -> pure (Just model)
+        Left problem -> do
+            hPutStrLn
+                stderr
+                ("Data.CFTA.GHC.HoleFits: the model " <> path <> " is not read, so the fits keep their order: " <> problem)
+            pure Nothing
+
+{- | The model of a hole, and how often the module uses each name that is
+@var@ for the model. The plugin reads the module once, at its first hole.
+-}
+modelFor :: TcRef (Maybe FitModel, Map.Map Text Int, Bool) -> TypedHole -> TcM (Maybe FitModel, Map.Map Text Int)
+modelFor reference hole = do
+    (loaded, uses, read') <- readTcRef reference
+    case (loaded, th_hole hole) of
+        (Just model, Just Hole{hole_loc = location}) | not read' -> do
+            flags <- getDynFlags
+            logger <- hsc_logger . env_top <$> getEnv
+            let file = unpackFS (srcSpanFile (ctLocSpan location))
+                parser = parserOf flags logger
+            -- How often the module uses each name that is var for the model.
+            names <- liftIO (moduleNames parser file)
+            let uses' = Map.filterWithKey (\name _ -> Map.notMember name (modelCandidates model)) names
+            writeTcRef reference (Just model, uses', True)
+            pure (Just model, uses')
+        (found, _) -> pure (found, uses)
+
+{- | The score of the tokens of the fits of a hole under a model. The root of
+a fit has the context of the hole ("Data.CFTA.GHC.Corpus.holeContext"): the
+symbol of the node whose child the hole is and the hole's position, as
+@foldr/3@ and 1 for @foldr f _ xs@, or @top@ for the body of a right-hand
+side. A hole of a function type gets its fits as lambdas: when such a hole
+is the child of another node, the root of a fit's body has the context of a
+lambda's body, @lambda/1@ and 0.
+-}
+scorerFor ::
+    TypedHole -> Map.Map Text Int -> FitModel -> TcM (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
+scorerFor hole uses model = case th_hole hole of
+    Just Hole{hole_ty = holeType, hole_loc = location} -> do
+        typ <- liftZonkM (zonkTcType holeType)
+        flags <- getDynFlags
+        logger <- hsc_logger . env_top <$> getEnv
+        let (parameters, _) = tcSplitFunTys typ
+            span' = ctLocSpan location
+            start = (srcSpanStartLine span', srcSpanStartCol span')
+            parser = parserOf flags logger
+        context <-
+            liftIO
+                (holeContext parser (modelModules model) (Map.keysSet (modelCandidates model)) (unpackFS (srcSpanFile span')) start)
+        pure . tokenScoreShared model uses $ case context of
+            Just found
+                | null parameters -> found
+                | fst found `notElem` ["top", "expr"] -> ("lambda/1", 0)
+            _ -> ("top", 0)
+    Nothing -> pure (tokenScoreShared model uses ("top", 0))
+
 {- | The plugin's fits for a hole, best first: none when the hole has no
 type, when its type has a @forall@ or a class context at the top, when a
-multiplicity is not @Many@, or when the search fails. The flag says whether
+multiplicity is neither @Many@ nor an open multiplicity variable (which GHC
+defaults to @Many@), or when the search fails. The flag says whether
 a model was asked.
 -}
-fitsFor :: PluginOptions -> TypedHole -> [HoleFitCandidate] -> TcM ([HoleFit], Bool)
-fitsFor (PluginOptions options ranking) hole scope = case th_hole hole of
+fitsFor ::
+    PluginOptions ->
+    Maybe (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double) ->
+    TypedHole ->
+    [HoleFitCandidate] ->
+    TcM ([HoleFit], Bool)
+fitsFor (PluginOptions options' ranking _ _ rerank) scorer hole scope = case th_hole hole of
     Nothing -> pure ([], False)
-    Just Hole{hole_ty = holeType} -> do
+    Just Hole{hole_ty = holeType, hole_loc = location} -> do
         elements <- globalRdrEnvElts <$> getGlobalRdrEnv
-        let everything = withoutRepeats (scope <> map GreHFCand elements <> map (NameHFCand . dataConName) syntax)
+        parser <- parserOf <$> getDynFlags <*> (hsc_logger . env_top <$> getEnv)
+        let span' = ctLocSpan location
+        equations <-
+            liftIO (holeEquations parser (unpackFS (srcSpanFile span')) (srcSpanStartLine span', srcSpanStartCol span'))
+        let definitions = moduleLocals scope elements
+            -- The definitions of the module that hold the hole.
+            holding = Set.intersection (binderNames location) definitions
+            localNames = Set.fromList [idName identifier | IdHFCand identifier <- scope]
+            -- A definition that holds the hole is not a fit when the hole is the
+            -- whole right-hand side of its only equation, because a call of it
+            -- loops. When the module does not parse, no top-level definition
+            -- that holds the hole is a fit.
+            looping = maybe holding (\found' -> Set.fromList [Text.unpack name | (name, _, True) <- found']) equations
+            -- A definition that holds the hole is a local and a name of the
+            -- module: the plugin keeps the local.
+            elsewhere element = not (gre_lcl element && getOccString (greName element) `Set.member` definitions)
+            everything =
+                withoutRepeats (scope <> map GreHFCand (filter elsewhere elements) <> map (NameHFCand . dataConName) syntax)
             syntax = [nilDataCon, consDataCon, tupleDataCon Boxed 2]
             -- The scope in an order that does not depend on uniques.
             byName (name, _, _) (name', _, _) = stableNameCmp name name'
@@ -255,8 +417,12 @@ fitsFor (PluginOptions options ranking) hole scope = case th_hole hole of
         types <- liftZonkM (zonkTcTypes [typ' | (_, _, typ') <- found])
         let (variables, context, _) = tcSplitSigmaTy typ
             (parameters, result) = tcSplitFunTys typ
-            enclosing = definitionsHolding scope elements
-            named = uniqueNames [(name, typ') | ((name, _, _), typ') <- zip found types, getOccString name `Set.notMember` enclosing]
+            named =
+                uniqueNames
+                    [ (name, typ')
+                    | ((name, _, _), typ') <- zip found types
+                    , not (name `Set.member` localNames && getOccString name `Set.member` looping)
+                    ]
             used = Set.fromList (map fst named)
             arguments =
                 take
@@ -266,22 +432,49 @@ fitsFor (PluginOptions options ranking) hole scope = case th_hole hole of
                 [Candidate label typ' (heads name) False (Just name) | (label, (name, typ')) <- named]
                     <> [Candidate argument (scaledThing parameter) True True Nothing | (argument, parameter) <- zip arguments parameters]
             names = Map.fromList [(label, pprPrefixName name) | (label, (name, _)) <- named]
-        if not (null variables && null context)
-            || not (all (isManyTy . scaledMult) parameters)
-            || not (all (\(_, identifier, _) -> isManyTy (idMult identifier)) found)
+        -- A binder of a case alternative has a multiplicity variable that GHC
+        -- defaults to Many later, so an open variable counts as Many.
+        multiplicities <-
+            liftZonkM (zonkTcTypes (map scaledMult parameters <> [idMult identifier | (_, identifier, _) <- found]))
+        let unrestricted multiplicity =
+                isManyTy multiplicity
+                    || maybe False (\variable -> isTcTyVar variable && isMetaTyVar variable) (getTyVar_maybe multiplicity)
+        if not (null variables && null context) || not (all unrestricted multiplicities)
             then pure ([], False)
             else do
                 flexible <-
                     filterM (fmap isFlexi . readMetaTyVar) (filter (\v -> isTcTyVar v && isMetaTyVar v) (tyCoVarsOfTypesList (typ : types)))
-                outcome <- attempt (search candidates arguments result)
+                -- The locals of the hole and the arguments of its lambdas are @arg@ for the model.
+                -- A definition of the module is @var@, as in the corpus.
+                let argumentNames =
+                        Set.fromList
+                            ( [ label
+                              | (label, (name, _)) <- named
+                              , name `Set.member` localNames
+                              , getOccString name `Set.notMember` definitions
+                              ]
+                                <> arguments
+                            )
+                -- A call of the definition of an equation that holds the hole,
+                -- with the parameters of the equation, loops at once.
+                let labelOf = Map.fromList [(Text.pack (getOccString name), label) | (label, (name, _)) <- named, name `Set.member` localNames]
+                    loops =
+                        Set.fromList
+                            [ foldl App (Var function') (map Var labels)
+                            | (function, equationParameters, _) <- fromMaybe [] equations
+                            , Just function' <- [Map.lookup function labelOf]
+                            , Just labels <- [traverse (>>= (`Map.lookup` labelOf)) equationParameters]
+                            ]
+                    dropped program = foundByGhc arguments program || program `Set.member` loops
+                outcome <- attempt (search (withScorer argumentNames) candidates dropped result)
                 -- As 'GHC.Tc.Errors.Hole.withoutUnification', also when the
                 -- search stops part way.
                 mapM_ (\variable -> writeTcRef (metaTyVarRef variable) Flexi) flexible
                 flags <- getDynFlags
                 let shown fit = render names arguments (fitProgram fit)
                     plain = Text.pack . showSDoc flags
-                    definition = [identifier | IdHFCand identifier <- scope, getOccString identifier `Set.member` enclosing]
-                    locals = [identifier | IdHFCand identifier <- scope, getOccString identifier `Set.notMember` enclosing]
+                    definition = [identifier | IdHFCand identifier <- scope, getOccString identifier `Set.member` holding]
+                    locals = [identifier | IdHFCand identifier <- scope, getOccString identifier `Set.notMember` definitions]
                     state =
                         holeState
                             ( (\identifier -> (plain (ppr identifier), plain (ppr (idType identifier)), ["..."]))
@@ -289,7 +482,15 @@ fitsFor (PluginOptions options ranking) hole scope = case th_hole hole of
                             )
                             (plain (ppr typ))
                             [(plain (ppr local), plain (ppr (idType local))) | local <- locals]
-                let fits = concat outcome
+                let found' = concat outcome
+                    -- With model-search=rerank, the model orders the fits of the search,
+                    -- those that use every part first.
+                    fits = case scorer of
+                        Just score
+                            | rerank ->
+                                let byScore = sortOn (Down . programScore (score argumentNames) . fitProgram)
+                                 in byScore (filter (not . comesLast) found') <> byScore (filter comesLast found')
+                        _ -> found'
                     -- 'rankedFits' asks a question for two fits or more that use every part.
                     asks pool = length (take pool (filter (not . comesLast) fits)) >= 2
                 (ordered, asked) <- case ranking of
@@ -297,14 +498,20 @@ fitsFor (PluginOptions options ranking) hole scope = case th_hole hole of
                         model <- rankingModel ranking'
                         (\(order, _) -> (order, asks (rankingPool ranking'))) <$> rankedFits model ranking' state (plain . shown) fits
                     Nothing -> pure (fits, False)
-                pure ([RawHoleFit (shown fit) | fit <- take (optionFits options) ordered], asked)
+                pure ([RawHoleFit (shown fit) | fit <- take (optionFits options') ordered], asked)
   where
+    -- With a fit model, mode (b) checks the programs in the order of the model's score.
+    withScorer argumentNames = case scorer of
+        Just score | not rerank -> options'{optionMode = States (Enumerated HostOrder), optionScore = Just (score argumentNames)}
+        _ -> options'
     -- With a ranking, the model orders more fits than the plugin shows.
-    wanted = maybe (optionFits options) (max (optionFits options) . rankingPool) ranking
-    search candidates arguments result = do
+    wanted =
+        maybe (optionFits options') (max (optionFits options') . rankingPool) ranking
+            `max` (if rerank && isJust scorer then 50 else 0)
+    search options candidates dropped result = do
         kept <- newTcRef []
         let accept fit
-                | foundByGhc arguments (fitProgram fit) = pure True
+                | dropped (fitProgram fit) = pure True
                 | otherwise = do
                     updTcRef kept (fit :)
                     fits <- readTcRef kept
@@ -315,6 +522,17 @@ fitsFor (PluginOptions options ranking) hole scope = case th_hole hole of
     -- As in Hectare's library, @($)@ and @id@ only appear as arguments; so
     -- does @($!)@, which applies a function as @($)@ does.
     heads name = getOccString name `notElem` ["$", "$!", "id"] || nameModule_maybe name /= Just gHC_INTERNAL_BASE
+
+-- | The score of a program: the sum of the scores of its tokens, each given its parent's token and its position.
+programScore :: (Maybe (Text, Int) -> Int -> (Text, Int) -> Double) -> Program -> Double
+programScore score = go Nothing 0
+  where
+    go parent position program =
+        let (name, arguments) = spine program
+            token = (name, length arguments)
+         in score parent position token + sum [go (Just token) index argument | (index, argument) <- zip [0 ..] arguments]
+    spine (Var name) = (name, [])
+    spine (App function argument) = let (name, arguments) = spine function in (name, arguments <> [argument])
 
 {- | The identifier of a candidate, with its name and type, as
 'GHC.Tc.Errors.Hole.tcFilterHoleFits' looks it up: a data constructor has
@@ -340,14 +558,28 @@ lookupCandidate candidate = case candidate of
         | nameModule_maybe name `elem` [Just gHC_INTERNAL_ERR, Just gHC_INTERNAL_UNSAFE_COERCE] = Nothing
         | otherwise = Just found
 
-{- | The names of the definitions that hold the hole. GHC gives such a
-definition as a local, with the name of a definition of the module.
+{- | The names of the definitions of the module that GHC gives as locals in
+the scope of a hole: the definitions that hold the hole, and the definitions
+with a type signature that GHC checks after the hole.
 -}
-definitionsHolding :: [HoleFitCandidate] -> [GlobalRdrElt] -> Set.Set String
-definitionsHolding scope elements =
+moduleLocals :: [HoleFitCandidate] -> [GlobalRdrElt] -> Set.Set String
+moduleLocals scope elements =
     Set.intersection
         (Set.fromList [getOccString identifier | IdHFCand identifier <- scope])
         (Set.fromList [getOccString (greName element) | element <- elements, gre_lcl element])
+
+{- | The names of the binders that hold a hole, from GHC's binder stack. The
+stack also has the definitions with a type signature that GHC checks after
+the hole, as top-level binders; they do not hold the hole, so they are not
+in the result.
+-}
+binderNames :: CtLoc -> Set.Set String
+binderNames location = Set.fromList (concatMap name (ctl_bndrs (ctLocEnv location)))
+  where
+    name binder = case binder of
+        TcIdBndr identifier flag | not (isTopLevel flag) -> [getOccString identifier]
+        TcIdBndr_ExpType name' _ flag | not (isTopLevel flag) -> [getOccString name']
+        _ -> []
 
 -- | The candidates without a second candidate of the same name.
 withoutRepeats :: [HoleFitCandidate] -> [HoleFitCandidate]
@@ -372,9 +604,12 @@ uniqueNames = go Map.empty
             text' = if count == 0 then base else base <> "'" <> Text.pack (show count)
          in (text', (name, typ)) : go (Map.insert base (count + 1) seen) rest
 
--- | Whether GHC finds a program itself: one identifier applied to the arguments in order.
+{- | Whether GHC finds a program itself: one identifier applied to the
+arguments in order, or the only argument, which is @id@.
+-}
 foundByGhc :: [Text] -> Program -> Bool
 foundByGhc arguments program = case spine program [] of
+    (Var name, []) | [name] == arguments -> True
     (Var _, applied) -> applied == map Var arguments
     _ -> False
   where
@@ -382,16 +617,31 @@ foundByGhc arguments program = case spine program [] of
     spine other rest = (other, rest)
 
 {- | A program as an expression: each candidate's name in prefix form, as
-GHC qualifies it, and the arguments as a lambda.
+GHC qualifies it, and the arguments as a lambda, eta reduced ('etaReduced').
 -}
 render :: Map.Map Text SDoc -> [Text] -> Program -> SDoc
 render names arguments program
-    | null arguments = expression False program
-    | otherwise = hcat [char '\\', hsep (map (text . Text.unpack) arguments)] <+> text "->" <+> expression False program
+    | null arguments' = expression False program'
+    | otherwise = hcat [char '\\', hsep (map (text . Text.unpack) arguments')] <+> text "->" <+> expression False program'
   where
+    (arguments', program') = etaReduced arguments program
     expression nested term = case term of
         Var name -> Map.findWithDefault (text (Text.unpack name)) name names
         App function argument -> (if nested then parens else id) (expression False function <+> expression True argument)
+
+{- | A lambda without the last arguments that its body applies last and
+does not use elsewhere: @\\x1 x2 -> f x1 a x2@ is @\\x1 -> f x1 a@, and
+@\\x1 -> h b x1@ is @h b@.
+-}
+etaReduced :: [Text] -> Program -> ([Text], Program)
+etaReduced arguments program = case (reverse arguments, program) of
+    (lastArgument : earlier, App function (Var name))
+        | name == lastArgument && not (uses lastArgument function) -> etaReduced (reverse earlier) function
+    _ -> (arguments, program)
+  where
+    uses name term = case term of
+        Var name' -> name == name'
+        App function argument -> uses name function || uses name argument
 
 {- | Run an action, and give 'Nothing' when it throws an exception that is
 not asynchronous, so that a failed search leaves GHC's fits as they are.
