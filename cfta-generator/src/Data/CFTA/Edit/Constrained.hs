@@ -70,9 +70,9 @@ assumption:
 
 * 'Branching': the edits are exact when the transitions above a site are
   those of the run of the term. That is so when the state of each position
-  above the site has one transition for the symbol of the term there.
-  Otherwise another transition can accept an edited term with other
-  constraints, or give the position another state.
+  above the site has one transition for the symbol and the number of
+  children of the term there. Otherwise another transition can accept an
+  edited term with other constraints, or give the position another state.
 * 'ConstrainedHole': a context wrap where a class or an atom reads the child
   with the hole, or where the new term can have a node with a constraint.
   Such a constraint reads the place of the hole, which differs from edit to
@@ -164,7 +164,7 @@ data ConstrainedEdits symbol = ConstrainedEdits
 one reason, the result gives the first in this order.
 -}
 data LeftOut
-    = -- | A state above the site has two transitions for the symbol of the term there.
+    = -- | A state above the site has two transitions for the symbol and the number of children of the term there.
       Branching
     | {- | A context wrap whose hole a constraint reads, or whose new term
       can have a node with a constraint.
@@ -398,7 +398,7 @@ editsWith check decideAtom runError automaton given = do
             wraps <- wrapSites at state old
             contexts <- contextSites at state old
             pure $ replaceSite at state old : unwraps <> wraps <> contexts
-        -- The site at a position is branching when a state above it has another transition for the symbol there.
+        -- The site at a position is branching when a state above it has another transition for the symbol and the number of children there.
         branching at =
             or
                 [ length [() | other <- FTA.transitionsFrom automaton state, sameShape other transition] > 1
