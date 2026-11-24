@@ -28,6 +28,7 @@ import qualified Data.CFTA.Sized.PrefixGuardSpec
 import qualified Data.CFTA.Sized.PrefixSpec
 import qualified Data.CFTA.SizedSpec
 import qualified Data.CFTA.TowerSpec
+import qualified Data.CFTA.TraceSpec
 
 main :: IO ()
 main =
@@ -58,3 +59,4 @@ main =
         Data.CFTA.ExtensionSpec.spec
         Data.CFTA.TowerSpec.spec
         Data.CFTA.InclusionSpec.spec
+        Data.CFTA.TraceSpec.spec
