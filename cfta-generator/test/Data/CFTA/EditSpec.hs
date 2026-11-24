@@ -2,8 +2,8 @@ module Data.CFTA.EditSpec (spec) where
 
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (sort)
-import Data.Maybe (listToMaybe)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (listToMaybe)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Data.CFTA as FTA

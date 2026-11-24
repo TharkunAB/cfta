@@ -10,6 +10,7 @@ module Data.CFTA.Edit.Internal (
     runStates,
 ) where
 
+import Control.Monad (zipWithM)
 import Data.List (mapAccumL)
 import qualified Data.Map.Strict as Map
 
@@ -65,5 +66,5 @@ runStates automaton given = case go (FTA.initialState automaton) given of
         | FTA.Transition other childStates _ <- FTA.transitionsFrom automaton state
         , other == symbol
         , length childStates == length children
-        , childRuns <- sequence $ zipWith go childStates children
+        , childRuns <- zipWithM go childStates children
         ]

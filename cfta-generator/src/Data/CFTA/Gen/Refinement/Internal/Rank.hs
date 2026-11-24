@@ -24,6 +24,7 @@ module Data.CFTA.Gen.Refinement.Internal.Rank (
 
 import Control.Monad.State.Strict (State, evalState, gets, modify')
 import Data.Containers.ListUtils (nubOrd)
+import Data.Functor (void)
 import qualified Data.Map.Strict as Map
 import qualified Data.Text as Text
 import Text.Read (readMaybe)
@@ -50,7 +51,7 @@ ranks, as for 'ranksOf'.
 ranksOfSurface :: Gen Symbol a -> Term Symbol -> Either GenError [Rank]
 ranksOfSurface generator target = do
     root <- support generator
-    let rows = fmap (map (fmap (const ()))) (toRows root)
+    let rows = fmap (map void) (toRows root)
         candidates = [term | (term, _, []) <- evalState (matchPrefix rows (stateOf root) [target]) Map.empty]
     nubOrd . concat <$> traverse (ranksOf generator) (nubOrd candidates)
 

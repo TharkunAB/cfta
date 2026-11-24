@@ -255,7 +255,7 @@ that is not an edit tree.
 -}
 editsOfTree :: Term (TreeSymbol symbol) -> Maybe [Edit symbol]
 editsOfTree (Term.Node symbol children) = case symbol of
-    Link site | not (null children) -> (:) <$> (Term.Node site <$> traverse material (init children)) <*> editsOfTree (last children)
+    Link site | not (null children) -> (:) . Term.Node site <$> traverse material (init children) <*> editsOfTree (last children)
     Last site -> (\new -> [Term.Node site new]) <$> traverse material children
     _ -> Nothing
   where

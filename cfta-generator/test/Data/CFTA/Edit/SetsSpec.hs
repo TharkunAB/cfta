@@ -3,7 +3,7 @@ module Data.CFTA.Edit.SetsSpec (spec) where
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (isPrefixOf, subsequences)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isNothing)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe)
 
@@ -75,7 +75,7 @@ spec = describe "Data.CFTA.Edit.Sets" $ do
                 ( name
                     , [ r
                       | r@(applied, reversed, count, paths) <- results
-                      , applied == Nothing || applied /= reversed || count > 3 || not (incomparable paths)
+                      , isNothing applied || applied /= reversed || count > 3 || not (incomparable paths)
                       ]
                     )
                     `shouldBe` (name, [])

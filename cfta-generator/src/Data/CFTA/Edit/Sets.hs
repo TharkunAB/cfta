@@ -194,7 +194,7 @@ paths are pairwise incomparable. 'Nothing' for a term that is not an edit set.
 -}
 editsOfSet :: Term (SetSymbol symbol) -> Maybe [Edit symbol]
 editsOfSet (Term.Node symbol children) = case symbol of
-    Link site | not (null children) -> (:) <$> (Term.Node site <$> traverse material (init children)) <*> editsOfSet (last children)
+    Link site | not (null children) -> (:) . Term.Node site <$> traverse material (init children) <*> editsOfSet (last children)
     Last site -> (\new -> [Term.Node site new]) <$> traverse material children
     _ -> Nothing
   where

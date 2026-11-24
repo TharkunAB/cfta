@@ -2,13 +2,13 @@ module Main (main) where
 
 import Test.Hspec (hspec)
 
-import qualified Data.CFTA.Edit.SetsSpec
-import qualified Data.CFTA.Edit.TreesSpec
 import qualified Data.CFTA.Edit.BetweenSpec
 import qualified Data.CFTA.Edit.ConstrainedSpec
+import qualified Data.CFTA.Edit.SetsSpec
+import qualified Data.CFTA.Edit.TreesSpec
 import qualified Data.CFTA.EditSpec
-import qualified Data.CFTA.Gen.CompiledRankSpec
 import qualified Data.CFTA.ExtensionSpec
+import qualified Data.CFTA.Gen.CompiledRankSpec
 import qualified Data.CFTA.Gen.Equality.DatatypeGenSpec
 import qualified Data.CFTA.Gen.Equality.GenSpec
 import qualified Data.CFTA.Gen.Equality.IFCExpressionGenSpec
@@ -16,8 +16,8 @@ import qualified Data.CFTA.Gen.Equality.RankDecodingSpec
 import qualified Data.CFTA.Gen.Equality.RecursiveGenSpec
 import qualified Data.CFTA.Gen.Equality.SimpleSpec
 import qualified Data.CFTA.Gen.Equality.TypedExpressionGenSpec
-import qualified Data.CFTA.Gen.InvertibleSpec
 import qualified Data.CFTA.Gen.IndexedLeafSpec
+import qualified Data.CFTA.Gen.InvertibleSpec
 import qualified Data.CFTA.Gen.ManySorted.RefinedSpec
 import qualified Data.CFTA.Gen.ManySorted.ScopedSpec
 import qualified Data.CFTA.Gen.ManySortedSpec

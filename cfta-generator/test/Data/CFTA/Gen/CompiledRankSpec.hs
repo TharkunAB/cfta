@@ -6,6 +6,7 @@ term against the support.
 -}
 module Data.CFTA.Gen.CompiledRankSpec (spec) where
 
+import Data.Either (fromRight)
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA.Gen as Gen
@@ -53,7 +54,7 @@ spec = describe "ranksOfSurface" $ do
             mapM_
                 ( \rank -> do
                     value <- either (fail . show) pure (Gen.unrank generator rank)
-                    let ranks = either (const []) id (LTAGen.ranksOfSurface generator value)
+                    let ranks = fromRight [] (LTAGen.ranksOfSurface generator value)
                     ranks `shouldSatisfy` elem rank
                     -- A term in two alternatives of a choice has two ranks, and both decode to it.
                     map (Gen.unrank generator) ranks `shouldBe` map (const (Right value)) ranks

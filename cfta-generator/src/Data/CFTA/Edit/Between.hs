@@ -134,7 +134,7 @@ rankedEditsBetween automaton old new = do
     edits <- either (Left . BetweenEdit) Right $ editAutomaton automaton old
     found <- editsBetween automaton old new
     let generator = Gen.fromAutomaton $ Interned.fromRows (FTA.initialState edits) (FTA.transitionTable edits)
-    ranked <- traverse (\edit -> either (Left . BetweenRank) (Right . flip (,) edit) $ Gen.rankOfTerm generator edit) found
+    ranked <- traverse (\edit -> either (Left . BetweenRank) (Right . (,edit)) $ Gen.rankOfTerm generator edit) found
     pure $ sortOn fst ranked
 
 {- | The edits at the root of the edit automaton that might give the new term:
@@ -238,7 +238,7 @@ rankedEditSetsBetween bound automaton old new = do
     found <- editSetsBetween bound automaton old new
     sets <- either (Left . BetweenEdit) Right $ editSetAutomaton bound automaton old
     let generator = Gen.fromAutomaton $ Interned.fromRows (FTA.initialState sets) (FTA.transitionTable sets)
-    ranked <- traverse (\set -> either (Left . BetweenRank) (Right . flip (,) set) $ Gen.rankOfTerm generator set) found
+    ranked <- traverse (\set -> either (Left . BetweenRank) (Right . (,set)) $ Gen.rankOfTerm generator set) found
     pure $ sortOn fst ranked
 
 -- | Where two terms differ, below a position where they agree on the symbol and the number of children.
@@ -326,6 +326,6 @@ differenceAt old new
     go (Term.Node symbol children) (Term.Node other others)
         | symbol == other
         , length children == length others
-        , [(index, (left, right))] <- [(index, pair) | (index, pair) <- zip [0 ..] (zip children others), fst pair /= snd pair] =
+        , [(index, (left, right))] <- [(index, pair) | (index, pair) <- zip [0 ..] (zip children others), uncurry (/=) pair] =
             ChildIndex index : go left right
     go _ _ = []

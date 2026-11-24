@@ -61,7 +61,7 @@ module Data.CFTA.Edit (
     holedRows,
 ) where
 
-import Control.Monad (guard)
+import Control.Monad (guard, zipWithM)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
 import qualified Data.Map.Strict as Map
@@ -216,7 +216,7 @@ editAutomaton automaton given
         | FTA.Transition other childStates _ <- FTA.transitionsFrom automaton state
         , other == symbol
         , length childStates == length children
-        , childRuns <- sequence $ zipWith runsFrom childStates children
+        , childRuns <- zipWithM runsFrom childStates children
         ]
 
 {- | The rows of the states with one hole, for a set of states of the hole. A
