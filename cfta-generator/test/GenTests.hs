@@ -2,6 +2,11 @@ module Main (main) where
 
 import Test.Hspec (hspec)
 
+import qualified Data.CFTA.Edit.BetweenSpec
+import qualified Data.CFTA.Edit.ConstrainedSpec
+import qualified Data.CFTA.Edit.SetsSpec
+import qualified Data.CFTA.Edit.TreesSpec
+import qualified Data.CFTA.EditSpec
 import qualified Data.CFTA.ExtensionSpec
 import qualified Data.CFTA.Gen.Equality.DatatypeGenSpec
 import qualified Data.CFTA.Gen.Equality.GenSpec
@@ -58,3 +63,8 @@ main =
         Data.CFTA.ExtensionSpec.spec
         Data.CFTA.TowerSpec.spec
         Data.CFTA.InclusionSpec.spec
+        Data.CFTA.Edit.SetsSpec.spec
+        Data.CFTA.Edit.TreesSpec.spec
+        Data.CFTA.Edit.BetweenSpec.spec
+        Data.CFTA.EditSpec.spec
+        Data.CFTA.Edit.ConstrainedSpec.spec
