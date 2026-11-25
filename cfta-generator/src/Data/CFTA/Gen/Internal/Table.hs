@@ -500,50 +500,100 @@ minimumSizes rows = converge Map.empty
     transitionMinimum known transition =
         (1 +) . sum <$> traverse (`Map.lookup` known) (FTA.transitionChildren transition)
 
-{- | Whether each term has at most one run in the rows. Bottom-up
-deterministic rows are unambiguous; otherwise the check builds a product.
+{- | Whether each term has at most one run in the rows.
 
-The synchronous product accepts the common terms of each pair of states.
-Two alternatives overlap when every pair of child states is productive.
+A candidate is a pair of transitions of one row with the same symbol and the
+same number of children. The rows are ambiguous exactly when the two
+transitions of a candidate accept a common term. The check has three steps,
+and each step stops when it has the answer:
+
+1. Rows without candidates are unambiguous. This step puts the symbol and
+   the number of children of each transition of a row in a set, so a wide row
+   costs no comparison of each pair of its transitions.
+2. Bottom-up deterministic rows are unambiguous. A set of transition keys
+   checks this condition.
+3. A product of pairs of states gives the answer. See Note [The product of
+   the ambiguity check].
 -}
 unambiguousRows :: (Ord state, Ord symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
-unambiguousRows rows =
-    bottomUpDeterministic
-        || not
-            ( or
-                [ FTA.transitionSymbol left == FTA.transitionSymbol right
-                    && length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
-                    && all (`Map.member` productive) (zip (FTA.transitionChildren left) (FTA.transitionChildren right))
-                | alternatives <- Map.elems rows
-                , left : rest <- tails alternatives
-                , right <- rest
-                ]
-            )
+unambiguousRows rows
+    | all distinctTokens rows = True
+    | bottomUpDeterministic = True
+    | otherwise = not $ any (all (`Map.member` productive)) candidates
   where
+    token transition = (FTA.transitionSymbol transition, length $ FTA.transitionChildren transition)
+    -- No two transitions of the row have one token, so the row has no candidate.
+    distinctTokens transitions = length transitions == Set.size (Set.fromList $ map token transitions)
+    -- The pairs of the children of each candidate.
+    candidates =
+        [ zipWith pairOf (FTA.transitionChildren left) (FTA.transitionChildren right)
+        | transitions <- Map.elems rows
+        , group <- Map.elems $ Map.fromListWith (flip (<>)) [(token transition, [transition]) | transition <- transitions]
+        , left : rest <- tails group
+        , right <- rest
+        ]
     -- No two transitions with the same symbol and the same child states, as
     -- in an e-graph: then each term reaches at most one state, by induction on
-    -- the term, so each term has at most one run. A set of transition keys
-    -- checks this before the product of each pair of states.
+    -- the term, so each term has at most one run.
     bottomUpDeterministic = length keys == Set.size (Set.fromList keys)
     keys =
         [ (FTA.transitionSymbol transition, FTA.transitionChildren transition)
         | transitions <- Map.elems rows
         , transition <- transitions
         ]
-    productive = minimumSizes products
-    products =
-        Map.fromList
-            [ ( (leftState, rightState)
-              , [ FTA.Transition (FTA.transitionSymbol left) (zip (FTA.transitionChildren left) (FTA.transitionChildren right)) ()
-                | left <- leftRows
-                , right <- rightRows
-                , FTA.transitionSymbol left == FTA.transitionSymbol right
-                , length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
+    productive = minimumSizes $ products Map.empty $ concat candidates
+    -- The rows of the pairs that the given pairs reach, from a worklist.
+    products table [] = table
+    products table (key@(left, right) : pending)
+        | Map.member key table = products table pending
+        | otherwise = products (Map.insert key row table) (concatMap FTA.transitionChildren row <> pending)
+      where
+        row
+            | left == right =
+                [ FTA.Transition (FTA.transitionSymbol transition) [(child, child) | child <- FTA.transitionChildren transition] ()
+                | transition <- transitionsOf left
                 ]
-              )
-            | (leftState, leftRows) <- Map.toList rows
-            , (rightState, rightRows) <- Map.toList rows
-            ]
+            | otherwise =
+                [ FTA.Transition
+                    (FTA.transitionSymbol leftTransition)
+                    (zipWith pairOf (FTA.transitionChildren leftTransition) (FTA.transitionChildren rightTransition))
+                    ()
+                | leftTransition <- transitionsOf left
+                , rightTransition <- transitionsOf right
+                , token leftTransition == token rightTransition
+                ]
+    transitionsOf state = Map.findWithDefault [] state rows
+    pairOf one other = (min one other, max one other)
+
+{- Note [The product of the ambiguity check]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'unambiguousRows' builds a synchronous product when its first two steps do
+not give the answer. A state of the product is a pair of states of the rows,
+and it accepts the common terms of its two states. A pair is unordered: its
+smaller state is first.
+
+The product has only the pairs that the candidates need. These are the pairs
+of the children of each candidate, and the pairs that the rows of these pairs
+reach. A worklist adds each pair once.
+
+The row of a pair of two different states has a transition for each
+transition of one state and each transition of the other state with the same
+symbol and number of children. The children of the transition are the pairs of
+their children, position by position.
+
+The row of a pair of one state has each transition of the state with itself.
+The children of the transition are the pairs of one child with itself. A pair
+of one state accepts the terms of the state, so this row is sufficient, and it
+is smaller than the product of the row with itself.
+
+One least fixed point ('minimumSizes') over these rows finds the productive
+pairs. A candidate overlaps when each pair of its children is productive. A
+pair that has transitions and no finite term, for example a cycle without a
+base, is not productive, so it does not make a candidate overlap.
+
+The cost depends on the pairs that the candidates reach. It does not depend on
+the number of all pairs of states.
+-}
 
 {- | The transitions of each state in the order of the count table of the
 cyclic import: by arity, symbol, and the canonical classes of their children.

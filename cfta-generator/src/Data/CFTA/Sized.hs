@@ -47,9 +47,11 @@ with a count table, without a list of the terms, when the rows that the
 initial state reaches are of one of these kinds:
 
 * Rows without constraints that are unambiguous. The table reads the rows,
-  and the order is the order of the reference. Bottom-up deterministic rows,
-  as in an e-graph, are unambiguous. A set of transition keys checks this
-  condition first.
+  and the order is the order of the reference. Rows are unambiguous when no
+  row has two transitions with the same symbol and number of children.
+  Bottom-up deterministic rows, as in an e-graph, are unambiguous too. The
+  check ('Data.CFTA.Gen.Internal.Table.unambiguousRows') tests these two
+  conditions before it builds a product.
 * Rows without constraints that are ambiguous. The table reads the bottom-up
   deterministic rows of all the rows of the automaton. A deterministic state
   is the set of the states that accept one term, so each term has one run.

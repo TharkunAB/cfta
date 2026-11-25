@@ -2,6 +2,16 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Gen.fromAutomaton`, and each other import of a cyclic automaton,
+  checks ambiguity with the check of `Data.CFTA.Sized`. A candidate is a pair
+  of transitions of one row with the same symbol and number of children.
+  Rows without candidates, and bottom-up deterministic rows, are unambiguous,
+  and the check builds no product for them. Otherwise the check builds one
+  product of pairs of states, with only the pairs that the children of the
+  candidates reach, and one fixed point gives the productive pairs. So the cost
+  depends on the pairs that the candidates reach, and not on the number of
+  pairs of edges. An automaton of 32 sorts with 16 transitions of `eq` in one
+  state is read and counted up to size 6 in about 65 million instructions.
 - `Data.CFTA.Sized.Prefix`: `stepToken` and `stepPrefix` add tokens only when
   the tokens are offered, and otherwise give a `Refusal`: the token is
   rejected, the token is undecided, or the prefix is a whole term.

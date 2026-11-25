@@ -1,9 +1,9 @@
 module Data.CFTA.SizedSpec (spec, SizedAutomaton, automatonGraph) where
 
 import Control.Exception (evaluate)
-import Control.Monad (forM_, void)
+import Control.Monad (forM, forM_, void, when)
 import Data.Containers.ListUtils (nubOrd)
-import Data.List (sort)
+import Data.List (nub, sort, tails)
 import qualified Data.Map.Strict as Map
 import qualified Data.Text as Text
 import Data.Word (Word64)
@@ -12,21 +12,25 @@ import Test.Hspec (Spec, describe, it, shouldBe, shouldReturn, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
 import Test.QuickCheck (Property, counterexample, (.&&.), (===))
 import qualified Test.QuickCheck as QC
+import Test.QuickCheck.Gen (unGen)
+import Test.QuickCheck.Random (mkQCGen)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, Guard (..), equalityConstraint, noConstraint, semanticConstraint)
 import Data.CFTA.Equality (numNestedMu)
 import qualified Data.CFTA.Equality as ECTA
 import qualified Data.CFTA.Gen as Gen
-import Data.CFTA.Gen.Internal.Table (unambiguousRows)
+import Data.CFTA.Gen.Internal.Table (minimumSizes, unambiguousRows)
 import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNode, closedAutomaton)
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
 import Data.CFTA.Interned (InternedState, toFTA)
+import qualified Data.CFTA.Interned as Interned
 import qualified Data.CFTA.Language as Language
 import qualified Data.CFTA.Language.Source as Source
 import Data.CFTA.Lowering (Expansion (..))
 import qualified Data.CFTA.Lowering as Lowering
 import Data.CFTA.Refinement (Entailment (Entailment))
+import qualified Data.CFTA.Simple as Simple
 import Data.CFTA.Sized
 import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
@@ -158,6 +162,79 @@ spec = describe "Data.CFTA.Sized" $ do
         let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
             rows = [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
         either Just (const Nothing) (sized $ automaton "s" rows) `shouldBe` Just ResidualGuard
+    describe "the ambiguity check of unambiguousRows and of the cyclic import" $ do
+        it "reads many transitions of one symbol in a state within a time bound" $ do
+            let graph = manySorted 16
+                root = Interned.fromRows (FTA.initialState graph) (FTA.transitionTable graph)
+                classes = either (error . show) id $ sized graph
+                expected = sum [count | size <- [1 .. 6], let Cardinality count = countOfSize classes (Size size)]
+            counted <-
+                timeout 20000000 $
+                    evaluate $
+                        Gen.cardinality (Gen.upToSize 6 $ Gen.fromAutomaton root) >>= \(Cardinality count) -> count `seq` Right count
+            counted `shouldBe` Just (Right expected)
+        it "finds no common term for two children whose product is a cycle without a base" $ do
+            -- p accepts f(...f(a)) and q accepts f(...f(b)). The product of p
+            -- and q has the transition f and no finite term. The leaf a of p
+            -- and of r makes the rows not bottom-up deterministic, so the
+            -- check builds the product.
+            let graph =
+                    automaton
+                        "s"
+                        [ ("s", [node "g" ["p"], node "g" ["q"], node "h" ["r"]])
+                        , ("p", [leaf "a", node "f" ["p"]])
+                        , ("q", [leaf "b", node "f" ["q"]])
+                        , ("r", [leaf "a"])
+                        ]
+                root = Interned.fromFTA graph
+                classes = either (error . show) id $ sized graph
+            unambiguousRows (Map.map (map void) $ FTA.transitionTable graph) `shouldBe` True
+            numNestedMu root `shouldSatisfy` (> 0)
+            [Gen.countAtSize (Gen.fromAutomaton root) (Size size) | size <- [1 .. 6]]
+                `shouldBe` [Right (countOfSize classes (Size size)) | size <- [1 .. 6]]
+        it "finds ambiguity exactly where a term has two runs, on rows and on interned nodes" $ do
+            forM_ explicitSamples $ \rows ->
+                (rows, unambiguousRows rows, unambiguousRows (trimmedRows rows))
+                    `shouldBe` (rows, not (twoRuns rows), not (twoRuns (trimmedRows rows)))
+            forM_ (map (interned . explicitGraph) explicitSamples <> map automatonNode descriptionSamples) $ \root -> do
+                let rows = Map.map (map void) $ FTA.transitionTable $ internedGraph root
+                (show rows, unambiguousRows rows) `shouldBe` (show rows, not (twoRuns rows))
+        it "rejects a cyclic automaton as ambiguous exactly where a term has two runs, and sized counts each term once" $ do
+            let roots = map (interned . explicitGraph) explicitSamples <> map automatonNode descriptionSamples
+            forM_ roots $ \root -> do
+                let graph = internedGraph root
+                    rows = Map.map (map void) $ FTA.transitionTable graph
+                    classes = either (error . show) id $ sized graph
+                    reference = either (error . show) id $ sizedReference graph
+                    generator = Gen.fromAutomaton root
+                    expected size
+                        | twoRuns rows = Left Gen.AmbiguousAutomaton
+                        | otherwise = Right $ countOfSize classes (Size size)
+                forM_ [1 .. 4] $ \size -> do
+                    (show rows, size, countOfSize classes (Size size)) `shouldBe` (show rows, size, countOfSize reference (Size size))
+                    -- An acyclic automaton has the finite import, which does not check ambiguity.
+                    when (numNestedMu root > 0) $
+                        (show rows, size, Gen.countAtSize generator (Size size)) `shouldBe` (show rows, size, expected size)
+        it "has samples with each kind of automaton that the check reads" $ do
+            let roots = map (interned . explicitGraph) explicitSamples <> map automatonNode descriptionSamples
+                cyclicRows = [Map.map (map void) $ FTA.transitionTable $ internedGraph root | root <- roots, numNestedMu root > 0]
+                partly rows pairs = any (common rows) pairs && not (all (common rows) pairs)
+                cycleOnly rows pair = not (common rows pair) && not (null $ initialRow $ productOf rows pair)
+                kinds =
+                    [ ("cyclic and ambiguous", any twoRuns cyclicRows)
+                    , ("cyclic and unambiguous", not (all twoRuns cyclicRows))
+                    , ("a cyclic interned state that accepts no term", any (\rows -> Map.size (minimumSizes rows) < Map.size rows) cyclicRows)
+                    , ("a repeated transition", any (any (\row -> length (nub row) < length row) . Map.elems) explicitSamples)
+                    ,
+                        ( "children with a common term at one position and none at another"
+                        , any (\rows -> any (partly rows) (candidatesOf rows)) cyclicRows
+                        )
+                    ,
+                        ( "two children whose product has transitions and no finite term"
+                        , any (\rows -> any (any (cycleOnly rows)) (candidatesOf rows)) cyclicRows
+                        )
+                    ]
+            [kind | (kind, False) <- kinds] `shouldBe` []
     modifyMaxSuccess (const 300) $ do
         it "lists each accepted term of each size once, and ranks it" $ QC.property exactClasses
         it "agrees with the cyclic import wherever the import accepts the automaton" $ QC.property importAgreement
@@ -690,3 +767,125 @@ sym = Symbol . Text.pack
 -- | A term from its symbol name and children.
 term :: String -> [Term Symbol] -> Term Symbol
 term = Term.Node . sym
+
+-- | A sort of 'manySorted': a base sort or the lists over a base sort.
+data Sort = Base Int | List Int
+    deriving (Eq, Ord, Show)
+
+{- | The automaton of a signature with a number of base sorts and the lists
+over them. Each base sort has a constant, and each list sort has a constant and
+cons. The first base sort has eq and length at each base sort, and each sort
+has ite. The initial state has the transitions of each sort. So a row has many
+transitions of one symbol, and the rows are not bottom-up deterministic.
+-}
+manySorted :: Int -> FTA.FTA (Maybe Sort) Symbol Constraint
+manySorted count = either (error . show) id $ FTA.mkFTA Nothing ((Nothing, concat $ Map.elems rows) : Map.toList rows)
+  where
+    sorts = map Base [1 .. count] <> map List [1 .. count]
+    functions =
+        [("c" <> show index, [], Base index) | index <- [1 .. count]]
+            <> [("nil" <> show index, [], List index) | index <- [1 .. count]]
+            <> [("cons", [Base index, List index], List index) | index <- [1 .. count]]
+            <> [("length", [List index], Base 1) | index <- [1 .. count]]
+            <> [("eq", [Base index, Base index], Base 1) | index <- [1 .. count]]
+            <> [("ite", [Base 1, other, other], other) | other <- sorts]
+    rows =
+        Map.fromListWith
+            (flip (<>))
+            [ (Just result, [FTA.Transition (sym symbol) (map Just arguments) noConstraint])
+            | (symbol, arguments, result) <- functions
+            ]
+
+{- | Rows over at most three states, from a fixed seed, so that each run reads
+the same rows. A row can be empty, so that its state accepts no term, and a row
+can repeat a transition. Two transitions of one row often have one symbol.
+-}
+explicitSamples :: [Map.Map Int [FTA.Transition Int Symbol ()]]
+explicitSamples = unGen (QC.vectorOf 500 sample) (mkQCGen 2026) 10
+  where
+    sample = do
+        count <- QC.chooseInt (1, 3)
+        fmap Map.fromList $ forM [0 .. count - 1] $ \state -> do
+            width <- QC.frequency [(1, pure 0), (6, QC.chooseInt (1, 4))]
+            (,) state <$> QC.vectorOf width (transition count)
+    transition count = do
+        (symbol, arity) <- QC.elements plainSymbols
+        children <- QC.vectorOf arity (QC.chooseInt (0, count - 1))
+        pure $ FTA.Transition (sym symbol) children ()
+
+{- | Descriptions of interned nodes with loops, from a fixed seed. A loop
+without a base gives a node with transitions and no term.
+-}
+descriptionSamples :: [Automaton]
+descriptionSamples = unGen (QC.vectorOf 300 (Loop <$> states 1 2)) (mkQCGen 1125) 10
+  where
+    states :: Int -> Int -> QC.Gen Automaton
+    states loops budget = do
+        count <- QC.chooseInt (1, 4)
+        States <$> QC.vectorOf count (edge loops budget)
+    edge loops budget = do
+        (symbol, arity) <- QC.elements [entry | entry@(_, arity) <- plainSymbols, budget > 0 || arity == 0]
+        children <- QC.vectorOf arity (child loops (budget - 1))
+        pure $ AutomatonEdge (Text.pack symbol) children False
+    child loops budget =
+        QC.frequency $
+            [(3, Back <$> QC.chooseInt (0, loops - 1)) | loops > 0]
+                <> [(2, states loops budget), (1, Loop <$> states (loops + 1) budget)]
+
+-- | The symbols of the samples and their arities.
+plainSymbols :: [(String, Int)]
+plainSymbols = [("a", 0), ("b", 0), ("f", 1), ("g", 2)]
+
+-- | The automaton of sample rows, with the initial state 0.
+explicitGraph :: Map.Map Int [FTA.Transition Int Symbol ()] -> FTA.FTA Int Symbol Constraint
+explicitGraph rows = either (error . show) id $ FTA.mkFTA 0 [(state, map (noConstraint <$) row) | (state, row) <- Map.toList rows]
+
+-- | The rows of sample rows that the state 0 reaches and that accept a term, as 'sized' reads them.
+trimmedRows :: Map.Map Int [FTA.Transition Int Symbol ()] -> Map.Map Int [FTA.Transition Int Symbol ()]
+trimmedRows rows = FTA.transitionTable $ FTA.trim $ either (error . show) id $ FTA.mkFTA 0 (Map.toList rows)
+
+-- | The interned node of an automaton. The import trims the automaton and merges equal transitions.
+interned :: FTA.FTA Int Symbol Constraint -> ECTA.Node Symbol
+interned = Interned.fromFTA
+
+-- | The explicit graph of an interned node, with a state for each node that the node reaches.
+internedGraph :: ECTA.Node Symbol -> FTA.FTA InternedState Symbol Constraint
+internedGraph = either (error . show) id . toFTA
+
+{- | Whether a term has two runs from a state of the rows. A term has two runs
+exactly when two transitions at two positions of one row accept a common
+term: the two runs are different first at such a row. Two transitions accept
+a common term when they have one symbol and number of children, and when the
+children at each position accept a common term.
+-}
+twoRuns :: (Ord state, Show state) => Map.Map state [FTA.Transition state Symbol ()] -> Bool
+twoRuns rows = any (all (common rows)) (candidatesOf rows)
+
+{- | The pairs of the children, position by position, of each two transitions
+at two positions of one row with one symbol and number of children.
+-}
+candidatesOf :: Map.Map state [FTA.Transition state Symbol ()] -> [[(state, state)]]
+candidatesOf rows =
+    [ zip (FTA.transitionChildren left) (FTA.transitionChildren right)
+    | row <- Map.elems rows
+    , left : rest <- tails row
+    , right <- rest
+    , FTA.transitionSymbol left == FTA.transitionSymbol right
+    , length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
+    ]
+
+-- | Whether two states of the rows accept a common term. A trim keeps a transition at the initial state exactly then.
+common :: (Ord state, Show state) => Map.Map state [FTA.Transition state Symbol ()] -> (state, state) -> Bool
+common rows pair = not $ null $ initialRow $ FTA.trim $ productOf rows pair
+
+-- | The product of two states of the rows, from "Data.CFTA.Simple": it accepts their common terms.
+productOf ::
+    (Ord state, Show state) =>
+    Map.Map state [FTA.Transition state Symbol ()] -> (state, state) -> FTA.FTA (state, state) Symbol Constraint
+productOf rows (one, other) = Simple.intersect (from one) (from other)
+  where
+    from state = either (error . show) id $ FTA.mkFTA state [(key, map (noConstraint <$) row) | (key, row) <- Map.toList rows]
+
+-- | The transitions of the initial state of an automaton.
+initialRow :: (Ord state) => FTA.FTA state symbol constraint -> [FTA.Transition state symbol constraint]
+initialRow graph = FTA.transitionsFrom graph (FTA.initialState graph)
