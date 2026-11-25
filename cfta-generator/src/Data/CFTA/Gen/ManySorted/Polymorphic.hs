@@ -471,8 +471,8 @@ find it ambiguous, and it counts each term one time. But the check of
 'Data.CFTA.Gen.fromAutomaton' for ambiguity intersects the children of each
 two transitions of one symbol in a state. A state of this automaton can have
 many transitions of one symbol, and the check then gets slow.
-"Data.CFTA.Sized" has no such check for an automaton that is deterministic
-bottom-up, and it reads this automaton fast. This holds also for a
+"Data.CFTA.Sized" makes the check with one product of the pairs of states,
+and it reads this automaton fast. This holds also for a
 term with an open sort: @nil@ is in the state @List a@, and @length(nil)@ is
 one transition from the state @Int@ to the state @List a@. The equality
 automaton of Note [Sorts as children] can have several typed terms for such a

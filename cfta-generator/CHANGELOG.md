@@ -30,8 +30,9 @@
   symbol in `refinedSemantics` apply to each instance. `instancesOf` gives the
   functions of each symbol. The generators of a signature get slow to build
   when a symbol has many instances with one result sort, because of the check
-  of `Data.CFTA.Gen.fromAutomaton` for ambiguity; `Data.CFTA.Sized` reads
-  `signatureAutomaton` without that check.
+  of `Data.CFTA.Gen.fromAutomaton` for ambiguity; `Data.CFTA.Sized` makes the
+  check with one product of the pairs of states, and it reads
+  `signatureAutomaton` fast.
 - `Data.CFTA.Gen.ManySorted.checkSorts` and `checkSortsWith` check that a
   map from the states of an automaton to sorts fits a run-time signature:
   each transition is a function from the sorts of its children to the sort of

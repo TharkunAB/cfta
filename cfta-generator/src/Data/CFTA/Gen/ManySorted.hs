@@ -291,7 +291,8 @@ distinct terms.
 The check of 'Data.CFTA.Gen.fromAutomaton' for ambiguity intersects the
 children of each two transitions of one symbol in a state. So the generators
 of a signature get slow to build when a symbol has many instances with one
-result sort. "Data.CFTA.Sized" reads 'signatureAutomaton' without this check.
+result sort. "Data.CFTA.Sized" makes the check with one product of the pairs
+of states, and it reads 'signatureAutomaton' fast.
 
 The rule refuses a constant at two sorts, for example @nil : List Int@ and
 @nil : List Bool@. The two constants have the same argument sorts: none. So
