@@ -16,7 +16,11 @@ data SortedSignature sort symbol = SortedSignature
     { sortedSorts :: [sort]
     -- ^ The sorts. Every other sort in the signature must be in this list.
     , sortedFunctions :: [SortedFunction sort symbol]
-    -- ^ The function symbols. Two functions must not have the same symbol.
+    {- ^ The function symbols. A symbol can have several functions, called its
+    instances. The instances of a symbol must have the same number of
+    arguments, and no two of them can have the same argument sorts. See
+    Note [Instances of a symbol] in "Data.CFTA.Gen.ManySorted".
+    -}
     , sortedRoots :: [sort]
     -- ^ The sorts of the terms in the language.
     , sortedValues :: [ValueSort sort symbol]

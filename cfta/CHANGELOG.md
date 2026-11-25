@@ -2,6 +2,9 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Signature`: a symbol of a `SortedSignature` can have several
+  functions, its instances, with the same number of arguments and different
+  argument sorts.
 - Add `Data.CFTA.Signature`: the data of a first-order many-sorted
   signature, `SortedSignature`, `SortedFunction`, `ValueSort`, and
   `ValueSource`. `Data.CFTA.Gen.ManySorted` of `cfta-generator` re-exports

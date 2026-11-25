@@ -294,9 +294,29 @@ Wilf, and Feat (ranking).
 - **Group index**: which matched key pair of a two-way join.
 - **Key index**: the position of a key among the keys of a recursive family.
 
+## Signatures
+
+- **Signature**: the function symbols of a language, each with its argument
+  sorts and its result sort, as a value at run time.
+- **Function**: a symbol of a signature with one list of argument sorts and
+  one result sort.
+- **Instance of a symbol**: one of several functions of one symbol in a
+  signature with closed sorts. The sorts of the children decide the instance.
+- **Sort term**: a sort that can hold sort variables. A **closed sort** has
+  none.
+- **Instance of a sort**: the sort with some of its sort variables replaced
+  by sorts.
+- **Principal sort**: the most general sort of a term. Each sort of the term
+  is an instance of it.
+- **Open sort**: a sort variable that stays in the principal sort of a
+  subterm and that the context of the subterm does not fix, as the element
+  sort of `nil` in `length(nil)`.
+- **Typed term**: a term with its sorts as children, in an ECTA of typed
+  terms. Its **plain term** is the term without them.
+
 ## Variables
 
-Three kinds, never called only "variable":
+Four kinds, never called only "variable":
 
 - **Union-find variable** (`UVar`): a variable of the enumeration; each set
   has a **representative** and each other element a **parent** (CLRS).
@@ -304,6 +324,8 @@ Three kinds, never called only "variable":
   variable list of one problem (the symbolic counter, the lattice counter,
   the open integer variables of a compiled group).
 - **Recursion reference** (`RecNodeId`): the variable that a `Mu` binds.
+- **Sort variable**: a variable of a sort term. It stands for every sort. Its
+  scope is one function of a signature, or one principal sort.
 
 ## Language chains
 
