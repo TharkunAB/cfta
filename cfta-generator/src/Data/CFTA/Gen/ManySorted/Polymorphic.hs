@@ -20,17 +20,21 @@ a symbol do in "Data.CFTA.Gen.ManySorted". Each sort constructor has one
 number of arguments in all the signature. 'checkPolymorphic' checks the two
 rules.
 
-The module gives three things:
+The module gives four things:
 
 * The data: 'SortTerm' and 'PolymorphicSignature', with the check
   'checkPolymorphic'.
 * The type check: 'principalSort' gives the most general sort of a term, as
   Haskell gives @[] :: [a]@. See Note [Principal sorts]. 'hasSort' tests
   whether a term has a sort that is an instance of a given sort.
-* The automaton: 'polymorphicSpace' gives the typed terms of a size and a root
-  sort as an automaton with equality constraints. 'polymorphicTerms' lists
-  their plain terms, and 'polymorphicGen' reads the automaton as a generator.
-  See Note [Sorts as children].
+* The equality automaton: 'polymorphicSpace' gives the typed terms of a size
+  and a root sort as an automaton with equality constraints.
+  'polymorphicTerms' lists their plain terms, and 'polymorphicGen' reads the
+  automaton as a generator. See Note [Sorts as children].
+* The automaton of principal sorts: 'principalAutomaton' gives the terms up to
+  a size bound as an automaton without constraints, whose states are
+  principal sorts. Each term has one run, so each term is counted one time,
+  also a term with an open sort. See Note [Principal sorts as states].
 -}
 module Data.CFTA.Gen.ManySorted.Polymorphic (
     SortTerm (..),
@@ -44,16 +48,17 @@ module Data.CFTA.Gen.ManySorted.Polymorphic (
     polymorphicTerms,
     polymorphicGen,
     openFunctions,
+    principalAutomaton,
 ) where
 
 import Control.Monad (foldM, foldM_)
 import Data.Containers.ListUtils (nubOrd)
-import Data.List (mapAccumL)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust)
 
-import Data.CFTA.Constraint (Constraint, equalityConstraint)
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
 import Data.CFTA.Equality (Edge (Edge), Node (EmptyNode, Node), createMu, mkEdge, mkEqConstraints, terms, union)
 import Data.CFTA.Gen.Equality (ECTAGen)
 import qualified Data.CFTA.Gen.Equality as ECTAGen
@@ -87,6 +92,10 @@ data PolymorphicError
       fields are the constructor, the first number, and the different number.
       -}
       ConstructorArity !Symbol !Int !Int
+    | {- | The terms up to the size bound of 'principalAutomaton' have more
+      principal sorts than the limit. The field is the limit.
+      -}
+      TooManySorts !Int
     deriving (Eq, Show)
 
 {- | Check that each symbol has one function, and that each sort constructor
@@ -183,27 +192,16 @@ principalSort signature = sortAt []
         Just function
             | length (functionArguments function) /= length children ->
                 Left $ WrongArity here symbol (length (functionArguments function)) (length children)
-            | otherwise -> case foldM unifyChild Map.empty (zip arguments renamed) of
+            | otherwise -> case resultSort function found of
                 Nothing -> Left $ WrongChildSort here symbol (functionArguments function) found
-                Just substitution -> canonical (resolve substitution result) <$ sequence results
+                Just sortTerm -> sortTerm <$ sequence results
           where
-            -- The variables of the function are 0 to count - 1. The variables
-            -- of each child come after them and after those of the children
-            -- before it. See Note [Principal sorts].
-            names = renaming 0 (functionResult function : functionArguments function)
-            arguments = map (rename names) (functionArguments function)
-            result = rename names (functionResult function)
             results = [sortAt (index : reversed) child | (index, child) <- zip [0 ..] children]
             found = map (either (const Nothing) Just) results
-            renamed = snd (mapAccumL apart (Map.size names) found)
       where
         symbol = Term.rootLabel term
         children = Term.subForest term
         here = path (map ChildIndex (reverse reversed))
-
-    apart next = maybe (next, Nothing) (fmap Just . renameFrom next)
-    unifyChild substitution (argument, Just child) = unify substitution argument child
-    unifyChild substitution (_, Nothing) = Just substitution
 
 {- | Whether a term is well-sorted and has a sort that is an instance of the
 given sort. The principal sort of the term and the given sort must have a
@@ -214,9 +212,46 @@ sort @'SortVariable' 0@ holds every well-sorted term.
 hasSort :: PolymorphicSignature -> SortTerm -> Term Symbol -> Bool
 hasSort signature root term = case principalSort signature term of
     Left _ -> False
-    Right principal ->
-        let (next, principal') = renameFrom 0 principal
-         in isJust (unify Map.empty principal' (snd (renameFrom next root)))
+    Right principal -> commonInstance principal root
+
+-- | Whether two sort terms have a common instance, after their variables are made different.
+commonInstance :: SortTerm -> SortTerm -> Bool
+commonInstance left right = isJust (unify Map.empty left' (snd (renameFrom next right)))
+  where
+    (next, left') = renameFrom 0 left
+
+{- | The principal sort of a function applied to children with these principal
+sorts, if the sorts unify. A child without a sort constrains nothing.
+'principalSort' applies it at each node, and 'principalAutomaton' applies its
+steps 'freshFunction' and 'unifyChild' one child at a time. See
+Note [Principal sorts].
+-}
+resultSort :: SortedFunction SortTerm Symbol -> [Maybe SortTerm] -> Maybe SortTerm
+resultSort function children = do
+    (substitution, _) <- foldM unifyChild (Map.empty, start) (zip arguments children)
+    pure (canonical (resolve substitution result))
+  where
+    (arguments, result, start) = freshFunction function
+
+{- | The argument sorts and the result sort of a function, with its variables
+renamed to 0, 1, ..., and the first number after them.
+-}
+freshFunction :: SortedFunction SortTerm Symbol -> ([SortTerm], SortTerm, Int)
+freshFunction function = (map (rename names) (functionArguments function), rename names (functionResult function), Map.size names)
+  where
+    names = renaming 0 (functionResult function : functionArguments function)
+
+{- | Unify an argument sort with the principal sort of a child. The variables
+of the child get the numbers from the given number on, so they differ from
+the variables of the function and of the children before it. A child without
+a sort constrains nothing. The result is the extended substitution and the
+first free number.
+-}
+unifyChild :: (Map.Map Int SortTerm, Int) -> (SortTerm, Maybe SortTerm) -> Maybe (Map.Map Int SortTerm, Int)
+unifyChild current (_, Nothing) = Just current
+unifyChild (substitution, next) (argument, Just child) = (,next') <$> unify substitution argument renamed
+  where
+    (next', renamed) = renameFrom next child
 
 {- Note [Sorts as children]
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -245,8 +280,9 @@ The sort is a child and not a state, because a state for each sort is a state
 for each shape of nested sorts. For the signature of @zero@, @true@, @ite@,
 @eq@, @nil@, @cons@, @length@, @pair@, @fst@, and @snd@, an automaton with a
 state for each sort has 15, 99, and 831 states for the terms up to the sizes
-3, 5, and 7. This automaton has one node for the terms of each size, and the
-constraints relate the sort children.
+3, 5, and 7. 'principalAutomaton' is such an automaton; see
+Note [Principal sorts as states]. This automaton has one node for the terms
+of each size, and the constraints relate the sort children.
 
 The terms are unrolled by size: there is one node for each size from 1 to the
 size, and a function has one edge for each way to divide the size minus 1
@@ -262,7 +298,8 @@ counts the terms. A term with an open sort keeps the node of all sorts in a
 sort child (see Note [Principal sorts]). In @length(nil)@, the sort of @nil@ is
 @List *@, and no constraint fixes the @*@. Then the generator can refuse to
 count the space, with 'Data.CFTA.Gen.Error.CannotCountConstrainedEdges'.
-'openFunctions' tells when this can occur.
+'openFunctions' tells when this can occur. 'principalAutomaton' counts such a
+term one time.
 
 "Data.CFTA.Gen.Synthesis" uses the same encoding for the components of a
 library and for application, with a goal type and arguments that a program
@@ -369,8 +406,9 @@ polymorphicTerms signature root size = nubOrd (map plainTerm (terms (polymorphic
 {- | The generator of 'polymorphicSpace', as 'Data.CFTA.Gen.Equality.fromAutomaton'
 reads it, with 'plainTerm' applied to each term. Its counts and its ranks are
 those of the typed terms. When 'openFunctions' is empty, each plain term has
-one typed term, so the counts are those of 'polymorphicTerms'. The signature
-must pass 'checkPolymorphic'.
+one typed term, so the counts are those of 'polymorphicTerms'. When a
+function is open, 'principalAutomaton' gives a count of each term one time.
+The signature must pass 'checkPolymorphic'.
 -}
 polymorphicGen :: PolymorphicSignature -> SortTerm -> Int -> ECTAGen (Term Symbol)
 polymorphicGen signature root size = plainTerm <$> ECTAGen.fromAutomaton (polymorphicSpace signature root size)
@@ -387,7 +425,8 @@ constraint, and 'polymorphicGen' counts each space.
 If the list is not empty, a term can keep an open sort, as @length(nil)@
 does. Then the generator can refuse to count a space that holds such a term,
 with 'Data.CFTA.Gen.Error.CannotCountConstrainedEdges'. 'polymorphicTerms'
-still lists the term one time. See Note [Sorts as children].
+still lists the term one time, and 'principalAutomaton' counts each term one
+time. See Note [Sorts as children].
 -}
 openFunctions :: PolymorphicSignature -> [Symbol]
 openFunctions signature =
@@ -395,6 +434,123 @@ openFunctions signature =
     | function <- polymorphicFunctions signature
     , any (`notElem` variables (functionArguments function)) (variables [functionResult function])
     ]
+
+{- Note [Principal sorts as states]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'principalAutomaton' reads a polymorphic signature as a tree automaton
+without constraints. A state is a principal sort (see Note [Principal sorts]),
+and the initial state is 'Nothing'. A transition goes from the principal sort
+of a term to the principal sorts of its children. The construction finds the
+states by size. It keeps the smallest size of a term of each state. For each
+total size from 1 to the bound, it tries each function with each list of
+known states whose smallest sizes sum to the total minus 1. It unifies the
+children one at a time, so a child that does not fit its argument sort stops
+the list at once. It also stops a list when the sizes that are left cannot
+fit the children that are left.
+
+The automaton has these properties.
+
+It is sound at each size. Each transition is the step of 'principalSort' for
+the principal sorts of its children. So an accepted term is well-sorted, and
+its principal sort has a common instance with the root sort.
+
+It is complete up to the bound. It accepts each term of at most the bound
+that has an instance of the root sort. By induction on the term, the state of
+each subterm has a smallest size of at most the size of the subterm. So the
+smallest sizes of the children of a term sum to at most the size of the term
+minus 1, and the construction tried the transition of the term. Above the
+bound, the automaton accepts some terms and not others: a state that only
+terms above the bound have was not found, and a transition is kept only when
+the smallest sizes of its children fit the bound. So read the automaton up to
+the bound, with the sizes up to the bound of "Data.CFTA.Sized", or with
+'Data.CFTA.Gen.upToSize'.
+
+Each term has one run. The principal sort of a term is a function of the
+term, so the automaton is deterministic bottom-up. The generator does not
+find it ambiguous, and it counts each term one time. But the check of
+'Data.CFTA.Gen.fromAutomaton' for ambiguity intersects the children of each
+two transitions of one symbol in a state. A state of this automaton can have
+many transitions of one symbol, and the check then gets slow.
+"Data.CFTA.Sized" has no such check for an automaton that is deterministic
+bottom-up, and it reads this automaton fast. This holds also for a
+term with an open sort: @nil@ is in the state @List a@, and @length(nil)@ is
+one transition from the state @Int@ to the state @List a@. The equality
+automaton of Note [Sorts as children] can have several typed terms for such a
+term, and its generator can refuse to count it.
+
+The cost is a state for each principal sort. With a sort constructor of two
+arguments, each shape of nested sorts is a state of its own.
+Note [Sorts as children] gives the numbers of states for a signature with
+pairs. So 'principalAutomaton' takes a limit on the number of states, and for
+such a signature 'polymorphicSpace' is the alternative.
+-}
+
+{- | An automaton without constraints for the terms of at most a size bound
+whose sort has an instance of a root sort. A state @'Just' s@ is a principal
+sort, canonical as 'principalSort' gives it. The initial state is 'Nothing',
+with the transitions of each state whose sort has a common instance with the
+root sort. Each transition has 'noConstraint'. See
+Note [Principal sorts as states].
+
+The arguments are the limit on the number of states, the signature, the root
+sort, and the size bound. Among the terms of at most the bound, the automaton
+accepts exactly those that have an instance of the root sort. Above the bound
+it can accept some terms and not others, so read it up to the bound.
+Each term has one run, so the counts are exact, also for a term with an open
+sort.
+
+The result is the error of 'checkPolymorphic', or 'TooManySorts' as soon as
+the terms up to the bound have more principal sorts than the limit.
+-}
+principalAutomaton ::
+    Int ->
+    PolymorphicSignature ->
+    SortTerm ->
+    Int ->
+    Either PolymorphicError (FTA.FTA (Maybe SortTerm) Symbol Constraint)
+principalAutomaton limit signature root bound = do
+    checkPolymorphic signature
+    (_, levels) <- foldM level (Map.empty, []) [1 .. bound]
+    let rows = Map.fromListWith (flip (<>)) [(Just state, [transition]) | (state, transition) <- concat (reverse levels)]
+        rootRow = concat [row | (Just state, row) <- Map.toList rows, commonInstance state root]
+    -- Each child of a transition is a state that an earlier transition gives,
+    -- so it has a row, and mkFTA does not fail.
+    pure
+        $ either (error . ("principalAutomaton: mkFTA rejected the rows: " <>) . show) id
+        $ FTA.mkFTA Nothing ((Nothing, rootRow) : Map.toList rows)
+  where
+    functions = polymorphicFunctions signature
+
+    -- The states and transitions of one total size, from the states of the smaller sizes.
+    level (smallest, levels) total = do
+        let bySize = Map.fromListWith (flip (<>)) [(size, [state]) | (state, size) <- Map.toList smallest]
+            found =
+                [ (canonical (resolve substitution result), FTA.Transition (functionSymbol function) (map Just children) noConstraint)
+                | function <- functions
+                , let (arguments, result, start) = freshFunction function
+                , (children, substitution) <- childLists bySize arguments (total - 1) (Map.empty, start)
+                ]
+        smallest' <- foldM (insertState total) smallest (map fst found)
+        pure (smallest', found : levels)
+
+    insertState total known state
+        | Map.size known' > limit = Left (TooManySorts limit)
+        | otherwise = Right known'
+      where
+        known' = Map.insertWith min state total known
+
+    -- The lists of known states, one for each argument sort, whose smallest
+    -- sizes sum to the budget, with the substitution of their unification.
+    -- Each child is unified when it is chosen, and the last child has exactly
+    -- the size that is left.
+    childLists _ [] budget (substitution, _) = [([], substitution) | budget == 0]
+    childLists bySize (argument : rest) budget current =
+        [ (state : children, substitution)
+        | size <- if null rest then [budget] else [1 .. budget - length rest]
+        , state <- Map.findWithDefault [] size bySize
+        , Just next <- [unifyChild current (argument, Just state)]
+        , (children, substitution) <- childLists bySize rest (budget - size) next
+        ]
 
 -- | Replace each variable of a sort term. The result of a replacement is not replaced again.
 substitute :: (Int -> SortTerm) -> SortTerm -> SortTerm

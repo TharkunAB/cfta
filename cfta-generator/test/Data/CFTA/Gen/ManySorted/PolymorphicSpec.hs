@@ -19,6 +19,7 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
+import qualified Data.CFTA as FTA
 import qualified Data.CFTA.Equality as Equality
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.ManySorted (SortedFunction (..), TypeError (..))
@@ -32,8 +33,10 @@ import Data.CFTA.Gen.Synthesis (
     library,
     parseType,
  )
-import Data.CFTA.Index (Cardinality (..), everyRank)
+import Data.CFTA.Index (Cardinality (..), Size (..), everyRank)
+import qualified Data.CFTA.Interned as Interned
 import Data.CFTA.Path (ChildIndex (..), path)
+import Data.CFTA.Sized (countOfSize, sized, termsOfSize)
 import Data.CFTA.Symbol (Symbol (Symbol), symbolText)
 import Data.CFTA.Term (Term (Node))
 
@@ -404,3 +407,88 @@ spec = describe "Data.CFTA.Gen.ManySorted.Polymorphic" $ do
         it "gives no term for a size below 1" $ do
             polymorphicSpace table1 int 0 `shouldBe` Equality.EmptyNode
             polymorphicTerms table1 int 0 `shouldBe` []
+
+    describe "principalAutomaton" $ do
+        mapM_
+            ( \(name, signature, roots) ->
+                it ("counts each term one time, as polymorphicTerms lists it, for " <> name) $
+                    mapM_
+                        ( \root -> do
+                            automaton <- either (fail . show) pure (principalAutomaton 100000 signature root 6)
+                            classes <- either (fail . show) pure (sized automaton)
+                            mapM_
+                                ( \size -> do
+                                    let listed = polymorphicTerms signature root size
+                                    (root, size, countOfSize classes (Size (fromIntegral size)))
+                                        `shouldBe` (root, size, Cardinality (fromIntegral (length listed)))
+                                    (root, size, Set.fromList (termsOfSize classes (Size (fromIntegral size))))
+                                        `shouldBe` (root, size, Set.fromList listed)
+                                )
+                                [1 .. 6]
+                        )
+                        roots
+            )
+            [("table 1", table1, roots1 <> [a]), ("table 2", table2, roots2 <> [a])]
+
+        it "counts length(nil) one time, where the generator of the equality automaton refuses to count" $ do
+            automaton <- either (fail . show) pure (principalAutomaton 1000 table1 int 2)
+            classes <- either (fail . show) pure (sized automaton)
+            termsOfSize classes (Size 2) `shouldBe` [Node "length" [nil]]
+            countOfSize classes (Size 2) `shouldBe` Cardinality 1
+            Gen.cardinality (polymorphicGen table1 int 2) `shouldBe` Left Gen.CannotCountConstrainedEdges
+
+        it "is a generator with distinct values and the rank round trip, in table 1 at the root Int" $ do
+            automaton <- either (fail . show) pure (principalAutomaton 100000 table1 int 5)
+            let generator = Gen.upToSize 5 (Gen.fromAutomaton (Interned.fromRows (FTA.initialState automaton) (FTA.transitionTable automaton)))
+                expected = sum [length (polymorphicTerms table1 int size) | size <- [1 .. 5]]
+                generated = either (error . show) id (Gen.values generator)
+            expected `shouldSatisfy` (> 5)
+            Gen.cardinality generator `shouldBe` Right (Cardinality (fromIntegral expected))
+            length generated `shouldBe` expected
+            Set.fromList generated `shouldBe` Set.fromList (concat [polymorphicTerms table1 int size | size <- [1 .. 5]])
+            generated `shouldSatisfy` elem (Node "length" [nil])
+            mapM_
+                (\rank -> (Gen.unrank generator rank >>= Gen.rankOfTerm generator) `shouldBe` Right rank)
+                (everyRank (Cardinality (fromIntegral expected)))
+
+        it "accepts exactly the trees up to the bound that have an instance of the root sort, in table 1" $
+            mapM_
+                ( \root -> do
+                    automaton <- either (fail . show) pure (principalAutomaton 100000 table1 root 5)
+                    mapM_ (\tree -> (root, tree, FTA.accepts automaton tree) `shouldBe` (root, tree, hasSort table1 root tree)) smallTrees
+                )
+                (roots1 <> [a])
+
+        it "is sound above the bound, and accepts some terms above the bound and not others" $ do
+            automaton <- either (fail . show) pure (principalAutomaton 100000 table1 a 3)
+            let larger = [tree | tree <- smallTrees, length tree >= 4]
+            mapM_
+                (\tree -> (tree, hasSort table1 a tree) `shouldBe` (tree, True))
+                (filter (FTA.accepts automaton) smallTrees)
+            filter (FTA.accepts automaton) larger `shouldSatisfy` (not . null)
+            [tree | tree <- larger, hasSort table1 a tree, not (FTA.accepts automaton tree)] `shouldSatisfy` (not . null)
+            -- The children of eq have the states Int and Int, of smallest size 1.
+            FTA.accepts automaton (Node "eq" [Node "length" [nil], zero]) `shouldBe` True
+            -- ite has three children, so its smallest sizes sum to 3, more than the bound minus 1.
+            FTA.accepts automaton (Node "ite" [true, zero, zero]) `shouldBe` False
+
+        it "has one state for each principal sort, at the bounds 21 and 3, 5, 7" $ do
+            let states signature bound =
+                    either (const (-1)) (\automaton -> length [() | Just _ <- Map.keys (FTA.transitionTable automaton)]) $
+                        principalAutomaton 100000 signature a bound
+            states table1 21 `shouldBe` (33 :: Int)
+            map (states table2) [3, 5, 7] `shouldBe` [15, 99, 831]
+
+        it "stops at the limit on the number of states, and checks the signature" $ do
+            either Just (const Nothing) (principalAutomaton 100 table2 a 7) `shouldBe` Just (TooManySorts 100)
+            principalAutomaton 831 table2 a 7 `shouldSatisfy` isRight
+            either
+                Just
+                (const Nothing)
+                ( principalAutomaton
+                    100
+                    (PolymorphicSignature (polymorphicFunctions table1 <> [SortedFunction "nil" [] (list int)]))
+                    int
+                    3
+                )
+                `shouldBe` Just (RepeatedSymbol "nil")
