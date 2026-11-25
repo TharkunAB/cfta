@@ -8,6 +8,15 @@ variable, of the sort Int. A variable is a leaf with a de Bruijn index. The
 index 0 is the variable that the nearest binder binds. The sort of a variable
 is the sort of its place in the environment.
 
+A 'Binding' names a symbol, so it applies to each instance of the symbol. In
+one environment, a term has at most one sort. This extends the argument of
+Note [Instances of a symbol] in "Data.CFTA.Gen.ManySorted". A variable has the
+sort at its index of the environment. The binding of a symbol gives the
+environments of the children, and these environments are the same for each
+instance. So each child has at most one sort in its environment, and the sorts
+of the children decide the instance. Then the automaton has at most one run
+for each term, and the counts of 'scopedGen' are exact.
+
 The approach is that of "Data.CFTA.Gen.Typing", which has the same language for
 a Haskell datatype known at compile time:
 
@@ -23,8 +32,8 @@ a Haskell datatype known at compile time:
   counted by size. Apply 'Data.CFTA.Gen.upToSize'.
 
 This module adds what the typing module does not need: the signature is data,
-so a function lists its scopes in a 'Binding' and not in a node view, and the
-variables and the values are symbols that a codec makes.
+so a function symbol lists its scopes in a 'Binding' and not in a node view,
+and the variables and the values are symbols that a codec makes.
 -}
 module Data.CFTA.Gen.ManySorted.Scoped (
     ScopedSignature (..),
@@ -58,7 +67,7 @@ data ScopedSignature sort symbol = ScopedSignature
     { scopedBase :: SortedSignature sort symbol
     -- ^ The sorts, the functions, the roots, and the value sorts.
     , scopedBinders :: [Binding sort symbol]
-    -- ^ The functions that bind variables. A function without a 'Binding' binds none.
+    -- ^ The function symbols that bind variables. A symbol without a 'Binding' binds none.
     , scopedInputs :: [sort]
     -- ^ The sorts of the variables in scope at the root. The input @i@ has the index @i@ there.
     , scopedBound :: Int
@@ -66,12 +75,17 @@ data ScopedSignature sort symbol = ScopedSignature
     }
     deriving (Eq, Show)
 
--- | The variables that the children of a function bind.
+{- | The variables that the children of a function symbol bind. The binding
+applies to each instance of the symbol.
+-}
 data Binding sort symbol = Binding
     { bindingSymbol :: symbol
-    -- ^ A function of the base signature. At most one 'Binding' names it.
+    -- ^ A function symbol of the base signature. At most one 'Binding' names it.
     , bindingScopes :: [[sort]]
-    -- ^ One list for each argument of the function. The first sort of a list is the variable with the index 0 in that child.
+    {- ^ One list for each argument of the symbol. All instances of the symbol
+    have this number of arguments. The first sort of a list is the variable
+    with the index 0 in that child.
+    -}
     }
     deriving (Eq, Show)
 
@@ -96,7 +110,7 @@ data ScopeError sort symbol
       BaseError !(SignatureError sort symbol)
     | -- | A 'Binding' names a symbol that is not a function.
       BindingOfUnknownFunction !symbol
-    | -- | Two 'Binding' name one function.
+    | -- | Two 'Binding' name one symbol.
       DuplicateBinding !symbol
     | -- | The scopes of a 'Binding' are not one for each argument.
       BindingArity !symbol
@@ -153,10 +167,12 @@ checkScoped codec scoped = do
 {- | The automaton of a scoped signature.
 
 The states are 'ScopedState'. The root has the transitions of the root sorts in
-the environment of the inputs. A function symbol is a transition from a state
-of its result sort, and each child is a state with the environment of the
-child. A variable is a transition with no child. A value sort has a
-transition with no child for its values, as in 'signatureAutomatonWith'.
+the environment of the inputs. Each function is a transition from a state of
+its result sort, and each child is a state with the environment of the child.
+The 'Binding' of the symbol gives the environments of the children, so they
+are the same for each instance. A variable is a transition with no child. A
+value sort has a transition with no child for its values, as in
+'signatureAutomatonWith'.
 -}
 scopedAutomaton ::
     (Ord sort, Ord symbol) =>
@@ -222,6 +238,11 @@ variable symbol needs an index below the number of variables in scope, or it is
 an 'UnboundVariable' with the path. A function whose child would pass the bound
 on the binders is a 'TooManyBinders'. So the accepted terms are the terms of
 'scopedGen'.
+
+The sorts of the children choose the instance of a symbol, as in 'typeCheck'.
+The checks at a node come in this order: the number of children, the bound on
+the binders, and the sorts of the children. Then the first error in a child
+comes.
 -}
 scopedTypeCheck ::
     (Ord sort, Ord symbol) =>
@@ -237,23 +258,30 @@ scopedTypeCheck codec scoped term0 = check (scopedInputs scoped) [] term0 >>= ro
         | sort' `elem` sortedRoots base = Right sort'
         | otherwise = Left $ NotRootSort sort'
 
-    functions = Map.fromList [(functionSymbol f, f) | f <- sortedFunctions base]
+    functions = instancesOf base
     scopes = Map.fromList [(bindingSymbol b, bindingScopes b) | b <- scopedBinders scoped]
     valueOf symbol = scopedValueCodec codec >>= \valueCodec -> valueSortOf valueCodec base symbol
 
-    check env reversed term = case Map.lookup symbol functions of
-        Just f
+    -- The instances of a symbol have one number of arguments, so the first
+    -- instance gives it. See Note [Instances of a symbol] in Data.CFTA.Gen.ManySorted.
+    check env reversed term = case Map.findWithDefault [] symbol functions of
+        instances@(f : _)
             | length expected /= length children -> Left $ WrongArity here symbol (length expected) (length children)
             | any (\childEnv -> length childEnv - length inputs > scopedBound scoped) childEnvs -> Left $ TooManyBinders here symbol
-            | any mismatch (zip expected found) ->
-                Left $ WrongChildSort here symbol expected found
-            | otherwise -> functionResult f <$ sequence results
+            | otherwise -> case filter fits instances of
+                fitting : _ -> functionResult fitting <$ sequence results
+                [] -> Left $ case instances of
+                    [_] -> WrongChildSort here symbol expected found
+                    _ -> NoInstance here symbol (map functionArguments instances) found
           where
             expected = functionArguments f
+            -- The binding names the symbol, so the environments of the
+            -- children do not depend on the instance.
             childEnvs = [binds <> env | binds <- Map.findWithDefault (map (const []) expected) symbol scopes]
             results = [check childEnv (index : reversed) child | (index, childEnv, child) <- zip3 [0 ..] childEnvs children]
             found = map (either (const Nothing) Just) results
-        Nothing -> case variableIndex codec symbol of
+            fits candidate = not (any mismatch (zip (functionArguments candidate) found))
+        [] -> case variableIndex codec symbol of
             Just index
                 | not (null children) -> Left $ WrongArity here symbol 0 (length children)
                 | index < 0 || index >= length env -> Left $ UnboundVariable here index (length env)

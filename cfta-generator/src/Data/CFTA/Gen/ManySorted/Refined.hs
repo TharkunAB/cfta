@@ -6,7 +6,8 @@ A value sort can carry a condition on its integers, and a function can carry a
 measure and a precondition. The measure of a function is the integer of the
 terms that it builds, as a term of the measures of its arguments. The
 precondition is a formula about the measures of the arguments. A value has
-its own integer as its measure.
+its own integer as its measure. The measure and the precondition belong to a
+symbol, so they apply to each instance of the symbol.
 
 The generator is a refinement generator of "Data.CFTA.Gen.Refinement", compiled
 with a solver. The values of a sort are 'Data.CFTA.Gen.Refinement.every' with the
@@ -77,7 +78,11 @@ import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
--- | What a function means for the integers of its terms.
+{- | What a function symbol means for the integers of its terms. The semantics
+of a symbol apply to each instance of the symbol. The instances have one
+number of arguments, so each function here gets one list of that length. See
+Note [Instances of a symbol] in "Data.CFTA.Gen.ManySorted".
+-}
 data FunctionSemantics = FunctionSemantics
     { semanticsMeasure :: Maybe ([Expr] -> Expr)
     -- ^ The integer of a term as a term of the integers of its arguments, one for each argument. A parent can name the measure in its own measure or precondition only if the function has one.
@@ -90,7 +95,10 @@ data RefinedSignature sort = RefinedSignature
     { refinedBase :: SortedSignature sort Symbol
     -- ^ The sorts, the functions, the roots, and the value sorts. A value sort has an 'Interval'.
     , refinedSemantics :: [(Symbol, FunctionSemantics)]
-    -- ^ The semantics of some functions. A function without an entry has no measure and no precondition.
+    {- ^ The semantics of some function symbols. The entry of a symbol applies
+    to each instance of the symbol. A symbol without an entry has no measure
+    and no precondition.
+    -}
     , refinedConditions :: [(sort, Refinement)]
     -- ^ A condition on the integers of a value sort, besides its interval.
     , refinedNesting :: Int

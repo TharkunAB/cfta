@@ -7,6 +7,7 @@ solver.
 module Data.CFTA.Gen.ManySorted.RefinedSpec (spec) where
 
 import Data.List (sort)
+import qualified Data.Set as Set
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 
@@ -15,12 +16,12 @@ import Data.CFTA.Gen.ManySorted
 import Data.CFTA.Gen.ManySorted.Refined
 import Data.CFTA.Index (Cardinality (..), everyRank)
 import Data.CFTA.Path (ChildIndex (..), path)
-import Data.CFTA.Refinement.Expression ((./=), (.>=))
+import Data.CFTA.Refinement.Expression ((./=), (.<=), (.>=))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Term (Term (Node))
 
-data Sort = Int | Quot | Level | Tag
+data Sort = Int | Quot | Level | Tag | Bool
     deriving (Eq, Ord, Show)
 
 codec :: ValueCodec Sort Symbol
@@ -119,13 +120,72 @@ poolFailure = go []
     firstOf (Nothing : rest) = firstOf rest
     firstOf [] = Nothing
 
--- | The integer of a term of Int.
+{- | Int has the integers 0 to 2 and add. Bool has false, true, and eq at Int
+and at Bool. The first argument gives the entry of eq in the semantics, which
+applies to both instances.
+-}
+comparisons :: [(Symbol, FunctionSemantics)] -> Int -> RefinedSignature Sort
+comparisons eqEntry nesting =
+    RefinedSignature
+        { refinedBase =
+            SortedSignature
+                { sortedSorts = [Int, Bool]
+                , sortedFunctions =
+                    [SortedFunction "false" [] Bool, SortedFunction "true" [] Bool, SortedFunction "add" [Int, Int] Int]
+                        <> [SortedFunction "eq" [s, s] Bool | s <- [Int, Bool]]
+                , sortedRoots = [Int, Bool]
+                , sortedValues = [ValueSort Int (Interval 0 2)]
+                }
+        , refinedSemantics =
+            [ ("false", FunctionSemantics (Just (const 0)) Nothing)
+            , ("true", FunctionSemantics (Just (const 1)) Nothing)
+            , ("add", FunctionSemantics (Just (binary (+))) Nothing)
+            ]
+                <> eqEntry
+        , refinedConditions = []
+        , refinedNesting = nesting
+        }
+
+{- | Entries of eq for 'comparisons': a name, the entry, whether the first
+argument of eq must be at most the second, and the nesting. Each entry makes
+eq a different kind of refinement constructor: a plain node, a measured node,
+a measured node with a precondition, and a guarded node. A guarded eq has no
+measure, so its nesting is 1: then the arguments of eq are not eq.
+-}
+eqEntries :: [(String, [(Symbol, FunctionSemantics)], Bool, Int)]
+eqEntries =
+    [ ("no entry", [], False, 2)
+    , ("a measure", [("eq", FunctionSemantics (Just (const 1)) Nothing)], False, 2)
+    , ("a measure and a precondition", [("eq", FunctionSemantics (Just (const 1)) (Just (binary (.<=))))], True, 2)
+    , ("a precondition", [("eq", FunctionSemantics Nothing (Just (binary (.<=))))], True, 1)
+    ]
+
+-- | The terms of the comparison signature by the nesting, with their sorts. Optionally only the terms whose preconditions hold.
+comparisonTerms :: Bool -> Int -> [(Sort, Term Symbol)]
+comparisonTerms ordered nesting = [(Int, t) | t <- ints nesting] <> [(Bool, t) | t <- bools nesting]
+  where
+    ints 0 = [Node (injectInteger codec n) [] | n <- [0 .. 2]]
+    ints level = ints 0 <> [Node "add" [l, r] | l <- ints (level - 1), r <- ints (level - 1)]
+    bools 0 = [Node "false" [], Node "true" []]
+    bools level =
+        bools 0
+            <> [ Node "eq" [l, r]
+               | below <- [ints (level - 1), bools (level - 1)]
+               , l <- below
+               , r <- below
+               , not ordered || measure l <= measure r
+               ]
+
+-- | The integer of a term of Int, or of Bool in 'comparisons'.
 measure :: Term Symbol -> Integer
 measure (Node (Symbol text) children) = case (Text.unpack text, map measure children) of
     ('#' : digits, []) | [(n, "")] <- reads digits -> n
     ("add", [a, b]) -> a + b
     ("sub", [a, b]) -> a - b
     ("shift", [a, b]) -> a + b
+    ("false", []) -> 0
+    ("true", []) -> 1
+    ("eq", [_, _]) -> 1
     _ -> error "measure"
 
 -- | The first node in preorder where the brute-force semantics fails, with its path.
@@ -238,6 +298,53 @@ spec = describe "Data.CFTA.Gen.ManySorted.Refined" $ do
                             (Gen.termAt generator rank >>= Gen.rankOf generator) `shouldBe` Right rank
                         )
                         (everyRank (Cardinality total))
+
+    it "generates and counts the terms of a symbol with instances, for each kind of entry" $
+        withZ3 [] $ \solver ->
+            mapM_
+                ( \(name, eqEntry, ordered, nesting) -> do
+                    result <- refinedGen solver codec (comparisons eqEntry nesting)
+                    case result of
+                        Left err -> expectationFailure (name <> ": " <> either show show err)
+                        Right generator -> do
+                            let expected = Set.toList (Set.fromList [t | (_, t) <- comparisonTerms ordered nesting])
+                                generated = either (error . show) id (Gen.values generator)
+                                total = either (const 0) (\(Cardinality n) -> n) (Gen.cardinality generator)
+                            (name, sort generated) `shouldBe` (name, expected)
+                            (name, Gen.cardinality generator) `shouldBe` (name, Right (Cardinality (fromIntegral (length expected))))
+                            mapM_
+                                (\rank -> (name, Gen.termAt generator rank >>= Gen.rankOf generator) `shouldBe` (name, Right rank))
+                                (everyRank (Cardinality total))
+                )
+                eqEntries
+
+    it "type checks exactly the terms of a symbol with instances whose preconditions hold" $
+        withZ3 [] $ \solver -> do
+            let sortOf (Node symbol _) = if symbol `elem` ["false", "true", "eq"] then Bool else Int
+            mapM_
+                ( \(name, eqEntry, ordered, nesting) -> do
+                    let signature = comparisons eqEntry nesting
+                        valid = Set.fromList [t | (_, t) <- comparisonTerms ordered nesting]
+                        below = [t | (_, t) <- comparisonTerms False (nesting - 1)]
+                        illSorted = [Node "eq" [l, r] | l <- below, r <- below, sortOf l /= sortOf r]
+                    mapM_
+                        ( \term -> do
+                            verdict <- refinedTypeCheck solver codec signature term
+                            (name, term, either (const Nothing) Just verdict)
+                                `shouldBe` (name, term, if Set.member term valid then Just (sortOf term) else Nothing)
+                        )
+                        ([t | (_, t) <- comparisonTerms False nesting] <> illSorted)
+                )
+                eqEntries
+            let withPrecondition = comparisons [("eq", FunctionSemantics (Just (const 1)) (Just (binary (.<=))))] 1
+            noInstance <- refinedTypeCheck solver codec withPrecondition (Node "eq" [Node "#0" [], Node "true" []])
+            noInstance `shouldBe` Left (NotWellTyped (NoInstance (path []) "eq" [[Int, Int], [Bool, Bool]] [Just Int, Just Bool]))
+            failedBool <- refinedTypeCheck solver codec withPrecondition (Node "eq" [Node "true" [], Node "false" []])
+            failedBool `shouldBe` Left (PreconditionFailed (path []) "eq")
+            failedInt <- refinedTypeCheck solver codec withPrecondition (Node "eq" [Node "#2" [], Node "#1" []])
+            failedInt `shouldBe` Left (PreconditionFailed (path []) "eq")
+            passed <- refinedTypeCheck solver codec withPrecondition (Node "eq" [Node "false" [], Node "true" []])
+            passed `shouldBe` Right Bool
   where
     shouldSatisfy' x p = if p x then pure () else expectationFailure "unrank failed"
     isLabel (Node symbol _) = symbol == "label"

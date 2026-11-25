@@ -58,6 +58,7 @@ module Data.CFTA.Gen.ManySorted (
 
     -- * For modules that extend signatures
     checkSignatureWith,
+    instancesOf,
     valueLeaves,
     valueSortOf,
 ) where

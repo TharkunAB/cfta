@@ -1,15 +1,18 @@
 {- | Binders and variables in a run-time signature: counts against brute force
 and against the typed arithmetic language of "Data.CFTA.Gen.Typing", closed
-and well-typed terms, rank round trips, and the type checker.
+and well-typed terms, rank round trips, the type checker, and symbols with
+instances.
 -}
 module Data.CFTA.Gen.ManySorted.ScopedSpec (spec) where
 
+import Data.Either (isRight)
 import Data.List (sort)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
+import qualified Data.CFTA as FTA
 import Data.CFTA.Gen (Gen)
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.ManySorted
@@ -80,9 +83,7 @@ bruteForce scoped = terms
     base = scopedBase scoped
     scopes = Map.fromList [(bindingSymbol b, bindingScopes b) | b <- scopedBinders scoped]
     terms env sort' size =
-        [Node "#0" [] | size == 1, sort' == Int]
-            <> [Node "#1" [] | size == 1, sort' == Int]
-            <> [Node value [] | size == 1, sort' == Bool, value <- ["false", "true"]]
+        [Node value [] | size == 1, ValueSort s source <- sortedValues base, s == sort', value <- valuesOf source]
             <> [Node ('v' : show index) [] | size == 1, (index, s) <- zip [0 :: Int ..] env, s == sort']
             <> [ Node (functionSymbol f) children
                | f <- sortedFunctions base
@@ -99,9 +100,34 @@ bruteForce scoped = terms
         , first <- terms childEnv argument firstSize
         , others <- arguments rest (budget - firstSize)
         ]
+    valuesOf (Interval low high) = ['#' : show n | n <- [low .. high]]
+    valuesOf (Pool symbols) = symbols
 
 exact :: ScopedSignature Sort String -> Int -> [Term String]
 exact scoped size = concat [bruteForce scoped (scopedInputs scoped) root size | root <- sortedRoots (scopedBase scoped)]
+
+-- | The distinct terms of the root sorts with exactly the given number of nodes, in order.
+distinctTerms :: ScopedSignature Sort String -> Int -> [Term String]
+distinctTerms scoped size = Set.toList (Set.fromList (exact scoped size))
+
+-- | zero, true, eq at Int and at Bool, and let with an Int variable in a body of either sort.
+instanced :: [Sort] -> Int -> ScopedSignature Sort String
+instanced inputs bound =
+    ScopedSignature
+        { scopedBase =
+            SortedSignature
+                { sortedSorts = [Int, Bool]
+                , sortedFunctions =
+                    [SortedFunction "zero" [] Int, SortedFunction "true" [] Bool]
+                        <> [SortedFunction "eq" [s, s] Bool | s <- [Int, Bool]]
+                        <> [SortedFunction "let" [Int, s] s | s <- [Int, Bool]]
+                , sortedRoots = [Int, Bool]
+                , sortedValues = []
+                }
+        , scopedBinders = [Binding "let" [[], [Int]]]
+        , scopedInputs = inputs
+        , scopedBound = bound
+        }
 
 allTerms :: ScopedSignature Sort String -> Int -> [Term String]
 allTerms scoped size =
@@ -228,6 +254,68 @@ spec = describe "Data.CFTA.Gen.ManySorted.Scoped" $ do
                     { scopedBase = (scopedBase valid){sortedFunctions = SortedFunction "v7" [] Int : sortedFunctions (scopedBase valid)}
                     }
                 `shouldBe` Just (VariableSymbolClash "v7")
+
+    describe "instances of a symbol" $ do
+        let withValues =
+                let scoped = instanced [Bool] 1
+                 in scoped{scopedBase = (scopedBase scoped){sortedValues = [ValueSort Int (Interval 1 2), ValueSort Bool (Pool ["false"])]}}
+        mapM_
+            ( \(name, scoped) -> do
+                let gen = generator maxSize scoped
+                    generated = members gen
+                it ("counts and generates the distinct brute-force terms, " <> name) $ do
+                    mapM_
+                        ( \size ->
+                            Gen.countAtSize gen (fromIntegral size)
+                                `shouldBe` Right (Cardinality (fromIntegral (length (distinctTerms scoped size))))
+                        )
+                        [1 .. maxSize]
+                    length generated `shouldSatisfy` (> 50)
+                    sort generated `shouldBe` sort (concatMap (distinctTerms scoped) [1 .. maxSize])
+                    Set.size (Set.fromList generated) `shouldBe` length generated
+                    mapM_ (\term -> scopedTypeCheck codec scoped term `shouldSatisfy` isRight) generated
+                it ("ranks every generated term back, " <> name) $
+                    mapM_
+                        (\rank -> (Gen.unrank gen rank >>= Gen.rankOfTerm gen) `shouldBe` Right rank)
+                        (everyRank (Cardinality (fromIntegral (length generated))))
+            )
+            [("without value sorts", instanced [Bool] 2), ("with value sorts", withValues)]
+
+        it "type checks exactly the terms that the automaton accepts, among untyped terms" $ do
+            let scoped = instanced [Bool] 1
+                untyped = concatMap (untypedTerms ["zero", "true", "eq", "let", "v0", "v1", "v2", "foo"]) [1 .. 4]
+            automaton <- either (fail . show) pure $ scopedAutomaton codec scoped
+            length untyped `shouldSatisfy` (> 10000)
+            mapM_
+                (\term -> (term, isRight (scopedTypeCheck codec scoped term)) `shouldBe` (term, FTA.accepts automaton term))
+                untyped
+            sort (filter (isRight . scopedTypeCheck codec scoped) untyped) `shouldBe` Set.toList (Set.fromList (allTerms scoped 4))
+
+        it "gives eq of one variable the sort Bool, with the variable of either sort" $ do
+            scopedTypeCheck codec (instanced [Int] 0) (Node "eq" [Node "v0" [], Node "v0" []]) `shouldBe` Right Bool
+            scopedTypeCheck codec (instanced [Bool] 0) (Node "eq" [Node "v0" [], Node "v0" []]) `shouldBe` Right Bool
+            scopedTypeCheck codec (instanced [Bool] 1) (Node "let" [Node "zero" [], Node "eq" [Node "v0" [], Node "v0" []]])
+                `shouldBe` Right Bool
+
+        it "rejects eq of two variables of different sorts" $
+            scopedTypeCheck codec (instanced [Int, Bool] 0) (Node "eq" [Node "v0" [], Node "v1" []])
+                `shouldBe` Left (NoInstance (path []) "eq" [[Int, Int], [Bool, Bool]] [Just Int, Just Bool])
+
+        it "gives let the sort of its body" $ do
+            let scoped = instanced [] 1
+            scopedTypeCheck codec scoped (Node "let" [Node "zero" [], Node "v0" []]) `shouldBe` Right Int
+            scopedTypeCheck codec scoped (Node "let" [Node "zero" [], Node "true" []]) `shouldBe` Right Bool
+            scopedTypeCheck codec scoped (Node "let" [Node "zero" [], Node "eq" [Node "v0" [], Node "zero" []]])
+                `shouldBe` Right Bool
+
+        it "checks the arity, then the bound, then the instances, then the children" $ do
+            scopedTypeCheck codec (instanced [] 0) (Node "let" [Node "zero" []]) `shouldBe` Left (WrongArity (path []) "let" 2 1)
+            scopedTypeCheck codec (instanced [] 0) (Node "let" [Node "true" [], Node "zero" []])
+                `shouldBe` Left (TooManyBinders (path []) "let")
+            scopedTypeCheck codec (instanced [] 1) (Node "let" [Node "true" [], Node "zero" []])
+                `shouldBe` Left (NoInstance (path []) "let" [[Int, Int], [Int, Bool]] [Just Bool, Just Int])
+            scopedTypeCheck codec (instanced [] 1) (Node "let" [Node "zero" [], Node "eq" [Node "v0" [], Node "true" []]])
+                `shouldBe` Left (NoInstance (path [ChildIndex 1]) "eq" [[Int, Int], [Bool, Bool]] [Just Int, Just Bool])
 
 -- | Every term with the given number of nodes, over some symbols, with any arity from zero to three.
 untypedTerms :: [String] -> Int -> [Term String]
