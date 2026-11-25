@@ -2,6 +2,36 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Gen.ManySorted.Polymorphic`: signatures whose sorts have sort
+  variables, as `cons : a, List a -> List a`. A sort variable stands for every
+  sort. `SortTerm` is a sort with variables, `PolymorphicSignature` has one
+  function for each symbol, and `checkPolymorphic` checks it
+  (`PolymorphicError`). `principalSort` gives the most general sort of a term
+  by unification, and `hasSort` tests a term against a root sort.
+  `polymorphicSpace` gives the terms of a size and a root sort as an automaton
+  with equality constraints: the sort of a term is a child of the term, and
+  path equalities do the typing, so a polymorphic function is one edge.
+  `plainTerm` removes the sort children, `polymorphicTerms` lists the plain
+  terms, and `polymorphicGen` reads the automaton as a generator. It counts
+  each space when no function can leave a sort open; `openFunctions` names the
+  functions that can. `principalAutomaton` gives the terms up to a size as an
+  automaton without constraints, whose states are principal sorts. It counts
+  each term one time, also a term with an open sort, and it stops with
+  `TooManySorts` when the sorts pass a limit. Read it with `Data.CFTA.Sized`.
+- `Data.CFTA.Gen.ManySorted`: a symbol of a run-time signature can have
+  several functions, its instances, as `eq : Int, Int -> Bool` and
+  `eq : Bool, Bool -> Bool`. The instances of a symbol have the same number of
+  arguments and different argument sorts, so the sorts of the children decide
+  the instance, and the counts and the ranks stay exact. Other functions with
+  one symbol are `DuplicateSymbol`, as a constant at two sorts. `typeCheck`,
+  `typeCheckWith`, and `scopedTypeCheck` choose the instance, and give the new
+  `NoInstance` when the children fit none; `checkSorts` and `checkSortsWith`
+  accept a transition that fits an instance. A `Binding` and the entry of a
+  symbol in `refinedSemantics` apply to each instance. `instancesOf` gives the
+  functions of each symbol. The generators of a signature get slow to build
+  when a symbol has many instances with one result sort, because of the check
+  of `Data.CFTA.Gen.fromAutomaton` for ambiguity; `Data.CFTA.Sized` reads
+  `signatureAutomaton` without that check.
 - `Data.CFTA.Gen.ManySorted.checkSorts` and `checkSortsWith` check that a
   map from the states of an automaton to sorts fits a run-time signature:
   each transition is a function from the sorts of its children to the sort of

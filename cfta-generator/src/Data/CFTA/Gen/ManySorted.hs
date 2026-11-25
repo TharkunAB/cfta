@@ -288,6 +288,11 @@ two sorts accept no common term, because a term has at most one sort. So
 generator then gives each term one rank, and its counts are the numbers of
 distinct terms.
 
+The check of 'Data.CFTA.Gen.fromAutomaton' for ambiguity intersects the
+children of each two transitions of one symbol in a state. So the generators
+of a signature get slow to build when a symbol has many instances with one
+result sort. "Data.CFTA.Sized" reads 'signatureAutomaton' without this check.
+
 The rule refuses a constant at two sorts, for example @nil : List Int@ and
 @nil : List Bool@. The two constants have the same argument sorts: none. So
 the term @nil@ would have two sorts and two runs, and a count would count it
@@ -380,7 +385,9 @@ data TypeError sort symbol
         -- | The number of children of the node.
         !Int
     | {- | The symbol has one function, and a child has a sort that differs
-      from the argument sort of the function.
+      from the argument sort of the function. For a signature whose sorts have
+      variables ("Data.CFTA.Gen.ManySorted.Polymorphic"), no one substitution
+      makes each argument sort equal to the sort of its child.
       -}
       WrongChildSort
         !Path
