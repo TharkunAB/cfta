@@ -12,6 +12,7 @@ import qualified Data.CFTA.Gen.Equality.SimpleSpec
 import qualified Data.CFTA.Gen.Equality.TypedExpressionGenSpec
 import qualified Data.CFTA.Gen.ExpressionLanguageSpec
 import qualified Data.CFTA.Gen.IndexedLeafSpec
+import qualified Data.CFTA.Gen.ManySorted.PolymorphicSpec
 import qualified Data.CFTA.Gen.ManySorted.RefinedSpec
 import qualified Data.CFTA.Gen.ManySorted.ScopedSpec
 import qualified Data.CFTA.Gen.ManySortedSpec
@@ -52,6 +53,7 @@ main =
         Data.CFTA.Gen.Equality.TypedExpressionGenSpec.spec
         Data.CFTA.Gen.ExpressionLanguageSpec.spec
         Data.CFTA.Gen.IndexedLeafSpec.spec
+        Data.CFTA.Gen.ManySorted.PolymorphicSpec.spec
         Data.CFTA.Gen.ManySorted.RefinedSpec.spec
         Data.CFTA.Gen.ManySorted.ScopedSpec.spec
         Data.CFTA.Gen.ManySortedSpec.spec
