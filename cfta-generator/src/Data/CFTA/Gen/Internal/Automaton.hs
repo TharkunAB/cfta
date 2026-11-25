@@ -18,7 +18,10 @@ miscounted.
 
 Ambiguity is not counted either. The union over a node's edges counts
 accepting runs, so a node with two edges that accept a common term counts that
-term twice; such an automaton is rejected rather than miscounted.
+term twice; such an automaton is rejected rather than miscounted. The check is
+'Ordinary.unambiguousRows' on the rows of the automaton, as for
+"Data.CFTA.Sized". See Note [The product of the ambiguity check] in
+"Data.CFTA.Gen.Internal.Table".
 
 These two limits hold for 'automatonIndex' and 'automatonTermPosition', which
 take an automaton that can have cycles. 'finiteAutomaton' takes an acyclic
@@ -40,7 +43,7 @@ module Data.CFTA.Gen.Internal.Automaton (
     undecodableConstructor,
 ) where
 
-import Control.Monad (foldM, (<=<))
+import Control.Monad (foldM, void, (<=<))
 import qualified Control.Monad.State.Strict as State
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (
@@ -102,7 +105,7 @@ language, on one whose edges carry equality constraints, and on an ambiguous
 one, whose runs outnumber its terms.
 -}
 automatonIndex ::
-    (Hashable symbol, Typeable symbol, Ord key) =>
+    (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
     (symbol -> key) -> Node symbol -> Either GenError (SizeIndex (Term symbol))
 automatonIndex order root = uncurry Ordinary.tableIndex <$> automatonRows order root
 
@@ -126,10 +129,12 @@ automatonTermPosition order root = case automatonRows order root of
 row in rank order. The rows are those of 'toRows', the adapter that 'toFTA'
 also reads, without their constraints.
 
-Fails as 'automatonIndex' does.
+Fails as 'automatonIndex' does. The checks run in this order: free recursive
+variables, equality constraints, and ambiguity. The check of ambiguity is
+'Ordinary.unambiguousRows' on the rows.
 -}
 automatonRows ::
-    (Hashable symbol, Typeable symbol, Ord key) =>
+    (Ord symbol, Hashable symbol, Typeable symbol, Ord key) =>
     (symbol -> key) ->
     Node symbol ->
     Either GenError (InternedState, Map.Map InternedState [FTA.Transition InternedState symbol Ordinary.EqualChildren])
@@ -137,7 +142,7 @@ automatonRows _ EmptyNode = Right (EmptyState, Map.empty)
 automatonRows order root
     | not $ Set.null $ freeVars root = Left $ InvalidSupport OpenAutomaton
     | any (any constrained) alternatives = Left CannotCountConstrainedEdges
-    | any (ambiguous productiveRows) alternatives = Left AmbiguousAutomaton
+    | not $ Ordinary.unambiguousRows $ Map.map (map void) rows = Left AmbiguousAutomaton
     | otherwise = Right (stateOf root, sortOn transitionKey <$> rows)
   where
     alternatives = IntMap.elems (reachable root)
@@ -187,14 +192,6 @@ ambiguous productive alternatives =
                     (edgeChildren left)
                     (edgeChildren right)
                 )
-
-{- | Whether a node of a graph that can have cycles accepts a term. A cycle can
-leave a node with edges and no finite term.
--}
-productiveRows :: (Hashable symbol, Typeable symbol) => Node symbol -> Bool
-productiveRows node
-    | null (nodeEdges node) = False
-    | otherwise = Map.member (stateOf node) $ Ordinary.minimumSizes $ toRows node
 
 -- | Whether an edge carries equality constraints.
 constrained :: Edge symbol -> Bool
